@@ -5,15 +5,17 @@ import java.util.*;
 public class Castle {
     private List<Color> waitingRoom;
     private Map<Color, Integer> diningRoom;
-    private boolean[] cardsPlayed;
-    private int lastCardPlayed;
-    private Team towerColor;
-
+    private List<Card> cards;
+    private Card lastCardPlayed;
+    private final Team towerColor;
+ 
     public Castle(String PLayerID, Team team){
         this.waitingRoom = new ArrayList<>();
         this.diningRoom = new HashMap<>();
-        this.cardsPlayed = new boolean[10];
+        this.cards = new ArrayList<>();
         this.towerColor = team;
+        lastCardPlayed = null;
+        for(int i=1; i<=10; i++) cards.add(new Card(i,(i+1)/2));
     }
 
     public boolean addStudentWR(List<Color> c){
@@ -50,10 +52,16 @@ public class Castle {
         }
     }
 
-    public boolean playCard(int i){
+    public boolean playCard(int i){ // con i mi riferisco alla priority della carta non alla sua posizione nell'arrayList
+        Card c;
         try{
-            cardsPlayed[i] = false;
-            return true;
+            c = cards.get(i-1);
+            if(c.isPlayed()) return false;
+            else {
+                c.setPlayed(false);
+                lastCardPlayed = c;
+                return true;
+            }
         }catch(ArrayIndexOutOfBoundsException e){
             e.printStackTrace();
             return false;
