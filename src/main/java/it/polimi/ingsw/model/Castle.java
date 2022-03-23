@@ -38,21 +38,13 @@ public class Castle {
         }
     }
 
-    public List<Color> removeWR(Set<Color> c){
+    public List<Color> removeWR(List<Color> c){
         List<Color> removedStudents = new ArrayList<>();
         try {
-            int[] arr = new int[c.size()];
-            for(int i : arr){
-                i = 0;
-            }
-            for(int i = 0; i<c.size(); i++) { //a ogni elemento dell'array arr associo un colore: lo rimuovo dalla WR
-                for (Color col : c) {         //se e solo se l'elemento dell'array corrispondente al colore è pari a 0
-                    if (i == 0) {                //(prima iterazione).
-                        waitingRoom.remove(col);
-                        removedStudents.add(col);
-                        i++;
-                    }
-                }
+            for (Color col : c) {         //se e solo se l'elemento dell'array corrispondente al colore è pari a 0
+                waitingRoom.remove(col);
+                removedStudents.add(col);
+
             }
         }catch(NullPointerException e){
             e.printStackTrace();
