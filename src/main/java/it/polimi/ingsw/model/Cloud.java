@@ -10,17 +10,20 @@ public class Cloud {
     public Cloud(Bag bag, int size){
         this.bag=bag;
         this.size = size;
-        this.studentList = new ArrayList<>(size);
+        this.studentList = new ArrayList<>();
+        refill();
     }
 
     public boolean refill(){
+        studentList.clear();
         for(int i=0; i<size; i++){
-            studentList.set(0, bag.extract());
+            studentList.add(bag.extract());
         }
         return true;
     }
 
     public List<Color> choose() {
+        if(studentList.size() != size) return null;
         List<Color> students = new ArrayList<>(studentList);
         studentList.clear();
         return students;
