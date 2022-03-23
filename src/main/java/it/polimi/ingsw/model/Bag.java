@@ -1,4 +1,6 @@
 package it.polimi.ingsw.model;
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import java.util.Arrays;
 import java.util.Random;
 
@@ -49,3 +51,14 @@ public class Bag {
         return Arrays.stream(students).sum();
     }
 }
+=======
+=======
+>>>>>>> Stashed changes
+
+public class Bag {
+    public
+}
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
