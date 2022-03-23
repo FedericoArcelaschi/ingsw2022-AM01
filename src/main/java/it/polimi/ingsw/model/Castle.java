@@ -38,18 +38,16 @@ public class Castle {
         }
     }
 
-    public List<Color> removeWR(List<Color> c){
-        List<Color> removedStudents = new ArrayList<>();
+    public boolean removeWR(List<Color> c) {
         try {
-            for (Color col : c) {         //se e solo se l'elemento dell'array corrispondente al colore è pari a 0
+            for (Color col : c) {
                 waitingRoom.remove(col);
-                removedStudents.add(col);
-
             }
-        }catch(NullPointerException e){
+            return true;
+        } catch (NullPointerException e) {
             e.printStackTrace();
+            return false;
         }
-        return removedStudents;
     }
 
     public boolean playCard(int i){
