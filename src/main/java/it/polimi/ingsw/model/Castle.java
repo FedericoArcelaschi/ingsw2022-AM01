@@ -5,7 +5,7 @@ import java.util.*;
 public class Castle {
     private List<Color> waitingRoom;
     private Map<Color, Integer> diningRoom;
-    private boolean cardsPlayed[];
+    private boolean[] cardsPlayed;
     private int lastCardPlayed;
     private Team towerColor;
 
@@ -48,7 +48,7 @@ public class Castle {
             for(int i = 0; i<c.size(); i++) { //a ogni elemento dell'array arr associo un colore: lo rimuovo dalla WR
                 for (Color col : c) {         //se e solo se l'elemento dell'array corrispondente al colore è pari a 0
                     if (i == 0) {                //(prima iterazione).
-                        waitingRoom.remove(col); 
+                        waitingRoom.remove(col);
                         removedStudents.add(col);
                         i++;
                     }
