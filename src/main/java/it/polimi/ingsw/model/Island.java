@@ -3,13 +3,25 @@ package it.polimi.ingsw.model;
 import java.util.*;
 
 public class Island {
-    private int id;
-    private Map<Color, Integer> students;
+    private final int id;
+    private final Map<Color, Integer> students;
     private Team ownership;
 
-    public Island(Set<Color> students, Team ownership){
-        this.id = id;
+    public Island(Color student){
+        this.id = 1;
         this.students = new HashMap<>();
+        for(Color c : Color.values()){
+            if(c == student) students.put(c, 1);
+            else students.put(c, 0);
+        }
+        this.ownership = null;
+    }
+
+    public Island(){
+        this.id = 1;
+        this.students = new HashMap<>();
+        for(Color c : Color.values())
+            students.put(c, 0);
         this.ownership = null;
     }
 
@@ -21,9 +33,17 @@ public class Island {
         return id;
     }
 
-    public boolean addStudent(Color c, int n){
+    public Map<Color, Integer> getStudents() {
+        return new HashMap<>(students);
+    }
+
+    public void setOwnership(Team ownership) {
+        this.ownership = ownership;
+    }
+
+    public boolean addStudent(Color c){
         try {
-            students.put(c, students.get(c) + n);
+            students.put(c, students.get(c) + 1);
             return true;
         }catch(NullPointerException e){
             e.printStackTrace();
@@ -31,5 +51,41 @@ public class Island {
         }
     }
 
+    public boolean addStudent(Map<Color, Integer> s){
+        try {
+            for(Color c: s.keySet()) {
+                students.put(c, students.get(c) + s.get(c));
+            }
+            return true;
+        }catch(NullPointerException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void towerInfluence(Map<Team, Integer> influence){
+        if(ownership != null){
+            influence.put(ownership,getIslandNumber());
+        }
+    }
+
+    private void studentInfluence(Map<Team, Integer> influence, Map<Color, Castle> professorMap){
+        for(Color c : Color.values()){
+            Team t = professorMap.get(c).getTeam(); //take team of the owner of the professor
+            influence.put(t, influence.get(t) + students.get(c));  //add influence for the color to the owner of the professor
+        }
+    }
+
+    public Map<Team, Integer> calculateInfluence(Map<Color, Castle> professorMap){
+        Map<Team, Integer> influence = new HashMap<>();
+        for(Team t : Team.values())
+            influence.put(t, 0);
+
+
+        studentInfluence(influence, professorMap);
+        towerInfluence(influence);
+
+        return influence;
+    }
     //MANCA IL toJson!!!!!!!!!!!!!!!!!
 }
