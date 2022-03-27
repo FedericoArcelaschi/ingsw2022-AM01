@@ -30,7 +30,7 @@ public class Island {
     }
 
     public int getIslandNumber(){
-        return id;
+        return 1;
     }
 
     public Map<Color, Integer> getStudents() {

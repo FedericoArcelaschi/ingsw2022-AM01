@@ -34,11 +34,14 @@ public class IslandTest extends TestCase {
 
         for(Color c : Color.values()){
             professors.put(c,c1);
-            students.put(c,2);
-        }
+            } //aggiungo i professori al bianco
 
-        i.addStudent(students);
-        professors.put(Color.BLUE,c2);
+        professors.put(Color.BLUE,c2); //aggiungo i professori al blu
+
+        for(Color c : Color.values()){
+            students.put(c,2);  //AGGIUNGO 2 STUDENTI PER COLORE ALL'ISOLA
+        }
+        i.addStudent(students); //aggiungo gli studenti all'isola al blu
 
         influence.put(Team.WHITE, 8);
         influence.put(Team.BLACK, 2);
