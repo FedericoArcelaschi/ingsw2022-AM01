@@ -11,6 +11,8 @@ public class Bag {
         students = new HashMap<>();
         for(Color c: Color.values()) students.put(c,studentsPerColor);
         random = new Random();
+        seed = random.nextLong();
+        random.setSeed(seed);
     }
 
     public Bag(int studentsPerColor, long seed){
