@@ -3,12 +3,10 @@ package it.polimi.ingsw.model;
 import java.util.*;
 
 public class Island {
-    private final int id;
     private final Map<Color, Integer> students;
     private Team ownership;
 
     public Island(Color student){
-        this.id = 1;
         this.students = new HashMap<>();
         for(Color c : Color.values()){
             if(c == student) students.put(c, 1);
@@ -18,7 +16,6 @@ public class Island {
     }
 
     public Island(){
-        this.id = 1;
         this.students = new HashMap<>();
         for(Color c : Color.values())
             students.put(c, 0);

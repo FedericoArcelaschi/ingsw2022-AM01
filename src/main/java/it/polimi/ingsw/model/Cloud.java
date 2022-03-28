@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cloud {
-    Bag bag;
-    List<Color> studentList;
-    int size;
+    private Bag bag;
+    private List<Color> studentList;
+    private int size;
 
     public Cloud(Bag bag, int size){
         this.bag=bag;
