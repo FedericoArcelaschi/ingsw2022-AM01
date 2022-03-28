@@ -8,8 +8,11 @@ public class Castle {
     private List<Card> cards;
     private Card lastCardPlayed;
     private final Team towerColor;
+    private final int WRSize;
  
-    public Castle(String PLayerID, Team team){
+    public Castle(String PLayerID, Team team, int nPlayer){
+        if(nPlayer == 3) WRSize = 7;
+        else WRSize = 9;
         this.waitingRoom = new ArrayList<>();
         this.diningRoom = new HashMap<>();
         this.cards = new ArrayList<>();
