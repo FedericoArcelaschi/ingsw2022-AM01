@@ -75,5 +75,7 @@ public class Castle {
         return towerColor;
     }
 
-    //MANCA IL toJson!!!!!!!!!!
+    public List<Card> remainingCards(){
+        return new ArrayList<>(cards);
+    }
 }

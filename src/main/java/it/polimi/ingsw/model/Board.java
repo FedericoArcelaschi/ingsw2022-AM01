@@ -88,28 +88,48 @@ public class Board {
         return castle.playCard(card);
     }
 
-    public Team isWinningPosition(){
-        Map <Team, Integer> nTowers = new HashMap<>();
+    private Map<Team,Integer> sumTowers() {
+        Map<Team, Integer> nTowers = new HashMap<>();
+        for (Team t : Team.values()) { //fill nTowers map for all team at 0
+            nTowers.put(t, 0);
+        }
+        for (Island i : islandList) { //sum towers for each island to the map
+            if (i.getOwnership() != null) {
+                nTowers.replace(i.getOwnership(), nTowers.get(i.getOwnership()) + i.getIslandNumber());
+            }
+        }
+        return nTowers;
+    }
+
+    private Team whoHasMoreTowers(Map<Team,Integer> nTowers){
         int max;
+        Team winner;
+
+        max = nTowers.get(Team.WHITE);
+        winner = Team.WHITE;
+        if(nTowers.get(Team.BLACK) > max){
+            max = nTowers.get(Team.BLACK);
+            winner = Team.BLACK;
+        }
+        else if (nTowers.get(Team.BLACK) == max) winner = null;
+        if(nTowers.get(Team.GREY) > max){
+            winner = Team.GREY;
+        }
+        else if (nTowers.get(Team.GREY) == max) winner = null;
+        return winner;
+    }
+
+    private int remainingCards(){
+        int r = 0;
+        for(Castle c : castleMap.values()) r += c.remainingCards().size();
+        return r;
+    }
+
+    public Team isWinningPosition(){
+        Map <Team, Integer> nTowers = sumTowers();
         Team winner = null;
-        for(Team t : Team.values()){
-            nTowers.put(t,0);
-        }
-        for(Island i : islandList){
-            if(i.getOwnership() != null){
-                nTowers.replace(i.getOwnership(),nTowers.get(i.getOwnership()) + i.getIslandNumber());
-            }
-        }
         if(islandList.size()<=3){
-            max = nTowers.get(Team.WHITE);
-            winner = Team.WHITE;
-            if(nTowers.get(Team.BLACK) > max){
-                max = nTowers.get(Team.BLACK);
-                winner = Team.BLACK;
-            }
-            if(nTowers.get(Team.GREY) > max){
-                winner = Team.GREY;
-            }
+            winner = whoHasMoreTowers(nTowers);
         }
         else{
             for(Team t : Team.values()){
@@ -117,5 +137,13 @@ public class Board {
             }
         }
         return winner;
+    }
+
+    public Team isWonByResources(){
+        if(bag.remainingStudents() == 0 || remainingCards() == 0){
+            Map <Team, Integer> nTowers = sumTowers();
+            return whoHasMoreTowers(nTowers);
+        }
+        else return null;
     }
 }
