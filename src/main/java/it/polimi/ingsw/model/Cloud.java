@@ -14,6 +14,10 @@ public class Cloud {
         refill();
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public boolean refill(){
         studentList.clear();
         for(int i=0; i<size; i++){

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import junit.framework.TestCase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,8 +30,8 @@ public class IslandTest extends TestCase {
         Map<Team, Integer> influence = new HashMap<>();
         Map<Color, Integer> students = new HashMap<>();
 
-        Castle c1 = new Castle("a", Team.WHITE, 2);
-        Castle c2 = new Castle("b", Team.BLACK, 2);
+        Castle c1 = new Castle("a", Team.WHITE, 2, new ArrayList<>());
+        Castle c2 = new Castle("b", Team.BLACK, 2, new ArrayList<>());
 
         for(Color c : Color.values()){
             professors.put(c,c1);
