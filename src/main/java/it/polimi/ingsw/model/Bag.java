@@ -37,6 +37,14 @@ public class Bag {
         return null;
     }
 
+    public List<Color> multipleExtract(int n){
+        List<Color> l = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            l.add(extract());
+        }
+        return l;
+    }
+
     public List<Color> extractForSetup(){
         List<Color> extractedList = new ArrayList<>();
         for(int i=0; i<2; i++){

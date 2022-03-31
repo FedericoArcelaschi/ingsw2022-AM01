@@ -15,28 +15,44 @@ public class Board {
     public Board(String playerID1, String playerID2){
         nPlayer = 2;
         setupClouds();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer));
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         setupIslands();
     }
 
     public Board(String playerID1, String playerID2, String playerID3){
         nPlayer = 3;
         setupClouds();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer));
-        castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer));
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer, bag.multipleExtract(7)));
         setupIslands();
     }
 
     public Board(String playerID1, String playerID2, String playerID3, String playerID4){
         nPlayer = 4;
         setupClouds();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer));
-        castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer));
-        castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer));
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         setupIslands();
+    }
+
+    public List<Cloud> getCloudList() {
+        return new ArrayList<>(cloudList);
+    }
+
+    public List<Island> getIslandList() {
+        return new ArrayList<>(islandList);
+    }
+
+    public Map<String, Castle> getCastleMap() {
+        return new HashMap<>(castleMap);
+    }
+
+    public Map<Color, Castle> getProfessorMap() {
+        return new HashMap<>(professorMap);
     }
 
     private void setupClouds(){
@@ -49,13 +65,19 @@ public class Board {
     }
 
     private void setupIslands(){
-        for(int i=0; i<12; i++){
-            if(i%6 == 0) islandList.add(new Island());
-            else islandList.add(new Island(bag.extract()));
+        List<Color> s = bag.extractForSetup();
+        for(int i=0, c=0; i<12; i++){
+            if(i%6 == 0){
+                islandList.add(new Island());
+            }
+            else{
+                islandList.add(new Island(s.get(c)));
+                c++;
+            }
         }
     }
 
-    public boolean resetClouds(){
+    public boolean refillClouds(){
         for(Cloud c: cloudList){
             if (!c.refill()) return false;
         }
