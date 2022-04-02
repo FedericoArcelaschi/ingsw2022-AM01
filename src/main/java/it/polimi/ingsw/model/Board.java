@@ -74,7 +74,7 @@ public class Board {
      */
 
     private void setupIslands(){
-        List<Color> s = bag.extractForSetup();
+        List<Color> s = bag.extractForIslandSetup();
         for(int i=0, c=0; i<12; i++){
             if(i%6 == 0){
                 islandList.add(new Island());

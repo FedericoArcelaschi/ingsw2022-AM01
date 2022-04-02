@@ -28,7 +28,7 @@ public class Bag {
         int r = random.nextInt(rs);
         Set<Color> keyList = students.keySet();
         for(Color c : keyList){
-            if(rs > students.get(c)) rs-=students.get(c);
+            if(r > students.get(c)) r-=students.get(c);
             else{
                 students.replace(c,students.get(c)-1);
                 return c;
@@ -45,7 +45,7 @@ public class Bag {
         return l;
     }
 
-    public List<Color> extractForSetup(){
+    public List<Color> extractForIslandSetup(){
         List<Color> extractedList = new ArrayList<>();
         for(int i=0; i<2; i++){
             for(Color c : Color.values()) {
@@ -56,6 +56,16 @@ public class Bag {
         Collections.shuffle(extractedList);
         return extractedList;
     }
+
+    public List<Color> extractForCastleSetup(){
+        List<Color> extractedList = new ArrayList<>();
+        for(int i=0; i<7; i++) {
+            extractedList.add(extract());
+        }
+
+        return extractedList;
+    }
+
 
     public int remainingStudents(){
         return students.values().stream().reduce(0, Integer::sum);
