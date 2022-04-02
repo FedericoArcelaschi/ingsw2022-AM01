@@ -84,5 +84,12 @@ public class Island {
 
         return influence;
     }
-    //MANCA IL toJson!!!!!!!!!!!!!!!!!
+
+    @Override
+    public String toString() {
+        return "Island{" +
+                "students=" + students +
+                ", ownership=" + ownership +
+                '}';
+    }
 }
