@@ -1,22 +1,15 @@
 package it.polimi.ingsw.model.expert;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class Character {
-    int cost;
-    String explanation;
-    Map<ListCharacters, int cost, String explaination>
-    public Character(int cost, String explanation) {
-        this.cost = cost;
-        this.explanation = explanation;
-    }
+    private int cost;
+    private String explanation;
 
+    public abstract String getExplanation();
 
-    public  String getExplanation(){
-        return explanation;
-    }
-
-    public int getCost(){
-        return cost;
-    }
+    public abstract int getCost();
 
     public abstract boolean applyEffect();
 
