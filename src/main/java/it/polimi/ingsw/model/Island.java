@@ -38,9 +38,16 @@ public class Island {
         this.ownership = ownership;
     }
 
+    public void setStudents(Map<Color, Integer> s){
+        this.students.clear();
+        for(Color c: s.keySet()) {
+            this.students.put(c, s.get(c));
+        }
+    }
+
     public boolean addStudent(Color c){
         try {
-            students.put(c, students.get(c) + 1);
+            students.put(c, students.get(c) + 1); //In the value of the color c, I'm putting the previous number of students + 1.
             return true;
         }catch(NullPointerException e){
             e.printStackTrace();
