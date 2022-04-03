@@ -30,7 +30,7 @@ public class BagTest extends TestCase {
 
     public void testExtractForSetup(){
         Bag b = new Bag(24,1);
-        List<Color> colorList = b.extractForSetup();
+        List<Color> colorList = b.extractForIslandSetup();
         boolean a=true;
         for(int i=0; i<2; i++) {
             for (Color c : Color.values()) {
@@ -42,12 +42,19 @@ public class BagTest extends TestCase {
 
     public void testExtractForSetupTotal(){ //check that students extracted are removed from the bag
         Bag b = new Bag(24,1);
-        b.extractForSetup();
+        b.extractForIslandSetup();
         boolean a=true;
         for (Color c : Color.values()) {
             if(b.getStudents(c) != 22) a=false;
         }
         assertTrue(a);
+    }
+
+    public void testExtractForCastleSetupTotal(){
+        Bag b = new Bag(24,1);
+        boolean a=true;
+        List<Color> colorList = b.extractForCastleSetup();
+        assertEquals(b.remainingStudents(), 113);
     }
 
     public void testRemainingStudents(){
