@@ -21,6 +21,33 @@ public class Castle {
         for(int i=1; i<=10; i++) cards.add(new Card(i,(i+1)/2));
     }
 
+
+    public List<Color> getWaitingRoom(){
+        return waitingRoom;
+    }
+
+    public Map<Color, Integer> getDiningRoom(){
+        return diningRoom;
+    }
+
+    public Team getTeam(){
+        return towerColor;
+    }
+
+    public void setDiningRoom(Map<Color, Integer> diningRoom){
+        this.diningRoom = diningRoom;
+    }
+
+    public void setWaitingRoom(List<Color> waitingRoom){
+        this.waitingRoom = waitingRoom;
+    }
+
+    /**
+     * Add a list of students to the waiting room
+     * @param c
+     * @return boolean that checks whether or not the operation was succesful.
+     */
+
     public boolean addStudentWR(List<Color> c){
         try {
             waitingRoom.addAll(c);
@@ -30,7 +57,11 @@ public class Castle {
             return false;
         }
     }
-
+    /**
+     * Add a list of students to the dining room
+     * @param c
+     * @return boolean that checks whether the operation was successful.
+     */
     public boolean addStudentDR(List<Color> c){
         try {
             for (Color col : c) {
@@ -43,6 +74,11 @@ public class Castle {
         }
     }
 
+    /**
+     * removes a list of students from the waiting room.
+     * @param c
+     * @return boolean, true if method was successful, false if it wasn't
+     */
     public boolean removeWR(List<Color> c) {
         try {
             for (Color col : c) {
@@ -55,6 +91,11 @@ public class Castle {
         }
     }
 
+    /**
+     * Method that allows the player to play the card.
+     * @param i
+     * @return
+     */
     public boolean playCard(int i){ // con i mi riferisco alla priority della carta non alla sua posizione nell'arrayList
         Card c;
         try{
@@ -71,7 +112,4 @@ public class Castle {
         }
     }
 
-    public Team getTeam(){
-        return towerColor;
-    }
 }
