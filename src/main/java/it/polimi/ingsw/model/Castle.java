@@ -42,6 +42,14 @@ public class Castle {
         this.waitingRoom = waitingRoom;
     }
 
+    public Card getLastCardPlayed(){
+        return lastCardPlayed;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
     /**
      * Add a list of students to the waiting room
      * @param c
@@ -49,13 +57,8 @@ public class Castle {
      */
 
     public boolean addStudentWR(List<Color> c){
-        try {
-            waitingRoom.addAll(c);
-            return true;
-        }catch(ArrayIndexOutOfBoundsException a){
-            a.printStackTrace();
-            return false;
-        }
+        waitingRoom.addAll(c);
+        return true;
     }
     /**
      * Add a list of students to the dining room
@@ -63,15 +66,10 @@ public class Castle {
      * @return boolean that checks whether the operation was successful.
      */
     public boolean addStudentDR(List<Color> c){
-        try {
-            for (Color col : c) {
-                diningRoom.put(col, diningRoom.get(col) + 1);
-            }
-            return true;
-        }catch(NullPointerException e){
-            e.printStackTrace();
-            return false;
+        for (Color col : c) {
+            diningRoom.put(col, diningRoom.get(col) + 1);
         }
+        return true;
     }
 
     /**
@@ -80,35 +78,26 @@ public class Castle {
      * @return boolean, true if method was successful, false if it wasn't
      */
     public boolean removeWR(List<Color> c) {
-        try {
-            for (Color col : c) {
-                waitingRoom.remove(col);
-            }
-            return true;
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            return false;
+        for (Color col : c) {
+            waitingRoom.remove(col);
         }
+        return true;
     }
 
     /**
      * Method that allows the player to play the card.
      * @param i
-     * @return
+     * @return boolean
      */
     public boolean playCard(int i){ // con i mi riferisco alla priority della carta non alla sua posizione nell'arrayList
         Card c;
-        try{
-            c = cards.get(i-1);
-            if(c.isPlayed()) return false;
-            else {
-                c.setPlayed(false);
-                lastCardPlayed = c;
-                return true;
-            }
-        }catch(ArrayIndexOutOfBoundsException e){
-            e.printStackTrace();
-            return false;
+
+        c = cards.get(i-1);
+        if(c.isPlayed()) return false;
+        else {
+            c.setPlayed(false);
+            lastCardPlayed = c;
+            return true;
         }
     }
 
