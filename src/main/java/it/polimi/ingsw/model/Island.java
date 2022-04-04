@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.util.*;
 
-public class Island {
+public class Island{
     private final Map<Color, Integer> students;
     private Team ownership;
 
@@ -75,13 +75,9 @@ public class Island {
 
     public Map<Team, Integer> calculateInfluence(Map<Color, Castle> professorMap){
         Map<Team, Integer> influence = new HashMap<>();
-        for(Team t : Team.values())
-            influence.put(t, 0);
-
-
+        for(Team t : Team.values()) influence.put(t, 0);
         studentInfluence(influence, professorMap);
         towerInfluence(influence);
-
         return influence;
     }
 
@@ -92,4 +88,8 @@ public class Island {
                 ", ownership=" + ownership +
                 '}';
     }
+    public Island joinTo(Island next) {
+        return next;
+    }
+    //TODO: method toJson!!
 }

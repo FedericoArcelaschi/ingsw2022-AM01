@@ -57,15 +57,6 @@ public class Bag {
         return extractedList;
     }
 
-    public List<Color> extractForCastleSetup(){
-        List<Color> extractedList = new ArrayList<>();
-        for(int i=0; i<7; i++) {
-            extractedList.add(extract());
-        }
-
-        return extractedList;
-    }
-
 
     public int remainingStudents(){
         return students.values().stream().reduce(0, Integer::sum);

@@ -9,7 +9,7 @@ public class BagTest extends TestCase {
     public void testExtract() {
         Bag b = new Bag(24,1);
         int nStudentsBefore = b.remainingStudents();
-        Color c = b.extract();
+        b.extract();
         assertEquals(nStudentsBefore-1,b.remainingStudents());
     }
 
@@ -48,13 +48,6 @@ public class BagTest extends TestCase {
             if(b.getStudents(c) != 22) a=false;
         }
         assertTrue(a);
-    }
-
-    public void testExtractForCastleSetupTotal(){
-        Bag b = new Bag(24,1);
-        boolean a=true;
-        List<Color> colorList = b.extractForCastleSetup();
-        assertEquals(b.remainingStudents(), 113);
     }
 
     public void testRemainingStudents(){

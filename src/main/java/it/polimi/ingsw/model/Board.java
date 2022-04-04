@@ -5,13 +5,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Board {
-    private int motherNature = 0;
-    private final int nPlayer;
-    private final Bag bag = new Bag(24);
-    private final List<Cloud> cloudList = new ArrayList<>();
-    private final List<Island> islandList = new ArrayList<>();
-    private final Map<String, Castle> castleMap = new HashMap<>();
-    private Map<Color, Castle> professorMap; //Map<professorColor, Castle> to handle professors assignment, null if no castle has the professor
+    private int motherNature = 0; //faarei un refactoring a MotherNature Position
+    protected final int nPlayer;
+    protected final Bag bag = new Bag(24);
+    protected final List<Cloud> cloudList = new ArrayList<>();
+    protected final List<Island> islandList = new ArrayList<>();
+    protected final Map<String, Castle> castleMap = new HashMap<>();
+    protected Map<Color, Castle> professorMap; //Map<professorColor, Castle> to handle professors assignment, null if no castle has the professor
 
     public Board(String playerID1, String playerID2){
         nPlayer = 2;
@@ -52,7 +52,7 @@ public class Board {
         return new HashMap<>(castleMap);
     }
 
-    public Map<Color, Castle> getProfessorMap() {
+    public Map<Color, Castle> getProfessorMap() { //TODO: per fare questo sarebbe utile "scorrere" i player
         return new HashMap<>(professorMap);
     }
 
@@ -139,6 +139,7 @@ public class Board {
             islandList.get(islandNumber).addStudent(c);
         }
         return true;
+
     }
 
     /**
@@ -154,12 +155,11 @@ public class Board {
     }
 
     /**
-     *
      * @param PlayerID the id of the player that ask for this move
      * @return a list of not yet played card
      */
 
-    public List<Card> getAviableCard(String PlayerID){
+    public List<Card> getAvailableCard(String PlayerID){
         Castle castle = castleMap.get(PlayerID);
         return castle.getCards().stream().filter(card -> !card.isPlayed()).collect(Collectors.toList());
     }
@@ -271,35 +271,49 @@ public class Board {
      */
 
     public Team moveMotherNature(int move){
-        if(motherNature+move/islandList.size() >= 1) motherNature += move-islandList.size();
-        else motherNature += move;
-        Island i = islandList.get(motherNature);
-        //calculates influence and set new owner
-        Map<Team, Integer> influence = i.calculateInfluence(professorMap);
-        Team t = teamWithMoreInfluence(influence);
-        if(t != null) i.setOwnership(t);
-
-        //checks if neighbouring island have the same owner and join
-        Island previous, next;
-        List<Island> islandToJoin = new ArrayList<>();
-        islandToJoin.add(i);
-        if(motherNature==0){
-            previous = islandList.get(islandList.size()-1);
-            next = islandList.get(motherNature + 1);
-        }
-        else if(motherNature == islandList.size()) {
-            previous = islandList.get(motherNature - 1);
-            next = islandList.get(0);
-        }
-        else{
-            previous = islandList.get(motherNature - 1);
-            next = islandList.get(motherNature + 1);
-        }
-        if(previous.getOwnership() == i.getOwnership()) islandToJoin.add(previous);
-        if(next.getOwnership() == i.getOwnership()) islandToJoin.add(next);
-        //TODO join islands
+        if((motherNature + move) >= islandList.size())
+            motherNature = motherNature - islandList.size() + move;
+        else
+            motherNature += move;
+        Island island = this.islandConquering(islandList.get(motherNature));
+        island = this.joinIsland(island);
 
         //checks if someone won and return the winner
         return isWinningPosition();
     }
+
+    private Island islandConquering(Island island){
+        //calculates influence and set new owner
+        Map<Team, Integer> influence = island.calculateInfluence(getProfessorMap());
+        Team t = teamWithMoreInfluence(influence);
+        if(t != null) { island.setOwnership(t); }
+        return island;
+    }
+    private Island joinIsland(Island island){
+        //checks if neighbouring island have the same owner and join
+        Island previous, next;
+        List<Island> islandToJoin = new ArrayList<>();
+        islandToJoin.add(island);
+        if(motherNature == 0 ){
+            previous = islandList.get(islandList.size()-1);
+            next = islandList.get(motherNature + 1);
+        }
+        else {
+            previous = islandList.get(motherNature - 1);
+            if (motherNature == islandList.size()) {
+                next = islandList.get(0);
+            } else {
+                next = islandList.get(motherNature + 1);
+            }
+        }
+        if(previous.getOwnership() == island.getOwnership()) island.joinTo(previous);
+        if(next.getOwnership() == island.getOwnership()) island.joinTo(next);
+
+        //TODO join islands
+        return island;
+    }
+    public Bag getBag() {//aggiunto per la Tavern. ne possiamo parlare
+        return bag;
+    }
+
 }
