@@ -92,5 +92,4 @@ public class Island {
                 ", ownership=" + ownership +
                 '}';
     }
-    //MANCA IL toJson!!!!!!!!!!!!!!!!!
 }
