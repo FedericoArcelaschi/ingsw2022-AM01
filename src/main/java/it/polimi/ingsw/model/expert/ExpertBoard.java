@@ -11,6 +11,7 @@ import java.util.Map;
 public class ExpertBoard extends Board {
     private Tavern tavern;
     List<Generic> expertCharactersCards;
+    int characterToken;
 
     public ExpertBoard(String playerID1, String playerID2) {
         super(playerID1, playerID2);
@@ -27,16 +28,9 @@ public class ExpertBoard extends Board {
      * @returns ArrayList<Characters>
      */
     private List<Generic> drawExpertCharacters(){
+        characterToken = 0;
         tavern = new Tavern(this.bag);
         return tavern.extract();
-    }
-    /**
-     * Calculates the influence for <code>InfluenceCharacters (MONK)</code>
-     * <code>parameter</code> changes based on the active <code>Character Effect</code>
-     * @return <code>professorMap</code>
-     */
-    public Map<Color, Castle> getProfessorMap(int parameter) {
-        return new HashMap<>(professorMap);
     }
 
     /**
@@ -44,11 +38,9 @@ public class ExpertBoard extends Board {
      * @param idChar
      * @return if works -> true else false //TODO: review
      */
-
     public boolean playExpertCard(int idChar){return true;}
 
-    public Island islandConquering(Island island){
-        //calculates influence and set new owner
+    private Island islandConquering(Island island){
         Map<Team, Integer> influence = island.calculateInfluence(getProfessorMap());
         Team t = teamWithMoreInfluence(influence);
         if(t != null) { island.setOwnership(t); }

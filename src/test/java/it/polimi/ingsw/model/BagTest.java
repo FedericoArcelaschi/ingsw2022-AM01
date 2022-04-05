@@ -53,7 +53,7 @@ public class BagTest extends TestCase {
     public void testExtractForCastleSetupTotal(){
         Bag b = new Bag(24,1);
         boolean a=true;
-        List<Color> colorList = b.extractForCastleSetup();
+        List<Color> colorList = b.extractMultipleStudents(7);
         assertEquals(b.remainingStudents(), 113);
     }
 

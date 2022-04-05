@@ -23,5 +23,4 @@ public abstract class Generic {
     }
 
     public abstract boolean applyEffect();
-
 }

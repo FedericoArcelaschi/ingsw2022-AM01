@@ -17,8 +17,7 @@ public class Block extends Generic {
     public boolean applyEffect(boolean payedToken, ExpertIsland island) { // for 5th character
 
         if (availableBlockTile > 0 && payedToken) {
-            island.block();
-            return true;
+            return island.blockIsland();
         }
         return false;
     }

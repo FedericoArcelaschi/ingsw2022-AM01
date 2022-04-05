@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.*;
 
+import java.util.Map;
+
 public class ExpertIsland extends Island {
     boolean isBLocked;
 
@@ -11,13 +13,16 @@ public class ExpertIsland extends Island {
     }
 
     /**
-     * Blocks the Island from the Block
+     * Blocks the Island from being conquered
      * @return
      */
-    public boolean block(){
+    public boolean blockIsland(){
         if(isBLocked)
             return false;
         isBLocked = true;
         return true;
+    }
+    protected boolean isBLocked(){
+        return isBLocked;
     }
 }

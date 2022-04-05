@@ -7,23 +7,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Influence extends Generic {
-    Board board;
 
     public Influence(int idChar){
         super(idChar);
     }
 
-    @Override
-    public boolean applyEffect() {
 
-        return false;
-    }
-    public boolean applyEffect(boolean payedToken, String PlayerID, Board board) {
-        this.board = board;
+
+    /**
+     * FARMER: even in case of tie students in the castle, assignes the relative professors
+     * to the player that uses this effect
+     * @param payedToken
+     * @param PlayerID
+     * @return characterToken
+     */
+    public boolean applyEffect(boolean payedToken, String PlayerID) {
         if(payedToken){
-            Map<Color, Castle> professorMap = board.getProfessorMap();
-            modify(PlayerID, professorMap); //dovrò usare il valore di ritorno di sto metodo
-            return true;
+
         }
         return false;
     }
@@ -32,5 +32,8 @@ public class Influence extends Generic {
         return newProfessorMap;
     }
 
-
+    @Override
+    public boolean applyEffect() {
+        return false;
+    }
 }

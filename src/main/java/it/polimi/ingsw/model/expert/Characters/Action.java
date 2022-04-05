@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.expert.Characters;
 
 import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.expert.ExpertBoard;
+import org.jetbrains.annotations.NotNull;
 
 public class Action extends Generic {
 
@@ -25,14 +26,13 @@ public class Action extends Generic {
 
     /**
      * effefct for third character
+     *
      * @param island
-     * @param board
      * @return island
      */
-     public Island applyEffect(Island island, ExpertBoard board){// ho bisgono della board. for
-        island.calculateInfluence(board.getProfessorMap());
-        return island = board.islandConquering(island);
-     }
+    public Island applyEffect(Island island) {
+        return island;
+    }
 
 
 }
