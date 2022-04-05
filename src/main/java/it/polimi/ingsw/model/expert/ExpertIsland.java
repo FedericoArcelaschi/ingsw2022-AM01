@@ -15,7 +15,7 @@ public class ExpertIsland extends Island {
     }
 
     /**
-     * Blocks the Island from being conquered
+     * Method for the WITCH: Blocks the Island from being conquered
      * @return
      */
     public boolean blockIsland(){
