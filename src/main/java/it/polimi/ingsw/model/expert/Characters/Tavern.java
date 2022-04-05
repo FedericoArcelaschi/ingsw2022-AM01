@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.expert.Characters;
 
 import it.polimi.ingsw.model.Bag;
+import it.polimi.ingsw.model.Board;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +13,12 @@ import java.util.Random;
  **/
 public class Tavern {
     private long seed;
-    Bag bag;
+    Board board;
     Generic ec;
 
-    public Tavern(Bag bag) { //TODO: add to the expertBoard a seed that matches between the cloud and the Tavern.
-        this.bag = bag;
-        seed = bag.getSeed();
+    public Tavern(Board board){
+        this.board = board;
+        seed = board.getBag().getSeed();
     }
 
     /**
@@ -27,9 +28,8 @@ public class Tavern {
     public List<Generic> extract(){
         List<Generic> expCards = new ArrayList<>();
         Random rand = new Random(seed);
-        Integer idChar = 0;
-        int i;
-        for(i= 0; i < 3; i++) {
+        int idChar;
+        for(int i= 0; i < 3; i++) {
             ec = getExpertCharacter(idChar = rand.nextInt(1, 12));
             if(!expCards.contains(ec))
                 expCards.add(ec);
@@ -45,17 +45,17 @@ public class Tavern {
      * @return Generic
      */
     private Generic getExpertCharacter(int idChar){
-        if(idChar == 1)
-            return ec = new Student(idChar, bag);
-        else if(idChar == 2 || idChar == 6)
-            return ec = new Influence(idChar);
-        else if(idChar == 5)
-            return ec = new Block(idChar);
-        else if(idChar == 4 || idChar == 3)
-            return ec = new Action(idChar);
-        else if(true)
-            return ec = new Influence(idChar);
-        else
-            return null; // vorrei un Exception
+        switch (idChar) {
+            case 1, 7, 10, 11:
+                return ec = new Student(idChar, board.getBag());
+            case 2, 6, 8, 9, 12:
+                return ec = new Influence(idChar);
+            case 3, 4:
+                return ec = new Action(idChar);
+            case 5:
+                return ec = new Block(idChar);
+            default:
+                return null;
+        }
     }
 }
