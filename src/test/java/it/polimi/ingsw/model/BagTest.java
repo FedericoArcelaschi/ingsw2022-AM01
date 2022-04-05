@@ -9,7 +9,7 @@ public class BagTest extends TestCase {
     public void testExtract() {
         Bag b = new Bag(24,1);
         int nStudentsBefore = b.remainingStudents();
-        Color c = b.extract();
+        b.extract();
         assertEquals(nStudentsBefore-1,b.remainingStudents());
     }
 
