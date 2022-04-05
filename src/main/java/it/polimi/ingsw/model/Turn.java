@@ -5,36 +5,48 @@ import java.util.List;
 
 public class Turn {
     private final List<String> playerSittingOrder;
-    private final List<String> playerPianificationOrder;
+    private List<String> playerPlanificationOrder;
     private String playerTurn;
 
-    public Turn(String playerTurn){
-        playerSittingOrder = new ArrayList<>();
-        playerPianificationOrder = new ArrayList<>();
-        this.playerTurn = playerTurn;
+    /**
+     * For the first round the PlanificationTurn is the Sitting Order
+     * @param playerSittingOrder
+     */
+    public Turn(List<String> playerSittingOrder) {
+        this.playerSittingOrder = new ArrayList<>(playerSittingOrder);
+        playerPlanificationOrder = new ArrayList<>(playerSittingOrder);
+        playerTurn = playerSittingOrder.get(0);
     }
-    /** Returns the turn of the current player.
-     *
-     * @return playerTurn
+
+    /**
+     * @return the player who is playing
      */
     public String getTurn(){
         return playerTurn;
     }
 
-    /** Changes the turn.
-     *
+    /**Changes the turn along the action turn order
      */
-    public void setTurn(List<String> newerTurns){
-        this.playerPianificationOrder.clear();
-        this.playerPianificationOrder.addAll(newerTurns);
+    public void setTurnAction(List<String> newerTurns){
+        this.playerPlanificationOrder= newerTurns;
     }
 
-    /** Sets the current turn to the next player.
-     *
+    /** Sets the current turn to the player besides him.
      * @return playerTurn
      */
-    public String nextTurn(){
-         this.playerTurn = playerTurn.replaceAll(playerTurn, playerPianificationOrder.get(playerPianificationOrder.indexOf(playerTurn)+1));
-         return playerTurn;
+    public String nextTurnPlanification(){
+        int nextPlayerPosition = playerSittingOrder.indexOf(playerTurn) + 1;
+        if(nextPlayerPosition > playerSittingOrder.size())
+            return playerTurn = playerSittingOrder.get(0);
+        else return playerTurn = playerSittingOrder.get(nextPlayerPosition);
+    }
+
+    /** Sets the current turn to the next player chose in the planification turn.
+     * Returns also the first player for the Planification turn
+     * @return playerTurn
+     */
+    public String nextTurnAction(){
+        int nextPlayerPosition = playerPlanificationOrder.indexOf(playerTurn) + 1;
+        return playerTurn = playerPlanificationOrder.get(nextPlayerPosition);
     }
 }
