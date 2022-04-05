@@ -29,9 +29,8 @@ public class IslandTest extends TestCase {
         Map<Color, Castle> professors = new HashMap<>();
         Map<Team, Integer> influence = new HashMap<>();
         Map<Color, Integer> students = new HashMap<>();
-
-        Castle c1 = new Castle("a", Team.WHITE, 2, new ArrayList<>());
-        Castle c2 = new Castle("b", Team.BLACK, 2, new ArrayList<>());
+        Castle c1 = new Castle("a", Team.WHITE, 2);
+        Castle c2 = new Castle("b", Team.BLACK, 2);
 
         for(Color c : Color.values()){
             professors.put(c,c1);
