@@ -11,7 +11,9 @@ public class Board {
     private final List<Cloud> cloudList = new ArrayList<>();
     private final List<Island> islandList = new ArrayList<>();
     private final Map<String, Castle> castleMap = new HashMap<>();
-    private Map<Color, Castle> professorMap; //Map<professorColor, Castle> to handle professors assignment, null if no castle has the professor
+    protected Map<Color, Castle> professorMap;
+    //Map<professorColor, Castle> to handle professors assignment, null if no castle has the professor
+    Turn turn;
 
     public Board(String playerID1, String playerID2){
         nPlayer = 2;
