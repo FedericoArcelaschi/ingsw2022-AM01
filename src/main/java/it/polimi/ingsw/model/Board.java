@@ -5,13 +5,16 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Board {
-    private int motherNature = 0; //faarei un refactoring a MotherNature Position
+    private int motherNature = 0; //farei un refactoring a MotherNature Position
     protected final int nPlayer;
     protected final Bag bag = new Bag(24);
     protected final List<Cloud> cloudList = new ArrayList<>();
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
-    protected Map<Color, Castle> professorMap; //Map<professorColor, Castle> to handle professors assignment, null if no castle has the professor
+
+    protected Map<Color, Castle> professorMap;
+    //Map<professorColor, Castle> to handle professors assignment, null if no castle has the professor
+    Turn turn;
 
     public Board(String playerID1, String playerID2){
         nPlayer = 2;
