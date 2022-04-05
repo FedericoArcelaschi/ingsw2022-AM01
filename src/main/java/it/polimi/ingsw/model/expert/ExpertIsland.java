@@ -10,6 +10,10 @@ public class ExpertIsland extends Island {
         this.isBLocked = false;
     }
 
+    /**
+     * Blocks the Island from the CharacterBlock
+     * @return
+     */
     public boolean block(){
         if(isBLocked)
             return false;

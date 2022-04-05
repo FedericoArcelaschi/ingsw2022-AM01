@@ -19,7 +19,6 @@ public class ExpertBoard extends Board {
 
     public ExpertBoard(String playerID1, String playerID2, String playerID3, String playerID4) {
         super(playerID1, playerID2, playerID3, playerID4);
-
         expertCharactersCards = this.drawExpertCharacters();
     }
 
@@ -33,7 +32,7 @@ public class ExpertBoard extends Board {
     }
     /**
      * Calculates the influence for <code>InfluenceCharacters (MONK)</code>
-     * <code>parameter</code></code> changes based on the active <code>Character Effect</code>
+     * <code>parameter</code> changes based on the active <code>Character Effect</code>
      * @return <code>professorMap</code>
      */
     public Map<Color, Castle> getProfessorMap(int parameter) {
@@ -43,8 +42,17 @@ public class ExpertBoard extends Board {
     /**
      * Tries to pay for a card and activates the right method.
      * @param idChar
-     * @return
+     * @return if works -> true else false //TODO: review
      */
+
     public boolean playExpertCard(int idChar){return true;}
+
+    public Island islandConquering(Island island){
+        //calculates influence and set new owner
+        Map<Team, Integer> influence = island.calculateInfluence(getProfessorMap());
+        Team t = teamWithMoreInfluence(influence);
+        if(t != null) { island.setOwnership(t); }
+        return island;
+    }
 
 }

@@ -16,27 +16,27 @@ public class Board {
     public Board(String playerID1, String playerID2){
         nPlayer = 2;
         setupClouds();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.extractMultipleStudents(9)));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.extractMultipleStudents(9)));
         setupIslands();
     }
 
     public Board(String playerID1, String playerID2, String playerID3){
         nPlayer = 3;
         setupClouds();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(7)));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(7)));
-        castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.extractMultipleStudents(7)));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.extractMultipleStudents(7)));
+        castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer, bag.extractMultipleStudents(7)));
         setupIslands();
     }
 
     public Board(String playerID1, String playerID2, String playerID3, String playerID4){
         nPlayer = 4;
         setupClouds();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.extractMultipleStudents(9)));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.extractMultipleStudents(9)));
+        castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer, bag.extractMultipleStudents(9)));
+        castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer, bag.extractMultipleStudents(9)));
         setupIslands();
     }
 
@@ -211,7 +211,7 @@ public class Board {
      * @return the team with more influence
      */
 
-    private Team teamWithMoreInfluence(Map<Team,Integer> influence){
+    protected Team teamWithMoreInfluence(Map<Team, Integer> influence){
         return teamWithMoreTowers(influence);
     }
 
@@ -282,13 +282,19 @@ public class Board {
         return isWinningPosition();
     }
 
+    /**
+     * Calculates Influence and set new owner.
+     *
+     * @param island
+     * @return island with updated owner
+     */
     private Island islandConquering(Island island){
-        //calculates influence and set new owner
         Map<Team, Integer> influence = island.calculateInfluence(getProfessorMap());
         Team t = teamWithMoreInfluence(influence);
         if(t != null) { island.setOwnership(t); }
         return island;
     }
+
     private Island joinIsland(Island island){
         //checks if neighbouring island have the same owner and join
         Island previous, next;
@@ -309,7 +315,7 @@ public class Board {
         if(previous.getOwnership() == island.getOwnership()) island.joinTo(previous);
         if(next.getOwnership() == island.getOwnership()) island.joinTo(next);
 
-        //TODO join islands
+        //TODO: join islands
         return island;
     }
     public Bag getBag() {//aggiunto per la Tavern. ne possiamo parlare

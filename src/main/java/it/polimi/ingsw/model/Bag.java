@@ -37,10 +37,10 @@ public class Bag {
         return null;
     }
 
-    public List<Color> multipleExtract(int n){
+    public List<Color> extractMultipleStudents(int n){
         List<Color> l = new ArrayList<>();
         for(int i=0; i<n; i++){
-            l.add(extract());
+            l.add(this.extract());
         }
         return l;
     }
@@ -50,7 +50,7 @@ public class Bag {
         for(int i=0; i<2; i++){
             for(Color c : Color.values()) {
                 extractedList.add(c);
-                students.replace(c,students.get(c)-1);
+                students.replace(c, students.get(c) - 1);
             }
         }
         Collections.shuffle(extractedList);
