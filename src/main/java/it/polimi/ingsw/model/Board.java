@@ -1,46 +1,51 @@
 package it.polimi.ingsw.model;
 
 
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Board {
-    private int motherNature = 0; //farei un refactoring a MotherNature Position
-    protected final int nPlayer;
+    protected int motherNaturePosition = 0;
+    protected int nPlayer;
     protected final Bag bag = new Bag(24);
     protected final List<Cloud> cloudList = new ArrayList<>();
-    protected final List<Island> islandList = new ArrayList<>();
-    protected final Map<String, Castle> castleMap = new HashMap<>();
-
+    private final List<Island> islandList = new ArrayList<>();
+    private final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Castle> professorMap;
     //Map<professorColor, Castle> to handle professors assignment, null if no castle has the professor
-    Turn turn;
+    private Turn turn;
 
     public Board(String playerID1, String playerID2){
         nPlayer = 2;
         setupClouds();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.extractMultipleStudents(9)));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.extractMultipleStudents(9)));
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer));
         setupIslands();
     }
 
     public Board(String playerID1, String playerID2, String playerID3){
         nPlayer = 3;
         setupClouds();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.extractMultipleStudents(7)));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.extractMultipleStudents(7)));
-        castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer, bag.extractMultipleStudents(7)));
         setupIslands();
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer));
+        castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer));
     }
 
     public Board(String playerID1, String playerID2, String playerID3, String playerID4){
         nPlayer = 4;
         setupClouds();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.extractMultipleStudents(9)));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.extractMultipleStudents(9)));
-        castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer, bag.extractMultipleStudents(9)));
-        castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer, bag.extractMultipleStudents(9)));
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer));
+        castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer));
+        castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer));
         setupIslands();
+    }
+
+    public Board() {
+
     }
 
     public List<Cloud> getCloudList() {
@@ -54,6 +59,9 @@ public class Board {
     public Map<String, Castle> getCastleMap() {
         return new HashMap<>(castleMap);
     }
+    public Castle getCastle(String playerID){
+        return castleMap.get(playerID);
+    }
 
     public Map<Color, Castle> getProfessorMap() { //TODO: per fare questo sarebbe utile "scorrere" i player
         return new HashMap<>(professorMap);
@@ -63,7 +71,7 @@ public class Board {
      * generate the clouds based on the nPlayer
      */
 
-    private void setupClouds(){
+    protected void setupClouds(){
         if(nPlayer == 3) {
             for (int i = 0; i < nPlayer; i++) cloudList.add(new Cloud(bag, 3));
         }
@@ -76,7 +84,7 @@ public class Board {
      * generate the islands
      */
 
-    private void setupIslands(){
+    protected void setupIslands(){
         List<Color> s = bag.extractForIslandSetup();
         for(int i=0, c=0; i<12; i++){
             if(i%6 == 0){
@@ -122,10 +130,12 @@ public class Board {
      * @return if the move is legal and played or not
      */
 
-    public boolean moveStudentToDR(String PlayerID, List<Color> students){
+    public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException {
         Castle castle = castleMap.get(PlayerID);
-        if(castle.removeWR(students)) return false;
-        return castle.addStudentDR(students);
+        if (castle.removeWR(students)) {
+            return castle.addStudentDR(students);
+        }
+        return false;
     }
 
     /**
@@ -136,7 +146,7 @@ public class Board {
      * @return if the move is legal and played or not
      */
 
-    public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students){
+    public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException {
         if(castleMap.get(PlayerID).removeWR(students)) return false;
         for(Color c : students){
             islandList.get(islandNumber).addStudent(c);
@@ -274,11 +284,11 @@ public class Board {
      */
 
     public Team moveMotherNature(int move){
-        if((motherNature + move) >= islandList.size())
-            motherNature = motherNature - islandList.size() + move;
+        if((motherNaturePosition + move) >= islandList.size())
+            motherNaturePosition = motherNaturePosition - islandList.size() + move;
         else
-            motherNature += move;
-        Island island = this.islandConquering(islandList.get(motherNature));
+            motherNaturePosition += move;
+        Island island = this.islandConquering(islandList.get(motherNaturePosition));
         island = this.joinIsland(island);
 
         //checks if someone won and return the winner
@@ -303,16 +313,16 @@ public class Board {
         Island previous, next;
         List<Island> islandToJoin = new ArrayList<>();
         islandToJoin.add(island);
-        if(motherNature == 0 ){
+        if(motherNaturePosition == 0 ){
             previous = islandList.get(islandList.size()-1);
-            next = islandList.get(motherNature + 1);
+            next = islandList.get(motherNaturePosition + 1);
         }
         else {
-            previous = islandList.get(motherNature - 1);
-            if (motherNature == islandList.size()) {
+            previous = islandList.get(motherNaturePosition - 1);
+            if (motherNaturePosition == islandList.size()) {
                 next = islandList.get(0);
             } else {
-                next = islandList.get(motherNature + 1);
+                next = islandList.get(motherNaturePosition + 1);
             }
         }
         if(previous.getOwnership() == island.getOwnership()) island.joinTo(previous);
@@ -321,8 +331,11 @@ public class Board {
         //TODO: join islands
         return island;
     }
+
     public Bag getBag() {//aggiunto per la Tavern. ne possiamo parlare
         return bag;
     }
+
+    public String getTurn(){return turn.getTurn();}
 
 }
