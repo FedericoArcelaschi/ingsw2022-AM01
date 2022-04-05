@@ -36,7 +36,7 @@ public class Turn {
      */
     public String nextTurnPlanification(){
         int nextPlayerPosition = playerSittingOrder.indexOf(playerTurn) + 1;
-        if(nextPlayerPosition > playerSittingOrder.size())
+        if(nextPlayerPosition == playerSittingOrder.size())
             return playerTurn = playerSittingOrder.get(0);
         else return playerTurn = playerSittingOrder.get(nextPlayerPosition);
     }
