@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.expert;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Island;
-import jdk.internal.net.http.ResponseSubscribers;
-import java.util.HashMap;
-import java.util.Map;
 
 public class InfluenceCharacter extends Character{
 
