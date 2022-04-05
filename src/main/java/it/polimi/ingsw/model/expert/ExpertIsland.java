@@ -11,7 +11,7 @@ public class ExpertIsland extends Island {
     }
 
     /**
-     * Blocks the Island from the CharacterBlock
+     * Blocks the Island from the Block
      * @return
      */
     public boolean block(){

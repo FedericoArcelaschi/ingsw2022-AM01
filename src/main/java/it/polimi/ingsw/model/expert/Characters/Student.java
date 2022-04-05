@@ -4,10 +4,10 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StudentCharacter extends ExpertCharacter {
+public class Student extends Generic {
     Bag bag;
     List<Color> availableStudents;
-    public StudentCharacter(int idChar, Bag bag){
+    public Student(int idChar, Bag bag){
         super(idChar);
         this.bag = bag;
         availableStudents = new ArrayList<>();

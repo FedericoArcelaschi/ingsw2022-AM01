@@ -6,15 +6,16 @@ import it.polimi.ingsw.model.Color;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InfluenceCharacter extends ExpertCharacter {
+public class Influence extends Generic {
     Board board;
 
-    public InfluenceCharacter(int idChar){
+    public Influence(int idChar){
         super(idChar);
     }
 
     @Override
     public boolean applyEffect() {
+
         return false;
     }
     public boolean applyEffect(boolean payedToken, String PlayerID, Board board) {
@@ -30,4 +31,6 @@ public class InfluenceCharacter extends ExpertCharacter {
         Map<Color, Castle> newProfessorMap = new HashMap<Color, Castle>();
         return newProfessorMap;
     }
+
+
 }

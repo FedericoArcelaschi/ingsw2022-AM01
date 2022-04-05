@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.expert.Characters.ExpertCharacter;
+import it.polimi.ingsw.model.expert.Characters.Generic;
 import it.polimi.ingsw.model.expert.Characters.Tavern;
 
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class ExpertBoard extends Board {
     private Tavern tavern;
-    List<ExpertCharacter> expertCharactersCards;
+    List<Generic> expertCharactersCards;
 
     public ExpertBoard(String playerID1, String playerID2) {
         super(playerID1, playerID2);
@@ -26,7 +26,7 @@ public class ExpertBoard extends Board {
      * Initializes <code>expertCharactersCards</code>. It's a factory method
      * @returns ArrayList<Characters>
      */
-    private List<ExpertCharacter> drawExpertCharacters(){
+    private List<Generic> drawExpertCharacters(){
         tavern = new Tavern(this.bag);
         return tavern.extract();
     }

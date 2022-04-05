@@ -1,21 +1,19 @@
 package it.polimi.ingsw.model.expert.Characters;
 
 import it.polimi.ingsw.model.Bag;
-import it.polimi.ingsw.model.Board;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 /**
- *factory method for ExpertCharacter generation
+ *factory method for Generic generation
  * Could contain the board to init the characters. Could also implement the character extraction.
  **/
 public class Tavern {
     private long seed;
     Bag bag;
-    ExpertCharacter ec;
+    Generic ec;
 
     public Tavern(Bag bag) { //TODO: add to the expertBoard a seed that matches between the cloud and the Tavern.
         this.bag = bag;
@@ -24,10 +22,10 @@ public class Tavern {
 
     /**
      * extract the 3 cards for the game
-     * @return List<ExpertCharacter>
+     * @return List<Generic>
      */
-    public List<ExpertCharacter> extract(){
-        List<ExpertCharacter> expCards = new ArrayList<>();
+    public List<Generic> extract(){
+        List<Generic> expCards = new ArrayList<>();
         Random rand = new Random(seed);
         Integer idChar = 0;
         int i;
@@ -44,19 +42,19 @@ public class Tavern {
     /**
      * Factory method that calls the right Character constructor
      * @param idChar
-     * @return ExpertCharacter
+     * @return Generic
      */
-    private ExpertCharacter getExpertCharacter(int idChar){
+    private Generic getExpertCharacter(int idChar){
         if(idChar == 1)
-            return ec = new StudentCharacter(idChar, bag);
+            return ec = new Student(idChar, bag);
         else if(idChar == 2 || idChar == 6)
-            return ec = new InfluenceCharacter(idChar);
-        else if(idChar == 3 || idChar == 5)
-            return ec = new BlockCharacter(idChar);
-        else if(idChar == 4)
-            return ec = new ScriptCharacter(idChar);
+            return ec = new Influence(idChar);
+        else if(idChar == 5)
+            return ec = new Block(idChar);
+        else if(idChar == 4 || idChar == 3)
+            return ec = new Action(idChar);
         else if(true)
-            return ec = new InfluenceCharacter(idChar);
+            return ec = new Influence(idChar);
         else
             return null; // vorrei un Exception
     }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.expert.Characters;
 
 
-public enum ListCharacters { //TODO: complete THE CHARACTERS
+public enum CharactersList { //TODO: complete THE CHARACTERS
     MONK(1,"Monk: this character offers the opportunity to add\n" +
                           "a student to an island of your choice for 1 coin!" +
                           "call function: -Pay MONK(Color)"),
@@ -20,7 +20,7 @@ public enum ListCharacters { //TODO: complete THE CHARACTERS
     private int id;
     private String explaination;
 
-    ListCharacters(int id, String explaination){
+    CharactersList(int id, String explaination){
         this.id = id;
     }
     protected String getExplaination(){ //TODO: finish explainations

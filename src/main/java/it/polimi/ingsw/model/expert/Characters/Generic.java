@@ -1,15 +1,15 @@
 package it.polimi.ingsw.model.expert.Characters;
 
-public abstract class ExpertCharacter {
+public abstract class Generic {
     final int cost;
     final String explaination;
     protected int IdChar;
-    final ListCharacters lc = null; //in fatto che sia final mi triggera un po' e non so se va' bene che l'ho inizializzato a null come ha chiesto l'IDE
+    final CharactersList lc = null; //in fatto che sia final mi triggera un po' e non so se va' bene che l'ho inizializzato a null come ha chiesto l'IDE
     int idChar; //non so se serve forse no.
 
-    public ExpertCharacter(int idChar){
+    public Generic(int idChar){
         this.idChar = idChar;
-        ListCharacters lc = ListCharacters.values()[idChar];
+        CharactersList lc = CharactersList.values()[idChar];
         cost = lc.getCost();
         explaination = lc.getExplaination();
     }

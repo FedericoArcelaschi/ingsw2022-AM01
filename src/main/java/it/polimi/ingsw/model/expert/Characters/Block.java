@@ -2,9 +2,9 @@ package it.polimi.ingsw.model.expert.Characters;
 
 import it.polimi.ingsw.model.expert.ExpertIsland;
 
-public class BlockCharacter extends ExpertCharacter {
+public class Block extends Generic {
     private int availableBlockTile;
-    public BlockCharacter(int idChar) {
+    public Block(int idChar) {
         super(idChar);
         availableBlockTile = 4;
     }
@@ -18,8 +18,8 @@ public class BlockCharacter extends ExpertCharacter {
 
         if (availableBlockTile > 0 && payedToken) {
             island.block();
+            return true;
         }
-
         return false;
     }
 }
