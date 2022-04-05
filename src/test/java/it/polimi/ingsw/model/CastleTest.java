@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class CastleTest extends TestCase{
         assertEquals(oldList, c.getDiningRoom());
     }
 
-    public void testRemoveWR(){
+    public void testRemoveWR() throws NoSuchStudentException {
         Castle c = new Castle("Lorenzo", Team.BLACK, 1);
         List<Color> s = new ArrayList<>();
         s.add(Color.BLUE);

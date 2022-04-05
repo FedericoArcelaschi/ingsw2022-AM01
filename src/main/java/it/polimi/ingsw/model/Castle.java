@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+
 import java.util.*;
 
 public class Castle {
@@ -76,8 +78,12 @@ public class Castle {
      * removes a list of students from the waiting room.
      * @param c
      * @return boolean, true if method was successful, false if it wasn't
+     * @throws NoSuchStudentException TODO
      */
-    public boolean removeWR(List<Color> c) {
+    public boolean removeWR(List<Color> c) throws NoSuchStudentException{
+        if(!waitingRoom.containsAll(c)){
+            throw new NoSuchStudentException();
+        }
         for (Color col : c) {
             waitingRoom.remove(col);
         }
