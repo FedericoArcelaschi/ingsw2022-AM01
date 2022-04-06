@@ -2,3 +2,5 @@
 Giovanni Arriciati, 10683631, giovanni.arriciati@mail.polimi.it. 
 
 Federico Arcelaschi, 10654781, federico.arcelaschi@mail.polimi.it
+
+Lorenzo Aicardi, 10675881, lorenzo.aicardi@mail.polimi.it
