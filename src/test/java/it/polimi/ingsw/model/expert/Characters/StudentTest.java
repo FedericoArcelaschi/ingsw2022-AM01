@@ -11,12 +11,9 @@ import java.util.Map;
 public class StudentTest extends TestCase {
     public void testApplyEffect4MONK() {
         ExpertBoard board = new ExpertBoard("pippo", "pluto");
+        ExpertIsland testIsland = (ExpertIsland) board.getIslandList().get(1);
         board.setup4CharacterTesting(1);
-
-        int countYellows = testIsland.getStudents().get(Color.YELLOW);
-        for (int i = 0; i < 4; i++) {
-            System.out.println(board.getAvailableCharacterCards().get(i).idChar+ "\n");
-        }
+        int countYellows =  testIsland.getStudents().get(Color.YELLOW).intValue();
         board.playExpertCard(1, testIsland, 0, List.of(Color.YELLOW));
         assertEquals(countYellows + 1, testIsland.getStudents().get(Color.YELLOW).intValue());
     }
