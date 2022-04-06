@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.expert;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.expert.Characters.CharactersList;
 import it.polimi.ingsw.model.expert.Characters.Generic;
+import it.polimi.ingsw.model.expert.Characters.Parameters;
 import it.polimi.ingsw.model.expert.Characters.Tavern;
 
 import java.util.ArrayList;
@@ -14,30 +15,32 @@ public class ExpertBoard extends Board {
     int idChar;
     private Tavern tavern;
     List<Generic> expertCharactersCards;
-    private final List<ExpertIsland> islandList = new ArrayList<>();
-    private final Map<String, ExpertCastle> castleMap = new HashMap<>();
 
-    public ExpertBoard(String playerID1, String playerID2) {
-        super(playerID1, playerID2);
-        for (Island i: super.getIslandList()){
-            islandList.add((ExpertIsland)i);
-        }
-        expertCharactersCards = this.drawExpertCharacters();
-    }
-
-    public ExpertBoard(String playerID1, String playerID2, String playerID3) {
-        super();
-        setupIslands();
+    public ExpertBoard(String playerID1, String playerID2){
+        nPlayer = 2;
         setupClouds();
         castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer));
         castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer));
-        castleMap.put(playerID3, new ExpertCastle(playerID3, Team.GREY, nPlayer));
-        this.expertCharactersCards = this.drawExpertCharacters();
+        setupIslands();
     }
 
-    public ExpertBoard(String playerID1, String playerID2, String playerID3, String playerID4) {
-        super(playerID1, playerID2, playerID3, playerID4);
-        expertCharactersCards = this.drawExpertCharacters();
+    public ExpertBoard(String playerID1, String playerID2, String playerID3){
+        nPlayer = 3;
+        setupClouds();
+        setupIslands();
+        castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer));
+        castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer));
+        castleMap.put(playerID3, new ExpertCastle(playerID3, Team.GREY, nPlayer));
+    }
+
+    public ExpertBoard(String playerID1, String playerID2, String playerID3, String playerID4){
+        nPlayer = 4;
+        setupClouds();
+        castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer));
+        castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer));
+        castleMap.put(playerID3, new ExpertCastle(playerID3, Team.WHITE, nPlayer));
+        castleMap.put(playerID4, new ExpertCastle(playerID4, Team.BLACK, nPlayer));
+        setupIslands();
     }
 
     /**
@@ -53,16 +56,27 @@ public class ExpertBoard extends Board {
      * @param idChar
      * @return if works -> true else false
      */
-    public boolean playExpertCard(int idChar, ExpertIsland island, Map<String, Color> professorMap, int move, List<Color> students){
+    public boolean playExpertCard(int idChar, ExpertIsland island, int move, List<Color> studentsList){
         Generic ec = expertCharactersCards.get(expertCharactersCards.indexOf(CharactersList.values()[idChar]));
         String playerID = this.getTurn();
-        ec.applyEffect(island, playerID, castleMap.get(playerID), professorMap, payExpertCharacter(ec), move, null );
+        Map<Parameters, Object> parametersMap = new HashMap<>();
+        
+        parametersMap.put(Parameters.PAY_TOKEN, payExpertCharacter(ec));
+        parametersMap.put(Parameters.PLAYERID, playerID);
+        parametersMap.put(Parameters.ISLAND, island);
+        parametersMap.put(Parameters.CASTLE, castleMap.get(playerID));
+        parametersMap.put(Parameters.PROFESSORMAP, professorMap);
+        parametersMap.put(Parameters.STUDENTLIST, studentsList);
+        parametersMap.put(Parameters.MOVE, move);
+
+        ec.applyEffect(parametersMap);
     return true;
     }
 
     private boolean payExpertCharacter(Generic ec){
         String playerID = this.getTurn();
-        return castleMap.get(playerID).payCharacter(ec.getCost());
+        ExpertCastle expcas = (ExpertCastle)castleMap.get(playerID);
+        return expcas.payCharacter(ec.getCost());
     }
 
     private Island islandConquering(Island island){
@@ -71,12 +85,4 @@ public class ExpertBoard extends Board {
         if(t != null) { island.setOwnership(t); }
         return island;
     }
-
-    public Map<String, ExpertCastle> getExpCastleMap() {
-        return new HashMap<>(castleMap);
-    }
-    public List<ExpertIsland> getExpIslandList() {
-        return new ArrayList<>(islandList);
-    }
-
 }

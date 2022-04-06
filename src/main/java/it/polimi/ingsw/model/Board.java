@@ -11,8 +11,8 @@ public class Board {
     protected int nPlayer;
     protected final Bag bag = new Bag(24);
     protected final List<Cloud> cloudList = new ArrayList<>();
-    private final List<Island> islandList = new ArrayList<>();
-    private final Map<String, Castle> castleMap = new HashMap<>();
+    protected final List<Island> islandList = new ArrayList<>();
+    protected final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Castle> professorMap;
     //Map<professorColor, Castle> to handle professors assignment, null if no castle has the professor
     private Turn turn;
