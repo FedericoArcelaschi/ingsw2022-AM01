@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model.expert.Characters;
 
-import it.polimi.ingsw.model.Castle;
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Island;
+import it.polimi.ingsw.model.expert.ExpertBoard;
 import it.polimi.ingsw.model.expert.ExpertIsland;
 
-import java.util.List;
 import java.util.Map;
 
 public class Block extends Generic {
@@ -16,8 +15,9 @@ public class Block extends Generic {
     }
 
     @Override
-    public boolean applyEffect(ExpertIsland island, String player, Castle castle, Map<String, Color> professorMap, boolean payedToken, int move, List<Color> students) {
-        if (availableBlockTile > 0 && payedToken) {
+    public boolean applyEffect(Map<Parameters, Object> parameterMap) {
+        if (availableBlockTile > 0 && (boolean) parameterMap.get(Parameters.PAY_TOKEN)) {
+            ExpertIsland island = (ExpertIsland) parameterMap.get(Parameters.ISLAND);
             return island.blockIsland();
         }
         return false;

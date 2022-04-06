@@ -13,6 +13,10 @@ public class ExpertIsland extends Island {
         super(student);
         this.isBLocked = false;
     }
+    public ExpertIsland(){
+        super();
+        this.isBLocked = false;
+    }
 
     /**
      * Method for the WITCH: Blocks the Island from being conquered

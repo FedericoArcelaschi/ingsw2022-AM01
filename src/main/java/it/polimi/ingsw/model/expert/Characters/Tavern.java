@@ -58,4 +58,8 @@ public class Tavern {
                 return null;
         }
     }
+    public Generic extract4testing(int idChar){
+        return getExpertCharacter(idChar);
+    }
+
 }

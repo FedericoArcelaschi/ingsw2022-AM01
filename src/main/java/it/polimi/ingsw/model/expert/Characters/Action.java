@@ -22,7 +22,7 @@ public class Action extends Generic {
      * @return move +2
      */
     @Override
-    public boolean applyEffect(ExpertIsland island, String player, Castle castle, Map<String, Color> professorMap, boolean payedToken, int move, List<Color> students) {
+    public boolean applyEffect(Map<Parameters, Object> ParameterMap) {
         if(idChar==4)
             return true;
         /*if(idChar==3) {

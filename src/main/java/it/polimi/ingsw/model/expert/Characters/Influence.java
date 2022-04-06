@@ -1,9 +1,7 @@
 package it.polimi.ingsw.model.expert.Characters;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.expert.ExpertIsland;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Influence extends Generic {
@@ -17,9 +15,11 @@ public class Influence extends Generic {
      * to the player that uses this effect
      * CENTAUR: during the influence calculation doesn't count the towers.
      * KNIGHT: the given PLayer has 2 points of influence more than the opponents
+     * @param ParameterMap
      */
     @Override
-    public boolean applyEffect(ExpertIsland island, String player, Castle castle, Map<String, Color> professorMap, boolean payedToken, int move, List<Color> students) {
+    public boolean applyEffect(Map<Parameters, Object> ParameterMap) {
+
         Map<Color, Castle> newProfessorMap = new HashMap<>();
         //needs all castles.
         return false;
