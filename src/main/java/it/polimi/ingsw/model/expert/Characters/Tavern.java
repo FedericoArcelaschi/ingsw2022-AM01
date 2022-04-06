@@ -3,9 +3,7 @@ package it.polimi.ingsw.model.expert.Characters;
 import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.Board;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  *factory method for Generic generation
@@ -25,14 +23,14 @@ public class Tavern {
      * extract the 3 cards for the game
      * @return List<Generic>
      */
-    public List<Generic> extract(){
-        List<Generic> expCards = new ArrayList<>();
+    public Map<Integer, Generic> extract(){
+        Map<Integer, Generic> expCards = new HashMap<>();
         Random rand = new Random(seed);
         int idChar;
         for(int i= 0; i < 3; i++) {
             ec = getExpertCharacter(idChar = rand.nextInt(1, 12));
-            if(!expCards.contains(ec))
-                expCards.add(ec);
+            if(!expCards.containsValue(ec))
+                expCards.put(idChar, ec);
             else
                 i--;
         }

@@ -14,7 +14,6 @@ import java.util.Map;
 public class ExpertCastleTest extends TestCase {
 
     public void testAddStudentDR_testpayCharacter() {
-
         List<String> players = Arrays.asList("pippo","pluto","paperino");
         Board board = new ExpertBoard("pippo","pluto","paperino");
         ExpertCastle justACastle = (ExpertCastle) board.getCastleMap().get("pippo");
