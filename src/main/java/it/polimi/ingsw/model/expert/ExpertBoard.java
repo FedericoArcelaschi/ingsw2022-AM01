@@ -15,9 +15,6 @@ public class ExpertBoard extends Board {
 
     public ExpertBoard(String playerID1, String playerID2){
         nPlayer = 2;
-        setupClouds();
-        setupIslands();
-        drawExpertCharacters();
         turn = new Turn(Arrays.asList(playerID1, playerID2));
         castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer));
         castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer));
@@ -25,9 +22,6 @@ public class ExpertBoard extends Board {
 
     public ExpertBoard(String playerID1, String playerID2, String playerID3){
         nPlayer = 3;
-        setupClouds();
-        setupIslands();
-        drawExpertCharacters();
         castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer));
         castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer));
         castleMap.put(playerID3, new ExpertCastle(playerID3, Team.GREY, nPlayer));
@@ -35,15 +29,19 @@ public class ExpertBoard extends Board {
 
     public ExpertBoard(String playerID1, String playerID2, String playerID3, String playerID4){
         nPlayer = 4;
-        setupClouds();
-        setupIslands();
-        drawExpertCharacters();
         castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer));
         castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer));
         castleMap.put(playerID3, new ExpertCastle(playerID3, Team.WHITE, nPlayer));
         castleMap.put(playerID4, new ExpertCastle(playerID4, Team.BLACK, nPlayer));
     }
 
+    /**Cleans the contructors' implementation
+     */
+    private void construct(){
+        setupClouds();
+        setupIslands();
+        drawExpertCharacters();
+    }
     /**
      * Initializes <code>expertCharactersCards</code>. It's a factory method
      * @returns ArrayList<Characters>
@@ -75,12 +73,19 @@ public class ExpertBoard extends Board {
     return true;
     }
 
+    /**
+     * returns true if the current player has enough <code>coins</code> to pay for the effect of the character <code>ec</code>.
+     * @param ec
+     * @return boolean
+     */
     private boolean payCharacter(Generic ec){
         String playerID = this.getTurn();
         ExpertCastle expcas = (ExpertCastle)castleMap.get(playerID);
         return expcas.payCharacter(ec.getCost());
     }
 
+    /**sets up for the ExpertIslands
+     */
     private void setupIslands(){
         List<Color> s = bag.extractForIslandSetup();
         for(int i=0, c=0; i<12; i++){
@@ -94,9 +99,15 @@ public class ExpertBoard extends Board {
         }
     }
 
+    /**adds to the available Characters also the Character #idChar.
+     * @param idChar
+     */
     public void setup4CharacterTesting(int idChar){
         expertCharactersCards.add(tavern.extract4testing(idChar));
     }
+
+    /**For debugging: returns the list of available characters
+     */
     public List<Generic> getAvailableCharacterCards(){
         return expertCharactersCards;
     }

@@ -260,18 +260,17 @@ public class Board {
         else return null;
     }
 
-    /*private boolean joinIslands(List<Island> il){ TODO: island join after archipelago is done
+    /*private boolean joinIslands(List<Island> islandList){ TODO: island join after archipelago is done
         return true;
     }*/
 
     /**
-     * calculates influence and set new owner
+     * calculates influence and set new owner to the island the player lands on.
      * checks if neighbouring island have the same owner and join
      * checks if someone won
      * @param move number of jumps forward motherNature have to do
      * @return the winner or null
      */
-
     public Team moveMotherNature(int move){
         if((motherNaturePosition + move) >= islandList.size())
             motherNaturePosition = motherNaturePosition - islandList.size() + move;
@@ -279,8 +278,6 @@ public class Board {
             motherNaturePosition += move;
         Island island = this.islandConquering(islandList.get(motherNaturePosition));
         island = this.joinIsland(island);
-
-        //checks if someone won and return the winner
         return isWinningPosition();
     }
 
@@ -316,8 +313,6 @@ public class Board {
         }
         if(previous.getOwnership() == island.getOwnership()) island.joinTo(previous);
         if(next.getOwnership() == island.getOwnership()) island.joinTo(next);
-
-        //TODO: join islands
         return island;
     }
 

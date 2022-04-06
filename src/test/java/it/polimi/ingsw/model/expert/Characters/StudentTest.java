@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 public class StudentTest extends TestCase {
+    /**
+     * Tests adding a YELLOW to the island.
+     * Problem: doesn't know for sure if there is a YELLOW in MONK
+     */
     public void testApplyEffect4MONK() {
         ExpertBoard board = new ExpertBoard("pippo", "pluto");
         ExpertIsland testIsland = (ExpertIsland) board.getIslandList().get(1);

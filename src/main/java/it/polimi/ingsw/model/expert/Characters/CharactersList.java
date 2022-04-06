@@ -23,7 +23,6 @@ public enum CharactersList { //TODO: complete THE CHARACTERS
 
     private int id;
     private String explaination;
-
     CharactersList(int id, String explaination){
         this.id = id;
     }

@@ -22,6 +22,10 @@ public class Bag {
         random = new Random(seed);
     }
 
+    /**
+     * Gets a random student
+     * @return One Student (color)
+     */
     public Color extract(){
         int rs = remainingStudents();
         if(rs == 0) return null;
@@ -45,6 +49,9 @@ public class Bag {
         return l;
     }
 
+    /**
+     * @return 2 students of each color in random order.
+     */
     public List<Color> extractForIslandSetup(){
         List<Color> extractedList = new ArrayList<>();
         for(int i=0; i<2; i++){
@@ -57,7 +64,9 @@ public class Bag {
         return extractedList;
     }
 
-
+    /**
+     * @return The number of students in the bag. Used to end the game for
+     */
     public int remainingStudents(){
         return students.values().stream().reduce(0, Integer::sum);
     }
