@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class CastleTest extends TestCase{
         oldList.add(Color.GREEN);
         oldList.add(Color.RED);
         c.addStudentWR(s);
-        assertEquals(oldList, c.getDiningRoom());
+        assertEquals(oldList, c.getWaitingRoom());
     }
 
     public void testAddStudentDR(){
