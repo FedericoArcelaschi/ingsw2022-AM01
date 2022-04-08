@@ -9,13 +9,13 @@ public class Castle {
     private List<Color> waitingRoom;
     private Map<Color, Integer> diningRoom;
     private List<Card> cards;
-    private Card lastCardPlayed;
+    private Card lastPlayedCard;
     private final Team towerColor;
     private final int WRSize;
 
     public Castle(String PLayerID, Team team, int nPlayer){
-        if(nPlayer == 3) WRSize = 7;
-        else WRSize = 9;
+        if(nPlayer == 3) this.WRSize = 7;
+        else this.WRSize = 9;
         this.waitingRoom = new ArrayList<>();
         this.diningRoom = new HashMap<>();
         for(Color c : Color.values()){
@@ -23,7 +23,7 @@ public class Castle {
         }
         this.cards = new ArrayList<>();
         this.towerColor = team;
-        lastCardPlayed = null;
+        this.lastPlayedCard = null;
         for(int i=1; i<=10; i++) cards.add(new Card(i,(i+1)/2));
     }
 
@@ -49,7 +49,7 @@ public class Castle {
     }
 
     public Card getLastCardPlayed(){
-        return lastCardPlayed;
+        return lastPlayedCard;
     }
 
     public List<Card> getCards() {
@@ -106,7 +106,7 @@ public class Castle {
         if(c.isPlayed()) return false;
         else {
             c.setPlayed(true);
-            lastCardPlayed = c;
+            lastPlayedCard = c;
             return true;
         }
     }
