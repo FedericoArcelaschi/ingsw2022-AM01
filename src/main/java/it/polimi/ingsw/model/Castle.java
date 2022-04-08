@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 
 import java.util.*;
 
@@ -17,6 +18,9 @@ public class Castle {
         else WRSize = 9;
         this.waitingRoom = new ArrayList<>();
         this.diningRoom = new HashMap<>();
+        for(Color c : Color.values()){
+            diningRoom.put(c, 0);
+        }
         this.cards = new ArrayList<>();
         this.towerColor = team;
         lastCardPlayed = null;
@@ -54,8 +58,8 @@ public class Castle {
 
     /**
      * Add a list of students to the waiting room
-     * @param c
-     * @return boolean that checks whether or not the operation was succesful.
+     * @param c The list of students to add to the waiting room.
+     * @return boolean that checks whether the operation was successful or not.
      */
 
     public boolean addStudentWR(List<Color> c){
@@ -75,10 +79,10 @@ public class Castle {
     }
 
     /**
-     * removes a list of students from the waiting room.
-     * @param c
+     * Removes a list of students from the waiting room.
+     * @param c The list of students to remove.
      * @return boolean, true if method was successful, false if it wasn't
-     * @throws NoSuchStudentException TODO
+     * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
      */
     public boolean removeWR(List<Color> c) throws NoSuchStudentException{
         if(!waitingRoom.containsAll(c)){
@@ -101,7 +105,7 @@ public class Castle {
         c = cards.get(i-1);
         if(c.isPlayed()) return false;
         else {
-            c.setPlayed(false);
+            c.setPlayed(true);
             lastCardPlayed = c;
             return true;
         }
