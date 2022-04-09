@@ -8,8 +8,8 @@ import java.util.Map;
 public class ExpertCastle extends Castle{
     private int coins;
 
-    public ExpertCastle(String PLayerID, Team team, int nPlayer){
-        super(PLayerID, team, nPlayer);
+    public ExpertCastle(String PLayerID, Team team, int nPlayer, List<Color> students){
+        super(PLayerID, team, nPlayer, students);
         this.coins = 0;
     }
 

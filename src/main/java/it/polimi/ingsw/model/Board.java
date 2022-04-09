@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -111,7 +113,7 @@ public class Board {
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
 
-        return castle.addStudentWR(cloud.choose());
+        return castle.addStudentsInDiningRoom(cloud.choose());
     }
 
     /**
@@ -121,10 +123,10 @@ public class Board {
      * @return if the move is legal and played or not
      */
 
-    public boolean moveStudentToDR(String PlayerID, List<Color> students){
+    public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException {
         Castle castle = castleMap.get(PlayerID);
-        if(castle.removeWR(students)) return false;
-        return castle.addStudentDR(students);
+        if(castle.removeStudentsFromWaitingRoom(students)) return false;
+        return castle.addStudentsInDiningRoom(students);
     }
 
     /**
@@ -135,8 +137,8 @@ public class Board {
      * @return if the move is legal and played or not
      */
 
-    public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students){
-        if(castleMap.get(PlayerID).removeWR(students)) return false;
+    public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException {
+        if(castleMap.get(PlayerID).removeStudentsFromWaitingRoom(students)) return false;
         for(Color c : students){
             islandList.get(islandNumber).addStudent(c);
         }
@@ -224,7 +226,7 @@ public class Board {
 
     private int remainingCards(){
         int cardsLeft = 0;
-        for(Castle c : castleMap.values()) cardsLeft += c.remainingCards().size();
+        for(Castle c : castleMap.values()) cardsLeft += c.getCards().size();
         return cardsLeft;
     }
 

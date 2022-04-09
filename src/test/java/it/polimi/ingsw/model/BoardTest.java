@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class BoardTest extends TestCase {
         assertTrue(b.refillClouds());
     }
 
-    public void testChooseCloud() {
+    public void testChooseCloud() throws NoSuchStudentException {
         String player1 = "1";
         String player2 = "2";
         Board b=new Board(player1,player2);

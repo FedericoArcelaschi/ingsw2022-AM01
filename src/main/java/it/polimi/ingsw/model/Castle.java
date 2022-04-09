@@ -12,10 +12,10 @@ public class Castle {
     private final Team towerColor;
     private final int waitingRoomSize;
 
-    public Castle(String PLayerID, Team team, int nPlayer){
+    public Castle(String PLayerID, Team team, int nPlayer, List<Color> students){
         if(nPlayer == 3) this.waitingRoomSize = 7;
         else this.waitingRoomSize = 9;
-        this.waitingRoom = new ArrayList<>();
+        this.waitingRoom = new ArrayList<>(students);
         this.diningRoom = new HashMap<>();
         for(Color c : Color.values()){
             diningRoom.put(c, 0);
@@ -103,6 +103,8 @@ public class Castle {
         return true;
     }
 
+
+
     /**
      * Method that allows the player to play the card.
      * @param i priority of the card
@@ -118,5 +120,4 @@ public class Castle {
             return true;
         }
     }
-
 }

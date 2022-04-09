@@ -11,7 +11,8 @@ import java.util.Map;
 public class CastleTest extends TestCase{
 
     public void testAddStudentWR(){
-        Castle c = new Castle("Lorenzo", Team.BLACK, 1);
+        Bag b = new Bag(24);
+        Castle c = new Castle("Lorenzo", Team.BLACK, 1, b.multipleExtract(9));
         List<Color> s = new ArrayList<>();
         s.add(Color.BLUE);
         s.add(Color.GREEN);
@@ -25,7 +26,8 @@ public class CastleTest extends TestCase{
     }
 
     public void testAddStudentDR(){
-        Castle c = new Castle("Lorenzo", Team.BLACK, 1);
+        Bag b = new Bag(24);
+        Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
         List<Color> s = new ArrayList<>();
         s.add(Color.BLUE);
         s.add(Color.GREEN);
@@ -39,23 +41,21 @@ public class CastleTest extends TestCase{
     }
 
     public void testRemoveWR() throws NoSuchStudentException {
-        Castle c = new Castle("Lorenzo", Team.BLACK, 1);
-        List<Color> s = new ArrayList<>();
-        s.add(Color.BLUE);
-        s.add(Color.GREEN);
-        s.add(Color.RED);
-        c.addStudentsInWaitingRoom(s);
+        Bag b = new Bag(24);
+        List<Color> students = b.multipleExtract(9);
+        Castle c = new Castle("Lorenzo", Team.BLACK, 2, students);
         List<Color> rm = new ArrayList<>();
-        List<Color> eq = new ArrayList<>();
-        eq.add(Color.BLUE);
-        eq.add(Color.RED);
-        rm.add(Color.GREEN);
+
+        Color remove = students.get(0);
+        students.remove(remove);
+        rm.add(remove);
         c.removeStudentsFromWaitingRoom(rm);
-        assertEquals(eq, c.getWaitingRoom());
+        assertEquals(students, c.getWaitingRoom());
     }
 
     public void testPlayCard(){
-        Castle c = new Castle("Lorenzo", Team.BLACK, 1);
+        Bag b = new Bag(24);
+        Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
         assertTrue(c.playCard(3));
         assertEquals(c.getCards().get(3-1), c.getLastCardPlayed());
         assertFalse(c.playCard(3));
