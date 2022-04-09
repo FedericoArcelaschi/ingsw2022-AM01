@@ -1,8 +1,9 @@
-package it.polimi.ingsw.model.expert;
+package it.polimi.ingsw.model.expert; 
 
 import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ConcurrentModificationException;
 import java.util.List;
@@ -14,8 +15,12 @@ public class ExpertCastle extends Castle {
         coins = 1;
     }
 
+    /**
+     * Adds internally the coins when Students are added in the write positions
+     * It's the only way to get coins
+     */
     @Override
-    public boolean addStudentDR(List<Color> c) {
+    public boolean addStudentDR(@NotNull List<Color> c) {
         try {
             for (Color col : c) {
                 if(diningRoom.containsKey(col))
@@ -31,16 +36,16 @@ public class ExpertCastle extends Castle {
         }
     }
 
-    /**
-     * Adds internally the coins when Students are added in the write positions
-     * It's the only way to get coins
-     */
     public boolean payCharacter(int price) {
         if(this.coins >= price) {
-            this.coins = this.coins - price;
+            this.coins -= price;
             return true;
         }else
             return false;
+    }
+
+    public void unpayCharacter(int price){
+        this.coins += price;
     }
 }
 

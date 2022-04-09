@@ -13,14 +13,15 @@ public class ExpertIsland extends Island {
         super(student);
         this.isBLocked = false;
     }
+
     public ExpertIsland(){
         super();
         this.isBLocked = false;
     }
 
     /**
-     * Method for the WITCH: Blocks the Island from being conquered
-     * @return
+     * Method for the  <italic>Witch</italic>: Blocks the Island from being conquered
+     * @return true -> the island could be blocked and was successfully blocked
      */
     public boolean blockIsland(){
         if(isBLocked)
