@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Castle {
     private List<Color> waitingRoom;
-    private Map<Color, Integer> diningRoom;
+    protected Map<Color, Integer> diningRoom;
     private List<Card> cards;
     private Card lastPlayedCard;
     private final Team towerColor;
@@ -66,11 +66,21 @@ public class Castle {
     }
 
     /**
+     * add a single student to the dining room
+     * @param student color
+     * @return if the student is added correctly
+     */
+    public boolean addStudentsInDiningRoom(Color student){//TODO: add bounds
+        diningRoom.put(student, diningRoom.get(student) + 1);
+        return true;
+    }
+
+    /**
      * Add a list of students to the dining room
      * @param students – The list of students to add to the dining room.
      * @return boolean that checks whether the operation was successful.
      */
-    public boolean addStudentsInDiningRoom(List<Color> students){
+    public boolean addStudentsInDiningRoom(List<Color> students){//TODO: add bounds
         for (Color col : students) {
             diningRoom.put(col, diningRoom.get(col) + 1);
         }

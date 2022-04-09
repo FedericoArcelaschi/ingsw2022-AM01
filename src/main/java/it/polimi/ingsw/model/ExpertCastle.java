@@ -13,44 +13,49 @@ public class ExpertCastle extends Castle{
         this.coins = 0;
     }
 
-    public boolean addStudentsInWaitingRoom(List<Color> c){
-        try {
-            List<Color> waitingRoom = new ArrayList<>(getWaitingRoom());
-            for (Color col : c) {
-                waitingRoom.remove(col);
-            }
-            setWaitingRoom(waitingRoom);
-                return true;
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            return false;
-        }
+    public int getCoins() {
+        return coins;
+    }
+
+    /**
+     * same as the super method but check if the player get a coin
+     * @param color color of the student to add
+     * @return if the bounds are respected
+     */
+
+    public boolean addStudentInDiningRoom(Color color){//TODO: check super.method() bounds
+        int nStudentsBefore, nStudentsAfter;
+        nStudentsBefore = diningRoom.get(color);
+        super.addStudentsInDiningRoom(color);
+        nStudentsAfter = diningRoom.get(color);
+        if(nStudentsBefore/3 < nStudentsAfter/3)
+            coins++;
+        return true;
     }
 
     /**
      * Removes a student from the dining room. Only available in expert mode due to the presence of characters that allow this.
-     * @param c
-     * @return boolean
+     * @param color color of the student to remove
+     * @return boolean if the student can be removed
      */
-    public boolean removeDR(List<Color> c){
-        try {
-            Map<Color, Integer> diningRoom = new HashMap<>(getDiningRoom());
-            for (Color col : c) {
-                diningRoom.put(col, diningRoom.get(col) - 1);
-            }
-            setDiningRoom(diningRoom);
+    public boolean removeStudentFromDiningRoom(Color color){
+        if(diningRoom.get(color) > 0){
+            diningRoom.replace(color, diningRoom.get(color)-1);
             return true;
-        }catch(NullPointerException e){
-            e.printStackTrace();
-            return false;
         }
+        else
+            return false;
     }
 
-    /** Pays the character to perform the action.
-     *
-     * @return
+    /** remove coins form the castle
+     * @param cost cost of the character that the player wants to buy
+     * @return if the player can afford to pay the cost
      */
-    //public boolean payChar(){
-    //
-    //}
+    public boolean payChar(int cost){
+        if(coins >= cost){
+            coins -= cost;
+            return true;
+        }
+        else return false;
+    }
 }
