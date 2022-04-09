@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 
 import java.util.*;
 
@@ -11,11 +10,11 @@ public class Castle {
     private List<Card> cards;
     private Card lastPlayedCard;
     private final Team towerColor;
-    private final int WRSize;
+    private final int waitingRoomSize;
 
     public Castle(String PLayerID, Team team, int nPlayer){
-        if(nPlayer == 3) this.WRSize = 7;
-        else this.WRSize = 9;
+        if(nPlayer == 3) this.waitingRoomSize = 7;
+        else this.waitingRoomSize = 9;
         this.waitingRoom = new ArrayList<>();
         this.diningRoom = new HashMap<>();
         for(Color c : Color.values()){
@@ -58,21 +57,21 @@ public class Castle {
 
     /**
      * Add a list of students to the waiting room
-     * @param c The list of students to add to the waiting room.
+     * @param students The list of students to add to the waiting room.
      * @return boolean that checks whether the operation was successful or not.
      */
-
-    public boolean addStudentWR(List<Color> c){
-        waitingRoom.addAll(c);
+    public boolean addStudentsInWaitingRoom(List<Color> students){
+        waitingRoom.addAll(students);
         return true;
     }
+
     /**
      * Add a list of students to the dining room
-     * @param c
+     * @param students – The list of students to add to the dining room.
      * @return boolean that checks whether the operation was successful.
      */
-    public boolean addStudentDR(List<Color> c){
-        for (Color col : c) {
+    public boolean addStudentsInDiningRoom(List<Color> students){
+        for (Color col : students) {
             diningRoom.put(col, diningRoom.get(col) + 1);
         }
         return true;
@@ -80,15 +79,15 @@ public class Castle {
 
     /**
      * Removes a list of students from the waiting room.
-     * @param c The list of students to remove.
+     * @param students – The list of students to remove.
      * @return boolean, true if method was successful, false if it wasn't
      * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
      */
-    public boolean removeWR(List<Color> c) throws NoSuchStudentException{
-        if(!waitingRoom.containsAll(c)){
+    public boolean removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException{
+        if(!waitingRoom.containsAll(students)){
             throw new NoSuchStudentException();
         }
-        for (Color col : c) {
+        for (Color col : students) {
             waitingRoom.remove(col);
         }
         return true;
@@ -96,12 +95,11 @@ public class Castle {
 
     /**
      * Method that allows the player to play the card.
-     * @param i
-     * @return boolean
+     * @param i priority of the card
+     * @return true if the card was played correctly
      */
-    public boolean playCard(int i){ // con i mi riferisco alla priority della carta non alla sua posizione nell'arrayList
+    public boolean playCard(int i){
         Card c;
-
         c = cards.get(i-1);
         if(c.isPlayed()) return false;
         else {

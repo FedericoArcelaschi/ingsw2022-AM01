@@ -13,7 +13,7 @@ public class ExpertCastle extends Castle{
         this.coins = 0;
     }
 
-    public boolean addStudentWR(List<Color> c){
+    public boolean addStudentsInWaitingRoom(List<Color> c){
         try {
             List<Color> waitingRoom = new ArrayList<>(getWaitingRoom());
             for (Color col : c) {
