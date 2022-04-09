@@ -1,8 +1,10 @@
 package it.polimi.ingsw.model.expert.Characters;
 
+import java.lang.IllegalArgumentException;
 import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.Board;
 
+import javax.crypto.NullCipher;
 import java.util.*;
 
 /**
@@ -23,26 +25,32 @@ public class Tavern {
      * extract the 3 cards for the game
      * @return List<Generic>
      */
-    public Map<Integer, Generic> extract(){
-        Map<Integer, Generic> expCards = new HashMap<>();
+    public List<Generic> extract(){
+        List<Generic> expCards = new ArrayList<>();
         Random rand = new Random(seed);
         int idChar;
+        for(int i = 0; i < 13; i++) {
+            expCards.add(i, null);
+        }
+        //NOT WORKING (LOOPS)
         for(int i= 0; i < 3; i++) {
-            ec = getExpertCharacter(idChar = rand.nextInt(1, 12));
-            if(!expCards.containsValue(ec))
-                expCards.put(idChar, ec);
-            else
+            idChar = rand.nextInt(1,12);
+            if(expCards.get(idChar)==null) {
+                ec = getExpertCharacter(idChar);
+                expCards.set(idChar, ec);
+            }else
                 i--;
         }
         return expCards;
+
     }
 
     /**
      * Factory method that calls the right Character constructor
-     * @param idChar
-     * @return Generic
+     * @param idChar - integer between 1 and 12 identifier of the character
+     * @return Generic - abstract superclass of all character
      */
-    private Generic getExpertCharacter(int idChar){
+    private Generic getExpertCharacter(int idChar) throws IllegalArgumentException{
         switch (idChar) {
             case 1, 7, 10, 11:
                 return ec = new Student(idChar, board.getBag());
@@ -53,7 +61,7 @@ public class Tavern {
             case 5:
                 return ec = new Block(idChar);
             default:
-                return null;
+                throw new IllegalArgumentException();
         }
     }
     public Generic extract4testing(int idChar){

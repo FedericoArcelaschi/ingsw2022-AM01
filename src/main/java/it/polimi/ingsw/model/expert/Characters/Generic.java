@@ -15,7 +15,7 @@ public abstract class Generic {
      */
     public Generic(int idChar){
         this.idChar = idChar;
-        CharactersList lc = CharactersList.values()[idChar--];
+        CharactersList lc = CharactersList.values()[idChar-1];
         cost = lc.getCost();
         explaination = lc.getExplaination();
     }
@@ -34,7 +34,11 @@ public abstract class Generic {
         return lc;
     }
 
-    public boolean equals(CharactersList charlist) {
-        return charlist == this.lc;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Generic)) return false;
+        Generic generic = (Generic) o;
+        return getLc() == generic.getLc();
     }
 }

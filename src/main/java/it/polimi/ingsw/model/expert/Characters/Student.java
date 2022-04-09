@@ -26,22 +26,21 @@ public class Student extends Generic {
      * @param 
      */
     @Override
-    public boolean applyEffect(Map<Parameters, Object> parameterMap) {
-        if((boolean) parameterMap.get(Parameters.PAY_TOKEN)){
-            switch (idChar) {
-                case 1://MONK
-                    List<Color> colorList = (ArrayList) parameterMap.get(Parameters.STUDENTLIST);
-                    Color c = colorList.get(0);
-                    Island island = (Island) parameterMap.get(Parameters.ISLAND);
-                    if (availableStudents.contains(c)) {
-                        island.addStudent(c); //only needs one student.
-                        availableStudents.remove(c);
-                        availableStudents.add(bag.extract());
-                        return true;
-                    }
-                case 7://JESTER
-                case 11://QUEEN
-            }
+    public boolean applyEffect(Map<Parameters, Object> parameterMap) { //Note: the map could be used to return errors.
+        switch(idChar) {
+            case 1://MONK
+                List<Color> colorList = (ArrayList) parameterMap.get(Parameters.STUDENTLIST);
+                Color c = colorList.get(0);
+                Island island = (Island) parameterMap.get(Parameters.ISLAND);
+                if (availableStudents.contains(c)) {
+                    island.addStudent(c); //only needs one student.
+                    availableStudents.remove(c);
+                    availableStudents.add(bag.extract());
+                    return true;
+                }
+            case 7://JESTER
+
+            case 11://QUEEN
         }
         return false;
     }

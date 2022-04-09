@@ -18,23 +18,31 @@ public class StudentTest extends TestCase {
         ExpertIsland testIsland = (ExpertIsland) board.getIslandList().get(1);
         board.setup4CharacterTesting(1);
         int countYellows =  testIsland.getStudents().get(Color.YELLOW).intValue();
+        int countAll =  testIsland.getStudents().size();
+
+        System.out.println("Y:" + countYellows);
+        System.out.println("#students:" + countAll);
 
         if(board.playExpertCard(1, testIsland, 0, List.of(Color.YELLOW)))
             assertEquals(countYellows + 1, testIsland.getStudents().get(Color.YELLOW).intValue());
-        //else
-            //assertEquals(countYellows, testIsland.getStudents().get(Color.YELLOW).intValue());
+        else
+            assertEquals(countYellows, testIsland.getStudents().get(Color.YELLOW).intValue());
 
         int countRed =  testIsland.getStudents().get(Color.RED).intValue();
         if(board.playExpertCard(1, testIsland, 0, List.of(Color.RED)))
             assertEquals(countYellows + 1, testIsland.getStudents().get(Color.RED).intValue());
-        //else
-            //assertEquals(countYellows, testIsland.getStudents().get(Color.YELLOW).intValue());
+        else
+            assertEquals(countYellows, testIsland.getStudents().get(Color.YELLOW).intValue());
 
         int countBlue =  testIsland.getStudents().get(Color.BLUE).intValue();
         if(board.playExpertCard(1, testIsland, 0, List.of(Color.BLUE)))
             assertEquals(countYellows + 1, testIsland.getStudents().get(Color.BLUE).intValue());
-        //else
-            //assertEquals(countYellows, testIsland.getStudents().get(Color.YELLOW).intValue());
+        else
+            assertEquals(countYellows, testIsland.getStudents().get(Color.YELLOW).intValue());
+        countAll =  testIsland.getStudents().size();
+        countYellows =  testIsland.getStudents().get(Color.YELLOW).intValue();
+        System.out.println("Y:" + countYellows);
+        System.out.println("#students:" + countAll);
 
     }
 }

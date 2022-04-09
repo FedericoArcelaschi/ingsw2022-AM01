@@ -16,7 +16,7 @@ public class Block extends Generic {
 
     @Override
     public boolean applyEffect(Map<Parameters, Object> parameterMap) {
-        if (availableBlockTile > 0 && (boolean) parameterMap.get(Parameters.PAY_TOKEN)) {
+        if (availableBlockTile > 0) {
             ExpertIsland island = (ExpertIsland) parameterMap.get(Parameters.ISLAND);
             return island.blockIsland();
         }

@@ -11,8 +11,27 @@ public class TavernTest extends TestCase {
     private Tavern tavern = new Tavern(board);
 
     public void testExtraction() {
-        Map<Integer, Generic> expCards = new HashMap<>();
+        List<Generic> expCards = new ArrayList<>();
         expCards = tavern.extract();
-        assertEquals(expCards.size(), 3);
+        assertEquals(13, expCards.size());
+        assertEquals(true,
+                expCards.contains(new Student(1, board.getBag()))
+                    ||expCards.contains(new Student(7, board.getBag()))
+                    ||expCards.contains(new Student(10, board.getBag()))
+                    ||expCards.contains(new Student(11, board.getBag()))
+                    ||expCards.contains(new Influence(2))
+                    ||expCards.contains(new Influence(6))
+                    ||expCards.contains(new Influence(8))
+                    ||expCards.contains(new Influence(9))
+                    ||expCards.contains(new Action(3))
+                    ||expCards.contains(new Action(4))
+                    ||expCards.contains(new Block(5))
+                );
+        int i = 0;
+        for (Generic a: expCards) {
+            if (a != null)
+                i++;
+        }
+        assertEquals(3,i);
     }
 }
