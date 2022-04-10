@@ -34,7 +34,7 @@ public class TurnTest extends TestCase {
         Turn turn = new Turn(players);
         turn.setTurnAction(players);
         turn.nextTurnPlanification();
-        assertEquals("pluto",turn.getTurn());
+        assertEquals("pluto", turn.getTurn());
     }
 
     public void testNextTurnAction() {
