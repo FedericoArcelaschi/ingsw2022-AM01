@@ -125,7 +125,7 @@ public class Board {
 
     public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException {
         Castle castle = castleMap.get(PlayerID);
-        if(castle.removeStudentsFromWaitingRoom(students)) return false;
+        if(!castle.removeStudentsFromWaitingRoom(students)) return false;
         return castle.addStudentsInDiningRoom(students);
     }
 

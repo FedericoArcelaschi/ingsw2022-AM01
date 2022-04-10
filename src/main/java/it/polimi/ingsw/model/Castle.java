@@ -77,10 +77,9 @@ public class Castle {
     public boolean addStudentsInDiningRoom(Color student){
         if (diningRoom.get(student)<diningRoomSize) {
             diningRoom.put(student, diningRoom.get(student) + 1);
-            return false;
-        }
-        else
             return true;
+        }
+        return false;
     }
 
     /**
@@ -90,7 +89,7 @@ public class Castle {
      */
     public boolean addStudentsInDiningRoom(List<Color> students){
         for (Color student : students) {
-            if(addStudentsInDiningRoom(student))
+            if(!addStudentsInDiningRoom(student))
                 return false;
         }
         return true;

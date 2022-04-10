@@ -29,13 +29,13 @@ public class CastleTest extends TestCase{
         Bag b = new Bag(24);
         Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
         List<Color> s = new ArrayList<>();
+        Map<Color, Integer> oldList = c.getDiningRoom();
         s.add(Color.BLUE);
         s.add(Color.GREEN);
         s.add(Color.RED);
-        Map<Color, Integer> oldList = new HashMap<>(c.getDiningRoom());
-        oldList.put(Color.BLUE, oldList.get(Color.BLUE) + 1);
-        oldList.put(Color.GREEN, oldList.get(Color.GREEN) + 1);
-        oldList.put(Color.RED, oldList.get(Color.RED) + 1);
+        oldList.replace(Color.BLUE, oldList.get(Color.BLUE) + 1);
+        oldList.replace(Color.GREEN, oldList.get(Color.GREEN) + 1);
+        oldList.replace(Color.RED, oldList.get(Color.RED) + 1);
         c.addStudentsInDiningRoom(s);
         assertEquals(oldList, c.getDiningRoom());
     }

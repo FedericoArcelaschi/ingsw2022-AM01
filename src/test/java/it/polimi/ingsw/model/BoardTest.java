@@ -67,10 +67,9 @@ public class BoardTest extends TestCase {
         for(int i=0; i<4;i++){
             cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(i));
         }
-        b.moveStudentToDR(player1, cl);
+        System.out.println(b.moveStudentToDR(player1, cl));
         //move the students from cloud to WR
         assertTrue(b.chooseCloud(player1, 0));
-
     }
 
     public void testMoveStudentToDR() {
