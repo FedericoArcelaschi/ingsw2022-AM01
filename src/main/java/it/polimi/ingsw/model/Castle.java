@@ -11,10 +11,14 @@ public class Castle {
     private Card lastPlayedCard;
     private final Team towerColor;
     private final int waitingRoomSize;
+    //constants
+    private static final int diningRoomSize = 9;
+    private static final int waitingRoomSize2Players = 9;
+    private static final int waitingRoomSize3Players = 7;
 
     public Castle(String PLayerID, Team team, int nPlayer, List<Color> students){
-        if(nPlayer == 3) this.waitingRoomSize = 7;
-        else this.waitingRoomSize = 9;
+        if(nPlayer == 3) this.waitingRoomSize = waitingRoomSize3Players;
+        else this.waitingRoomSize = waitingRoomSize2Players;
         this.waitingRoom = new ArrayList<>(students);
         this.diningRoom = new HashMap<>();
         for(Color c : Color.values()){
@@ -70,9 +74,13 @@ public class Castle {
      * @param student color
      * @return if the student is added correctly
      */
-    public boolean addStudentsInDiningRoom(Color student){//TODO: add bounds
-        diningRoom.put(student, diningRoom.get(student) + 1);
-        return true;
+    public boolean addStudentsInDiningRoom(Color student){
+        if (diningRoom.get(student)<diningRoomSize) {
+            diningRoom.put(student, diningRoom.get(student) + 1);
+            return false;
+        }
+        else
+            return true;
     }
 
     /**
@@ -80,9 +88,10 @@ public class Castle {
      * @param students – The list of students to add to the dining room.
      * @return boolean that checks whether the operation was successful.
      */
-    public boolean addStudentsInDiningRoom(List<Color> students){//TODO: add bounds
-        for (Color col : students) {
-            diningRoom.put(col, diningRoom.get(col) + 1);
+    public boolean addStudentsInDiningRoom(List<Color> students){
+        for (Color student : students) {
+            if(addStudentsInDiningRoom(student))
+                return false;
         }
         return true;
     }

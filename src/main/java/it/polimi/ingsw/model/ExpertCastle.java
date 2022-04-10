@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ExpertCastle extends Castle{
     private int coins;
@@ -23,7 +20,7 @@ public class ExpertCastle extends Castle{
      * @return if the bounds are respected
      */
 
-    public boolean addStudentInDiningRoom(Color color){//TODO: check super.method() bounds
+    public boolean addStudentInDiningRoom(Color color){
         int nStudentsBefore, nStudentsAfter;
         nStudentsBefore = diningRoom.get(color);
         super.addStudentsInDiningRoom(color);
