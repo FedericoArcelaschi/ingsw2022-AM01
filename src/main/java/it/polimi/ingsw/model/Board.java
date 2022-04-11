@@ -138,7 +138,9 @@ public class Board {
      */
 
     public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException {
-        if(castleMap.get(PlayerID).removeStudentsFromWaitingRoom(students)) return false;
+        if(!castleMap.get(PlayerID).removeStudentsFromWaitingRoom(students)){
+            throw new NoSuchStudentException();
+        }
         for(Color c : students){
             islandList.get(islandNumber).addStudent(c);
         }

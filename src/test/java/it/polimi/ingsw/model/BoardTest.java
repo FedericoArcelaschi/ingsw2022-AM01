@@ -2,9 +2,9 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import junit.framework.TestCase;
+import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BoardTest extends TestCase {
 
@@ -72,13 +72,45 @@ public class BoardTest extends TestCase {
         assertTrue(b.chooseCloud(player1, 0));
     }
 
-    public void testMoveStudentToDR() {
-    }
+    public void testMoveStudentToIsland() throws NoSuchStudentException {
+        String player1 = "1";
+        String player2 = "2";
+        Board b=new Board(player1,player2);
+        List<Color> cl =  new ArrayList<>();
 
-    public void testMoveStudentToIsland() {
+        cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
+        cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(1));
+        Map<Color, Integer> students = new HashMap<>();
+        for(Color c : Color.values()){
+            students.put(c,0);
+        }
+        for(Color c : cl){
+            students.replace(c, students.get(c)+1);
+        }
+        //test if the method returns correctly
+        assertTrue(b.moveStudentToIsland(player1, 0, cl));
+        //test if the student get removed from castle waiting room
+        assertEquals(9-cl.size(),b.getCastleMap().get(player1).getWaitingRoom().size());
+        //test if the student get added to the island
+        Map<Color, Integer> studentsOnIsland = b.getIslandList().get(0).getStudents();
+        assertEquals(students, studentsOnIsland);
     }
 
     public void testPlayCard() {
+        String player1 = "1";
+        String player2 = "2";
+        Board b=new Board(player1,player2);
+        //check if the card is not used at the beginning
+        assertFalse(b.getCastleMap().get(player1).getCards().get(0).isPlayed());
+        //check if the card is played correctly
+        assertTrue(b.playCard(player1,1));
+        //check if the card is set as used
+        assertTrue(b.getCastleMap().get(player1).getCards().get(0).isPlayed());
+        //check if last card played is the one we played
+        assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed().getPriority());
+        assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed().getDistance());
+        //check if the card can't be reused
+        assertFalse(b.playCard(player1,1));
     }
 
     public void testIsWinningPosition() {
