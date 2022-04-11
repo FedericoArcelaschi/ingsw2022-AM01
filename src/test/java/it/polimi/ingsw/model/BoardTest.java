@@ -118,4 +118,11 @@ public class BoardTest extends TestCase {
 
     public void testIsWonByResources() {
     }
+
+    public void testMoveMotherNature() {
+        String player1 = "1";
+        String player2 = "2";
+        Board b=new Board(player1,player2);
+        assertTrue(b.moveMotherNature(3));
+    }
 }

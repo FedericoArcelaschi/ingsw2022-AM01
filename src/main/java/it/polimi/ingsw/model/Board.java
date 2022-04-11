@@ -23,6 +23,7 @@ public class Board {
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         setupIslands();
+        setupProfessorMap();
     }
 
     public Board(String playerID1, String playerID2, String playerID3){
@@ -32,6 +33,7 @@ public class Board {
         castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer, bag.multipleExtract(7)));
         setupIslands();
+        setupProfessorMap();
     }
 
     public Board(String playerID1, String playerID2, String playerID3, String playerID4){
@@ -42,8 +44,8 @@ public class Board {
         castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         setupIslands();
+        setupProfessorMap();
     }
-
     public List<Cloud> getCloudList() {
         return new ArrayList<>(cloudList);
     }
@@ -72,6 +74,17 @@ public class Board {
             for(int i=0; i<nPlayer;i++)   cloudList.add(new Cloud(bag,4));
         }
     }
+
+    /**
+     * instance at null the professor map
+     */
+    private void setupProfessorMap(){
+        professorMap = new HashMap<>();
+        for(Color c : Color.values()){
+            professorMap.put(c,null);
+        }
+    }
+
 
     /**
      * generate the islands
@@ -237,7 +250,7 @@ public class Board {
      * @return the winner team
      */
 
-    public Team isWinningPosition(){
+    private Team isWinningPosition(){
         Map <Team, Integer> nTowers = sumTowers();
         Team winner = null;
         if(islandList.size()<=3){
@@ -264,9 +277,23 @@ public class Board {
         else return null;
     }
 
-    /*private boolean joinIslands(List<Island> il){ TODO: island join after archipelago is done
+    private boolean joinIslands(List<Island> il){
+        int firstIsland = islandList.indexOf(il.get(0));
+        if(firstIsland == -1) return false;
+        Island a;
+        if(il.size()==2){
+            a = new Archipelago(il.get(0),il.get(1));
+        }
+        else if(il.size()==3){
+            a = new Archipelago(il.get(0),il.get(1),il.get(2));
+        }
+        else return false;
+        for (int i = firstIsland; i < firstIsland+il.size(); i++) {
+            il.remove(i);
+        }
+        islandList.add(firstIsland,a);
         return true;
-    }*/
+    }
 
     /**
      * calculates influence and set new owner
@@ -276,7 +303,7 @@ public class Board {
      * @return the winner or null
      */
 
-    public Team moveMotherNature(int move){
+    public boolean moveMotherNature(int move){
         if(motherNature+move/islandList.size() >= 1) motherNature += move-islandList.size();
         else motherNature += move;
         Island i = islandList.get(motherNature);
@@ -301,11 +328,15 @@ public class Board {
             previous = islandList.get(motherNature - 1);
             next = islandList.get(motherNature + 1);
         }
-        if(previous.getOwnership() == i.getOwnership()) islandToJoin.add(previous);
-        if(next.getOwnership() == i.getOwnership()) islandToJoin.add(next);
-        //TODO join islands
+        if(i.getOwnership() != null && previous.getOwnership() == i.getOwnership()) islandToJoin.add(0,previous);
+        if(i.getOwnership() != null && next.getOwnership() == i.getOwnership()) islandToJoin.add(next);
 
-        //checks if someone won and return the winner
-        return isWinningPosition();
+        if(islandToJoin.size() == 2 || islandToJoin.size() == 3) {
+            if (!joinIslands(islandToJoin)) {
+                System.out.println("join error");
+                return false;
+            }
+        }
+        return true;
     }
 }
