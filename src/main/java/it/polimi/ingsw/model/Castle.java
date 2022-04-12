@@ -32,11 +32,11 @@ public class Castle {
 
 
     public List<Color> getWaitingRoom(){
-        return waitingRoom;
+        return new ArrayList<>(waitingRoom);
     }
 
     public Map<Color, Integer> getDiningRoom(){
-        return diningRoom;
+        return new HashMap<>(diningRoom);
     }
 
     public Team getTeam(){
@@ -48,7 +48,7 @@ public class Castle {
     }
 
     public List<Card> getCards() {
-        return cards;
+        return new ArrayList<>(cards);
     }
 
     /**
