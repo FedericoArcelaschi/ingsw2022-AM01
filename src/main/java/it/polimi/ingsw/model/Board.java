@@ -14,7 +14,7 @@ public class Board {
     private final List<Island> islandList = new ArrayList<>();
     private final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Castle> professorMap;
-    //Map<professorColor, Castle> to handle professors assignment, null if no castle has the professor
+
     Turn turn;
 
     public Board(String playerID1, String playerID2){
@@ -85,7 +85,6 @@ public class Board {
         }
     }
 
-
     /**
      * generate the islands
      */
@@ -130,6 +129,28 @@ public class Board {
     }
 
     /**
+     * check who has more student for each color and reassign the professors
+     */
+
+    private void updateProfessorsOwners(){
+        for(Color color : Color.values()) {
+            int max = 0;
+            Castle newOwner = null;
+            for (Castle castle : castleMap.values()) {
+                int n = castle.getDiningRoom().get(color);
+                if(n > max){
+                    max = n;
+                    newOwner = castle;
+                }
+                else if(n == max){
+                    newOwner = null;
+                }
+            }
+            if(newOwner != null) professorMap.replace(color, newOwner);
+        }
+    }
+
+    /**
      * move students form the waiting room to the dining room
      * @param PlayerID the id of the player that ask for this move
      * @param students a list of students you want to move
@@ -139,7 +160,9 @@ public class Board {
     public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException {
         Castle castle = castleMap.get(PlayerID);
         if(!castle.removeStudentsFromWaitingRoom(students)) return false;
-        return castle.addStudentsInDiningRoom(students);
+        boolean r = castle.addStudentsInDiningRoom(students);
+        updateProfessorsOwners();
+        return r;
     }
 
     /**

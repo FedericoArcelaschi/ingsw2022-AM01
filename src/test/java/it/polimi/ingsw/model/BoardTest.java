@@ -113,6 +113,26 @@ public class BoardTest extends TestCase {
         assertFalse(b.playCard(player1,1));
     }
 
+    public void testUpdateProfessor() throws NoSuchStudentException {
+        String player1 = "1";
+        String player2 = "2";
+        Board b = new Board(player1,player2);
+        List<Color> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
+        b.moveStudentToDR(player1, students);
+
+        //test professor get assigned
+        Map<Color,Castle> pm1 = b.getProfessorMap();
+        Map<Color,Castle> pm2;
+        for(Color c : Color.values()){
+            if(students.contains(c)){
+                assertNotNull(pm1.get(c));
+            }
+            else{
+                assertNull(pm1.get(c));
+            }
+        }
+    }
+
     public void testIsWinningPosition() {
     }
 
