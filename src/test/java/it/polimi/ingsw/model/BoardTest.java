@@ -12,7 +12,6 @@ public class BoardTest extends TestCase {
         String player1 = "1";
         String player2 = "2";
         Board b=new Board(player1,player2);
-        System.out.println(b.getIslandList());
         assertEquals(12, b.getIslandList().size());
     }
 
@@ -67,7 +66,7 @@ public class BoardTest extends TestCase {
         for(int i=0; i<4;i++){
             cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(i));
         }
-        System.out.println(b.moveStudentToDR(player1, cl));
+        b.moveStudentToDR(player1, cl);
         //move the students from cloud to WR
         assertTrue(b.chooseCloud(player1, 0));
     }

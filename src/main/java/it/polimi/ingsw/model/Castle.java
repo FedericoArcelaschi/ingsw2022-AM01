@@ -5,9 +5,9 @@ import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import java.util.*;
 
 public class Castle {
-    private List<Color> waitingRoom;
-    protected Map<Color, Integer> diningRoom;
-    private List<Card> cards;
+    private final List<Color> waitingRoom;
+    protected final Map<Color, Integer> diningRoom;
+    private final List<Card> cards;
     private Card lastPlayedCard;
     private final Team towerColor;
     private final int waitingRoomSize;
@@ -43,14 +43,6 @@ public class Castle {
         return towerColor;
     }
 
-    public void setDiningRoom(Map<Color, Integer> diningRoom){
-        this.diningRoom = diningRoom;
-    }
-
-    public void setWaitingRoom(List<Color> waitingRoom){
-        this.waitingRoom = waitingRoom;
-    }
-
     public Card getLastCardPlayed(){
         return lastPlayedCard;
     }
@@ -75,11 +67,11 @@ public class Castle {
      * @return if the student is added correctly
      */
     public boolean addStudentsInDiningRoom(Color student){
-        if (diningRoom.get(student)<diningRoomSize) {
-            diningRoom.put(student, diningRoom.get(student) + 1);
-            return true;
+        if (diningRoom.get(student)>=diningRoomSize) {
+            return false;
         }
-        return false;
+        diningRoom.put(student, diningRoom.get(student) + 1);
+        return true;
     }
 
     /**

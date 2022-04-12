@@ -28,7 +28,6 @@ public class ExpertCastleTest extends TestCase {
         for (int i = 0; i < 5; i++) { //add 3 students to give pippo a coin
             ec.addStudentInDiningRoom(Color.YELLOW);
         }
-        System.out.println(ec.getCoins());
         assertTrue(ec.payChar(1));
     }
 

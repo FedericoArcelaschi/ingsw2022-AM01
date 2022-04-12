@@ -61,4 +61,11 @@ public class BagTest extends TestCase {
         Bag b = new Bag(24,1);
         assertEquals(24*Color.values().length,b.remainingStudents());
     }
+
+    public void testGetSeed(){
+        int seed = 1;
+        Bag b = new Bag(24,seed);
+
+        assertEquals(seed,b.getSeed());
+    }
 }
