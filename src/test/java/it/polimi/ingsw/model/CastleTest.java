@@ -1,15 +1,16 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CastleTest extends TestCase{
-
+public class CastleTest{
+    @Test
     public void testAddStudentWR(){
         Bag b = new Bag(24);
         Castle c = new Castle("Lorenzo", Team.BLACK, 1, b.multipleExtract(9));
@@ -24,7 +25,7 @@ public class CastleTest extends TestCase{
         c.addStudentsInWaitingRoom(s);
         assertEquals(oldList, c.getWaitingRoom());
     }
-
+    @Test
     public void testAddStudentDR(){
         Bag b = new Bag(24);
         Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
@@ -39,7 +40,7 @@ public class CastleTest extends TestCase{
         c.addStudentsInDiningRoom(s);
         assertEquals(oldList, c.getDiningRoom());
     }
-
+    @Test
     public void testRemoveWR() throws NoSuchStudentException {
         Bag b = new Bag(24);
         List<Color> students = b.multipleExtract(9);
@@ -52,7 +53,7 @@ public class CastleTest extends TestCase{
         c.removeStudentsFromWaitingRoom(rm);
         assertEquals(students, c.getWaitingRoom());
     }
-
+    @Test
     public void testPlayCard(){
         Bag b = new Bag(24);
         Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));

@@ -2,13 +2,13 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
-import junit.framework.TestCase;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 import java.util.*;
 
-public class BoardTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
 
+public class BoardTest{
+    @Test
     public void testBoardIslandNumber(){
         String player1 = "1";
         String player2 = "2";
@@ -16,7 +16,7 @@ public class BoardTest extends TestCase {
         Board b=new Board(player1,player2,t);
         assertEquals(12, b.getIslandList().size());
     }
-
+    @Test
     public void testBoardIslandStartingColor(){
         String player1 = "1";
         String player2 = "2";
@@ -29,7 +29,7 @@ public class BoardTest extends TestCase {
             else assertEquals(1,nStudents);
         }
     }
-
+    @Test
     public void testBoardCloudNumber(){
         String player1 = "1";
         String player2 = "2";
@@ -54,7 +54,7 @@ public class BoardTest extends TestCase {
         assertEquals(3, cl3.get(0).getSize());
         assertEquals(4, cl4.get(0).getSize());
     }
-
+    @Test
     public void testResetClouds() {
         String player1 = "1";
         String player2 = "2";
@@ -64,7 +64,7 @@ public class BoardTest extends TestCase {
 
         assertTrue(b.refillClouds());
     }
-
+    @Test
     public void testChooseCloud() throws NoSuchStudentException, NotYourTurnException {
         String player1 = "1";
         String player2 = "2";
@@ -81,7 +81,7 @@ public class BoardTest extends TestCase {
         //move the students from cloud to WR
         assertTrue(b.chooseCloud(player1, 0));
     }
-
+    @Test
     public void testMoveStudentToIsland() throws NoSuchStudentException, NotYourTurnException {
         String player1 = "1";
         String player2 = "2";
@@ -106,7 +106,7 @@ public class BoardTest extends TestCase {
         Map<Color, Integer> studentsOnIsland = b.getIslandList().get(0).getStudents();
         assertEquals(students, studentsOnIsland);
     }
-
+    @Test
     public void testPlayCard() throws NotYourTurnException {
         String player1 = "1";
         String player2 = "2";
@@ -124,7 +124,7 @@ public class BoardTest extends TestCase {
         //check if the card can't be reused
         assertFalse(b.playCard(player1,1));
     }
-
+    @Test
     public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException {
         String player1 = "1";
         String player2 = "2";
@@ -145,13 +145,13 @@ public class BoardTest extends TestCase {
             }
         }
     }
-
+    @Test
     public void testIsWinningPosition() {
     }
-
+    @Test
     public void testIsWonByResources() {
     }
-
+    @Test
     public void testMoveMotherNature() {
         String player1 = "1";
         String player2 = "2";

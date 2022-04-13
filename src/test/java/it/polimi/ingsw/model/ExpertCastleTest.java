@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 
-public class ExpertCastleTest extends TestCase {
-
+public class ExpertCastleTest{
+    @Test
     public void testRemoveStudentFromDiningRoom() {
         Bag b = new Bag(24);
         ExpertCastle ec = new ExpertCastle("pippo", Team.WHITE, 2, b.multipleExtract(9));
@@ -14,14 +16,14 @@ public class ExpertCastleTest extends TestCase {
         int nOfYellows = ec.getDiningRoom().get(Color.YELLOW);
         assertEquals(1, nOfYellows);
     }
-
+    @Test
     //test not enough coins
     public void testFalsePayChar() {
         Bag b = new Bag(24);
         ExpertCastle ec = new ExpertCastle("pippo", Team.WHITE, 2, b.multipleExtract(9));
         assertFalse(ec.payChar(1));
     }
-
+    @Test
     public void testTruePayChar() {
         Bag b = new Bag(24);
         ExpertCastle ec = new ExpertCastle("pippo", Team.WHITE, 2, b.multipleExtract(9));
@@ -30,7 +32,7 @@ public class ExpertCastleTest extends TestCase {
         }
         assertTrue(ec.payChar(1));
     }
-
+    @Test
     public void testAddStudentInDiningRoom() {
         Bag b = new Bag(24);
         ExpertCastle ec = new ExpertCastle("pippo", Team.WHITE, 2, b.multipleExtract(9));

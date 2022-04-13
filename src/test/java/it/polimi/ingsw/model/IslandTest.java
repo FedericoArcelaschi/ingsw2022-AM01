@@ -1,20 +1,21 @@
 package it.polimi.ingsw.model;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class IslandTest extends TestCase {
-
+public class IslandTest{
+    @Test
     public void testAddStudent() {
         Island i = new Island(Color.YELLOW);
         i.addStudent(Color.YELLOW);
         int nYellow = i.getStudents().get(Color.YELLOW);
         assertEquals(2,nYellow);
     }
-
+    @Test
     public void testAddStudentMap() {
         Island i = new Island();
         Map<Color, Integer> students= new HashMap<>();
@@ -23,7 +24,7 @@ public class IslandTest extends TestCase {
         i.addStudent(students);
         assertEquals(students,i.getStudents());
     }
-
+    @Test
     public void testCalculateInfluence(){
         Island i = new Island();
         Map<Color, Castle> professors = new HashMap<>();
