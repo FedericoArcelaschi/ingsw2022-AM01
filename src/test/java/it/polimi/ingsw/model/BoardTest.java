@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -11,14 +12,16 @@ public class BoardTest extends TestCase {
     public void testBoardIslandNumber(){
         String player1 = "1";
         String player2 = "2";
-        Board b=new Board(player1,player2);
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
         assertEquals(12, b.getIslandList().size());
     }
 
     public void testBoardIslandStartingColor(){
         String player1 = "1";
         String player2 = "2";
-        Board b=new Board(player1,player2);
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
 
         for(int i=0; i<12; i++){
             int nStudents = b.getIslandList().get(i).getStudents().values().stream().mapToInt(n -> n).sum();
@@ -32,9 +35,12 @@ public class BoardTest extends TestCase {
         String player2 = "2";
         String player3 = "3";
         String player4 = "4";
-        Board b2=new Board(player1,player2);
-        Board b3=new Board(player1,player2,player3);
-        Board b4=new Board(player1,player2,player3,player4);
+        Turn t1 = new Turn(Arrays.asList(player1,player2));
+        Turn t2 = new Turn(Arrays.asList(player1,player2,player3));
+        Turn t3 = new Turn(Arrays.asList(player1,player2,player3,player4));
+        Board b2=new Board(player1,player2,t1);
+        Board b3=new Board(player1,player2,player3,t2);
+        Board b4=new Board(player1,player2,player3,player4,t3);
         List<Cloud> cl2 = b2.getCloudList();
         List<Cloud> cl3 = b3.getCloudList();
         List<Cloud> cl4 = b4.getCloudList();
@@ -52,15 +58,20 @@ public class BoardTest extends TestCase {
     public void testResetClouds() {
         String player1 = "1";
         String player2 = "2";
-        Board b=new Board(player1,player2);
+
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
 
         assertTrue(b.refillClouds());
     }
 
-    public void testChooseCloud() throws NoSuchStudentException {
+    public void testChooseCloud() throws NoSuchStudentException, NotYourTurnException {
         String player1 = "1";
         String player2 = "2";
-        Board b=new Board(player1,player2);
+
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
+
         List<Color> cl = new ArrayList<>();
         //move 4 element to DR to free space for new students coming from cloud
         for(int i=0; i<4;i++){
@@ -71,10 +82,11 @@ public class BoardTest extends TestCase {
         assertTrue(b.chooseCloud(player1, 0));
     }
 
-    public void testMoveStudentToIsland() throws NoSuchStudentException {
+    public void testMoveStudentToIsland() throws NoSuchStudentException, NotYourTurnException {
         String player1 = "1";
         String player2 = "2";
-        Board b=new Board(player1,player2);
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
         List<Color> cl =  new ArrayList<>();
 
         cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
@@ -95,10 +107,11 @@ public class BoardTest extends TestCase {
         assertEquals(students, studentsOnIsland);
     }
 
-    public void testPlayCard() {
+    public void testPlayCard() throws NotYourTurnException {
         String player1 = "1";
         String player2 = "2";
-        Board b=new Board(player1,player2);
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
         //check if the card is not used at the beginning
         assertFalse(b.getCastleMap().get(player1).getCards().get(0).isPlayed());
         //check if the card is played correctly
@@ -112,10 +125,11 @@ public class BoardTest extends TestCase {
         assertFalse(b.playCard(player1,1));
     }
 
-    public void testUpdateProfessor() throws NoSuchStudentException {
+    public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException {
         String player1 = "1";
         String player2 = "2";
-        Board b = new Board(player1,player2);
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
         List<Color> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
         b.moveStudentToDR(player1, students);
 
@@ -141,7 +155,8 @@ public class BoardTest extends TestCase {
     public void testMoveMotherNature() {
         String player1 = "1";
         String player2 = "2";
-        Board b=new Board(player1,player2);
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
         assertTrue(b.moveMotherNature(3));
     }
 }

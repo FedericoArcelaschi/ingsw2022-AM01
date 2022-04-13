@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,19 +15,19 @@ public class Board {
     private final List<Island> islandList = new ArrayList<>();
     private final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Castle> professorMap;
+    private final Turn turn;
 
-    Turn turn;
-
-    public Board(String playerID1, String playerID2){
+    public Board(String playerID1, String playerID2, Turn turn){
         nPlayer = 2;
         setupClouds();
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         setupIslands();
         setupProfessorMap();
+        this.turn=turn;
     }
 
-    public Board(String playerID1, String playerID2, String playerID3){
+    public Board(String playerID1, String playerID2, String playerID3, Turn turn){
         nPlayer = 3;
         setupClouds();
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(7)));
@@ -34,9 +35,10 @@ public class Board {
         castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer, bag.multipleExtract(7)));
         setupIslands();
         setupProfessorMap();
+        this.turn=turn;
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, String playerID4){
+    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn){
         nPlayer = 4;
         setupClouds();
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
@@ -45,6 +47,7 @@ public class Board {
         castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         setupIslands();
         setupProfessorMap();
+        this.turn=turn;
     }
     public List<Cloud> getCloudList() {
         return new ArrayList<>(cloudList);
@@ -121,7 +124,8 @@ public class Board {
      * @return if the move is legal and played or not
      */
 
-    public boolean chooseCloud(String PlayerID, int cloudID){
+    public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException {
+        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
 
@@ -157,7 +161,8 @@ public class Board {
      * @return if the move is legal and played or not
      */
 
-    public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException {
+    public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException, NotYourTurnException {
+        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         if(!castle.removeStudentsFromWaitingRoom(students)) return false;
         boolean r = castle.addStudentsInDiningRoom(students);
@@ -173,7 +178,8 @@ public class Board {
      * @return if the move is legal and played or not
      */
 
-    public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException {
+    public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException, NotYourTurnException {
+        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
         if(!castleMap.get(PlayerID).removeStudentsFromWaitingRoom(students)){
             throw new NoSuchStudentException();
         }
@@ -190,7 +196,8 @@ public class Board {
      * @return if the move is legal and played or not
      */
 
-    public boolean playCard(String PlayerID, int card){//true if the move is legal, false otherwise
+    public boolean playCard(String PlayerID, int card) throws NotYourTurnException {//true if the move is legal, false otherwise
+        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         return castle.playCard(card);
     }
