@@ -4,113 +4,116 @@ import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import java.util.*;
 
 public class Castle {
-    private List<Color> waitingRoom;
-    protected Map<Color, Integer> diningRoom;
-    private List<Card> cards;
-    private Card lastCardPlayed;
+    private final List<Color> waitingRoom;
+    protected final Map<Color, Integer> diningRoom;
+    private final List<Card> cards;
+    private Card lastPlayedCard;
     private final Team towerColor;
-    private final int WRSize;
+    private final int waitingRoomSize;
+    //constants
+    private static final int diningRoomSize = 9;
+    private static final int waitingRoomSize2Players = 9;
+    private static final int waitingRoomSize3Players = 7;
 
-    public Castle(String PLayerID, Team team, int nPlayer) {
-        if (nPlayer == 3) WRSize = 7;
-        else WRSize = 9;
-        this.waitingRoom = new ArrayList<>();
+    public Castle(String PLayerID, Team team, int nPlayer, List<Color> students){
+        if(nPlayer == 3) this.waitingRoomSize = waitingRoomSize3Players;
+        else this.waitingRoomSize = waitingRoomSize2Players;
+        this.waitingRoom = new ArrayList<>(students);
         this.diningRoom = new HashMap<>();
+        for(Color c : Color.values()){
+            diningRoom.put(c, 0);
+        }
         this.cards = new ArrayList<>();
         this.towerColor = team;
-        lastCardPlayed = null;
-        for (int i = 1; i <= 10; i++) cards.add(new Card(i, (i + 1) / 2));
+        this.lastPlayedCard = null;
+        for(int i=1; i<=10; i++) cards.add(new Card(i,(i+1)/2));
     }
 
-    public List<Color> getWaitingRoom() {
-        return new ArrayList<>(waitingRoom);
+
+    public List<Color> getWaitingRoom(){
+        return waitingRoom;
     }
 
-    public Map<Color, Integer> getDiningRoom() {
-        return new HashMap<>(diningRoom);
+    public Map<Color, Integer> getDiningRoom(){
+        return diningRoom;
+    }
+
+    public Team getTeam(){
+        return towerColor;
+    }
+
+    public Card getLastCardPlayed(){
+        return lastPlayedCard;
     }
 
     public List<Card> getCards() {
-        return new ArrayList<>(cards);
-    }
-
-    public Card getLastCardPlayed() {
-        return lastCardPlayed;
+        return cards;
     }
 
     /**
      * Add a list of students to the waiting room
-     * @param c
-     * @return boolean that checks whether or not the operation was succesful.
+     * @param students The list of students to add to the waiting room.
+     * @return boolean that checks whether the operation was successful or not.
      */
-
-    public boolean addStudentWR (List < Color > c) {
-        waitingRoom.addAll(c);
+    public boolean addStudentsInWaitingRoom(List<Color> students){
+        waitingRoom.addAll(students);
+        return true;
+    }
+    /**
+     * add a single student to the dining room
+     * @param student color
+     * @return if the student is added correctly
+     */
+    public boolean addStudentsInDiningRoom(Color student){
+        if (diningRoom.get(student)>=diningRoomSize) {
+            return false;
+        }
+        diningRoom.put(student, diningRoom.get(student) + 1);
         return true;
     }
 
-    public boolean addStudentDR(List<Color> c) {
-        try {
-            for (Color col : c) {
-                if (diningRoom.containsKey(col))
-                    diningRoom.put(col, diningRoom.get(col) + 1);
-                else diningRoom.put(col, 1);
-            }
-            return true;
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            return false;
+    /**
+     * Add a list of students to the dining room
+     * @param students – The list of students to add to the dining room.
+     * @return boolean that checks whether the operation was successful.
+     */
+    public boolean addStudentsInDiningRoom(List<Color> students){
+        for (Color student : students) {
+            if(!addStudentsInDiningRoom(student))
+                return false;
         }
     }
 
     /**
-     * removes a list of students from the waiting room.
-     * @param c
+     * Removes a list of students from the waiting room.
+     * @param students – The list of students to remove.
      * @return boolean, true if method was successful, false if it wasn't
-     * @throws NoSuchStudentException TODO
+     * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
      */
-    public boolean removeWR (List < Color > c) throws NoSuchStudentException {
-        if (!waitingRoom.containsAll(c)) {
+    public boolean removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException{
+        if(!waitingRoom.containsAll(students)){
             throw new NoSuchStudentException();
         }
-        for (Color col : c) {
+        for (Color col : students) {
             waitingRoom.remove(col);
         }
         return true;
     }
 
-    /**
-     *
-     * @param i: number on the top left of the card (priority)
-     * @return
+
+
+    /**Method that allows the player to play the card.
+     * @param i priority of the card
+     * @return true if the card was played correctly
      */
     public boolean playCard(int i){
         Card c;
-        try{
-            c = cards.get(i-1);
-            if(c.isPlayed())
-                return false;
-            else {
-                c.setPlayed(false);
-                lastCardPlayed = c;
-                return true;
-            }
-        }catch(ArrayIndexOutOfBoundsException e){
-            e.printStackTrace();
-            return false;
+        c = cards.get(i-1);
+        if(c.isPlayed()) return false;
+        else {
+            c.setPlayed(true);
+            lastPlayedCard = c;
+            return true;
         }
-    }
-
-    /**
-     * Gives the remaining planification Cards.
-     * @return
-     */
-    public List<Card> remainingCards() {
-        List<Card> cards=  new ArrayList<>(this.cards);
-        return cards;
-    }
-
-    public Team getTeam() {
-        return towerColor;
     }
 }

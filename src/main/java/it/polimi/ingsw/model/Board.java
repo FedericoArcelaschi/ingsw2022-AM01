@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,29 +15,25 @@ public class Board {
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Castle> professorMap;
-    //Map<professorColor, Castle> to handle professors assignment, null if no castle has the professor
-    protected Turn turn;
+    private final Turn turn;
 
-    public Board(String playerID1, String playerID2){
+    public Board(String playerID1, String playerID2, Turn turn){
         nPlayer = 2;
         setupClouds();
         setupIslands();
-        turn = new Turn(Arrays.asList(playerID1, playerID2));
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer));
+        setupProfessorMap();
+        this.turn=turn;
     }
 
-    public Board(String playerID1, String playerID2, String playerID3){
+    public Board(String playerID1, String playerID2, String playerID3, Turn turn){
         nPlayer = 3;
         setupClouds();
         setupIslands();
-        turn = new Turn(Arrays.asList(playerID1, playerID2, playerID3));
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer));
-        castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer));
+        setupProfessorMap();
+        this.turn=turn;
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, String playerID4){
+    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn){
         nPlayer = 4;
         setupClouds();
         turn = new Turn(Arrays.asList(playerID1, playerID2, playerID3, playerID4));
@@ -45,10 +42,8 @@ public class Board {
         castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer));
         castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer));
         setupIslands();
-    }
-
-    public Board() {
-
+        setupProfessorMap();
+        this.turn=turn;
     }
 
     public List<Cloud> getCloudList() {
@@ -80,6 +75,16 @@ public class Board {
         }
         else{
             for(int i=0; i<nPlayer;i++)   cloudList.add(new Cloud(bag,4));
+        }
+    }
+
+    /**
+     * instance at null the professor map
+     */
+    private void setupProfessorMap(){
+        professorMap = new HashMap<>();
+        for(Color c : Color.values()){
+            professorMap.put(c,null);
         }
     }
 
@@ -117,11 +122,34 @@ public class Board {
      * @param cloudID the cloud that is chosen
      * @return if the move is legal and played or not
      */
-    public boolean chooseCloud(String PlayerID, int cloudID){
+    public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException {
+        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
 
-        return castle.addStudentWR(cloud.choose());
+        return castle.addStudentsInDiningRoom(cloud.choose());
+    }
+
+    /**
+     * check who has more student for each color and reassign the professors
+     */
+
+    private void updateProfessorsOwners(){
+        for(Color color : Color.values()) {
+            int max = 0;
+            Castle newOwner = null;
+            for (Castle castle : castleMap.values()) {
+                int n = castle.getDiningRoom().get(color);
+                if(n > max){
+                    max = n;
+                    newOwner = castle;
+                }
+                else if(n == max){
+                    newOwner = null;
+                }
+            }
+            if(newOwner != null) professorMap.replace(color, newOwner);
+        }
     }
 
     /**
@@ -130,12 +158,13 @@ public class Board {
      * @param students a list of students you want to move
      * @return if the move is legal and played or not
      */
-    public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException {
+    public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException, NotYourTurnException {
+        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
-        if (castle.removeWR(students)) {
-            return castle.addStudentDR(students);
-        }
-        return false;
+        if(!castle.removeStudentsFromWaitingRoom(students)) return false;
+        boolean r = castle.addStudentsInDiningRoom(students);
+        updateProfessorsOwners();
+        return r;
     }
 
     /**
@@ -144,8 +173,11 @@ public class Board {
      * @param students a list of students you want to move
      * @return if the move is legal and played or not
      */
-    public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException {
-        if(castleMap.get(PlayerID).removeWR(students)) return false;
+    public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException, NotYourTurnException {
+        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
+        if(!castleMap.get(PlayerID).removeStudentsFromWaitingRoom(students)){
+            throw new NoSuchStudentException();
+        }
         for(Color c : students){
             islandList.get(islandNumber).addStudent(c);
         }
@@ -158,7 +190,8 @@ public class Board {
      * @param card the number of the card the player want to use
      * @return if the move is legal and played or not
      */
-    public boolean playCard(String PlayerID, int card){//true if the move is legal, false otherwise
+    public boolean playCard(String PlayerID, int card) throws NotYourTurnException {//true if the move is legal, false otherwise
+        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         return castle.playCard(card);
     }
@@ -226,7 +259,7 @@ public class Board {
      */
     private int remainingCards(){
         int cardsLeft = 0;
-        for(Castle c : castleMap.values()) cardsLeft += c.remainingCards().size();
+        for(Castle c : castleMap.values()) cardsLeft += c.getCards().size();
         return cardsLeft;
     }
 
@@ -234,7 +267,7 @@ public class Board {
      * checks if the game is won after a player turn
      * @return the winner team
      */
-    public Team isWinningPosition(){
+    private Team isWinningPosition(){
         Map <Team, Integer> nTowers = sumTowers();
         Team winner = null;
         if(islandList.size()<=3){
@@ -260,9 +293,24 @@ public class Board {
         else return null;
     }
 
-    /*private boolean joinIslands(List<Island> islandList){ TODO: island join after archipelago is done
+
+    private boolean joinIslands(List<Island> il){
+        int firstIsland = islandList.indexOf(il.get(0));
+        if(firstIsland == -1) return false;
+        Island a;
+        if(il.size()==2){
+            a = new Archipelago(il.get(0),il.get(1));
+        }
+        else if(il.size()==3){
+            a = new Archipelago(il.get(0),il.get(1),il.get(2));
+        }
+        else return false;
+        for (int i = firstIsland; i < firstIsland+il.size(); i++) {
+            il.remove(i);
+        }
+        islandList.add(firstIsland,a);
         return true;
-    }*/
+    }
 
     /**
      * calculates influence and set new owner to the island the player lands on.
@@ -271,53 +319,42 @@ public class Board {
      * @param move number of jumps forward motherNature have to do
      * @return the winner or null
      */
-    public Team moveMotherNature(int move){
-        if((motherNaturePosition + move) >= islandList.size())
-            motherNaturePosition = motherNaturePosition - islandList.size() + move;
-        else
-            motherNaturePosition += move;
-        Island island = this.islandConquering(islandList.get(motherNaturePosition));
-        island = this.joinIsland(island);
-        return isWinningPosition();
-    }
 
-    /**
-     * Calculates Influence and set new owner.
-     *
-     * @param island
-     * @return island with updated owner
-     */
-    private Island islandConquering(Island island){
-        Map<Team, Integer> influence = island.calculateInfluence(getProfessorMap());
+    public boolean moveMotherNature(int move){
+        if(motherNaturePosition+move/islandList.size() >= 1) motherNaturePosition += move-islandList.size();
+        else motherNaturePosition += move;
+        Island i = islandList.get(motherNaturePosition);
+        //calculates influence and set new owner
+        Map<Team, Integer> influence = i.calculateInfluence(professorMap);
         Team t = teamWithMoreInfluence(influence);
-        if(t != null) { island.setOwnership(t); }
-        return island;
-    }
+        if(t != null) i.setOwnership(t);
 
-    private Island joinIsland(Island island){
         //checks if neighbouring island have the same owner and join
         Island previous, next;
         List<Island> islandToJoin = new ArrayList<>();
-        islandToJoin.add(island);
-        if(motherNaturePosition == 0 ){
+        islandToJoin.add(i);
+        if(motherNaturePosition==0){
             previous = islandList.get(islandList.size()-1);
             next = islandList.get(motherNaturePosition + 1);
         }
-        else {
+        else if(motherNaturePosition == islandList.size()) {
             previous = islandList.get(motherNaturePosition - 1);
-            if (motherNaturePosition == islandList.size()) {
-                next = islandList.get(0);
-            } else {
-                next = islandList.get(motherNaturePosition + 1);
+            next = islandList.get(0);
+        }
+        else{
+            previous = islandList.get(motherNaturePosition - 1);
+            next = islandList.get(motherNaturePosition + 1);
+        }
+        if(i.getOwnership() != null && previous.getOwnership() == i.getOwnership()) islandToJoin.add(0,previous);
+        if(i.getOwnership() != null && next.getOwnership() == i.getOwnership()) islandToJoin.add(next);
+
+        if(islandToJoin.size() == 2 || islandToJoin.size() == 3) {
+            if (!joinIslands(islandToJoin)) {
+                System.out.println("join error");
+                return false;
             }
         }
-        if(previous.getOwnership() == island.getOwnership()) island.joinTo(previous);
-        if(next.getOwnership() == island.getOwnership()) island.joinTo(next);
-        return island;
-    }
-
-    public Bag getBag() {//aggiunto per la Tavern. ne possiamo parlare
-        return bag;
+        return true;
     }
 
     public String getTurn(){return turn.getTurn();}

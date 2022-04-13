@@ -1,13 +1,13 @@
 package it.polimi.ingsw.model;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-public class TurnTest extends TestCase {
-
+public class TurnTest{
+    @Test
     public void testGetTurn() {
         List<String> players = Arrays.asList("pippo","pluto","paperino");
         Turn turn = new Turn(players);
@@ -16,7 +16,7 @@ public class TurnTest extends TestCase {
             turn.nextTurnPlanification();
         }
     }
-
+    @Test
     public void testSetTurnAction() {
         List<String> players = Arrays.asList("pippo","pluto","paperino");
         Turn turn = new Turn(players);
@@ -29,15 +29,15 @@ public class TurnTest extends TestCase {
 
     }
 
+    @Test
     public void testNextTurnPlanification() {
         List<String> players = Arrays.asList("pippo","pluto","paperino");
         Turn turn = new Turn(players);
-        players = Arrays.asList("pluto","paperino","pippo");
         turn.setTurnAction(players);
         turn.nextTurnPlanification();
-        assertTrue(false);
+        assertEquals("pluto", turn.getTurn());
     }
-
+    @Test
     public void testNextTurnAction() {
     }
 }

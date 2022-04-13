@@ -38,33 +38,16 @@ public class Island{
         this.ownership = ownership;
     }
 
-    public void setStudents(Map<Color, Integer> s){
-        this.students.clear();
-        for(Color c: s.keySet()) {
-            this.students.put(c, s.get(c));
-        }
-    }
-
     public boolean addStudent(Color c){
-        try {
-            students.put(c, students.get(c) + 1); //In the value of the color c, I'm putting the previous number of students + 1.
-            return true;
-        }catch(NullPointerException e){
-            e.printStackTrace();
-            return false;
-        }
+        students.put(c, students.get(c) + 1); //In the value of the color c, I'm putting the previous number of students + 1.
+        return true;
     }
 
     public boolean addStudent(Map<Color, Integer> s){
-        try {
-            for(Color c: s.keySet()) {
-                students.put(c, students.get(c) + s.get(c));
-            }
-            return true;
-        }catch(NullPointerException e){
-            e.printStackTrace();
-            return false;
+        for(Color c: s.keySet()) {
+            students.put(c, students.get(c) + s.get(c));
         }
+        return true;
     }
 
     private void towerInfluence(Map<Team, Integer> influence){
@@ -75,8 +58,10 @@ public class Island{
 
     private void studentInfluence(Map<Team, Integer> influence, Map<Color, Castle> professorMap){
         for(Color c : Color.values()){
-            Team t = professorMap.get(c).getTeam(); //take team of the owner of the professor
-            influence.put(t, influence.get(t) + students.get(c));  //add influence for the color to the owner of the professor
+            if(professorMap.get(c) != null) {
+                Team t = professorMap.get(c).getTeam(); //take team of the owner of the professor
+                influence.replace(t, influence.get(t) + students.get(c));  //add influence for the color to the owner of the professor
+            }
         }
     }
 
@@ -87,7 +72,6 @@ public class Island{
         towerInfluence(influence);
         return influence;
     }
-
     @Override
     public String toString() {
         return "Island{" +

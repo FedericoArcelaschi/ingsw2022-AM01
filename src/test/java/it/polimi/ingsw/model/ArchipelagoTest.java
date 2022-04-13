@@ -1,12 +1,14 @@
 package it.polimi.ingsw.model;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ArchipelagoTest extends TestCase {
-
+public class ArchipelagoTest{
+    @Test
     public void testGetIslandNumber() {
         Island i1, i2, i3;
         Island a1, a2, a3;
@@ -21,7 +23,7 @@ public class ArchipelagoTest extends TestCase {
         assertEquals(3, a2.getIslandNumber());
         assertEquals(5, a3.getIslandNumber());
     }
-
+    @Test
     public void testAddStudents(){
         Island i1, i2, i3;
         Island a1, a2, a3;
