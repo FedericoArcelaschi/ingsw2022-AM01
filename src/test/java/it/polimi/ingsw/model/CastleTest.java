@@ -1,30 +1,56 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class CastleTest{
     @Test
-    public void testAddStudentWR(){
+    public void testAddStudentWR() throws TooManyStudentsException, NoSuchStudentException {
+        Bag b = new Bag(24);
+        Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
+        List<Color> s = new ArrayList<>();
+        List<Color> newStudents = new ArrayList<>();
+        s.add(c.getWaitingRoom().get(0));
+        s.add(c.getWaitingRoom().get(1));
+        s.add(c.getWaitingRoom().get(2));
+        c.removeStudentsFromWaitingRoom(s);
+        newStudents.add(Color.BLUE);
+        newStudents.add(Color.GREEN);
+        newStudents.add(Color.RED);
+        assertTrue(c.addStudentsInWaitingRoom(newStudents));
+    }
+
+    @Test
+    public void testNoSuchStudentException(){
         Bag b = new Bag(24);
         Castle c = new Castle("Lorenzo", Team.BLACK, 1, b.multipleExtract(9));
-        List<Color> s = new ArrayList<>();
-        s.add(Color.BLUE);
-        s.add(Color.GREEN);
-        s.add(Color.RED);
-        List<Color> oldList = new ArrayList<>(c.getWaitingRoom());
-        oldList.add(Color.BLUE);
-        oldList.add(Color.GREEN);
-        oldList.add(Color.RED);
-        c.addStudentsInWaitingRoom(s);
-        assertEquals(oldList, c.getWaitingRoom());
+        List<Color> students = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            students.add(Color.YELLOW);
+        }
+        assertThrows(NoSuchStudentException.class, () -> c.removeStudentsFromWaitingRoom(students), "");
     }
+
+    @Test
+    public void testTooManyStudentException(){
+        Bag b = new Bag(24);
+        Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
+        //test adding student in a full waiting room
+        List<Color> newStudents = new ArrayList<>();
+        newStudents.add(Color.BLUE);
+        newStudents.add(Color.GREEN);
+        newStudents.add(Color.RED);
+        assertThrows(TooManyStudentsException.class, () -> c.addStudentsInWaitingRoom(newStudents), "");
+    }
+
     @Test
     public void testAddStudentDR(){
         Bag b = new Bag(24);

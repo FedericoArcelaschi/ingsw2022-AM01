@@ -16,6 +16,17 @@ public class BoardTest{
         Board b=new Board(player1,player2,t);
         assertEquals(12, b.getIslandList().size());
     }
+
+    @Test
+    public void testNotYourTurnException(){
+        String player1 = "1";
+        String player2 = "2";
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
+
+        assertThrows(NotYourTurnException.class, () -> b.chooseCloud(player2,0), "");
+    }
+
     @Test
     public void testBoardIslandStartingColor(){
         String player1 = "1";
