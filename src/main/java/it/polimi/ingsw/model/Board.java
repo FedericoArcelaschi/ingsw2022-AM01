@@ -333,7 +333,7 @@ public class Board {
      * @return the winner or null
      */
 
-    public boolean moveMotherNature(int move){
+    public Team moveMotherNature(int move){
         if(motherNature+move/islandList.size() >= 1) motherNature += move-islandList.size();
         else motherNature += move;
         Island i = islandList.get(motherNature);
@@ -364,9 +364,9 @@ public class Board {
         if(islandToJoin.size() == 2 || islandToJoin.size() == 3) {
             if (!joinIslands(islandToJoin)) {
                 System.out.println("join error");
-                return false;
+                return null;
             }
         }
-        return true;
+        return isWinningPosition();
     }
 }
