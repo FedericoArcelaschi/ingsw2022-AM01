@@ -3,18 +3,33 @@ package it.polimi.ingsw.model.expert.Characters;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.expert.*;
 import it.polimi.ingsw.model.expert.ExpertIsland;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.lang.management.PlatformLoggingMXBean;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class StudentTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class StudentTest {
+
+    private static Turn t;
+    private static ExpertBoard board;
+    @BeforeEach
+    void setUp() {
+        t = new Turn(Arrays.asList("pippo", "pluto"));
+        board = new ExpertBoard("pippo", "pluto", t);
+
+    }
+
     /**
      * Tests adding a YELLOW to the island.
      * Problem: doesn't know for sure if there is a YELLOW in MONK
      */
+    @Test
     public void testApplyEffect4MONK() {
-        ExpertBoard board = new ExpertBoard("pippo", "pluto");
         ExpertIsland testIsland = (ExpertIsland) board.getIslandList().get(1);
         board.setup4CharacterTesting(1);
         int countYellows =  testIsland.getStudents().get(Color.YELLOW).intValue();

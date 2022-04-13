@@ -54,7 +54,7 @@ public class BagTest {
     public void testExtractForCastleSetupTotal(){
         Bag b = new Bag(24,1);
         boolean a=true;
-        List<Color> colorList = b.extractMultipleStudents(7);
+        List<Color> colorList = b.multipleExtract(7);
         assertEquals(b.remainingStudents(), 113);
     }
     @Test

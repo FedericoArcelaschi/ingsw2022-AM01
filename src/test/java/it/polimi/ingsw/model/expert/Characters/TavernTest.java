@@ -1,15 +1,30 @@
 package it.polimi.ingsw.model.expert.Characters;
 
 import it.polimi.ingsw.model.Board;
-import junit.framework.TestCase;
+import it.polimi.ingsw.model.Turn;
+import it.polimi.ingsw.model.expert.ExpertBoard;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
 import java.util.*;
 
-public class TavernTest extends TestCase {
-    Board board = new Board("a", "b");
-    private Tavern tavern = new Tavern(board);
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+public class TavernTest{
+    private static Turn t;
+    private static ExpertBoard board;
+    private static Tavern tavern;
+
+    @BeforeAll
+    static void beforeAll() {
+        t = new Turn(Arrays.asList("a","b"));
+        board = new ExpertBoard("a", "b", t);
+        tavern = new Tavern(board);
+    }
+
+    @Test
     public void testExtraction() {
         List<Generic> expCards = new ArrayList<>();
         expCards = tavern.extract();
@@ -33,5 +48,16 @@ public class TavernTest extends TestCase {
                 i++;
         }
         assertEquals(3,i);
+        System.out.println(expCards);
+    }
+
+    @Test
+    public void testExtract4Testing(){
+        List<Generic> expertModeCharacters = new ArrayList<>();
+        for (int i = 1; i < 13; i++) {
+            expertModeCharacters.add(tavern.extract4testing(i));
+        }
+        System.out.println(expertModeCharacters.get(3).getLc());
+        System.out.println(CharactersList.values());
     }
 }
