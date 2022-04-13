@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +28,7 @@ public class CastleTest{
         assertEquals(oldList, c.getWaitingRoom());
     }
     @Test
-    public void testAddStudentDR(){
+    public void testAddStudentDR() throws TooManyStudentsException {
         Bag b = new Bag(24);
         Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
         List<Color> s = new ArrayList<>();

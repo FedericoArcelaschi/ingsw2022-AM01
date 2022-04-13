@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.expert.Characters;
 import java.lang.IllegalArgumentException;
 import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.model.expert.ExpertBoard;
 
 import javax.crypto.NullCipher;
 import java.util.*;
@@ -13,10 +14,10 @@ import java.util.*;
  **/
 public class Tavern {
     private long seed;
-    Board board;
+    ExpertBoard board;
     Generic ec;
 
-    public Tavern(Board board){
+    public Tavern(ExpertBoard board){
         this.board = board;
         seed = board.getBag().getSeed();
     }
@@ -32,7 +33,6 @@ public class Tavern {
         for(int i = 0; i < 13; i++) {
             expCards.add(i, null);
         }
-        //NOT WORKING (LOOPS)
         for(int i= 0; i < 3; i++) {
             idChar = rand.nextInt(1,12);
             if(expCards.get(idChar)==null) {

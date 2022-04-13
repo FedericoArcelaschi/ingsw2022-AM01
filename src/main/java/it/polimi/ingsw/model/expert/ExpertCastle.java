@@ -32,9 +32,11 @@ public class ExpertCastle extends Castle {
     }
 
     public boolean addStudentsInDiningRoom(List<Color> students) throws TooManyStudentsException {
+        boolean check = true;
         for (Color c: students) {
-            addStudentInDiningRoom(c);
+            if(!addStudentInDiningRoom(c))return false;
         }
+        return true;
     }
 
 

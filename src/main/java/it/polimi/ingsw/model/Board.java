@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -161,7 +162,7 @@ public class Board {
      * @param students a list of students you want to move
      * @return if the move is legal and played or not
      */
-    public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException, NotYourTurnException {
+    public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         if(!castle.removeStudentsFromWaitingRoom(students)) return false;

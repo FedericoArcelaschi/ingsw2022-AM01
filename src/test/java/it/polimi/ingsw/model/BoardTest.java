@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.Test;
 import java.util.*;
 
@@ -65,7 +66,7 @@ public class BoardTest{
         assertTrue(b.refillClouds());
     }
     @Test
-    public void testChooseCloud() throws NoSuchStudentException, NotYourTurnException {
+    public void testChooseCloud() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         String player1 = "1";
         String player2 = "2";
 
@@ -125,7 +126,7 @@ public class BoardTest{
         assertFalse(b.playCard(player1,1));
     }
     @Test
-    public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException {
+    public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         String player1 = "1";
         String player2 = "2";
         Turn t = new Turn(Arrays.asList(player1,player2));
