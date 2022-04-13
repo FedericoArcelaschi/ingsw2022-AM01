@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ConcurrentModificationException;
@@ -11,8 +13,8 @@ import java.util.List;
 
 public class ExpertCastle extends Castle {
     private int coins;
-    public ExpertCastle(String PLayerID, Team team, int nPlayer) {
-        super(PLayerID, team, nPlayer);
+    public ExpertCastle(String PLayerID, Team team, int nPlayer, List<Color> Students) {
+        super(PLayerID, team, nPlayer, Students);
         coins = 1;
     }
 
@@ -20,25 +22,31 @@ public class ExpertCastle extends Castle {
      * @param color color of the student to add
      * @return if the bounds are respected
      */
-    public boolean addStudentInDiningRoom(Color color){
-        int nStudentsBefore, nStudentsAfter;
-        nStudentsBefore = diningRoom.get(color);
-        //super.addStudentsInDiningRoom(color);
-        nStudentsAfter = diningRoom.get(color);
-        if(nStudentsBefore/3 < nStudentsAfter/3)
+    public boolean addStudentInDiningRoom(Color color) throws TooManyStudentsException {
+        if(!super.addStudentInDiningRoom(color))
+            return false;
+        if (diningRoom.get(color) % 3 == 0)
             coins++;
         return true;
+
     }
+
+    public boolean addStudentsInDiningRoom(List<Color> students) throws TooManyStudentsException {
+        for (Color c: students) {
+            addStudentInDiningRoom(c);
+        }
+    }
+
 
     /**
      * Removes a student from the dining room. Only available in expert mode due to the presence of characters that allow this.
      * @param color color of the student to remove
      * @return boolean if the student can be removed
      */
-    public boolean removeStudentFromDiningRoom(Color color){
+    public boolean removeStudentFromDiningRoom(Color color) throws NoSuchStudentException {
         if(diningRoom.get(color) > 0){
             diningRoom.replace(color, diningRoom.get(color)-1);
-            return true;
+            throw new NoSuchStudentException();
         }
         else
             return false;

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+
 import java.util.*;
 
 public class Castle {
@@ -59,14 +61,15 @@ public class Castle {
         waitingRoom.addAll(students);
         return true;
     }
+
     /**
      * add a single student to the dining room
      * @param student color
      * @return if the student is added correctly
      */
-    public boolean addStudentsInDiningRoom(Color student){
-        if (diningRoom.get(student)>=diningRoomSize) {
-            return false;
+    public boolean addStudentInDiningRoom(Color student) throws TooManyStudentsException{
+        if (diningRoom.get(student) == diningRoomSize) {
+            throw new TooManyStudentsException();
         }
         diningRoom.put(student, diningRoom.get(student) + 1);
         return true;
@@ -77,11 +80,12 @@ public class Castle {
      * @param students – The list of students to add to the dining room.
      * @return boolean that checks whether the operation was successful.
      */
-    public boolean addStudentsInDiningRoom(List<Color> students){
+    public boolean addStudentsInDiningRoom(List<Color> students)throws TooManyStudentsException {
         for (Color student : students) {
-            if(!addStudentsInDiningRoom(student))
+            if(!addStudentInDiningRoom(student))
                 return false;
         }
+        return true;
     }
 
     /**
