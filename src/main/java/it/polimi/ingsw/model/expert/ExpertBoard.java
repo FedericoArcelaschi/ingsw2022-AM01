@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.expert.Characters.CharactersList;
 import it.polimi.ingsw.model.expert.Characters.Generic;
 import it.polimi.ingsw.model.expert.Characters.Parameters;
 import it.polimi.ingsw.model.expert.Characters.Tavern;
@@ -12,28 +11,27 @@ public class ExpertBoard extends Board {
     private Tavern tavern;
     private List<Generic> expertCharactersCards;
 
-    public ExpertBoard(String playerID1, String playerID2){
-        nPlayer = 2;
-        turn = new Turn(Arrays.asList(playerID1, playerID2));
-        castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer));
-        castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer));
+    public ExpertBoard(String playerID1, String playerID2, Turn t){
+        super(playerID1, playerID2, t);
+        castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer,bag.multipleExtract(7)));
         construct();
     }
 
-    public ExpertBoard(String playerID1, String playerID2, String playerID3){
-        nPlayer = 3;
-        castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer));
-        castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer));
-        castleMap.put(playerID3, new ExpertCastle(playerID3, Team.GREY, nPlayer));
+    public ExpertBoard(String playerID1, String playerID2, String playerID3, Turn t){
+        super(playerID1, playerID2, playerID3, t);
+        castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID3, new ExpertCastle(playerID3, Team.GREY, nPlayer, bag.multipleExtract(9)));
         construct();
     }
 
-    public ExpertBoard(String playerID1, String playerID2, String playerID3, String playerID4){
-        nPlayer = 4;
-        castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer));
-        castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer));
-        castleMap.put(playerID3, new ExpertCastle(playerID3, Team.WHITE, nPlayer));
-        castleMap.put(playerID4, new ExpertCastle(playerID4, Team.BLACK, nPlayer));
+    public ExpertBoard(String playerID1, String playerID2, String playerID3, String playerID4, Turn t){
+        super(playerID1, playerID2,playerID3,playerID4,t);
+        castleMap.put(playerID1, new ExpertCastle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID2, new ExpertCastle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID3, new ExpertCastle(playerID3, Team.WHITE, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID4, new ExpertCastle(playerID4, Team.BLACK, nPlayer, bag.multipleExtract(7)));
         construct();
     }
 
@@ -107,5 +105,8 @@ public class ExpertBoard extends Board {
      */
     public List<Generic> getAvailableCharacterCards(){
         return expertCharactersCards;
+    }
+
+    public Bag getBag() {return bag;
     }
 }

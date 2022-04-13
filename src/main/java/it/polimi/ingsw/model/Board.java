@@ -15,11 +15,13 @@ public class Board {
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Castle> professorMap;
-    private final Turn turn;
+    protected Turn turn;
 
     public Board(String playerID1, String playerID2, Turn turn){
         nPlayer = 2;
         setupClouds();
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         setupIslands();
         setupProfessorMap();
         this.turn=turn;
@@ -28,22 +30,24 @@ public class Board {
     public Board(String playerID1, String playerID2, String playerID3, Turn turn){
         nPlayer = 3;
         setupClouds();
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer, bag.multipleExtract(7)));
         setupIslands();
         setupProfessorMap();
-        this.turn=turn;
+        this.turn = turn;
     }
 
     public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn){
         nPlayer = 4;
         setupClouds();
-        turn = new Turn(Arrays.asList(playerID1, playerID2, playerID3, playerID4));
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer));
-        castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer));
-        castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer));
+        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         setupIslands();
         setupProfessorMap();
-        this.turn=turn;
+        this.turn = turn;
     }
 
     public List<Cloud> getCloudList() {
@@ -126,8 +130,7 @@ public class Board {
         if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
-
-        return castle.addStudentsInDiningRoom(cloud.choose());
+        return castle.addStudentsInWaitingRoom(cloud.choose());
     }
 
     /**
@@ -358,5 +361,4 @@ public class Board {
     }
 
     public String getTurn(){return turn.getTurn();}
-
 }

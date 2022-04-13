@@ -41,7 +41,7 @@ public class Bag {
         return null;
     }
 
-    public List<Color> extractMultipleStudents(int n){
+    public List<Color> multipleExtract(int n){
         List<Color> l = new ArrayList<>();
         for(int i=0; i<n; i++){
             l.add(this.extract());
