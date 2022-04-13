@@ -33,11 +33,11 @@ public class Castle {
 
 
     public List<Color> getWaitingRoom(){
-        return waitingRoom;
+        return new ArrayList<>(waitingRoom);
     }
 
     public Map<Color, Integer> getDiningRoom(){
-        return diningRoom;
+        return new HashMap<>(diningRoom);
     }
 
     public Team getTeam(){
@@ -49,7 +49,7 @@ public class Castle {
     }
 
     public List<Card> getCards() {
-        return cards;
+        return new ArrayList<>(cards);
     }
 
     /**
@@ -57,7 +57,13 @@ public class Castle {
      * @param students The list of students to add to the waiting room.
      * @return boolean that checks whether the operation was successful or not.
      */
-    public boolean addStudentsInWaitingRoom(List<Color> students){
+    public boolean addStudentsInWaitingRoom(List<Color> students) throws TooManyStudentsException{
+        if(students.size()+waitingRoom.size() > waitingRoomSize) {
+            System.out.println(getWaitingRoom());
+            System.out.println(students);
+            System.out.println(waitingRoomSize);
+            throw new TooManyStudentsException();
+        }
         waitingRoom.addAll(students);
         return true;
     }
@@ -95,8 +101,18 @@ public class Castle {
      * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
      */
     public boolean removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException{
-        if(!waitingRoom.containsAll(students)){
+        if(!waitingRoom.containsAll(students) || students.size()>waitingRoomSize){
             throw new NoSuchStudentException();
+        }
+        else{
+            List<Color> temp = getWaitingRoom();
+            for(Color s : students){
+                if(!temp.remove(s)){
+                    System.out.println(getWaitingRoom());
+                    System.out.println(students);
+                    throw new NoSuchStudentException();
+                }
+            }
         }
         for (Color col : students) {
             waitingRoom.remove(col);
