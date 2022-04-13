@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.expert; 
 
+import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
@@ -15,27 +16,38 @@ public class ExpertCastle extends Castle {
         coins = 1;
     }
 
-    /**
-     * Adds internally the coins when Students are added in the write positions
-     * It's the only way to get coins
+    /**same as the super method but check adds a coin to the player
+     * @param color color of the student to add
+     * @return if the bounds are respected
      */
-    @Override
-    public boolean addStudentDR(@NotNull List<Color> c) {
-        try {
-            for (Color col : c) {
-                if(diningRoom.containsKey(col))
-                    diningRoom.put(col, diningRoom.get(col) + 1);
-                else diningRoom.put(col, 1);
-                if((diningRoom.get(col) + 1) % 3 == 0)
-                    coins++;
-            }
-            return true;
-        }catch(NullPointerException e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean addStudentInDiningRoom(Color color){
+        int nStudentsBefore, nStudentsAfter;
+        nStudentsBefore = diningRoom.get(color);
+        //super.addStudentsInDiningRoom(color);
+        nStudentsAfter = diningRoom.get(color);
+        if(nStudentsBefore/3 < nStudentsAfter/3)
+            coins++;
+        return true;
     }
 
+    /**
+     * Removes a student from the dining room. Only available in expert mode due to the presence of characters that allow this.
+     * @param color color of the student to remove
+     * @return boolean if the student can be removed
+     */
+    public boolean removeStudentFromDiningRoom(Color color){
+        if(diningRoom.get(color) > 0){
+            diningRoom.replace(color, diningRoom.get(color)-1);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    /** remove coins form the castle
+     * @param price cost of the character that the player wants to buy
+     * @return if the player can afford to pay the cost
+     */
     public boolean payCharacter(int price) {
         if(this.coins >= price) {
             this.coins -= price;
@@ -47,5 +59,9 @@ public class ExpertCastle extends Castle {
     public void unpayCharacter(int price){
         this.coins += price;
     }
-}
 
+    public int getCoins() {
+        return coins;
+    }
+
+}
