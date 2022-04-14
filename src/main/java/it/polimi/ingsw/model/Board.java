@@ -15,7 +15,7 @@ public class Board {
     protected final List<Cloud> cloudList = new ArrayList<>();
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
-    protected Map<Color, Castle> professorMap;
+    protected Map<Color, Team> professorMap;
     protected final Turn turn;
 
     public Board(String playerID1, String playerID2, Turn turn){
@@ -23,8 +23,6 @@ public class Board {
         construct();
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
-        setupIslands();
-        setupProfessorMap();
         this.turn=turn;
     }
 
@@ -75,7 +73,7 @@ public class Board {
         return castleMap.get(playerID);
     }
 
-    public Map<Color, Castle> getProfessorMap() {
+    public Map<Color, Team> getProfessorMap() {
         return new HashMap<>(professorMap);
     }
 
@@ -164,7 +162,7 @@ public class Board {
                     newOwner = null;
                 }
             }
-            if(newOwner != null) professorMap.replace(color, newOwner);
+            if(newOwner != null) professorMap.replace(color, newOwner.getTeam());
         }
     }
 
@@ -344,7 +342,7 @@ public class Board {
      * checks if neighbouring island have the same owner and join
      * checks if someone won
      * @param move number of jumps forward motherNature have to do
-     * @return
+     * @return false if the move encounters some errors, true if it doesn't
      */
 
     public boolean moveMotherNature(int move){

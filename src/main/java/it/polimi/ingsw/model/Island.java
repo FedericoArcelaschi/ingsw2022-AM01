@@ -75,10 +75,10 @@ public class Island {
      * @param influence map that contains the sum of influences per team
      * @param professorMap map that contains the team owners of each professor
      */
-    private void studentInfluence(Map<Team, Integer> influence, Map<Color, Castle> professorMap){
+    private void studentInfluence(Map<Team, Integer> influence, Map<Color, Team> professorMap){
         for(Color c : Color.values()){
             if(professorMap.get(c) != null) {
-                Team t = professorMap.get(c).getTeam(); //take team of the owner of the professor
+                Team t = professorMap.get(c); //take team of the owner of the professor
                 influence.replace(t, influence.get(t) + students.get(c));  //add influence for the color to the owner of the professor
             }
         }
@@ -89,7 +89,7 @@ public class Island {
      * @param professorMap map that contains the sum of influences per team
      * @return an object containing the influence per team
      */
-    public Map<Team, Integer> calculateInfluence(Map<Color, Castle> professorMap){
+    public Map<Team, Integer> calculateInfluence(Map<Color, Team> professorMap){
         Map<Team, Integer> influence = new HashMap<>();
         for(Team t : Team.values())
             influence.put(t, 0);

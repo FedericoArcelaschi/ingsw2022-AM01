@@ -27,7 +27,7 @@ public class IslandTest{
     @Test
     public void testCalculateInfluence(){
         Island i = new Island();
-        Map<Color, Castle> professors = new HashMap<>();
+        Map<Color, Team> professors = new HashMap<>();
         Map<Team, Integer> influence = new HashMap<>();
         Map<Color, Integer> students = new HashMap<>();
 
@@ -35,15 +35,15 @@ public class IslandTest{
         Castle c2 = new Castle("b", Team.BLACK, 2, new ArrayList<>());
 
         for(Color c : Color.values()){
-            professors.put(c,c1);
-            } //aggiungo i professori al bianco
+            professors.put(c,c1.getTeam());
+            } //add professors to team white
 
-        professors.put(Color.BLUE,c2); //aggiungo i professori al blu
+        professors.put(Color.BLUE,c2.getTeam()); //add professor to team black
 
         for(Color c : Color.values()){
-            students.put(c,2);  //AGGIUNGO 2 STUDENTI PER COLORE ALL'ISOLA
+            students.put(c,2);  //add 2 student per color
         }
-        i.addStudent(students); //aggiungo gli studenti all'isola al blu
+        i.addStudent(students); //put the students on the island
 
         influence.put(Team.WHITE, 8);
         influence.put(Team.BLACK, 2);
