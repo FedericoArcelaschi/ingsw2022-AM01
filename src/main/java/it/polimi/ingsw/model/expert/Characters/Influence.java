@@ -24,4 +24,9 @@ public class Influence extends Generic {
         //needs all castles.
         return false;
     }
+
+    @Override
+    public Map<Parameters, Object> getEffect() {
+        return null;
+    }
 }

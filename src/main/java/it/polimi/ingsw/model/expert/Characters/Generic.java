@@ -20,19 +20,20 @@ public abstract class Generic {
         explaination = lc.getExplaination();
     }
 
-    public String getExplanation(){
-        return explaination;
-    }
-
-    public int getCost(){
-        return cost;
-    }
 
     public abstract boolean applyEffect(Map<Parameters, Object> ParameterMap);
+    public abstract Map<Parameters, Object> getEffect();
 
     public CharactersList getLc() {
         return lc;
     }
+    public String getExplanation(){
+        return explaination;
+    }
+    public int getCost(){
+        return cost;
+    }
+
 
     @Override
     public boolean equals(Object o) {

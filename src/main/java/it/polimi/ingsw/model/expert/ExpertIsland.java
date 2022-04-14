@@ -29,7 +29,9 @@ public class ExpertIsland extends Island {
         isBLocked = true;
         return true;
     }
+
     public boolean isBLocked(){
         return isBLocked;
     }
+
 }

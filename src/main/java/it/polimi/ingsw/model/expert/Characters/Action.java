@@ -48,4 +48,10 @@ public class Action extends Generic {
         }
         return false;
     }
+
+    @Override
+    public Map<Parameters, Object> getEffect() {
+        return null;
+    }
+
 }
