@@ -108,8 +108,6 @@ public class Castle {
             List<Color> temp = getWaitingRoom();
             for(Color s : students){
                 if(!temp.remove(s)){
-                    System.out.println(getWaitingRoom());
-                    System.out.println(students);
                     throw new NoSuchStudentException();
                 }
             }
