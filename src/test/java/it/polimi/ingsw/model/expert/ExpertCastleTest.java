@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -11,28 +12,23 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpertCastleTest{
-
-    private static Turn t;
+    private static final List<String> players = Arrays.asList("pippo","pluto","paperino");
+    private static final Turn t = new Turn(players);
     private static ExpertBoard board;
-    private static List<String> players;
     private static Bag bag;
     private static ExpertCastle expertCastle;
 
-    @BeforeAll
-    static void beforeAll() {
-        /**
-         * players = Arrays.asList("pippo","pluto","paperino");
-         * t = new Turn(players);
-         * board = new ExpertBoard("pippo","pluto","paperino", t);
-         * bag = board.getBag();
-         */
-        bag = new Bag(24);
-        expertCastle = new ExpertCastle("pippo", Team.WHITE, 2, bag.multipleExtract(9));
+    @BeforeEach
+    void setUp() {
+        board = new ExpertBoard(players.get(0), players.get(1), players.get(2), t);
+        bag = board.getBag();
+        expertCastle = (ExpertCastle) board.getCastle(players.get(0));
+
     }
 
     @Test
     public void testAddStudentDR_testpayCharacter() throws TooManyStudentsException {
-        List<Color> yellows_3 = Arrays.asList(Color.YELLOW,Color.YELLOW,Color.YELLOW);
+        List<Color> yellows_3 = Arrays.asList(Color.YELLOW, Color.YELLOW, Color.YELLOW);
             //one coin --> first payment okay, second payment failed
         assertTrue(expertCastle.payCharacter(1));
         assertFalse(expertCastle.payCharacter(1));
@@ -58,11 +54,13 @@ public class ExpertCastleTest{
         assertFalse(expertCastle.payCharacter(2));
     }
     @Test
+    //test adding coins
     public void testTruePayChar() throws TooManyStudentsException {
-        for (int i = 0; i < 5; i++) {                          //add 3 students to give pippo a coin
+        for (int i = 0; i < 3; i++) {                          //add 3 students to give pippo a coin
             expertCastle.addStudentInDiningRoom(Color.YELLOW);
+            expertCastle.addStudentInDiningRoom(Color.BLUE);
         }
-        assertTrue(expertCastle.payCharacter(1));
+        assertTrue(expertCastle.payCharacter(3));
     }
     @Test
     public void testAddStudentInDiningRoom() throws TooManyStudentsException {

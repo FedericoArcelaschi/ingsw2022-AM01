@@ -45,18 +45,17 @@ public class ExpertCastle extends Castle {
      * @param color color of the student to remove
      * @return boolean if the student can be removed
      */
-    public boolean removeStudentFromDiningRoom(Color color) throws NoSuchStudentException {
+    public void removeStudentFromDiningRoom(Color color) throws NoSuchStudentException {
         if(diningRoom.get(color) > 0){
             diningRoom.replace(color, diningRoom.get(color)-1);
-            throw new NoSuchStudentException();
         }
         else
-            return false;
+            throw new NoSuchStudentException();
     }
 
     /** remove coins form the castle
      * @param price cost of the character that the player wants to buy
-     * @return if the player can afford to pay the cost
+     * @return true if the transaction is successful
      */
     public boolean payCharacter(int price) {
         if(this.coins >= price) {

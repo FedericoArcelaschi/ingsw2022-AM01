@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
 
 public class Board {
     private static final int numOfStudentsPerColor=24;
-    protected static int motherNaturePosition = 0;
-    protected static int nPlayer;
-    protected static final Bag bag = new Bag(numOfStudentsPerColor);
-    protected static final List<Cloud> cloudList = new ArrayList<>();
-    protected static final List<Island> islandList = new ArrayList<>();
-    protected static final Map<String, Castle> castleMap = new HashMap<>();
-    protected static Map<Color, Castle> professorMap;
+    protected int motherNaturePosition = 0;
+    protected int nPlayer;
+    protected final Bag bag = new Bag(numOfStudentsPerColor);
+    protected final List<Cloud> cloudList = new ArrayList<>();
+    protected final List<Island> islandList = new ArrayList<>();
+    protected final Map<String, Castle> castleMap = new HashMap<>();
+    protected Map<Color, Castle> professorMap;
     protected final Turn turn;
 
     public Board(String playerID1, String playerID2, Turn turn){
