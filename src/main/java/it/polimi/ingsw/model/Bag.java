@@ -22,6 +22,10 @@ public class Bag {
         random = new Random(seed);
     }
 
+    /**
+     * extract a random student from the pool of students represented with the Map students
+     * @return the color of the extracted student
+     */
     public Color extract(){
         int rs = remainingStudents();
         if(rs == 0) return null;
@@ -37,6 +41,11 @@ public class Bag {
         return null;
     }
 
+    /**
+     * extract random students from the pool of students represented with the Map students multiple times
+     * @param n number of student to extract
+     * @return a list of colors of the students extracted
+     */
     public List<Color> multipleExtract(int n){
         List<Color> l = new ArrayList<>();
         for(int i=0; i<n; i++){
@@ -45,6 +54,10 @@ public class Bag {
         return l;
     }
 
+    /**
+     * extract 2 student in a random order to put them in islands at the beginning of the game
+     * @return a list of 10 students (2 per color) in a random order
+     */
     public List<Color> extractForIslandSetup(){
         List<Color> extractedList = new ArrayList<>();
         for(int i=0; i<2; i++){
@@ -57,16 +70,10 @@ public class Bag {
         return extractedList;
     }
 
-    public List<Color> extractForCastleSetup(){
-        List<Color> extractedList = new ArrayList<>();
-        for(int i=0; i<7; i++) {
-            extractedList.add(extract());
-        }
-
-        return extractedList;
-    }
-
-
+    /**
+     * sum the number of remaining students per color
+     * @return the sum
+     */
     public int remainingStudents(){
         return students.values().stream().reduce(0, Integer::sum);
     }

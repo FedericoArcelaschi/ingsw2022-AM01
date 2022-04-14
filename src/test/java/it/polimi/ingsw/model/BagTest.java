@@ -51,13 +51,6 @@ public class BagTest {
         assertTrue(a);
     }
     @Test
-    public void testExtractForCastleSetupTotal(){
-        Bag b = new Bag(24,1);
-        boolean a=true;
-        List<Color> colorList = b.extractForCastleSetup();
-        assertEquals(b.remainingStudents(), 113);
-    }
-    @Test
     public void testRemainingStudents(){
         Bag b = new Bag(24,1);
         assertEquals(24*Color.values().length,b.remainingStudents());
