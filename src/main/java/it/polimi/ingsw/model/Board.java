@@ -8,18 +8,19 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Board {
-    private int motherNature = 0;
-    private final int nPlayer;
-    private final Bag bag = new Bag(24);
-    private final List<Cloud> cloudList = new ArrayList<>();
-    private final List<Island> islandList = new ArrayList<>();
-    private final Map<String, Castle> castleMap = new HashMap<>();
+    private static final int numOfStudentsPerColor=24;
+    protected int motherNaturePosition = 0;
+    protected int nPlayer;
+    protected final Bag bag = new Bag(numOfStudentsPerColor);
+    protected final List<Cloud> cloudList = new ArrayList<>();
+    protected final List<Island> islandList = new ArrayList<>();
+    protected final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Castle> professorMap;
-    private final Turn turn;
+    protected final Turn turn;
 
     public Board(String playerID1, String playerID2, Turn turn){
         nPlayer = 2;
-        setupClouds();
+        construct();
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         setupIslands();
@@ -29,25 +30,35 @@ public class Board {
 
     public Board(String playerID1, String playerID2, String playerID3, Turn turn){
         nPlayer = 3;
-        setupClouds();
+        construct();
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer, bag.multipleExtract(7)));
-        setupIslands();
-        setupProfessorMap();
-        this.turn=turn;
+        this.turn = turn;
     }
 
     public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn){
         nPlayer = 4;
-        setupClouds();
+        construct();
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer, bag.multipleExtract(9)));
+        this.turn = turn;
+    }
+
+    protected Board(Turn turn){
+        this.turn = turn;
+        setupClouds();
+        setupProfessorMap();
+    }
+
+    /**Cleans the constructor implementation
+     */
+    private void construct(){
+        setupClouds();
         setupIslands();
         setupProfessorMap();
-        this.turn=turn;
     }
     public List<Cloud> getCloudList() {
         return new ArrayList<>(cloudList);
@@ -59,6 +70,9 @@ public class Board {
 
     public Map<String, Castle> getCastleMap() {
         return new HashMap<>(castleMap);
+    }
+    public Castle getCastle(String playerID){
+        return castleMap.get(playerID);
     }
 
     public Map<Color, Castle> getProfessorMap() {
@@ -326,17 +340,17 @@ public class Board {
     }
 
     /**
-     * calculates influence and set new owner
+     * calculates influence and set new owner to the island the player lands on.
      * checks if neighbouring island have the same owner and join
      * checks if someone won
      * @param move number of jumps forward motherNature have to do
-     * @return the winner or null
+     * @return
      */
 
-    public Team moveMotherNature(int move){
-        if(motherNature+move/islandList.size() >= 1) motherNature += move-islandList.size();
-        else motherNature += move;
-        Island i = islandList.get(motherNature);
+    public boolean moveMotherNature(int move){
+        if(motherNaturePosition+move/islandList.size() >= 1) motherNaturePosition += move-islandList.size();
+        else motherNaturePosition += move;
+        Island i = islandList.get(motherNaturePosition);
         //calculates influence and set new owner
         Map<Team, Integer> influence = i.calculateInfluence(professorMap);
         Team t = teamWithMoreInfluence(influence);
@@ -346,17 +360,17 @@ public class Board {
         Island previous, next;
         List<Island> islandToJoin = new ArrayList<>();
         islandToJoin.add(i);
-        if(motherNature==0){
+        if(motherNaturePosition==0){
             previous = islandList.get(islandList.size()-1);
-            next = islandList.get(motherNature + 1);
+            next = islandList.get(motherNaturePosition + 1);
         }
-        else if(motherNature == islandList.size()) {
-            previous = islandList.get(motherNature - 1);
+        else if(motherNaturePosition == islandList.size()) {
+            previous = islandList.get(motherNaturePosition - 1);
             next = islandList.get(0);
         }
         else{
-            previous = islandList.get(motherNature - 1);
-            next = islandList.get(motherNature + 1);
+            previous = islandList.get(motherNaturePosition - 1);
+            next = islandList.get(motherNaturePosition + 1);
         }
         if(i.getOwnership() != null && previous.getOwnership() == i.getOwnership()) islandToJoin.add(0,previous);
         if(i.getOwnership() != null && next.getOwnership() == i.getOwnership()) islandToJoin.add(next);
@@ -364,9 +378,11 @@ public class Board {
         if(islandToJoin.size() == 2 || islandToJoin.size() == 3) {
             if (!joinIslands(islandToJoin)) {
                 System.out.println("join error");
-                return null;
+                return false;
             }
         }
-        return isWinningPosition();
+        return true;
     }
+
+    public String getTurn(){return turn.getTurn();}
 }
