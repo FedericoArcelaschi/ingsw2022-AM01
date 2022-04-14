@@ -39,7 +39,6 @@ public class ExpertBoard extends Board {
     /**Cleans the contructors' implementation
      */
     private void construct(){
-        setupClouds();
         setupIslands();
         drawExpertCharacters();
     }
@@ -53,11 +52,15 @@ public class ExpertBoard extends Board {
         expertCharactersCards = tavern.extract();
     }
 
-    /**
-     * Tries to pay for a card and calls applyEffect with the right parameters
-     * @param idChar
-     * @return if works -> true else false
-     */
+    public void playExpertCard(int idChar, int move, List<Color> studentsList){
+        playExpertCard(idChar, (ExpertIsland) this.getIslandList().get(0), move, studentsList);
+    }
+
+        /**
+         * Tries to pay for a card and calls applyEffect with the right parameters
+         * @param idChar
+         * @return if works -> true else false
+         */
     public boolean playExpertCard(int idChar, ExpertIsland island, int move, List<Color> studentsList){
         String playerID = this.getTurn();
         Generic ec = expertCharactersCards.get(idChar);
@@ -69,7 +72,7 @@ public class ExpertBoard extends Board {
                 Parameters.PAY_TOKEN,((ExpertCastle) castleMap.get(playerID)).payCharacter(ec.getCost()),
                 Parameters.PLAYERID, playerID,
                 Parameters.ISLAND, island,
-                Parameters.CASTLE, castleMap.get(playerID),
+                Parameters.CASTLEMAP, castleMap,
                 Parameters.PROFESSORMAP, professorMap,
                 Parameters.STUDENTLIST, studentsList,
                 Parameters.MOVE, move));
@@ -103,7 +106,7 @@ public class ExpertBoard extends Board {
         expertCharactersCards.set(idChar, tavern.extract4testing(idChar));
     }
 
-    /**For debugging: returns the list of available characters
+    /**For testing: returns the list of available characters
      */
     public List<Generic> getAvailableCharacterCards(){
         return expertCharactersCards;

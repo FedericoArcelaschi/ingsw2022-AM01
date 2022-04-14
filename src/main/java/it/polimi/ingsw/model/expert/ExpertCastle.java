@@ -28,7 +28,6 @@ public class ExpertCastle extends Castle {
         if (diningRoom.get(color) % 3 == 0)
             coins++;
         return true;
-
     }
 
     public boolean addStudentsInDiningRoom(List<Color> students) throws TooManyStudentsException {

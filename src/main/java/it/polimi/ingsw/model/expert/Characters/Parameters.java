@@ -6,7 +6,7 @@ public enum Parameters {
     PAY_TOKEN,
     PLAYERID,
     ISLAND,
-    CASTLE,
+    CASTLEMAP,
     PROFESSORMAP,
     STUDENTLIST,
     MOVE

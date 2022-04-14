@@ -46,36 +46,21 @@ public class Board {
         this.turn = turn;
     }
 
+    /**Contructor for ExpertBoard
+     * @param turn
+     */
     protected Board(Turn turn){
         this.turn = turn;
         setupClouds();
         setupProfessorMap();
     }
 
-    /**Cleans the constructor implementation
+    /**Cleans the constructors' implementation
      */
     private void construct(){
         setupClouds();
-        setupIslands();
         setupProfessorMap();
-    }
-    public List<Cloud> getCloudList() {
-        return new ArrayList<>(cloudList);
-    }
-
-    public List<Island> getIslandList() {
-        return new ArrayList<>(islandList);
-    }
-
-    public Map<String, Castle> getCastleMap() {
-        return new HashMap<>(castleMap);
-    }
-    public Castle getCastle(String playerID){
-        return castleMap.get(playerID);
-    }
-
-    public Map<Color, Castle> getProfessorMap() { //TODO: per fare questo sarebbe utile "scorrere" i player
-        return new HashMap<>(professorMap);
+        setupIslands();
     }
 
     /**
@@ -234,7 +219,7 @@ public class Board {
     }
 
     /**
-     * calculate who has the highest number of towers in the map that he receives
+     * Calculate who has the highest number of towers in the map that he receives
      * @param nTowers map that contains team and towers of the team on the islands
      * @return the team with most towers
      */
@@ -257,7 +242,7 @@ public class Board {
     }
 
     /**
-     * use the teamWithMoreTowers algorithm to determine who has more influence
+     * Use the teamWithMoreTowers algorithm to determine who has more influence
      * @param influence map that contains influence for each team
      * @return the team with more influence
      */
@@ -266,7 +251,7 @@ public class Board {
     }
 
     /**
-     * checks if the cards are ended
+     * Checks if the cards are ended
      * @return number of card left
      */
     private int remainingCards(){
@@ -276,7 +261,7 @@ public class Board {
     }
 
     /**
-     * checks if the game is won after a player turn
+     * Checks if the game is won after a player turn
      * @return the winner team
      */
     private Team isWinningPosition(){
@@ -294,7 +279,7 @@ public class Board {
     }
 
     /**
-     * checks if the game is won after all players turn when cards or student in the bag are finished
+     * Checks if the game is won after all players turn when cards or student in the bag are finished
      * @return the winner team
      */
     public Team isWonByResources(){
@@ -324,17 +309,15 @@ public class Board {
         return true;
     }
 
-    /**
-     * calculates influence and set new owner to the island the player lands on.
+    /**calculates influence and set new owner to the island the player lands on.
      * checks if neighbouring island have the same owner and join
      * checks if someone won
      * @param move number of jumps forward motherNature have to do
      * @return the winner or null
      */
-
     public boolean moveMotherNature(int move){
-        if(motherNaturePosition+move/islandList.size() >= 1) motherNaturePosition += move-islandList.size();
-        else motherNaturePosition += move;
+        motherNaturePosition += move;
+        if(motherNaturePosition >= islandList.size() - 1) motherNaturePosition -= islandList.size() - 1;
         Island i = islandList.get(motherNaturePosition);
         //calculates influence and set new owner
         Map<Team, Integer> influence = i.calculateInfluence(professorMap);
@@ -345,12 +328,12 @@ public class Board {
         Island previous, next;
         List<Island> islandToJoin = new ArrayList<>();
         islandToJoin.add(i);
-        if(motherNaturePosition==0){
+        if(motherNaturePosition == 0){
             previous = islandList.get(islandList.size()-1);
-            next = islandList.get(motherNaturePosition + 1);
+            next = islandList.get(1);
         }
         else if(motherNaturePosition == islandList.size()) {
-            previous = islandList.get(motherNaturePosition - 1);
+            previous = islandList.get(islandList.size() - 1);
             next = islandList.get(0);
         }
         else{
@@ -370,4 +353,25 @@ public class Board {
     }
 
     public String getTurn(){return turn.getTurn();}
+
+    public List<Cloud> getCloudList() {
+        return new ArrayList<>(cloudList);
+    }
+
+    public List<Island> getIslandList() {
+        return new ArrayList<>(islandList);
+    }
+
+    public Map<String, Castle> getCastleMap() {
+        return new HashMap<>(castleMap);
+    }
+
+    public Castle getCastle(String playerID){
+        return new Castle(castleMap.get(playerID));
+    }
+
+    public Map<Color, Castle> getProfessorMap() { //TODO: per fare questo sarebbe utile "scorrere" i player
+        return new HashMap<>(professorMap);
+    }
+
 }

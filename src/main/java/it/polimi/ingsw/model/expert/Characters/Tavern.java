@@ -35,7 +35,7 @@ public class Tavern {
         }
         for(int i= 0; i < 3; i++) {
             idChar = rand.nextInt(1,12);
-            if(expCards.get(idChar)==null) {
+            if(expCards.get(idChar) == null) {
                 ec = getExpertCharacter(idChar);
                 expCards.set(idChar, ec);
             }else
@@ -52,7 +52,7 @@ public class Tavern {
      */
     private Generic getExpertCharacter(int idChar) throws IllegalArgumentException{
         Generic ec;
-        switch (idChar) {
+        switch (idChar){
             case 1, 7, 10, 11:
                 return ec = new Student(idChar, bag);
             case 2, 6, 8, 9, 12:

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.expert;
 
+import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.expert.Characters.Generic;

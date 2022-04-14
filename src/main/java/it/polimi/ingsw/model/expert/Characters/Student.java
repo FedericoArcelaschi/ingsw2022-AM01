@@ -36,8 +36,10 @@ public class Student extends Generic {
                     island.addStudent(student);//Adds one student per use.
                     availableStudents.remove(student);
                     availableStudents.add(bag.extract());
+                    cost += CharactersList.MONK.getCost() + 1;
                     return true;
                 }
+                return false;
             case 7://JESTER
 
             case 11://QUEEN
@@ -46,10 +48,14 @@ public class Student extends Generic {
     }
 
     public Map<Parameters, Object> getEffect(){
-        Map<Parameters, Object> parameterMap = new HashMap<>();
-        List<Color> students = new ArrayList<>(availableStudents);
-        parameterMap.put(Parameters.STUDENTLIST, students);
-        return parameterMap;
+        switch(idChar) {
+            case 1: Map<Parameters, Object> parameterMap = new HashMap<>();
+                    List<Color> students = new ArrayList<>(availableStudents);
+                    parameterMap.put(Parameters.STUDENTLIST, students);
+                    return parameterMap;
+            default:
+                return null;
+        }
     }
 
 }

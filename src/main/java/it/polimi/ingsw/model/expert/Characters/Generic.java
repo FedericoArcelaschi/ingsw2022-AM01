@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public abstract class Generic {
-    protected final int cost;
+    protected int cost;
     protected final String explaination;
     protected int idChar;
     protected CharactersList lc = null;

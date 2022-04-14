@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class StudentTest {
+public class StudentTestMonk {
 
     private static Turn t;
     private static ExpertBoard board;
@@ -34,9 +34,6 @@ public class StudentTest {
         board.setup4CharacterTesting(1);
         int countYellows =  testIsland.getStudents().get(Color.YELLOW).intValue();
         int countAll =  testIsland.getStudents().size();
-
-        System.out.println("Y:" + countYellows);
-        System.out.println("#students:" + countAll);
 
         if(board.playExpertCard(1, testIsland, 0, List.of(Color.YELLOW)))
             assertEquals(countYellows + 1, testIsland.getStudents().get(Color.YELLOW).intValue());

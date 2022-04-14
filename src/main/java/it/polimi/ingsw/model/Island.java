@@ -72,6 +72,7 @@ public class Island{
         towerInfluence(influence);
         return influence;
     }
+
     @Override
     public String toString() {
         return "Island{" +
@@ -79,6 +80,7 @@ public class Island{
                 ", ownership=" + ownership +
                 '}';
     }
+
     public Island joinTo(Island next) {
         return next;
     }

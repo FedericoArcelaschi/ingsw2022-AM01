@@ -31,7 +31,6 @@ public class Castle {
         for(int i=1; i<=10; i++) cards.add(new Card(i,(i+1)/2));
     }
 
-
     public List<Color> getWaitingRoom(){
         return new ArrayList<>(waitingRoom);
     }
