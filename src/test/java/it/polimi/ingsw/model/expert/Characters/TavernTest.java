@@ -1,13 +1,11 @@
 package it.polimi.ingsw.model.expert.Characters;
 
-import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,13 +19,14 @@ public class TavernTest{
     static void beforeAll() {
         t = new Turn(Arrays.asList("a","b"));
         board = new ExpertBoard("a", "b", t);
-        tavern = new Tavern(board);
+        tavern = new Tavern(board.getBag());
     }
 
     @Test
     public void testExtraction() {
         List<Generic> expCards = new ArrayList<>();
         expCards = tavern.extract();
+        board.getBag().extract();
         assertEquals(13, expCards.size());
         assertEquals(true,
                 expCards.contains(new Student(1, board.getBag()))
@@ -54,10 +53,13 @@ public class TavernTest{
     @Test
     public void testExtract4Testing(){
         List<Generic> expertModeCharacters = new ArrayList<>();
+        List<CharactersList> expertModeCharactersList4Comparison = new ArrayList<>();
+
         for (int i = 1; i < 13; i++) {
+            System.out.println(tavern.extract4testing(i));
             expertModeCharacters.add(tavern.extract4testing(i));
         }
-        System.out.println(expertModeCharacters.get(3).getLc());
-        System.out.println(CharactersList.values());
+        expertModeCharactersList4Comparison.addAll(Arrays.asList(CharactersList.MONK));
+
     }
 }

@@ -14,12 +14,11 @@ import java.util.*;
  **/
 public class Tavern {
     private long seed;
-    ExpertBoard board;
-    Generic ec;
+    private static Bag bag;
 
-    public Tavern(ExpertBoard board){
-        this.board = board;
-        seed = board.getBag().getSeed();
+    public Tavern(Bag bag){
+        seed = bag.getSeed();
+        this.bag = bag;
     }
 
     /**
@@ -27,6 +26,7 @@ public class Tavern {
      * @return List<Generic>
      */
     public List<Generic> extract(){
+        Generic ec;
         List<Generic> expCards = new ArrayList<>();
         Random rand = new Random(seed);
         int idChar;
@@ -51,9 +51,10 @@ public class Tavern {
      * @return Generic - abstract superclass of all character
      */
     private Generic getExpertCharacter(int idChar) throws IllegalArgumentException{
+        Generic ec;
         switch (idChar) {
             case 1, 7, 10, 11:
-                return ec = new Student(idChar, board.getBag());
+                return ec = new Student(idChar, bag);
             case 2, 6, 8, 9, 12:
                 return ec = new Influence(idChar);
             case 3, 4:

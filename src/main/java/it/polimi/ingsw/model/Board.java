@@ -9,48 +9,56 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Board {
-    protected int motherNaturePosition = 0;
-    protected int nPlayer;
-    protected final Bag bag = new Bag(24);
-    protected final List<Cloud> cloudList = new ArrayList<>();
-    protected final List<Island> islandList = new ArrayList<>();
-    protected final Map<String, Castle> castleMap = new HashMap<>();
-    protected Map<Color, Castle> professorMap;
-    protected Turn turn;
+    private static final int numOfStudentsPerColor=24;
+    protected static int motherNaturePosition = 0;
+    protected static int nPlayer;
+    protected static final Bag bag = new Bag(numOfStudentsPerColor);
+    protected static final List<Cloud> cloudList = new ArrayList<>();
+    protected static final List<Island> islandList = new ArrayList<>();
+    protected static final Map<String, Castle> castleMap = new HashMap<>();
+    protected static Map<Color, Castle> professorMap;
+    protected final Turn turn;
 
     public Board(String playerID1, String playerID2, Turn turn){
         nPlayer = 2;
-        setupClouds();
+        construct();
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
-        setupIslands();
-        setupProfessorMap();
         this.turn=turn;
     }
 
     public Board(String playerID1, String playerID2, String playerID3, Turn turn){
         nPlayer = 3;
-        setupClouds();
+        construct();
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer, bag.multipleExtract(7)));
-        setupIslands();
-        setupProfessorMap();
         this.turn = turn;
     }
 
     public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn){
         nPlayer = 4;
-        setupClouds();
+        construct();
         castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer, bag.multipleExtract(9)));
-        setupIslands();
-        setupProfessorMap();
         this.turn = turn;
     }
 
+    protected Board(Turn turn){
+        this.turn = turn;
+        setupClouds();
+        setupProfessorMap();
+    }
+
+    /**Cleans the constructor implementation
+     */
+    private void construct(){
+        setupClouds();
+        setupIslands();
+        setupProfessorMap();
+    }
     public List<Cloud> getCloudList() {
         return new ArrayList<>(cloudList);
     }
@@ -127,7 +135,7 @@ public class Board {
      * @param cloudID the cloud that is chosen
      * @return if the move is legal and played or not
      */
-    public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException {
+    public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException {
         if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
