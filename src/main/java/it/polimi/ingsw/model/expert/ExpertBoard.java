@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.Characters.Generic;
 import it.polimi.ingsw.model.expert.Characters.Parameters;
 import it.polimi.ingsw.model.expert.Characters.Tavern;
@@ -52,7 +54,7 @@ public class ExpertBoard extends Board {
         expertCharactersCards = tavern.extract();
     }
 
-    public void playExpertCard(int idChar, int move, List<Color> studentsList){
+    public void playExpertCard(int idChar, int move, List<Color> studentsList) throws NoSuchStudentException, TooManyStudentsException {
         playExpertCard(idChar, (ExpertIsland) this.getIslandList().get(0), move, studentsList);
     }
 
@@ -61,13 +63,14 @@ public class ExpertBoard extends Board {
          * @param idChar
          * @return if works -> true else false
          */
-    public boolean playExpertCard(int idChar, ExpertIsland island, int move, List<Color> studentsList){
+    public boolean playExpertCard(int idChar, ExpertIsland island, int move, List<Color> studentsList) throws NoSuchStudentException, TooManyStudentsException {
         String playerID = this.getTurn();
         Generic ec = expertCharactersCards.get(idChar);
         if(((ExpertCastle)castleMap.get(playerID)).payCharacter(ec.getCost())) {
             //in/out parameters for the applyEffect method
             Map<Parameters, Object> parametersMap = new HashMap<>();
             //Parameter to setup: (will clean code up)
+            if(island == null) island = (ExpertIsland) getIslandList().get(0);
             parametersMap.putAll(Map.of(
                 Parameters.PAY_TOKEN,((ExpertCastle) castleMap.get(playerID)).payCharacter(ec.getCost()),
                 Parameters.PLAYERID, playerID,

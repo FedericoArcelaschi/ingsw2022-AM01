@@ -1,15 +1,19 @@
 package it.polimi.ingsw.model.expert.Characters;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.Castle;
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Turn;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import it.polimi.ingsw.model.expert.ExpertIsland;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 class InfluenceTestFarmer {
     private final Turn t = new Turn(Arrays.asList("a", "b"));
@@ -34,8 +38,8 @@ class InfluenceTestFarmer {
     }
 
     @Test
-    void applyEffect() throws TooManyStudentsException {//a's turn
-        Map<Color, Castle> expectedProfessorMap, professorMap;
+    void applyEffect() throws TooManyStudentsException, NoSuchStudentException {//a's turn
+        Map<Color, Castle> expectedProfessorMap = new HashMap<>();
         expectedProfessorMap.putAll(
                 Map.of(Color.YELLOW, castleA)
         );
@@ -55,7 +59,7 @@ class InfluenceTestFarmer {
                     Color.RED,
                     Color.PINK,
                     Color.GREEN));
-        professorMap = board.getProfessorMap();
+        Map<Color, Castle> professorMap = board.getProfessorMap();
         parametersMap.put(
                 Parameters.PROFESSORMAP, professorMap);
         Influence farmerChar = (Influence) board.getAvailableCharacterCards().get(2);

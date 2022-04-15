@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.expert.Characters;
 
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -21,7 +24,7 @@ public abstract class Generic {
     }
 
 
-    public abstract boolean applyEffect(Map<Parameters, Object> ParameterMap);
+    public abstract boolean applyEffect(Map<Parameters, Object> ParameterMap) throws NoSuchStudentException, TooManyStudentsException;
     public abstract Map<Parameters, Object> getEffect();
 
     public CharactersList getLc() {

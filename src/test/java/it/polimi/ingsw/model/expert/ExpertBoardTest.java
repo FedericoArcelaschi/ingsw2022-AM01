@@ -1,8 +1,9 @@
 package it.polimi.ingsw.model.expert;
 
-import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Turn;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.Characters.Generic;
 import it.polimi.ingsw.model.expert.Characters.Parameters;
 import it.polimi.ingsw.model.expert.Characters.Student;
@@ -38,7 +39,7 @@ public class ExpertBoardTest{
     }
 
     @Test
-    public void testPlayExpertCards4MONK() {
+    public void testPlayExpertCards4MONK() throws NoSuchStudentException, TooManyStudentsException {
         Generic monkChar;
         List<Color> availableStudent;
         ExpertIsland island = ((ExpertIsland) board.getIslandList().get(1));

@@ -366,8 +366,8 @@ public class Board {
         return new HashMap<>(castleMap);
     }
 
-    public Castle getCastle(String playerID){
-        return new Castle(castleMap.get(playerID));
+    public Castle getCastle(String playerID){//TODO: make return only a copy
+        return castleMap.get(playerID);
     }
 
     public Map<Color, Castle> getProfessorMap() { //TODO: per fare questo sarebbe utile "scorrere" i player
