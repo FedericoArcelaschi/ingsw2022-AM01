@@ -25,7 +25,7 @@ public class BoardTest{
         String player2 = "2";
         Turn t = new Turn(Arrays.asList(player1,player2));
         Board b=new Board(player1,player2,t);
-        assertFalse(b.getAviableCard(player1).isEmpty());
+        assertFalse(b.getAvailableCard(player1).isEmpty());
         b.playCard(player1, 1);
         b.playCard(player1, 2);
         b.playCard(player1, 3);
@@ -36,7 +36,7 @@ public class BoardTest{
         b.playCard(player1, 8);
         b.playCard(player1, 9);
         b.playCard(player1, 10);
-        assertTrue(b.getAviableCard(player1).isEmpty());
+        assertTrue(b.getAvailableCard(player1).isEmpty());
     }
 
     @Test

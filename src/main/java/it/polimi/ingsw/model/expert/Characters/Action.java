@@ -29,10 +29,10 @@ public class Action extends Generic {
         return true;
         }
         ExpertIsland island;
-        Map<Color, Castle> professorMap;
+        Map<Color, Team> professorMap;
         if(idChar==3) {
             island = (ExpertIsland) ParameterMap.get(Parameters.ISLAND);
-            professorMap = (Map<Color, Castle>) ParameterMap.get(Parameters.PROFESSORMAP);
+            professorMap = (Map<Color, Team>) ParameterMap.get(Parameters.PROFESSORMAP);
             Map<Team, Integer> influenceMap = island.calculateInfluence(professorMap);
             Team team = null;
             int maxInfluence = 0;

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.expert.Characters;
 
 import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
@@ -19,7 +20,7 @@ class InfluenceTestFarmer {
     private final Turn t = new Turn(Arrays.asList("a", "b"));
     private ExpertBoard board;
     private Map<Parameters, Object> parametersMap;
-    private Map<Color, Castle> professorsMap;
+    private Map<Color, Team> professorsMap;
     private Map<String, Castle> castleMap;
     private Castle castleA, castleB;
     private Generic charInfl;
@@ -39,9 +40,9 @@ class InfluenceTestFarmer {
 
     @Test
     void applyEffect() throws TooManyStudentsException, NoSuchStudentException {//a's turn
-        Map<Color, Castle> expectedProfessorMap = new HashMap<>();
+        Map<Color, Team> expectedProfessorMap = new HashMap<>();
         expectedProfessorMap.putAll(
-                Map.of(Color.YELLOW, castleA)
+                Map.of(Color.YELLOW, Team.WHITE)
         );
         castleA.addStudentsInDiningRoom(
                 Arrays.asList(
@@ -59,7 +60,7 @@ class InfluenceTestFarmer {
                     Color.RED,
                     Color.PINK,
                     Color.GREEN));
-        Map<Color, Castle> professorMap = board.getProfessorMap();
+        Map<Color, Team> professorMap = board.getProfessorMap();
         parametersMap.put(
                 Parameters.PROFESSORMAP, professorMap);
         Influence farmerChar = (Influence) board.getAvailableCharacterCards().get(2);
@@ -85,7 +86,7 @@ class InfluenceTestFarmer {
                     newOwner = null;
                 }
             }
-            if(newOwner != null) professorsMap.replace(color, newOwner);
+            if(newOwner != null) professorsMap.replace(color, newOwner.getTeam());
         }
     }
 }
