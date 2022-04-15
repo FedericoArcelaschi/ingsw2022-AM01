@@ -53,12 +53,14 @@ public class BagTest {
         }
         assertTrue(a);
     }
+
     @Test
     public void testExtractForCastleSetupTotal(){
         boolean a=true;
         List<Color> colorList = b.multipleExtract(7);
         assertEquals(b.remainingStudents(), 113);
     }
+
     @Test
     public void testRemainingStudents(){
         assertEquals(120, b.remainingStudents());
@@ -67,6 +69,7 @@ public class BagTest {
         b.extract();
         assertEquals(19, b.remainingStudents());
     }
+
     @Test
     public void testGetSeed(){
         final int seed = 1;

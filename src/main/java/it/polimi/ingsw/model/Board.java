@@ -16,7 +16,7 @@ public class Board {
     protected final List<Cloud> cloudList = new ArrayList<>();
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
-    protected Map<Color, Castle> professorMap;
+    protected Map<Color, Team> professorMap;
     protected final Turn turn;
 
     public Board(String playerID1, String playerID2, Turn turn){
@@ -46,6 +46,14 @@ public class Board {
         this.turn = turn;
     }
 
+    /**Cleans the constructor implementation
+     */
+    private void construct(){
+        setupClouds();
+        setupIslands();
+        setupProfessorMap();
+    }
+
     /**Contructor for ExpertBoard
      * @param turn
      */
@@ -53,14 +61,6 @@ public class Board {
         this.turn = turn;
         setupClouds();
         setupProfessorMap();
-    }
-
-    /**Cleans the constructors' implementation
-     */
-    private void construct(){
-        setupClouds();
-        setupProfessorMap();
-        setupIslands();
     }
 
     /**
@@ -145,7 +145,7 @@ public class Board {
                     newOwner = null;
                 }
             }
-            if(newOwner != null) professorMap.replace(color, newOwner);
+            if(newOwner != null) professorMap.replace(color, newOwner.getTeam());
         }
     }
 
@@ -309,15 +309,16 @@ public class Board {
         return true;
     }
 
-    /**calculates influence and set new owner to the island the player lands on.
+    /**
+     * calculates influence and set new owner to the island the player lands on.
      * checks if neighbouring island have the same owner and join
      * checks if someone won
      * @param move number of jumps forward motherNature have to do
-     * @return the winner or null
+     * @return false if the move encounters some errors, true if it doesn't
      */
     public boolean moveMotherNature(int move){
-        motherNaturePosition += move;
-        if(motherNaturePosition >= islandList.size() - 1) motherNaturePosition -= islandList.size() - 1;
+        if(motherNaturePosition+move/islandList.size() >= 1) motherNaturePosition += move-islandList.size();
+        else motherNaturePosition += move;
         Island i = islandList.get(motherNaturePosition);
         //calculates influence and set new owner
         Map<Team, Integer> influence = i.calculateInfluence(professorMap);
@@ -370,8 +371,8 @@ public class Board {
         return castleMap.get(playerID);
     }
 
-    public Map<Color, Castle> getProfessorMap() { //TODO: per fare questo sarebbe utile "scorrere" i player
-        return new HashMap<>(professorMap);
+    public Map<Color, Team> getProfessorMap() { //TODO: per fare questo sarebbe utile "scorrere" i player
+        return professorMap;
     }
 
 }

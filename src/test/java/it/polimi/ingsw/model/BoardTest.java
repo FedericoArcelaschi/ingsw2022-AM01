@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.Test;
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,6 +17,26 @@ public class BoardTest{
         Turn t = new Turn(Arrays.asList(player1,player2));
         Board b=new Board(player1,player2, t);
         assertEquals(12, b.getIslandList().size());
+    }
+
+    @Test
+    public void testGetAviableCard() throws NotYourTurnException {
+        String player1 = "1";
+        String player2 = "2";
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
+        assertFalse(b.getAviableCard(player1).isEmpty());
+        b.playCard(player1, 1);
+        b.playCard(player1, 2);
+        b.playCard(player1, 3);
+        b.playCard(player1, 4);
+        b.playCard(player1, 5);
+        b.playCard(player1, 6);
+        b.playCard(player1, 7);
+        b.playCard(player1, 8);
+        b.playCard(player1, 9);
+        b.playCard(player1, 10);
+        assertTrue(b.getAviableCard(player1).isEmpty());
     }
 
     @Test
@@ -146,8 +167,8 @@ public class BoardTest{
         b.moveStudentToDR(player1, students);
 
         //test professor get assigned
-        Map<Color,Castle> pm1 = b.getProfessorMap();
-        Map<Color,Castle> pm2;
+        Map<Color,Team> pm1 = b.getProfessorMap();
+        Map<Color,Team> pm2;
         for(Color c : Color.values()){
             if(students.contains(c)){
                 assertNotNull(pm1.get(c));
@@ -157,11 +178,14 @@ public class BoardTest{
             }
         }
     }
+
     @Test
-    public void testIsWinningPosition() {
-    }
-    @Test
-    public void testIsWonByResources() {
+    public void testIsNotWonByResources() {
+        String player1 = "1";
+        String player2 = "2";
+        Turn t = new Turn(Arrays.asList(player1,player2));
+        Board b=new Board(player1,player2,t);
+        assertNull(b.isWonByResources());
     }
 
     @Test
@@ -171,5 +195,10 @@ public class BoardTest{
         Turn t = new Turn(Arrays.asList(player1,player2));
         Board b=new Board(player1,player2,t);
         assertTrue(b.moveMotherNature(3));
+    }
+
+    @Test
+    public void testJoinIsland() {
+
     }
 }
