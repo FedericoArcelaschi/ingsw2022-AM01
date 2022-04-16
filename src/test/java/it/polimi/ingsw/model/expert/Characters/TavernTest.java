@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.expert.Characters;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -47,19 +46,31 @@ public class TavernTest{
                 i++;
         }
         assertEquals(3,i);
-        System.out.println(expCards);
     }
 
     @Test
     public void testExtract4Testing(){
-        List<Generic> expertModeCharacters = new ArrayList<>();
+        List<CharactersList> expertModeCharacters = new ArrayList<>();
         List<CharactersList> expertModeCharactersList4Comparison = new ArrayList<>();
 
         for (int i = 1; i < 13; i++) {
-            System.out.println(tavern.extract4testing(i));
-            expertModeCharacters.add(tavern.extract4testing(i));
+            expertModeCharacters.add(tavern.extract4testing(i).getcCharacterName());
         }
-        expertModeCharactersList4Comparison.addAll(Arrays.asList(CharactersList.MONK));
-
+        expertModeCharactersList4Comparison
+                .addAll(Arrays.asList(
+                            CharactersList.MONK,
+                            CharactersList.FARMER,
+                            CharactersList.GUARD,
+                            CharactersList.MAILMAN,
+                            CharactersList.WITCH,
+                            CharactersList.CENTAUR,
+                            CharactersList.JESTER,
+                            CharactersList.KNIGHT,
+                            CharactersList.COOK,
+                            CharactersList.STORYTELLER,
+                            CharactersList.QUEEN,
+                            CharactersList.TAXMAN));
+        assertEquals(expertModeCharactersList4Comparison, expertModeCharacters,
+                "both lists should contain all characers");//TODO: understand why lc is null (in debugging isn't)
     }
 }

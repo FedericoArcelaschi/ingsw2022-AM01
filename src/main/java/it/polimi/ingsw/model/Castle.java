@@ -58,9 +58,6 @@ public class Castle {
      */
     public boolean addStudentsInWaitingRoom(List<Color> students) throws TooManyStudentsException{
         if(students.size()+waitingRoom.size() > waitingRoomSize) {
-            System.out.println(getWaitingRoom());
-            System.out.println(students);
-            System.out.println(waitingRoomSize);
             throw new TooManyStudentsException();
         }
         waitingRoom.addAll(students);
@@ -116,8 +113,6 @@ public class Castle {
         }
         return true;
     }
-
-
 
     /**Method that allows the player to play the card.
      * @param i priority of the card

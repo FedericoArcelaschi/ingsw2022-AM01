@@ -25,19 +25,24 @@ public class Influence extends Generic {
             case 2:
                 String currPlayer = (String) parameterMap.get(Parameters.PLAYERID);
                 Map<String, Castle> castleMap = (HashMap<String, Castle>) parameterMap.get(Parameters.CASTLEMAP);
-                Map<Color, Castle> newProfessorMap = new HashMap<>();
-
-                for (Color c: newProfessorMap.keySet())
-                        newProfessorMap.put(c, castleMap.get(currPlayer));
-
-                for (String player: castleMap.keySet())
-                    if(player != currPlayer)
-                        for (Color c: newProfessorMap.keySet()) {
-                            if(castleMap.get(player).getDiningRoom().get(c) > castleMap.get(currPlayer).getDiningRoom().get(c))
-                                newProfessorMap.put(c, castleMap.get(player));
+                Map<Color, Team> newProfessorMap = new HashMap<>();
+                int currentPlayerStudentsColor = 0;
+                int opponentPlayerStudentsColor = 0;
+                for(Color c: Color.values()) {
+                    newProfessorMap.put(c, castleMap.get(currPlayer).getTeam());
+                }
+                for(String player: castleMap.keySet()) {
+                    if(!player.equals(currPlayer)){
+                        for (Color c : Color.values()) {
+                            currentPlayerStudentsColor = castleMap.get(currPlayer).getDiningRoom().get(c);
+                            opponentPlayerStudentsColor = castleMap.get(player).getDiningRoom().get(c);
+                            if (opponentPlayerStudentsColor > currentPlayerStudentsColor)
+                                newProfessorMap.put(c, castleMap.get(player).getTeam());
                         }
+                    }
+                }
                 parameterMap.put(Parameters.PROFESSORMAP, newProfessorMap);
-                cost = CharactersList.FARMER.getCost()+1;
+                cost = CharactersList.FARMER.getCost() + 1;
                 return true;
             case 6:
                 return true;

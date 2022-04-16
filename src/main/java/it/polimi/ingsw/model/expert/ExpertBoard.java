@@ -45,6 +45,21 @@ public class ExpertBoard extends Board {
         drawExpertCharacters();
     }
 
+    /**sets up for the ExpertIslands
+     */
+    private void setupIslands(){
+        List<Color> s = bag.extractForIslandSetup();
+        for(int i=0, c=0; i<12; i++){
+            if(i%6 == 0){
+                islandList.add(new ExpertIsland());
+            }
+            else{
+                islandList.add(new ExpertIsland(s.get(c)));
+                c++;
+            }
+        }
+    }
+
     /**
      * Initializes <code>expertCharactersCards</code>. It's a factory method
      * @returns ArrayList<Characters>
@@ -54,8 +69,11 @@ public class ExpertBoard extends Board {
         expertCharactersCards = tavern.extract();
     }
 
-    public void playExpertCard(int idChar, int move, List<Color> studentsList) throws NoSuchStudentException, TooManyStudentsException {
-        playExpertCard(idChar, (ExpertIsland) this.getIslandList().get(0), move, studentsList);
+    /**Adds to the available Characters also the Character #idChar.
+     * @param idChar
+     */
+    public void setup4CharacterTesting(int idChar){
+        expertCharactersCards.set(idChar, tavern.extract4testing(idChar));
     }
 
         /**
@@ -79,34 +97,19 @@ public class ExpertBoard extends Board {
                 Parameters.PROFESSORMAP, professorMap,
                 Parameters.STUDENTLIST, studentsList,
                 Parameters.MOVE, move));
-            if (ec.applyEffect(parametersMap))
+            boolean returnValue =  ec.applyEffect(parametersMap);
+            if(idChar == 2) professorMap = (Map<Color, Team>) parametersMap.get(Parameters.PROFESSORMAP);
+            //TODO: do we actually need a retun value with those exceptions?!
+            if(returnValue)
                 return true;
-            else ((ExpertCastle)castleMap.get(playerID)).unpayCharacter(ec.getCost());
-        }
-            return false;
+        }else ((ExpertCastle)castleMap.get(playerID)).unpayCharacter(ec.getCost());
+
+        return false;
         //at this point in the view I would print the reasons why it could have stopped (coins, wrong parameters, etc..)
     }
 
-    /**sets up for the ExpertIslands
-     */
-    private void setupIslands(){
-        List<Color> s = bag.extractForIslandSetup();
-        for(int i=0, c=0; i<12; i++){
-            if(i%6 == 0){
-                islandList.add(new ExpertIsland());
-            }
-            else{
-                islandList.add(new ExpertIsland(s.get(c)));
-                c++;
-            }
-        }
-    }
-
-    /**adds to the available Characters also the Character #idChar.
-     * @param idChar
-     */
-    public void setup4CharacterTesting(int idChar){
-        expertCharactersCards.set(idChar, tavern.extract4testing(idChar));
+    public boolean playExpertCard(int idChar, int move, List<Color> studentsList) throws NoSuchStudentException, TooManyStudentsException {
+        return playExpertCard(idChar, (ExpertIsland) this.getIslandList().get(0), move, studentsList);
     }
 
     /**For testing: returns the list of available characters
@@ -115,6 +118,5 @@ public class ExpertBoard extends Board {
         return expertCharactersCards;
     }
 
-    public Bag getBag() {return bag;
-    }
+    public Bag getBag() {return bag;}
 }

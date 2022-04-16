@@ -24,7 +24,7 @@ class StudentTestJester {
     }
 
     @Test
-    void applyEffect() throws NoSuchStudentException, TooManyStudentsException {
+    void applyEffectJESTER() throws NoSuchStudentException, TooManyStudentsException {
         List<Color> availableStudents
             = ((List<Color>)jester
                     .getEffect()
@@ -43,7 +43,7 @@ class StudentTestJester {
                                         studentsInWaitingRoom.get(0),
                                         studentsInWaitingRoom.get(1),
                                         studentsInWaitingRoom.get(2)));
-        board.playExpertCard(7, null, 0,studentListForJester);
+        board.playExpertCard(7,0,studentListForJester);
 
         assertEquals(studentsInWaitingRoom.subList(3,7), castle.getWaitingRoom().subList(0,4),
                 "wrong students remaining");

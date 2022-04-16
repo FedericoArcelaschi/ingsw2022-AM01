@@ -128,21 +128,21 @@ public class Board {
     }
 
     /**
-     * check who has more student for each color and reassign the professors
+     * Checks who has more student for each color and reassign the professors
      */
 
-    private void updateProfessorsOwners(){
+    public void updateProfessorsOwners(){
         for(Color color : Color.values()) {
             int max = 0;
             Castle newOwner = null;
+            for (Castle castle : castleMap.values())
+                if(professorMap.get(color) == castle.getTeam())
+                    max = castle.getDiningRoom().get(color);
             for (Castle castle : castleMap.values()) {
                 int n = castle.getDiningRoom().get(color);
                 if(n > max){
                     max = n;
                     newOwner = castle;
-                }
-                else if(n == max){
-                    newOwner = null;
                 }
             }
             if(newOwner != null) professorMap.replace(color, newOwner.getTeam());
@@ -179,7 +179,6 @@ public class Board {
             islandList.get(islandNumber).addStudent(c);
         }
         return true;
-
     }
 
     /**
@@ -323,7 +322,7 @@ public class Board {
         //calculates influence and set new owner
         Map<Team, Integer> influence = i.calculateInfluence(professorMap);
         Team t = teamWithMoreInfluence(influence);
-        if(t != null) i.setOwnership(t);
+         if(t != null) i.setOwnership(t);
 
         //checks if neighbouring island have the same owner and join
         Island previous, next;
@@ -371,7 +370,8 @@ public class Board {
         return castleMap.get(playerID);
     }
 
-    public Map<Color, Team> getProfessorMap() { //TODO: per fare questo sarebbe utile "scorrere" i player
+    public Map<Color, Team> getProfessorMap() {
+        //Dosn't calculate the professorMap()
         return professorMap;
     }
 

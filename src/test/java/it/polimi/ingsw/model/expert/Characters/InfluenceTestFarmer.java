@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class InfluenceTestFarmer {
     private final Turn t = new Turn(Arrays.asList("a", "b"));
     private ExpertBoard board;
@@ -30,29 +32,16 @@ class InfluenceTestFarmer {
     void setUp() throws TooManyStudentsException {
         board = new ExpertBoard("a", "b", t);
         board.setup4CharacterTesting(2);
-        castleA = board.getCastle("a");
-        castleB = board.getCastle("b");
+        castleA = board.getCastle("a");//WHITE
+        castleB = board.getCastle("b");//BLACK
         charInfl = board.getAvailableCharacterCards().get(2);
         parametersMap = new HashMap<>();
-        //castleMap.put()
 
     }
 
     @Test
     void applyEffect() throws TooManyStudentsException, NoSuchStudentException {//a's turn
-        Map<Color, Team> expectedProfessorMap = new HashMap<>();
-        expectedProfessorMap.putAll(
-                Map.of(Color.YELLOW, Team.WHITE)
-        );
-        castleA.addStudentsInDiningRoom(
-                Arrays.asList(
-                    Color.YELLOW,
-                    Color.YELLOW,
-                    Color.YELLOW,
-                    Color.BLUE,
-                    Color.GREEN,
-                    Color.GREEN));
-        castleB.addStudentsInDiningRoom(
+        castleB.addStudentsInDiningRoom(//BLACK
                 Arrays.asList(
                     Color.YELLOW,
                     Color.YELLOW,
@@ -60,33 +49,39 @@ class InfluenceTestFarmer {
                     Color.RED,
                     Color.PINK,
                     Color.GREEN));
-        Map<Color, Team> professorMap = board.getProfessorMap();
+        board.updateProfessorsOwners();
+        castleA.addStudentsInDiningRoom( //WHITE - //a has 2 coins.
+                Arrays.asList(
+                        Color.YELLOW,
+                        Color.YELLOW,
+                        Color.YELLOW,
+                        Color.BLUE,
+                        Color.GREEN,
+                        Color.GREEN));
+        board.updateProfessorsOwners();
+        professorsMap = board.getProfessorMap();
+        Map<Color, Team> expectedProfessorsMap
+                = new HashMap<>(Map.of(
+                Color.YELLOW, Team.BLACK,
+                Color.GREEN, Team.WHITE,
+                Color.PINK, Team.BLACK,
+                Color.BLUE, Team.WHITE,
+                Color.RED, Team.BLACK));
+        assertEquals(expectedProfessorsMap, professorsMap
+                    , "before applyEffect() use. Initialization check.");
         parametersMap.put(
-                Parameters.PROFESSORMAP, professorMap);
+                Parameters.PROFESSORMAP, professorsMap);
         Influence farmerChar = (Influence) board.getAvailableCharacterCards().get(2);
-        board.getCastle("a").addStudentsInDiningRoom(List.of(Color.YELLOW));
-        board.getCastle("b").addStudentsInDiningRoom(List.of(Color.BLUE,Color.BLUE,Color.BLUE,Color.BLUE));
-        board.getCastle("a").addStudentsInDiningRoom(List.of(Color.BLUE));
-        //System.out.println(parametersMap.get(Parameters.PROFESSORMAP));
         board.playExpertCard(2, (ExpertIsland) board.getIslandList().get(0), 0, Arrays.asList());
-        //System.out.println(professorMap);
+        professorsMap = board.getProfessorMap();
+        expectedProfessorsMap = Map.of(
+                Color.YELLOW, Team.WHITE,
+                Color.GREEN, Team.WHITE,
+                Color.PINK, Team.BLACK,
+                Color.BLUE, Team.WHITE,
+                Color.RED, Team.BLACK);
+        assertEquals(expectedProfessorsMap, professorsMap
+                    , "after applyEffect() application.");
     }
 
-    private void updateProfessorsMap(){
-        for(Color color : Color.values()) {
-            int max = 0;
-            Castle newOwner = null;
-            for (Castle castle : castleMap.values()) {
-                int n = castle.getDiningRoom().get(color);
-                if(n > max){
-                    max = n;
-                    newOwner = castle;
-                }
-                else if(n == max){
-                    newOwner = null;
-                }
-            }
-            if(newOwner != null) professorsMap.replace(color, newOwner.getTeam());
-        }
-    }
 }

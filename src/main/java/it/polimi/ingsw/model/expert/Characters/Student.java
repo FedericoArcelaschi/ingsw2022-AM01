@@ -15,8 +15,17 @@ public class Student extends Generic {
     private static Bag bag;
     private static final List<Color> availableStudents = new ArrayList<>();
 
+    protected int cost;
+    protected String explaination;
+    protected int idChar;
+    protected CharactersList characterName;
+
     public Student(int idChar, Bag bag) {
         super(idChar);
+        cost = super.cost;
+        explaination = super.explaination;
+        idChar = super.idChar;
+        characterName = super.characterName;
         this.bag = bag;
         switch (idChar){
             case 1, 11: availableStudents.addAll(bag.multipleExtract(4)); //MONK, QUEEN
@@ -50,7 +59,7 @@ public class Student extends Generic {
                     return true;
                 }
                 return false;
-            case 7://JESTER
+            case 7 ://JESTER
                 //Passaggio parametri: i primi 3 studenti della list sono quelli del giocoliere(da spostare nel castello)
                 //i seocondi tre studenti sono quelli da togliere dal castello e mettere nel giocoliere
                 studentList = (ArrayList) parameterMap.get(Parameters.STUDENTLIST);

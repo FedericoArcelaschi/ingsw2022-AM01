@@ -4,13 +4,12 @@ import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 
 import java.util.Map;
-import java.util.Objects;
 
 public abstract class Generic {
     protected int cost;
     protected final String explaination;
     protected int idChar;
-    protected CharactersList lc = null;
+    protected CharactersList characterName;
 
     /**
      * requires idChar between 1 and 12.
@@ -18,17 +17,17 @@ public abstract class Generic {
      */
     public Generic(int idChar){
         this.idChar = idChar;
-        CharactersList lc = CharactersList.values()[idChar-1];
-        cost = lc.getCost();
-        explaination = lc.getExplaination();
+        CharactersList characterName = CharactersList.values()[idChar-1];
+        cost = characterName.getCost();
+        explaination = characterName.getExplaination();
     }
 
 
     public abstract boolean applyEffect(Map<Parameters, Object> ParameterMap) throws NoSuchStudentException, TooManyStudentsException;
     public abstract Map<Parameters, Object> getEffect();
 
-    public CharactersList getLc() {
-        return lc;
+    public CharactersList getcCharacterName() {
+        return characterName;
     }
     public String getExplanation(){
         return explaination;
@@ -43,6 +42,6 @@ public abstract class Generic {
         if (this == o) return true;
         if (!(o instanceof Generic)) return false;
         Generic generic = (Generic) o;
-        return getLc() == generic.getLc();
+        return getcCharacterName() == generic.getcCharacterName();
     }
 }
