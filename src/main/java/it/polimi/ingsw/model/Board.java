@@ -220,9 +220,9 @@ public class Board {
      * @return a list of not yet played card
      */
 
-    public List<Card> getAviableCard(String PlayerID){
+    public Boolean[] getAviableCard(String PlayerID){
         Castle castle = castleMap.get(PlayerID);
-        return castle.getCards().stream().filter(card -> !card.isPlayed()).collect(Collectors.toList());
+        return castle.getCards();
     }
 
     /**
@@ -283,7 +283,7 @@ public class Board {
 
     private int remainingCards(){
         int cardsLeft = 0;
-        for(Castle c : castleMap.values()) cardsLeft += c.getCards().size();
+        for(Castle castle : castleMap.values()) cardsLeft += (int) Arrays.stream(castle.getCards()).filter(card -> card != null && !card).count();
         return cardsLeft;
     }
 
@@ -330,9 +330,7 @@ public class Board {
             a = new Archipelago(il.get(0),il.get(1),il.get(2));
         }
         else return false;
-        for (int i = firstIsland; i < firstIsland+il.size(); i++) {
-            il.remove(i);
-        }
+        islandList.removeAll(il);
         islandList.add(firstIsland,a);
         return true;
     }

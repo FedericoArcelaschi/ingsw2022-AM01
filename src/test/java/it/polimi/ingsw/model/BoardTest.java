@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import org.junit.jupiter.api.Test;
 import java.util.*;
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,12 +18,12 @@ public class BoardTest{
     }
 
     @Test
-    public void testGetAviableCard() throws NotYourTurnException {
+    public void testGetAvailableCard() throws NotYourTurnException {
         String player1 = "1";
         String player2 = "2";
         Turn t = new Turn(Arrays.asList(player1,player2));
         Board b=new Board(player1,player2,t);
-        assertFalse(b.getAviableCard(player1).isEmpty());
+        assertEquals(10, Arrays.stream(b.getCastleMap().get(player1).getCards()).filter(card -> card != null && !card).count());
         b.playCard(player1, 1);
         b.playCard(player1, 2);
         b.playCard(player1, 3);
@@ -35,7 +34,7 @@ public class BoardTest{
         b.playCard(player1, 8);
         b.playCard(player1, 9);
         b.playCard(player1, 10);
-        assertTrue(b.getAviableCard(player1).isEmpty());
+        assertEquals(0, Arrays.stream(b.getCastleMap().get(player1).getCards()).filter(card -> card != null && !card).count());
     }
 
     @Test
@@ -109,7 +108,7 @@ public class BoardTest{
         for(int i=0; i<4;i++){
             cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(i));
         }
-        b.moveStudentToDR(player1, cl);
+        assertTrue(b.moveStudentToDR(player1, cl));
         //move the students from cloud to WR
         assertTrue(b.chooseCloud(player1, 0));
     }
@@ -145,14 +144,14 @@ public class BoardTest{
         Turn t = new Turn(Arrays.asList(player1,player2));
         Board b=new Board(player1,player2,t);
         //check if the card is not used at the beginning
-        assertFalse(b.getCastleMap().get(player1).getCards().get(0).isPlayed());
+        assertFalse(b.getCastleMap().get(player1).getCards()[0]);
         //check if the card is played correctly
         assertTrue(b.playCard(player1,1));
         //check if the card is set as used
-        assertTrue(b.getCastleMap().get(player1).getCards().get(0).isPlayed());
+        assertTrue(b.getCastleMap().get(player1).getCards()[0]);
         //check if last card played is the one we played
-        assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed().getPriority());
-        assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed().getDistance());
+        assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed());
+        assertEquals(1, (b.getCastleMap().get(player1).getLastCardPlayed()+1)/2);
         //check if the card can't be reused
         assertFalse(b.playCard(player1,1));
     }
@@ -167,7 +166,6 @@ public class BoardTest{
 
         //test professor get assigned
         Map<Color,Team> pm1 = b.getProfessorMap();
-        Map<Color,Team> pm2;
         for(Color c : Color.values()){
             if(students.contains(c)){
                 assertNotNull(pm1.get(c));

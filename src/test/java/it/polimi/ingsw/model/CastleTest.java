@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -84,7 +83,7 @@ public class CastleTest{
         Bag b = new Bag(24);
         Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
         assertTrue(c.playCard(3));
-        assertEquals(c.getCards().get(3-1), c.getLastCardPlayed());
+        assertEquals(3, c.getLastCardPlayed());
         assertFalse(c.playCard(3));
     }
 }
