@@ -84,26 +84,26 @@ public class ExpertBoard extends Board {
     public boolean playExpertCard(int idChar, ExpertIsland island, int move, List<Color> studentsList) throws NoSuchStudentException, TooManyStudentsException {
         String playerID = this.getTurn();
         Generic ec = expertCharactersCards.get(idChar);
-        if(((ExpertCastle)castleMap.get(playerID)).payCharacter(ec.getCost())) {
+        if (((ExpertCastle) castleMap.get(playerID)).payCharacter(ec.getCost())) {
             //in/out parameters for the applyEffect method
             Map<Parameters, Object> parametersMap = new HashMap<>();
             //Parameter to setup: (will clean code up)
-            if(island == null) island = (ExpertIsland) getIslandList().get(0);
+            if (island == null) island = (ExpertIsland) getIslandList().get(0);
             parametersMap.putAll(Map.of(
-                Parameters.PAY_TOKEN,((ExpertCastle) castleMap.get(playerID)).payCharacter(ec.getCost()),
+                Parameters.PAY_TOKEN, ((ExpertCastle) castleMap.get(playerID)).payCharacter(ec.getCost()),
                 Parameters.PLAYERID, playerID,
                 Parameters.ISLAND, island,
                 Parameters.CASTLEMAP, castleMap,
                 Parameters.PROFESSORMAP, professorMap,
                 Parameters.STUDENTLIST, studentsList,
                 Parameters.MOVE, move));
-            boolean returnValue =  ec.applyEffect(parametersMap);
-            if(idChar == 2) professorMap = (Map<Color, Team>) parametersMap.get(Parameters.PROFESSORMAP);
+            boolean returnValue = ec.applyEffect(parametersMap);
+            if (idChar == 2) professorMap = (Map<Color, Team>) parametersMap.get(Parameters.PROFESSORMAP);
             //TODO: do we actually need a retun value with those exceptions?!
-            if(returnValue)
+            if (returnValue)
                 return true;
-        }else ((ExpertCastle)castleMap.get(playerID)).unpayCharacter(ec.getCost());
-
+            else ((ExpertCastle) castleMap.get(playerID)).unpayCharacter(ec.getCost());
+        }
         return false;
         //at this point in the view I would print the reasons why it could have stopped (coins, wrong parameters, etc..)
     }

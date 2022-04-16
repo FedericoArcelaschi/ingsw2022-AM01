@@ -38,6 +38,7 @@ public class StudentTestMonk {
         for (Color c: Color.values()){
             countAll +=  testIsland.getStudents().get(c);
         }
+
         int countYellows =  testIsland.getStudents().get(Color.YELLOW).intValue();
         if(board.playExpertCard(1, testIsland, 0, (List<Color>) List.of(Color.YELLOW)))
             assertEquals(countYellows + 1, testIsland.getStudents().get(Color.YELLOW).intValue());
@@ -72,7 +73,7 @@ public class StudentTestMonk {
         for (Color c: Color.values()) {
             CountAfter +=  testIsland.getStudents().get(c);
         }
-        assertEquals(countAll +1, CountAfter,
+        assertEquals(countAll + 1, CountAfter,
                 "I don't know witch one, but at least one student was added");
     }
 
@@ -100,8 +101,7 @@ public class StudentTestMonk {
         Map<Parameters, Object> parametersMap
                 = new HashMap<>(Map.of(
                     Parameters.STUDENTLIST, List.of(availableStudent),
-                    Parameters.ISLAND, island)
-        );
+                    Parameters.ISLAND, island));
         numberOfStudentsBefore = island.getStudents().get(availableStudent);
         //In this test I invoke directly the Character's method
         assertTrue(monkCharacter.applyEffect(parametersMap));

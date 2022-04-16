@@ -60,8 +60,8 @@ public class ExpertCastle extends Castle {
         if(this.coins >= price) {
             this.coins -= price;
             return true;
-        }else
-            return false;
+        }
+        return false;
     }
 
     public void unpayCharacter(int price){

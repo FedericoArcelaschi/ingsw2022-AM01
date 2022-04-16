@@ -15,17 +15,8 @@ public class Student extends Generic {
     private static Bag bag;
     private static final List<Color> availableStudents = new ArrayList<>();
 
-    protected int cost;
-    protected String explaination;
-    protected int idChar;
-    protected CharactersList characterName;
-
     public Student(int idChar, Bag bag) {
         super(idChar);
-        cost = super.cost;
-        explaination = super.explaination;
-        idChar = super.idChar;
-        characterName = super.characterName;
         this.bag = bag;
         switch (idChar){
             case 1, 11: availableStudents.addAll(bag.multipleExtract(4)); //MONK, QUEEN
