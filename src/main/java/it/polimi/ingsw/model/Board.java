@@ -64,7 +64,7 @@ public class Board {
     }
 
     /**
-     * generate the clouds based on the nPlayer
+     * Generates the clouds based on the nPlayer
      */
 
     protected void setupClouds(){
