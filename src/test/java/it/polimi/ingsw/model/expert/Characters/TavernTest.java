@@ -48,28 +48,28 @@ public class TavernTest{
         assertEquals(3,i);
     }
 
+    
     @Test
     public void testExtract4Testing(){
         List<CharactersList> expertModeCharacters = new ArrayList<>();
         List<CharactersList> expertModeCharactersList4Comparison = new ArrayList<>();
-
         for (int i = 1; i < 13; i++) {
-            expertModeCharacters.add(tavern.extract4testing(i).getcCharacterName());
+            expertModeCharacters.add(tavern.extract4testing(i).getCharacterName());
         }
         expertModeCharactersList4Comparison
-                .addAll(Arrays.asList(
-                            CharactersList.MONK,
-                            CharactersList.FARMER,
-                            CharactersList.GUARD,
-                            CharactersList.MAILMAN,
-                            CharactersList.WITCH,
-                            CharactersList.CENTAUR,
-                            CharactersList.JESTER,
-                            CharactersList.KNIGHT,
-                            CharactersList.COOK,
-                            CharactersList.STORYTELLER,
-                            CharactersList.QUEEN,
-                            CharactersList.TAXMAN));
+            .addAll(Arrays.asList(
+                CharactersList.MONK,
+                CharactersList.FARMER,
+                CharactersList.GUARD,
+                CharactersList.MAILMAN,
+                CharactersList.WITCH,
+                CharactersList.CENTAUR,
+                CharactersList.JESTER,
+                CharactersList.KNIGHT,
+                CharactersList.COOK,
+                CharactersList.STORYTELLER,
+                CharactersList.QUEEN,
+                CharactersList.TAXMAN));
         assertEquals(expertModeCharactersList4Comparison, expertModeCharacters,
                 "both lists should contain all characters names");//TODO: understand why lc is null (in debugging isn't)
     }

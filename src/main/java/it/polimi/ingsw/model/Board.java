@@ -16,7 +16,7 @@ public class Board {
     protected final List<Cloud> cloudList = new ArrayList<>();
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
-    protected Map<Color, Team> professorMap;
+    protected Map<Color, Team> professorsMap;
     protected final Turn turn;
 
     public Board(String playerID1, String playerID2, Turn turn){
@@ -80,9 +80,9 @@ public class Board {
      * instance at null the professor map
      */
     private void setupProfessorMap(){
-        professorMap = new HashMap<>();
+        professorsMap = new HashMap<>();
         for(Color c : Color.values()){
-            professorMap.put(c,null);
+            professorsMap.put(c,null);
         }
     }
 
@@ -136,7 +136,7 @@ public class Board {
             int max = 0;
             Castle newOwner = null;
             for (Castle castle : castleMap.values())
-                if(professorMap.get(color) == castle.getTeam())
+                if(professorsMap.get(color) == castle.getTeam())
                     max = castle.getDiningRoom().get(color);
             for (Castle castle : castleMap.values()) {
                 int n = castle.getDiningRoom().get(color);
@@ -145,7 +145,7 @@ public class Board {
                     newOwner = castle;
                 }
             }
-            if(newOwner != null) professorMap.replace(color, newOwner.getTeam());
+            if(newOwner != null) professorsMap.replace(color, newOwner.getTeam());
         }
     }
 
@@ -320,7 +320,7 @@ public class Board {
         else motherNaturePosition += move;
         Island i = islandList.get(motherNaturePosition);
         //calculates influence and set new owner
-        Map<Team, Integer> influence = i.calculateInfluence(professorMap);
+        Map<Team, Integer> influence = i.calculateInfluence(professorsMap);
         Team t = teamWithMoreInfluence(influence);
          if(t != null) i.setOwnership(t);
 
@@ -370,9 +370,9 @@ public class Board {
         return castleMap.get(playerID);
     }
 
-    public Map<Color, Team> getProfessorMap() {
-        //Dosn't calculate the professorMap()
-        return professorMap;
+    public Map<Color, Team> getProfessorsMap() {
+        //Dosn't calculate the professorsMap()
+        return professorsMap;
     }
 
 }

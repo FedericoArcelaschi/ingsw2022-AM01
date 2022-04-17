@@ -62,39 +62,42 @@ public class Island{
 
     /**
      * calculate the influence that the towers have on the island
-     * @param influence map that contains the sum of influences per team
+     * @param influenceMap map that contains the sum of influences per team
      */
-    private void towerInfluence(Map<Team, Integer> influence){
+    private void towerInfluence(Map<Team, Integer> influenceMap){
         if(ownership != null){
-            influence.put(ownership,getIslandNumber());
+            int influence = influenceMap.get(ownership);
+            influenceMap.replace(ownership, influence + getIslandNumber());
         }
     }
 
     /**
-     * calculate the influence that the students have on the island
-     * @param influence map that contains the sum of influences per team
+     * Calculates the influence that the students have on the island
+     * @param influenceMap map that contains the sum of influences per team
      * @param professorMap map that contains the team owners of each professor
      */
-    private void studentInfluence(Map<Team, Integer> influence, Map<Color, Team> professorMap){
+    private void studentInfluence(Map<Team, Integer> influenceMap, Map<Color, Team> professorMap){
         for(Color c : Color.values()){
             if(professorMap.get(c) != null) {
-                Team t = professorMap.get(c); //take team of the owner of the professor
-                influence.replace(t, influence.get(t) + students.get(c));  //add influence for the color to the owner of the professor
+                Team t = professorMap.get(c); //gets the team of professor's owner
+                influenceMap.replace
+                        (t, influenceMap.get(t) + students.get(c));  //add influence for the color to the owner of the professor
             }
         }
     }
 
     /**
      * calculate the influence on the island per team
-     * @param professorMap map that contains the sum of influences per team
-     * @return an object containing the influence per team
+     * @param professorsMap map that contains the sum of influences per team
+     * @return influenceMap map containing the sum of influences per team
      */
-    public Map<Team, Integer> calculateInfluence(Map<Color, Team> professorMap){
-        Map<Team, Integer> influence = new HashMap<>();
-        for(Team t : Team.values()) influence.put(t, 0);
-        studentInfluence(influence, professorMap);
-        towerInfluence(influence);
-        return influence;
+    public Map<Team, Integer> calculateInfluence(Map<Color, Team> professorsMap){
+        Map<Team, Integer> influenceMap = new HashMap<>();
+        for(Team t : Team.values())
+            influenceMap.put(t, 0);
+        studentInfluence(influenceMap, professorsMap);
+        towerInfluence(influenceMap);
+        return influenceMap;
     }
 
     @Override

@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,7 +58,7 @@ class InfluenceTestFarmer {
                         Color.GREEN,
                         Color.GREEN));
         board.updateProfessorsOwners();
-        professorsMap = board.getProfessorMap();
+        professorsMap = board.getProfessorsMap();
         Map<Color, Team> expectedProfessorsMap
                 = new HashMap<>(Map.of(
                 Color.YELLOW, Team.BLACK,
@@ -70,10 +69,10 @@ class InfluenceTestFarmer {
         assertEquals(expectedProfessorsMap, professorsMap
                     , "before applyEffect() use. Initialization check.");
         parametersMap.put(
-                Parameters.PROFESSORMAP, professorsMap);
+                Parameters.PROFESSORSMAP, professorsMap);
         Influence farmerChar = (Influence) board.getAvailableCharacterCards().get(2);
         board.playExpertCard(2, (ExpertIsland) board.getIslandList().get(0), 0, Arrays.asList());
-        professorsMap = board.getProfessorMap();
+        professorsMap = board.getProfessorsMap();
         expectedProfessorsMap = Map.of(
                 Color.YELLOW, Team.WHITE,
                 Color.GREEN, Team.WHITE,

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.expert.Characters;
 
-
-public enum CharactersList { //TODO: complete THE CHARACTERS
+public enum CharactersList { //TODO: complete characters' explaination
     MONK(1,"Monk: this character offers the opportunity to add\n" +
             "a student to an island of your choice for 1 coin!\n" +
             "call function: -Pay MONK(Color)"),

@@ -90,15 +90,14 @@ public class ExpertBoard extends Board {
             //Parameter to setup: (will clean code up)
             if (island == null) island = (ExpertIsland) getIslandList().get(0);
             parametersMap.putAll(Map.of(
-                Parameters.PAY_TOKEN, ((ExpertCastle) castleMap.get(playerID)).payCharacter(ec.getCost()),
                 Parameters.PLAYERID, playerID,
                 Parameters.ISLAND, island,
                 Parameters.CASTLEMAP, castleMap,
-                Parameters.PROFESSORMAP, professorMap,
+                Parameters.PROFESSORSMAP, professorsMap,
                 Parameters.STUDENTLIST, studentsList,
                 Parameters.MOVE, move));
             boolean returnValue = ec.applyEffect(parametersMap);
-            if (idChar == 2) professorMap = (Map<Color, Team>) parametersMap.get(Parameters.PROFESSORMAP);
+            if (idChar == 2) professorsMap = (Map<Color, Team>) parametersMap.get(Parameters.PROFESSORSMAP);
             //TODO: do we actually need a retun value with those exceptions?!
             if (returnValue)
                 return true;

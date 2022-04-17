@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.Test;
 import java.util.*;
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -167,7 +166,7 @@ public class BoardTest{
         b.moveStudentToDR(player1, students);
 
         //test professor get assigned
-        Map<Color,Team> pm1 = b.getProfessorMap();
+        Map<Color,Team> pm1 = b.getProfessorsMap();
         Map<Color,Team> pm2;
         for(Color c : Color.values()){
             if(students.contains(c)){

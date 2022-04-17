@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.expert.Characters;
 import it.polimi.ingsw.model.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Influence extends Generic {
@@ -41,7 +40,7 @@ public class Influence extends Generic {
                         }
                     }
                 }
-                parameterMap.put(Parameters.PROFESSORMAP, newProfessorMap);
+                parameterMap.put(Parameters.PROFESSORSMAP, newProfessorMap);
                 cost = CharactersList.FARMER.getCost() + 1;
                 return true;
             case 6:

@@ -26,7 +26,7 @@ public abstract class Generic {
     public abstract boolean applyEffect(Map<Parameters, Object> ParameterMap) throws NoSuchStudentException, TooManyStudentsException;
     public abstract Map<Parameters, Object> getEffect();
 
-    public CharactersList getcCharacterName() {
+    public CharactersList getCharacterName() {
         return characterName;
     }
     public String getExplanation(){
@@ -42,6 +42,6 @@ public abstract class Generic {
         if (this == o) return true;
         if (!(o instanceof Generic)) return false;
         Generic generic = (Generic) o;
-        return getcCharacterName() == generic.getcCharacterName();
+        return getCharacterName() == generic.getCharacterName();
     }
 }
