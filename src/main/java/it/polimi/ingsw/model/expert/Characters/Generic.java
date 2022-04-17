@@ -17,7 +17,7 @@ public abstract class Generic {
      */
     public Generic(int idChar){
         this.idChar = idChar;
-        CharactersList characterName = CharactersList.values()[idChar-1];
+        this.characterName = CharactersList.values()[idChar-1];
         cost = characterName.getCost();
         explaination = characterName.getExplaination();
     }
