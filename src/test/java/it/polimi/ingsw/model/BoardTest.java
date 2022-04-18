@@ -2,27 +2,34 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Isolated;
+
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest{
+
+    private String player1 = "a", player2= "2";
+    private Board b;
+
+    @BeforeEach
+    void setUp() {
+        Turn t = new Turn(Arrays.asList(player1, player2));
+        b = new Board(player1, player2, t);
+    }
+
     @Test
     public void testBoardIslandNumber(){
-        String player1 = "1";
-        String player2 = "2";
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
+
         assertEquals(12, b.getIslandList().size());
     }
 
     @Test
     public void testGetAvailableCard() throws NotYourTurnException {
-        String player1 = "1";
-        String player2 = "2";
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
         assertEquals(10, Arrays.stream(b.getCastleMap().get(player1).getCards()).filter(card -> card != null && !card).count());
         b.playCard(player1, 1);
         b.playCard(player1, 2);
@@ -39,31 +46,20 @@ public class BoardTest{
 
     @Test
     public void testNotYourTurnException(){
-        String player1 = "1";
-        String player2 = "2";
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
-
         assertThrows(NotYourTurnException.class, () -> b.chooseCloud(player2,0), "");
     }
 
     @Test
     public void testBoardIslandStartingColor(){
-        String player1 = "1";
-        String player2 = "2";
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
-
         for(int i=0; i<12; i++){
             int nStudents = b.getIslandList().get(i).getStudents().values().stream().mapToInt(n -> n).sum();
             if(i%6 == 0)    assertEquals(0, nStudents);
             else assertEquals(1,nStudents);
         }
     }
+
     @Test
     public void testBoardCloudNumber(){
-        String player1 = "1";
-        String player2 = "2";
         String player3 = "3";
         String player4 = "4";
         Turn t1 = new Turn(Arrays.asList(player1,player2));
@@ -75,6 +71,7 @@ public class BoardTest{
         List<Cloud> cl2 = b2.getCloudList();
         List<Cloud> cl3 = b3.getCloudList();
         List<Cloud> cl4 = b4.getCloudList();
+
         //test numbers of clouds
         assertEquals(2, cl2.size());
         assertEquals(3, cl3.size());
@@ -87,37 +84,22 @@ public class BoardTest{
     }
     @Test
     public void testResetClouds() {
-        String player1 = "1";
-        String player2 = "2";
-
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
-
         assertTrue(b.refillClouds());
     }
+
     @Test
-    public void testChooseCloud() throws NoSuchStudentException, NotYourTurnException {
-        String player1 = "1";
-        String player2 = "2";
-
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
-
+    public void testChooseCloud() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         List<Color> cl = new ArrayList<>();
         //move 4 element to DR to free space for new students coming from cloud
         for(int i=0; i<4;i++){
             cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(i));
         }
-        assertTrue(b.moveStudentToDR(player1, cl));
+        b.moveStudentToDR(player1, cl);
         //move the students from cloud to WR
         assertTrue(b.chooseCloud(player1, 0));
     }
     @Test
     public void testMoveStudentToIsland() throws NoSuchStudentException, NotYourTurnException {
-        String player1 = "1";
-        String player2 = "2";
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
         List<Color> cl =  new ArrayList<>();
 
         cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
@@ -139,10 +121,6 @@ public class BoardTest{
     }
     @Test
     public void testPlayCard() throws NotYourTurnException {
-        String player1 = "1";
-        String player2 = "2";
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
         //check if the card is not used at the beginning
         assertFalse(b.getCastleMap().get(player1).getCards()[0]);
         //check if the card is played correctly
@@ -156,16 +134,12 @@ public class BoardTest{
         assertFalse(b.playCard(player1,1));
     }
     @Test
-    public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException {
-        String player1 = "1";
-        String player2 = "2";
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
+    public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         List<Color> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
         b.moveStudentToDR(player1, students);
 
         //test professor get assigned
-        Map<Color,Team> pm1 = b.getProfessorMap();
+        Map<Color,Team> pm1 = b.getProfessorsMap();
         for(Color c : Color.values()){
             if(students.contains(c)){
                 assertNotNull(pm1.get(c));
@@ -178,23 +152,58 @@ public class BoardTest{
 
     @Test
     public void testIsNotWonByResources() {
-        String player1 = "1";
-        String player2 = "2";
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
         assertNull(b.isWonByResources());
     }
     @Test
     public void testMoveMotherNature() {
-        String player1 = "1";
-        String player2 = "2";
-        Turn t = new Turn(Arrays.asList(player1,player2));
-        Board b=new Board(player1,player2,t);
-        assertTrue(b.moveMotherNature(3));
+        b.moveMotherNature(1);
     }
 
+    /**
+     * Test from blank board.
+     * Joins 3 islands with three students and no owner.
+     */
     @Test
-    public void testJoinIsland() {
+    public void testJoinIsland(){
+        List<Island> oldList = new ArrayList<>(b.islandList);
+        Island islandA = b.islandList.get(1);
+        Island islandB = b.islandList.get(2);
+        Island islandC = b.islandList.get(3);
+        b.joinIslands(Arrays.asList(islandA, islandB, islandC));
+        assertEquals(oldList.get(0), b.islandList.get(0),
+                "The first island should stay untouched");
+        assertEquals(10, b.islandList.size(),
+                "the island list shoud decrease by 2");
+        assertEquals(3, b.islandList.get(1).getIslandNumber(),
+                "the second island is the union of three");
+        Map<Color, Integer> EmptyStudentsMap = b.islandList.get(0).getStudents(); //first island is empty
+        Map<Color, Integer> expectedStudentsMap
+                = new HashMap<>(EmptyStudentsMap);
 
+        for (int i = 1; i < 4; i++) {
+            for (Color student: Color.values()) {
+                if(oldList.get(i).getStudents().get(student) > 0){
+                    if(expectedStudentsMap.get(student) != null){
+                        int previousStudents = expectedStudentsMap.get(student);
+                        expectedStudentsMap
+                                .replace(student,
+                                        previousStudents +
+                                        oldList.get(i).getStudents().get(student));
+                        break;
+                    }else{
+                        expectedStudentsMap
+                                .put(student,
+                                        oldList.get(i).getStudents().get(student));
+                        break;
+                    }
+                }
+            }
+        }
+        assertEquals(expectedStudentsMap, b.islandList.get(1).getStudents(),
+                "The second island should have all the students as the islands before");
+        assertEquals(oldList.get(4), b.islandList.get(2),
+                "also the next island is untouched");
+        assertEquals(oldList.get(1).getOwnership(), b.islandList.get(2).getOwnership(),
+                "no owner should be present");
     }
 }
