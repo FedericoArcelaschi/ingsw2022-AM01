@@ -19,6 +19,8 @@ public class Board {
     protected final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Team> professorsMap;
     protected final Turn turn;
+    protected int possibleMovingSteps;//calculated form the card: must be stored in memory til the player action turn
+
 
     public Board(String playerID1, String playerID2, Turn turn){
         nPlayer = 2;
@@ -188,6 +190,7 @@ public class Board {
     public boolean playCard(String PlayerID, int card) throws NotYourTurnException {//true if the move is legal, false otherwise
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
+        possibleMovingSteps = (card+1)/2;
         return castle.playCard(card);
     }
 

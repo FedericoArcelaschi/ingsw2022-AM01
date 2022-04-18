@@ -37,12 +37,14 @@ public class Action extends Generic {
                     teamOwner = island.getOwnership(); //owner doesn't change
             }
             island.setOwnership(teamOwner);
+            cost = characterName.getCost() +1;
             return true;
         }
         if (idChar == 4) {
             Integer move;
             move = (Integer) (ParametersMap.get(Parameters.MOVE)) + 2;
             ParametersMap.replace(Parameters.MOVE, move);
+            cost = characterName.getCost() +1;
             return true;
         }
         throw new IllegalArgumentException("Wrong character summoned: should be either 3 or 4");

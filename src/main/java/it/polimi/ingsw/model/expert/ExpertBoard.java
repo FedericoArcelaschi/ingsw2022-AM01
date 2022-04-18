@@ -89,6 +89,7 @@ public class ExpertBoard extends Board {
                 Parameters.MOVE, move));
             boolean returnValue = ec.applyEffect(parametersMap);
             if (idChar == 2) professorsMap = (Map<Color, Team>) parametersMap.get(Parameters.PROFESSORSMAP);
+            if (idChar == 4) possibleMovingSteps = (Integer) parametersMap.get(Parameters.MOVE);
             //TODO: do we actually need a retun value with those exceptions?!
             if (returnValue)
                 return true;
@@ -114,14 +115,14 @@ public class ExpertBoard extends Board {
     /**
      * Only the fourth character needs no other input parameters
      * @param idChar
-     * @return
+     * @return true if the expert card was correctly played
      * @throws NoSuchStudentException
      * @throws TooManyStudentsException
      */
     public boolean playExpertCard(int idChar) throws NoSuchStudentException, TooManyStudentsException {
         if(idChar == 4 && expertCharactersCards.get(4) != null)
             return playExpertCard(idChar, (ExpertIsland) this.getIslandList().get(0),
-                    castleMap.get(this.getCurrentPlayer()).getLastCardPlayed().getDistance(),
+                    possibleMovingSteps,
                     List.of());
         return false;
     }

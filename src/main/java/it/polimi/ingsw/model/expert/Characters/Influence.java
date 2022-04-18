@@ -41,13 +41,20 @@ public class Influence extends Generic {
                     }
                 }
                 parameterMap.put(Parameters.PROFESSORSMAP, newProfessorMap);
-                cost = CharactersList.FARMER.getCost() + 1;
+                cost = characterName.getCost() +1;
                 return true;
             case 6:
+                cost = characterName.getCost() +1;
                 return true;
             case 8:
+                cost = characterName.getCost() +1;
+                return true;
             case 9:
+                cost = characterName.getCost() +1;
+                return true;
             case 12:
+                cost = characterName.getCost() +1;
+                return true;
         }
         return false;
     }

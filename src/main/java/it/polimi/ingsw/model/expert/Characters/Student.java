@@ -52,7 +52,7 @@ public class Student extends Generic {
                     island.addStudent(student);//Adds one student per use.
                     availableStudents.remove(student);
                     availableStudents.add(bag.extract());
-                    cost += CharactersList.MONK.getCost() + 1;
+                    cost = characterName.getCost() +1;
                     return true;
                 }
                 return false;
@@ -70,9 +70,11 @@ public class Student extends Generic {
                 playerCastle.addStudentsInWaitingRoom(studentList.subList(0,3));
                 availableStudents.addAll(studentList.subList(3,6));
                 availableStudents.removeAll(studentList.subList(0,3));
+                cost = characterName.getCost() +1;
                 return true;
             case 11://QUEEN
 
+                cost = characterName.getCost() +1;
                 return true;
             default:
                 throw new IllegalStateException("Unexpected value: " + idChar);
