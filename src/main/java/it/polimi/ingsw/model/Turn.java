@@ -23,7 +23,7 @@ public class Turn {
     /**
      * @return the player who is playing
      */
-    public String getTurn(){
+    public String getCurrentPlayer(){
         return currentPlayerTurn;
     }
 

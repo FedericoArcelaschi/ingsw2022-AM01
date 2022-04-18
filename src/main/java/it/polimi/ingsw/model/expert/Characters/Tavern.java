@@ -15,6 +15,8 @@ import java.util.*;
 public class Tavern {
     private long seed;
     private static Bag bag;
+    private final int numberOfCharacters = 12;
+    private final int numberOfPlayableCharacter = 3;
 
     public Tavern(Bag bag){
         seed = bag.getSeed();
@@ -22,7 +24,7 @@ public class Tavern {
     }
 
     /**
-     * extract the 3 cards for the game
+     * extract 3 different cards for the game
      * @return List<Generic>
      */
     public List<Generic> extract(){
@@ -30,11 +32,11 @@ public class Tavern {
         List<Generic> expCards = new ArrayList<>();
         Random rand = new Random(seed);
         int idChar;
-        for(int i = 0; i < 13; i++) {
+        for(int i = 0; i < numberOfCharacters + 1; i++) {
             expCards.add(i, null);
         }
-        for(int i= 0; i < 3; i++) {
-            idChar = rand.nextInt(1,12);
+        for(int i= 0; i < numberOfPlayableCharacter; i++) {
+            idChar = rand.nextInt(1, numberOfCharacters);
             if(expCards.get(idChar) == null) {
                 ec = getExpertCharacter(idChar);
                 expCards.set(idChar, ec);

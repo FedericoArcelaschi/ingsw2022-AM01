@@ -1,6 +1,7 @@
-package it.polimi.ingsw.model.expert.Characters;
+package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.Turn;
+import it.polimi.ingsw.model.expert.Characters.*;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -56,6 +57,7 @@ public class TavernTest{
         for (int i = 1; i < 13; i++) {
             expertModeCharacters.add(tavern.extract4testing(i).getCharacterName());
         }
+        //System.out.println(tavern.extract4testing(3).getCharacterName().name());
         expertModeCharactersList4Comparison
             .addAll(Arrays.asList(
                 CharactersList.MONK,
@@ -71,6 +73,6 @@ public class TavernTest{
                 CharactersList.QUEEN,
                 CharactersList.TAXMAN));
         assertEquals(expertModeCharactersList4Comparison, expertModeCharacters,
-                "both lists should contain all characters names");//TODO: understand why lc is null (in debugging isn't)
+                "both CharacterList-lists should contain all characters names");//TODO: understand why lc is null (in debugging isn't)
     }
 }

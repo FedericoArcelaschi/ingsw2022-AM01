@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
+import it.polimi.ingsw.model.expert.ExpertCastle;
 import it.polimi.ingsw.model.expert.ExpertIsland;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,28 +19,25 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class InfluenceTestFarmer {
-    private final Turn t = new Turn(Arrays.asList("a", "b"));
+    private final Turn t = new Turn(Arrays.asList("Lorenzo", "Giovanni2069"));
     private ExpertBoard board;
-    private Map<Parameters, Object> parametersMap;
     private Map<Color, Team> professorsMap;
-    private Map<String, Castle> castleMap;
-    private Castle castleA, castleB;
+    private ExpertCastle castleA, castleB;
     private Generic charInfl;
 
 
     @BeforeEach
     void setUp() throws TooManyStudentsException {
-        board = new ExpertBoard("a", "b", t);
+        board = new ExpertBoard("Lorenzo", "Giovanni2069", t);
         board.setup4CharacterTesting(2);
-        castleA = board.getCastle("a");//WHITE
-        castleB = board.getCastle("b");//BLACK
+        castleA = (ExpertCastle) board.getCastle("Lorenzo"); //WHITE
+        castleB = (ExpertCastle) board.getCastle("Giovanni2069");//BLACK
         charInfl = board.getAvailableCharacterCards().get(2);
-        parametersMap = new HashMap<>();
 
     }
 
     @Test
-    void applyEffect() throws TooManyStudentsException, NoSuchStudentException {//a's turn
+    void applyEffect() throws TooManyStudentsException, NoSuchStudentException {//Lorenzo's turn
         castleB.addStudentsInDiningRoom(//BLACK
                 Arrays.asList(
                     Color.YELLOW,
@@ -49,7 +47,7 @@ class InfluenceTestFarmer {
                     Color.PINK,
                     Color.GREEN));
         board.updateProfessorsOwners();
-        castleA.addStudentsInDiningRoom( //WHITE - //a has 2 coins.
+        castleA.addStudentsInDiningRoom( //WHITE - //Lorenzo has 2 coins.
                 Arrays.asList(
                         Color.YELLOW,
                         Color.YELLOW,
@@ -68,10 +66,9 @@ class InfluenceTestFarmer {
                 Color.RED, Team.BLACK));
         assertEquals(expectedProfessorsMap, professorsMap
                     , "before applyEffect() use. Initialization check.");
-        parametersMap.put(
-                Parameters.PROFESSORSMAP, professorsMap);
-        Influence farmerChar = (Influence) board.getAvailableCharacterCards().get(2);
+
         board.playExpertCard(2, (ExpertIsland) board.getIslandList().get(0), 0, Arrays.asList());
+
         professorsMap = board.getProfessorsMap();
         expectedProfessorsMap = Map.of(
                 Color.YELLOW, Team.WHITE,
@@ -79,8 +76,8 @@ class InfluenceTestFarmer {
                 Color.PINK, Team.BLACK,
                 Color.BLUE, Team.WHITE,
                 Color.RED, Team.BLACK);
-        assertEquals(expectedProfessorsMap, professorsMap
-                    , "after applyEffect() application.");
+        assertEquals(expectedProfessorsMap, professorsMap,
+                "after applyEffect() application.");
     }
 
 }

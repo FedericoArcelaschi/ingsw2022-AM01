@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
+import it.polimi.ingsw.model.expert.ExpertCastle;
 import it.polimi.ingsw.model.expert.ExpertIsland;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,8 +23,8 @@ public class StudentTestMonk {
     private static ExpertBoard board;
     @BeforeEach
     void setUp() {
-        t = new Turn(Arrays.asList("pippo", "pluto"));
-        board = new ExpertBoard("pippo", "pluto", t);
+        t = new Turn(Arrays.asList("Lorenzo", "Giovanni"));
+        board = new ExpertBoard("Lorenzo", "Giovanni", t);
     }
 
     /**
@@ -40,7 +41,7 @@ public class StudentTestMonk {
         }
 
         int countYellows =  testIsland.getStudents().get(Color.YELLOW).intValue();
-        if(board.playExpertCard(1, testIsland, 0, (List<Color>) List.of(Color.YELLOW)))
+        if(board.playExpertCard(1, testIsland, 0, List.of(Color.YELLOW)))
             assertEquals(countYellows + 1, testIsland.getStudents().get(Color.YELLOW).intValue());
         else
             assertEquals(countYellows, testIsland.getStudents().get(Color.YELLOW).intValue());
@@ -52,7 +53,7 @@ public class StudentTestMonk {
             assertEquals(countGreen, testIsland.getStudents().get(Color.GREEN).intValue());
 
         int countPink =  testIsland.getStudents().get(Color.PINK).intValue();
-        if(board.playExpertCard(1, testIsland, 0, (List<Color>) List.of(Color.PINK)))
+        if(board.playExpertCard(1, testIsland, 0, List.of(Color.PINK)))
             assertEquals(countPink + 1, testIsland.getStudents().get(Color.PINK).intValue());
         else
             assertEquals(countPink, testIsland.getStudents().get(Color.PINK).intValue());
@@ -145,4 +146,27 @@ public class StudentTestMonk {
                 "The student number of color " + notAvailableStudent + " must be increased.");
     }
 
+    @Test
+    public void testPlayExpertCards4MONK() throws NoSuchStudentException, TooManyStudentsException {
+        Generic monkChar;
+        List<Color> availableStudent;
+        ExpertIsland island = ((ExpertIsland) board.getIslandList().get(1));
+        Map<Color, Integer> presentStudents = island.getStudents();
+        board.setup4CharacterTesting(1);
+        monkChar = board.getAvailableCharacterCards().get(1);
+        availableStudent = ((List<Color>) monkChar.getEffect().get(Parameters.STUDENTLIST));
+        //note: I pass 4 colors and the MONK adds only the first
+        //the effect should be applied only for the fist time (1 coin is present)
+        assertTrue(board.playExpertCard(1, island, 0, availableStudent), "Assertion playExpertCardFailed #1");
+        assertEquals(0, ((ExpertCastle) board.getCastle(board.getCurrentPlayer())).getCoins(), "Error: coins");
+        assertFalse(board.playExpertCard(1, island, 0, availableStudent), "Assertion playExpertCardFailed #2");
+        assertEquals(0, ((ExpertCastle) board.getCastle(board.getCurrentPlayer())).getCoins(), "Error: coins");
+        //check if it works as expected
+        for (Color c: presentStudents.keySet()){
+            if(c == availableStudent.get(0))
+                assertEquals(presentStudents.get(c) + 1 , island.getStudents().get(c), "Assertion color "+ c +" failed");
+            else
+                assertEquals(presentStudents.get(c), island.getStudents().get(c),"Assertion color "+ c +" failed");
+        }
+    }
 }

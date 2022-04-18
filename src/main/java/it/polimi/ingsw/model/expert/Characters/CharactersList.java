@@ -3,13 +3,18 @@ package it.polimi.ingsw.model.expert.Characters;
 public enum CharactersList { //TODO: complete characters' explaination
     MONK(1,"Monk: this character offers the opportunity to add\n" +
             "a student to an island of your choice for 1 coin!\n" +
-            "call function: -Pay MONK(Color)"),
+            "call function: -Pay MONK: colorToPut\n" +
+            "-More MONK: returns the possible students that can be moved"),
     FARMER(2, "Farmer: this character gives you the chance to have\n" +
             "more influence than your competitor.\n" +
             "Pay 2 coin to break-tie the number of students" +
             "in your Castle and take the control of the professors!" +
-            "call function: -Pay FARMER()"),
-    GUARD(3,""),
+            "call function: -Pay FARMER\n" +
+            "-More FARMER: "),
+    GUARD(3,"Guard: this character offers you the chance to conquer\n" +
+            "another island, besides the one where mother nature\n" +
+            "in on.\n" +
+            "call function -Pay GUARD: islandNumber"),
     MAILMAN(4,""),
     WITCH(5,""),
     CENTAUR(6,""),
@@ -21,14 +26,16 @@ public enum CharactersList { //TODO: complete characters' explaination
     TAXMAN(12,"");
 
     private int id;
-    private String explaination;
+    private String explanation;
 
-    CharactersList(int id, String explaination){
+    /**
+     * The cost is also dynamically added to the explanation
+     */
+    CharactersList(int id, String explanation){
         this.id = id;
     }
-
-    protected String getExplaination(){ //TODO: finish explainations
-        return this.explaination;
+    protected String getExplanation(){ //TODO: finish explainations
+        return this.explanation;
     }
     protected int getCost(){
         return id % 3;

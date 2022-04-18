@@ -7,7 +7,7 @@ import java.util.Map;
 
 public abstract class Generic {
     protected int cost;
-    protected final String explaination;
+    protected final String explanation;
     protected int idChar;
     protected CharactersList characterName;
 
@@ -19,7 +19,7 @@ public abstract class Generic {
         this.idChar = idChar;
         this.characterName = CharactersList.values()[idChar-1];
         cost = characterName.getCost();
-        explaination = characterName.getExplaination();
+        explanation = characterName.getExplanation();
     }
 
 
@@ -30,7 +30,7 @@ public abstract class Generic {
         return characterName;
     }
     public String getExplanation(){
-        return explaination;
+        return explanation + "cost - " + String.valueOf(this.getCost());
     }
     public int getCost(){
         return cost;

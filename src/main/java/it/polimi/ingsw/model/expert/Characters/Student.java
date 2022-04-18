@@ -14,20 +14,26 @@ import java.util.Map;
 public class Student extends Generic {
     private static Bag bag;
     private static final List<Color> availableStudents = new ArrayList<>();
+    private final int numberOfAvailableStudents;
 
     public Student(int idChar, Bag bag) {
         super(idChar);
         this.bag = bag;
+        int k = 0;
         switch (idChar){
-            case 1, 11: availableStudents.addAll(bag.multipleExtract(4)); //MONK, QUEEN
-                return;
-            case 7: availableStudents.addAll(bag.multipleExtract(6)); //JESTER
-                return;
+            case 1, 11: k = 4;
+                        break;
+            case 7:     k = 6;
+                        break;
         }
+        numberOfAvailableStudents = k;
+        availableStudents.addAll(bag.multipleExtract(numberOfAvailableStudents));
     }
 
     /**
-     * MONK: Adds a student to the given island
+     * MONK: Adds one student from the card to the given island
+     * JESTER: Switches three or less students form the card to the dining room
+     * QUEEN: Adds one student from the card to the dining room
      * @return if can place the student requested -> true else false
      * @param 
      */
@@ -50,24 +56,23 @@ public class Student extends Generic {
                     return true;
                 }
                 return false;
-            case 7 ://JESTER
-                //Passaggio parametri: i primi 3 studenti della list sono quelli del giocoliere(da spostare nel castello)
-                //i seocondi tre studenti sono quelli da togliere dal castello e mettere nel giocoliere
+            case 7: //JESTER
+                    //Passaggio parametri: i primi 3 studenti della list sono quelli del giocoliere(da spostare nel castello)
+                    //i seocondi tre studenti sono quelli da togliere dal castello e mettere nel giocoliere
                 studentList = (ArrayList) parameterMap.get(Parameters.STUDENTLIST);
                 if(!availableStudents.containsAll(studentList.subList(0,3)))return false;
-                //need to handle the case with less that three students to move.(null in list or number of students in Move)
-
+                    //needs to handle the case with less than three students to move.(null in list or number of students in Move)
+                String currentPlayer = (String)parameterMap.get(Parameters.PLAYERID);
                 playerCastle = ((Map<String, ExpertCastle>) parameterMap
                                     .get(Parameters.CASTLEMAP))
-                                        .get(
-                                            (String)parameterMap
-                                            .get(Parameters.PLAYERID));
+                                        .get(currentPlayer);
                 playerCastle.removeStudentsFromWaitingRoom(studentList.subList(3,6));
                 playerCastle.addStudentsInWaitingRoom(studentList.subList(0,3));
                 availableStudents.addAll(studentList.subList(3,6));
                 availableStudents.removeAll(studentList.subList(0,3));
                 return true;
             case 11://QUEEN
+
                 return true;
             default:
                 throw new IllegalStateException("Unexpected value: " + idChar);

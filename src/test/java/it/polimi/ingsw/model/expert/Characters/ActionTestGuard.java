@@ -24,8 +24,8 @@ public class ActionTestGuard { //THIRD CHARACTER
 
     @BeforeEach
     void setUp() {
-        Turn t = new Turn(Arrays.asList("a", "b"));
-        board = new ExpertBoard("a", "b", t);
+        Turn t = new Turn(Arrays.asList("Federico", "Lorenzo"));
+        board = new ExpertBoard("Federico", "Lorenzo", t);
         board.setup4CharacterTesting(3);
         guardChar = board.getAvailableCharacterCards().get(3);
         ParametersMap = new HashMap<>();
@@ -43,15 +43,18 @@ public class ActionTestGuard { //THIRD CHARACTER
                         Color.GREEN, Team.BLACK,
                         Color.RED, Team.BLACK
                 ));
-        for (int j = 0; j < 12; j++) {
+        for (int j = 0; j < 12; j++) {//loop: Federico conquers every island(first and 6th have no students on them)
             ExpertIsland island =
                     (ExpertIsland) board.getIslandList().get(j);
+            assertTrue(island.getOwnership() == null,
+                    "First every island is initialized");
             ParametersMap.putAll(
                     Map.of(
                             Parameters.ISLAND, island,
                             Parameters.PROFESSORSMAP, professorsMap
                     ));
             guardChar.applyEffect(ParametersMap);
+            //System.out.println("isola prima: " + j + " " +island);
             for (Color c : List.of(Color.YELLOW, Color.BLUE, Color.PINK)) {
                 if (island.getStudents().get(c) == 1) //island that contained those colors should be white.
                     assertEquals(Team.WHITE, board.getIslandList().get(j).getOwnership(),
@@ -59,9 +62,13 @@ public class ActionTestGuard { //THIRD CHARACTER
             }
             for (Color c : List.of(Color.GREEN, Color.RED)) {
                 if (island.getStudents().get(c) == 1) //island that contained those colors should be black.
-                    assertEquals(Team.BLACK, board.getIslandList().get(j).getOwnership(),
+                    assertEquals(Team.BLACK, island.getOwnership(),
                             "all green and red islands should go to BlACK team");
             }
+            if(j == 0 || j == 6)
+                assertEquals(null, island.getOwnership(),
+                        "those islands contain no students --> therefore have no owner");
+            //System.out.println("isola dopo: " + j + " " + board.getIslandList().get(j).toString());
         }
     }
 }

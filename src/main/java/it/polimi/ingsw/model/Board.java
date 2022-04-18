@@ -4,6 +4,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -121,7 +122,7 @@ public class Board {
      * @return if the move is legal and played or not
      */
     public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException {
-        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
+        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
         return castle.addStudentsInWaitingRoom(cloud.choose());
@@ -155,13 +156,12 @@ public class Board {
      * @param students a list of students you want to move
      * @return if the move is legal and played or not
      */
-    public boolean moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
-        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
+    public void moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
+        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
-        if(!castle.removeStudentsFromWaitingRoom(students)) return false;
-        boolean r = castle.addStudentsInDiningRoom(students);
+        castle.removeStudentsFromWaitingRoom(students);
+        castle.addStudentsInDiningRoom(students);
         updateProfessorsOwners();
-        return r;
     }
 
     /**
@@ -171,10 +171,8 @@ public class Board {
      * @return if the move is legal and played or not
      */
     public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException, NotYourTurnException {
-        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
-        if(!castleMap.get(PlayerID).removeStudentsFromWaitingRoom(students)){
-            throw new NoSuchStudentException();
-        }
+        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
+        castleMap.get(PlayerID).removeStudentsFromWaitingRoom(students);
         for(Color c : students){
             islandList.get(islandNumber).addStudent(c);
         }
@@ -187,7 +185,7 @@ public class Board {
      * @return if the move is legal and played or not
      */
     public boolean playCard(String PlayerID, int card) throws NotYourTurnException {//true if the move is legal, false otherwise
-        if(!turn.getTurn().equals(PlayerID)) throw new NotYourTurnException();
+        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         return castle.playCard(card);
     }
@@ -222,7 +220,7 @@ public class Board {
      * @param nTowers map that contains team and towers of the team on the islands
      * @return the team with most towers
      */
-    private Team teamWithMoreTowers(Map<Team,Integer> nTowers){
+    private Team teamWithMoreTowers(Map<Team, Integer> nTowers){
         int max;
         Team winner;
 
@@ -290,44 +288,58 @@ public class Board {
     }
 
 
-    private boolean joinIslands(List<Island> il){
-        int firstIsland = islandList.indexOf(il.get(0));
-        if(firstIsland == -1) return false;
-        Island a;
+    private void joinIslands(List<Island> il){
+        int firstIslandIndex = islandList.indexOf(il.get(0));
+        if(firstIslandIndex == -1)
+            throw new IllegalArgumentException("island: " + il.get(0).toString() + "not found!");
+        Island newIsland;
         if(il.size()==2){
-            a = new Archipelago(il.get(0),il.get(1));
+            newIsland = new Archipelago(il.get(0),il.get(1));
         }
         else if(il.size()==3){
-            a = new Archipelago(il.get(0),il.get(1),il.get(2));
+            newIsland = new Archipelago(il.get(0),il.get(1),il.get(2));
         }
-        else return false;
-        for (int i = firstIsland; i < firstIsland+il.size(); i++) {
+        else
+            throw new IllegalArgumentException("wrong number of islands in the given list: " + il.toString());
+        for (int i = firstIslandIndex; i < firstIslandIndex + il.size(); i++) {
             il.remove(i);
         }
-        islandList.add(firstIsland,a);
-        return true;
+        islandList.add(firstIslandIndex,newIsland);
     }
 
     /**
-     * calculates influence and set new owner to the island the player lands on.
-     * checks if neighbouring island have the same owner and join
-     * checks if someone won
-     * @param move number of jumps forward motherNature have to do
-     * @return false if the move encounters some errors, true if it doesn't
+     * Calculates the influence and sets a new owner
+     * on the current island mother nature lands on.
+     * Checks if nearby islands have the same owner and possibly joins them.
+     * Checks if someone won the game after an island is conquered
+     * @param move number of steps forward of mother nature
+     * @return false if the move encounters any error, true if it doesn't
      */
-    public boolean moveMotherNature(int move){
-        if(motherNaturePosition+move/islandList.size() >= 1) motherNaturePosition += move-islandList.size();
+    public void moveMotherNature(int move) {
+        if (motherNaturePosition + move / islandList.size() >= 1) motherNaturePosition += move - islandList.size();
         else motherNaturePosition += move;
-        Island i = islandList.get(motherNaturePosition);
-        //calculates influence and set new owner
-        Map<Team, Integer> influence = i.calculateInfluence(professorsMap);
-        Team t = teamWithMoreInfluence(influence);
-         if(t != null) i.setOwnership(t);
+        conquerIsland(islandList.get(motherNaturePosition));
+    }
 
-        //checks if neighbouring island have the same owner and join
+    /**
+     * Calculates influence on island and sets a new owner if possible
+     * @param island the current island mother nature is on
+     */
+    protected void conquerIsland(@NotNull Island island) {
+        Map<Team, Integer> influence = island.calculateInfluence(professorsMap);
+        Team t = teamWithMoreInfluence(influence);
+        if (t != null) island.setOwnership(t);
+        checkJoinIsland(island);
+    }
+
+    /**
+     * Checks if neighbouring island have the same owner and joins them to the current island
+     * @param island
+     */
+    protected void checkJoinIsland(Island island){
         Island previous, next;
         List<Island> islandToJoin = new ArrayList<>();
-        islandToJoin.add(i);
+        islandToJoin.add(island);
         if(motherNaturePosition == 0){
             previous = islandList.get(islandList.size()-1);
             next = islandList.get(1);
@@ -340,38 +352,26 @@ public class Board {
             previous = islandList.get(motherNaturePosition - 1);
             next = islandList.get(motherNaturePosition + 1);
         }
-        if(i.getOwnership() != null && previous.getOwnership() == i.getOwnership()) islandToJoin.add(0,previous);
-        if(i.getOwnership() != null && next.getOwnership() == i.getOwnership()) islandToJoin.add(next);
+        if(island.getOwnership() != null && previous.getOwnership() == island.getOwnership()) islandToJoin.add(0,previous);
+        if(island.getOwnership() != null && next.getOwnership() == island.getOwnership()) islandToJoin.add(next);
 
-        if(islandToJoin.size() == 2 || islandToJoin.size() == 3) {
-            if (!joinIslands(islandToJoin)) {
-                System.out.println("join error");
-                return false;
-            }
-        }
-        return true;
+        if(islandToJoin.size() == 2 || islandToJoin.size() == 3) joinIslands(islandToJoin);
+
     }
 
-    public String getTurn(){return turn.getTurn();}
+    public String getCurrentPlayer(){return turn.getCurrentPlayer();}
 
-    public List<Cloud> getCloudList() {
-        return new ArrayList<>(cloudList);
-    }
+    public List<Cloud> getCloudList() {return new ArrayList<>(cloudList);}
 
-    public List<Island> getIslandList() {
-        return new ArrayList<>(islandList);
-    }
+    public List<Island> getIslandList() {return new ArrayList<>(islandList);}
 
-    public Map<String, Castle> getCastleMap() {
-        return new HashMap<>(castleMap);
-    }
+    public Map<String, Castle> getCastleMap() {return new HashMap<>(castleMap);}
 
     public Castle getCastle(String playerID){//TODO: make return only a copy
         return castleMap.get(playerID);
     }
 
-    public Map<Color, Team> getProfessorsMap() {
-        //Dosn't calculate the professorsMap()
+    public Map<Color, Team> getProfessorsMap() {//TODO: make return only a copy
         return professorsMap;
     }
 

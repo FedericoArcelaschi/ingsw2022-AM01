@@ -1,14 +1,11 @@
 package it.polimi.ingsw.model.expert; 
 
-import it.polimi.ingsw.model.Bag;
 import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class ExpertCastle extends Castle {
@@ -18,31 +15,34 @@ public class ExpertCastle extends Castle {
         coins = 1;
     }
 
-    /**same as the super method but check adds a coin to the player
+    /**
+     * Adds also a coin to the player
      * @param color color of the student to add
      * @return if the bounds are respected
      */
-    public boolean addStudentInDiningRoom(Color color) throws TooManyStudentsException {
-        if(!super.addStudentInDiningRoom(color))
-            return false;
+    public void addStudentInDiningRoom(Color color) throws TooManyStudentsException {
+        super.addStudentInDiningRoom(color);
         if (diningRoom.get(color) % 3 == 0)
             coins++;
-        return true;
     }
 
-    public boolean addStudentsInDiningRoom(List<Color> students) throws TooManyStudentsException {
+    /**
+     * Adds a coin to this player
+     * @param students – The list of students to add to the dining room.
+     * @throws TooManyStudentsException
+     */
+    public void addStudentsInDiningRoom(List<Color> students) throws TooManyStudentsException {
         boolean check = true;
         for (Color c: students) {
-            if(!addStudentInDiningRoom(c))return false;
+            addStudentInDiningRoom(c);
         }
-        return true;
     }
 
 
     /**
-     * Removes a student from the dining room. Only available in expert mode due to the presence of characters that allow this.
-     * @param color color of the student to remove
-     * @return boolean if the student can be removed
+     * Removes a student from the Dining room.
+     * Only available in Expert mode.
+     * @param color color of the student remove
      */
     public void removeStudentFromDiningRoom(Color color) throws NoSuchStudentException {
         if(diningRoom.get(color) > 0){
@@ -52,9 +52,10 @@ public class ExpertCastle extends Castle {
             throw new NoSuchStudentException();
     }
 
-    /** remove coins form the castle
+    /**Checks if the player can pay and if possible
+     * Removes coins from the castle
      * @param price cost of the character that the player wants to buy
-     * @return true if the transaction is successful
+     * @return true if the transaction was successful
      */
     public boolean payCharacter(int price) {
         if(this.coins >= price) {
@@ -64,6 +65,10 @@ public class ExpertCastle extends Castle {
         return false;
     }
 
+    /**
+     * If the character doesn't <em>apply the effect</em> gives back to the player the money
+     * @param price
+     */
     public void unpayCharacter(int price){
         this.coins += price;
     }

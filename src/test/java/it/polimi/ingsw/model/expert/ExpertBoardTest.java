@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.expert;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.Characters.Generic;
 import it.polimi.ingsw.model.expert.Characters.Parameters;
@@ -26,9 +27,6 @@ public class ExpertBoardTest{
         board = new ExpertBoard("Lorenzo", "Federico", "Giovanni", t);
     }
 
-    public void testPlayExpertCard() {
-    }
-
     @Test
     public void testSetup4CharacterTesting() {
         board.setup4CharacterTesting(1);
@@ -38,28 +36,22 @@ public class ExpertBoardTest{
                         ));
     }
 
+    /**
+     * Tries the easiest implementation of the method - Deeper testing in each Character test class
+     * @throws NoSuchStudentException
+     * @throws TooManyStudentsException
+     */
     @Test
-    public void testPlayExpertCards4MONK() throws NoSuchStudentException, TooManyStudentsException {
-        Generic monkChar;
-        List<Color> availableStudent;
-        ExpertIsland island = ((ExpertIsland) board.getIslandList().get(1));
-        Map<Color, Integer> presentStudents = island.getStudents();
-        board.setup4CharacterTesting(1);
-        monkChar = board.getAvailableCharacterCards().get(1);
-        availableStudent = ((List<Color>) monkChar.getEffect().get(Parameters.STUDENTLIST));
-        //note: I pass 4 colors and the MONK adds only the first
-        //the effect should be applied only for the fist time (1 coin is present)
-        assertTrue(board.playExpertCard(1, island, 0, availableStudent), "Assertion playExpertCardFailed #1");
-        assertEquals(0, ((ExpertCastle) board.getCastle(board.getTurn())).getCoins(), "Error: coins");
-        assertFalse(board.playExpertCard(1, island, 0, availableStudent), "Assertion playExpertCardFailed #2");
-        assertEquals(0, ((ExpertCastle) board.getCastle(board.getTurn())).getCoins(), "Error: coins");
-        //check if it works as expected
-        for (Color c: presentStudents.keySet()){
-            if(c == availableStudent.get(0))
-                assertEquals(presentStudents.get(c) + 1 , island.getStudents().get(c), "Assertion color "+ c +" failed");
-            else
-                assertEquals(presentStudents.get(c), island.getStudents().get(c),"Assertion color "+ c +" failed");
-        }
+    public void testPlayExpertCard() throws NoSuchStudentException, TooManyStudentsException, NotYourTurnException {
+        board.playCard("Lorenzo", 1);
+        if(board.getAvailableCharacterCards().get(4) == null) {
+            assertFalse(board.playExpertCard(4));
+            board.setup4CharacterTesting(4);
+            assertTrue(board.playExpertCard(4));
+        }else
+            assertTrue(board.playExpertCard(4));
+
     }
+
 
 }
