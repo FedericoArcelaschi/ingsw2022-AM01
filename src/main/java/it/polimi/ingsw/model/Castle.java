@@ -8,14 +8,15 @@ import java.util.*;
 public class Castle {
     private final List<Color> waitingRoom;
     protected final Map<Color, Integer> diningRoom;
-    private final List<Card> cards;
-    private Card lastPlayedCard;
+    private final Boolean[] cards;
+    private int lastPlayedCard;
     private final Team towerColor;
     private final int waitingRoomSize;
     //constants
     private static final int diningRoomSize = 9;
     private static final int waitingRoomSize2Players = 9;
     private static final int waitingRoomSize3Players = 7;
+    private static final int numberOfCards = 10;
 
     public Castle(String PLayerID, Team team, int nPlayer, List<Color> students){
         if(nPlayer == 3) this.waitingRoomSize = waitingRoomSize3Players;
@@ -25,11 +26,12 @@ public class Castle {
         for(Color c : Color.values()){
             diningRoom.put(c, 0);
         }
-        this.cards = new ArrayList<>();
+        this.cards = new Boolean[numberOfCards];
         this.towerColor = team;
-        this.lastPlayedCard = null;
-        for(int i=1; i<=10; i++) cards.add(new Card(i,(i+1)/2));
+        this.lastPlayedCard = -1;
+        for(int i=0; i<10; i++) cards[i] = false;
     }
+
 
     public List<Color> getWaitingRoom(){
         return new ArrayList<>(waitingRoom);
@@ -43,12 +45,12 @@ public class Castle {
         return towerColor;
     }
 
-    public Card getLastCardPlayed(){
+    public int getLastCardPlayed(){
         return lastPlayedCard;
     }
 
-    public List<Card> getCards() {
-        return new ArrayList<>(cards);
+    public Boolean[] getCards() {
+        return Arrays.copyOf(cards, cards.length);
     }
 
     /**
@@ -67,7 +69,6 @@ public class Castle {
     /**
      * Adds a single student to the dining room
      * @param student color
-     * @return if the student is added correctly
      */
     public void addStudentInDiningRoom(Color student) throws TooManyStudentsException{
         if (diningRoom.get(student) == diningRoomSize) {
@@ -108,17 +109,16 @@ public class Castle {
         }
     }
 
-    /**Method that allows the player to play the card.
+    /**
+     * Method that allows the player to play the card.
      * @param i priority of the card
      * @return true if the card was played correctly
      */
     public boolean playCard(int i){
-        Card c;
-        c = cards.get(i-1);
-        if(c.isPlayed()) return false;
+        if(cards[i-1]) return false;
         else {
-            c.setPlayed(true);
-            lastPlayedCard = c;
+            cards[i-1] = true;
+            lastPlayedCard = i;
             return true;
         }
     }

@@ -10,11 +10,9 @@ public class Turn {
 
     /**
      * For the first round the PlanificationTurn is the Sitting Order
-     * @param sittingOrder
+     * @param sittingOrder players in the ordered they joined the server
      */
-    public Turn(List<String> sittingOrder) throws IllegalArgumentException{
-        if(sittingOrder.size() < 2 && sittingOrder.size() > 4)
-            throw new IllegalArgumentException();
+    public Turn(List<String> sittingOrder){
         this.sittingOrder = new ArrayList<>(sittingOrder);
         actionOrder = new ArrayList<>(sittingOrder);
         currentPlayerTurn = sittingOrder.get(0);

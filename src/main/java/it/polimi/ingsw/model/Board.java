@@ -56,7 +56,6 @@ public class Board {
     }
 
     /**Contructor for ExpertBoard
-     * @param turn
      */
     protected Board(Turn turn){
         this.turn = turn;
@@ -154,7 +153,9 @@ public class Board {
      * move students form the waiting room to the dining room
      * @param PlayerID the id of the player that ask for this move
      * @param students a list of students you want to move
-     * @return if the move is legal and played or not
+     * @throws NoSuchStudentException if the student is not in the Waiting Room of the current player
+     * @throws NotYourTurnException if the player in the argument is not the current player
+     * @throws TooManyStudentsException if the castle dining room already contains 9 students
      */
     public void moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
@@ -194,9 +195,10 @@ public class Board {
      * @param PlayerID the id of the player that ask for this move
      * @return a list of not yet played card
      */
-    public List<Card> getAvailableCard(String PlayerID){
+
+    public Boolean[] getAvaliableCard(String PlayerID){
         Castle castle = castleMap.get(PlayerID);
-        return castle.getCards().stream().filter(card -> !card.isPlayed()).collect(Collectors.toList());
+        return castle.getCards();
     }
 
     /**
@@ -220,7 +222,7 @@ public class Board {
      * @param nTowers map that contains team and towers of the team on the islands
      * @return the team with most towers
      */
-    private Team teamWithMoreTowers(Map<Team, Integer> nTowers){
+    private Team teamWithMoreTowers(Map<Team,Integer> nTowers){
         int max;
         Team winner;
 
@@ -253,7 +255,7 @@ public class Board {
      */
     private int remainingCards(){
         int cardsLeft = 0;
-        for(Castle c : castleMap.values()) cardsLeft += c.getCards().size();
+        for(Castle castle : castleMap.values()) cardsLeft += (int) Arrays.stream(castle.getCards()).filter(card -> card != null && !card).count();
         return cardsLeft;
     }
 
@@ -287,24 +289,25 @@ public class Board {
         else return null;
     }
 
-
-    private void joinIslands(List<Island> il){
-        int firstIslandIndex = islandList.indexOf(il.get(0));
+    /**
+     * Joins the islands and put the new island into the list
+     */
+    public void joinIslands(@NotNull List<Island> islandList){
+        int firstIslandIndex = this.islandList.indexOf(islandList.get(0));
         if(firstIslandIndex == -1)
-            throw new IllegalArgumentException("island: " + il.get(0).toString() + "not found!");
-        Island newIsland;
-        if(il.size()==2){
-            newIsland = new Archipelago(il.get(0),il.get(1));
+            throw new IllegalArgumentException("island: " + islandList.get(0).toString() + "not found!");
+        Island newIsland = null;
+        if(islandList.size()==2){
+            if(this.islandList.removeAll(Arrays.asList(islandList.get(0), islandList.get(1))))
+                newIsland = new Archipelago(islandList.get(0),islandList.get(1));
         }
-        else if(il.size()==3){
-            newIsland = new Archipelago(il.get(0),il.get(1),il.get(2));
+        else if(islandList.size()==3){
+            if(this.islandList.removeAll(Arrays.asList(islandList.get(0), islandList.get(1), islandList.get(2))))
+                newIsland = new Archipelago(islandList.get(0),islandList.get(1),islandList.get(2));
         }
         else
-            throw new IllegalArgumentException("wrong number of islands in the given list: " + il.toString());
-        for (int i = firstIslandIndex; i < firstIslandIndex + il.size(); i++) {
-            il.remove(i);
-        }
-        islandList.add(firstIslandIndex,newIsland);
+            throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
+        this.islandList.add(firstIslandIndex, newIsland);
     }
 
     /**
@@ -313,7 +316,6 @@ public class Board {
      * Checks if nearby islands have the same owner and possibly joins them.
      * Checks if someone won the game after an island is conquered
      * @param move number of steps forward of mother nature
-     * @return false if the move encounters any error, true if it doesn't
      */
     public void moveMotherNature(int move) {
         if (motherNaturePosition + move / islandList.size() >= 1) motherNaturePosition += move - islandList.size();
@@ -334,7 +336,7 @@ public class Board {
 
     /**
      * Checks if neighbouring island have the same owner and joins them to the current island
-     * @param island
+     * @param island the island mother nature is on
      */
     protected void checkJoinIsland(Island island){
         Island previous, next;
