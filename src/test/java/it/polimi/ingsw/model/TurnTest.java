@@ -3,7 +3,6 @@ package it.polimi.ingsw.model;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class TurnTest{
         List<String> players = Arrays.asList("pippo","pluto","paperino");
         Turn turn = new Turn(players);
         for (String pl: players) {
-            assertEquals(turn.getTurn(), pl);
+            assertEquals(turn.getCurrentPlayer(), pl);
             turn.nextTurnPlanification();
         }
     }
@@ -24,7 +23,7 @@ public class TurnTest{
         players = Arrays.asList("pluto","paperino","pippo");
         turn.setTurnAction(players);
         for (String pl: players) {
-            assertEquals(turn.getTurn(), pl);
+            assertEquals(turn.getCurrentPlayer(), pl);
             turn.nextTurnAction();
         }
 
@@ -35,7 +34,7 @@ public class TurnTest{
         Turn turn = new Turn(players);
         turn.setTurnAction(players);
         turn.nextTurnPlanification();
-        assertEquals("pluto", turn.getTurn());
+        assertEquals("pluto", turn.getCurrentPlayer());
     }
     @Test
     public void testNextTurnAction() {

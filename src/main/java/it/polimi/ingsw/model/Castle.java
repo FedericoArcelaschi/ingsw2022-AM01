@@ -60,9 +60,6 @@ public class Castle {
      */
     public boolean addStudentsInWaitingRoom(List<Color> students) throws TooManyStudentsException{
         if(students.size()+waitingRoom.size() > waitingRoomSize) {
-            System.out.println(getWaitingRoom());
-            System.out.println(students);
-            System.out.println(waitingRoomSize);
             throw new TooManyStudentsException();
         }
         waitingRoom.addAll(students);
@@ -70,47 +67,39 @@ public class Castle {
     }
 
     /**
-     * add a single student to the dining room
+     * Adds a single student to the dining room
      * @param student color
-     * @return if the student is added correctly
      */
-    public boolean addStudentsInDiningRoom(Color student){
-        if (diningRoom.get(student)>=diningRoomSize) {
-            return false;
+    public void addStudentInDiningRoom(Color student) throws TooManyStudentsException{
+        if (diningRoom.get(student) == diningRoomSize) {
+            throw new TooManyStudentsException();
         }
         diningRoom.put(student, diningRoom.get(student) + 1);
-        return true;
     }
 
     /**
-     * Add a list of students to the dining room
+     * Adds a list of students to the dining room
      * @param students – The list of students to add to the dining room.
-     * @return boolean that checks whether the operation was successful.
      */
-    public boolean addStudentsInDiningRoom(List<Color> students){
-        for (Color student : students) {
-            if(!addStudentsInDiningRoom(student))
-                return false;
+    public void addStudentsInDiningRoom(List<Color> students)throws TooManyStudentsException {
+        for (Color c : students) {
+            addStudentInDiningRoom(c);
         }
-        return true;
     }
 
     /**
      * Removes a list of students from the waiting room.
      * @param students – The list of students to remove.
-     * @return boolean, true if method was successful, false if it wasn't
      * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
      */
-    public boolean removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException{
-        if(!new HashSet<>(waitingRoom).containsAll(students) || students.size()>waitingRoomSize){
+    public void removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException{
+        if(!waitingRoom.containsAll(students) || students.size()>waitingRoomSize){
             throw new NoSuchStudentException();
         }
         else{
             List<Color> temp = getWaitingRoom();
             for(Color s : students){
                 if(!temp.remove(s)){
-                    System.out.println(getWaitingRoom());
-                    System.out.println(students);
                     throw new NoSuchStudentException();
                 }
             }
@@ -118,10 +107,7 @@ public class Castle {
         for (Color col : students) {
             waitingRoom.remove(col);
         }
-        return true;
     }
-
-
 
     /**
      * Method that allows the player to play the card.

@@ -51,7 +51,7 @@ public class CastleTest{
     }
 
     @Test
-    public void testAddStudentDR(){
+    public void testAddStudentDR() throws TooManyStudentsException {
         Bag b = new Bag(24);
         Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
         List<Color> s = new ArrayList<>();
