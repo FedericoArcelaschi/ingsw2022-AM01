@@ -14,13 +14,21 @@ public class Block extends Generic {
         availableBlockTile = 4;
     }
 
+    /**
+     * WITCH character: blocks islands
+     * @param parameterMap contains the island to block
+     * @return
+     */
     @Override
     public boolean applyEffect(Map<Parameters, Object> parameterMap) {
+        boolean result = false;
         if (availableBlockTile > 0) {
             ExpertIsland island = (ExpertIsland) parameterMap.get(Parameters.ISLAND);
-            return island.blockIsland();
+            result = island.blockIsland();
+            if(result)
+                cost = characterName.getCost() + 1;
         }
-        return false;
+        return result;
     }
 
     @Override

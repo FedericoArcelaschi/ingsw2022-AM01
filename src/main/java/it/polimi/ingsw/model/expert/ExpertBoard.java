@@ -88,7 +88,6 @@ public class ExpertBoard extends Board {
                 Parameters.STUDENTLIST, studentsList,
                 Parameters.MOVE, move));
             boolean returnValue = ec.applyEffect(parametersMap);
-            if (idChar == 2) professorsMap = (Map<Color, Team>) parametersMap.get(Parameters.PROFESSORSMAP);
             if (idChar == 4) possibleMovingSteps = (Integer) parametersMap.get(Parameters.MOVE);
             //TODO: do we actually need a retun value with those exceptions?!
             if (returnValue)
@@ -134,8 +133,19 @@ public class ExpertBoard extends Board {
         expertCharactersCards.set(idChar, tavern.extract4testing(idChar));
     }
 
-
-
+    /**
+     * As super but checks if the island is blocked.
+     */
+    @Override
+    public void moveMotherNature(int move) {
+        if (motherNaturePosition + move / islandList.size() >= 1) motherNaturePosition += move - islandList.size();
+        else motherNaturePosition += move;
+        ExpertIsland currIsland = (ExpertIsland)islandList.get(motherNaturePosition);
+        if(!currIsland.isBLocked())
+            conquerIsland(currIsland);
+        else
+            currIsland.unlockIsland();
+    }
     /**For testing: returns the list of available characters
      */
     public List<Generic> getAvailableCharacterCards(){
