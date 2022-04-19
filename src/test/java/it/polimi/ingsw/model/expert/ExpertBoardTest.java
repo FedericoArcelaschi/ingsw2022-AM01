@@ -1,19 +1,14 @@
 package it.polimi.ingsw.model.expert;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
-import it.polimi.ingsw.model.expert.Characters.Generic;
-import it.polimi.ingsw.model.expert.Characters.Parameters;
 import it.polimi.ingsw.model.expert.Characters.Student;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,7 +24,7 @@ public class ExpertBoardTest{
 
     @Test
     public void testSetup4CharacterTesting() {
-        board.setup4CharacterTesting(1);
+        board.extract4CharacterTesting(1);
         assertTrue(board.getAvailableCharacterCards()
                         .contains(
                         new Student(1, board.getBag())
@@ -46,7 +41,7 @@ public class ExpertBoardTest{
         board.playCard("Lorenzo", 1);
         if(board.getAvailableCharacterCards().get(4) == null) {
             assertFalse(board.playExpertCard(4));
-            board.setup4CharacterTesting(4);
+            board.extract4CharacterTesting(4);
             assertTrue(board.playExpertCard(4));
         }else
             assertTrue(board.playExpertCard(4));

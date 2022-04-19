@@ -24,7 +24,7 @@ public class Influence extends Generic {
             case 2:
                 String currPlayer = (String) parameterMap.get(Parameters.PLAYERID);
                 Map<String, Castle> castleMap = (HashMap<String, Castle>) parameterMap.get(Parameters.CASTLEMAP);
-                Map<Color, Team> newProfessorMap = new HashMap<>();
+                Map<Color, Team> newProfessorMap = (HashMap<Color, Team>) parameterMap.get(Parameters.PROFESSORSMAP);
                 int currentPlayerStudentsColor = 0;
                 int opponentPlayerStudentsColor = 0;
                 for(Color c: Color.values()) {
@@ -40,7 +40,6 @@ public class Influence extends Generic {
                         }
                     }
                 }
-                parameterMap.put(Parameters.PROFESSORSMAP, newProfessorMap);
                 cost = characterName.getCost() +1;
                 return true;
             case 6:

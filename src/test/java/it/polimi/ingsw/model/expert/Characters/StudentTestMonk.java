@@ -34,38 +34,38 @@ public class StudentTestMonk {
     @Test
     public void testApplyEffectFromBoard() throws NoSuchStudentException, TooManyStudentsException {
         ExpertIsland testIsland = (ExpertIsland) board.getIslandList().get(1);
-        board.setup4CharacterTesting(1);
+        board.extract4CharacterTesting(1);
         int countAll = 0;
         for (Color c: Color.values()){
             countAll +=  testIsland.getStudents().get(c);
         }
 
         int countYellows =  testIsland.getStudents().get(Color.YELLOW).intValue();
-        if(board.playExpertCard(1, testIsland, 0, List.of(Color.YELLOW)))
+        if(board.playExpertCard(1, testIsland, List.of(Color.YELLOW)))
             assertEquals(countYellows + 1, testIsland.getStudents().get(Color.YELLOW).intValue());
         else
             assertEquals(countYellows, testIsland.getStudents().get(Color.YELLOW).intValue());
 
         int countGreen =  testIsland.getStudents().get(Color.GREEN).intValue();
-        if(board.playExpertCard(1, testIsland, 0, List.of(Color.GREEN)))
+        if(board.playExpertCard(1, testIsland, List.of(Color.GREEN)))
             assertEquals(countGreen + 1, testIsland.getStudents().get(Color.GREEN).intValue());
         else
             assertEquals(countGreen, testIsland.getStudents().get(Color.GREEN).intValue());
 
         int countPink =  testIsland.getStudents().get(Color.PINK).intValue();
-        if(board.playExpertCard(1, testIsland, 0, List.of(Color.PINK)))
+        if(board.playExpertCard(1, testIsland, List.of(Color.PINK)))
             assertEquals(countPink + 1, testIsland.getStudents().get(Color.PINK).intValue());
         else
             assertEquals(countPink, testIsland.getStudents().get(Color.PINK).intValue());
 
         int countBlue =  testIsland.getStudents().get(Color.BLUE).intValue();
-        if(board.playExpertCard(1, testIsland, 0, List.of(Color.BLUE)))
+        if(board.playExpertCard(1, testIsland, List.of(Color.BLUE)))
             assertEquals(countBlue + 1, testIsland.getStudents().get(Color.BLUE).intValue());
         else
             assertEquals(countBlue, testIsland.getStudents().get(Color.BLUE).intValue());
 
         int countRed =  testIsland.getStudents().get(Color.RED).intValue();
-        if(board.playExpertCard(1, testIsland, 0, List.of(Color.RED)))
+        if(board.playExpertCard(1, testIsland, List.of(Color.RED)))
             assertEquals(countRed + 1, testIsland.getStudents().get(Color.RED).intValue());
         else
             assertEquals(countRed, testIsland.getStudents().get(Color.RED).intValue());
@@ -85,7 +85,7 @@ public class StudentTestMonk {
     @Test
     public void testApplyEffectWithGetEffect() throws NoSuchStudentException, TooManyStudentsException {
         ExpertIsland testIsland = (ExpertIsland) board.getIslandList().get(1);
-        board.setup4CharacterTesting(1);
+        board.extract4CharacterTesting(1);
         Generic monkCharacter
                 = board.getAvailableCharacterCards().get(1);
         ExpertIsland island
@@ -114,7 +114,7 @@ public class StudentTestMonk {
     @Test
     public void testApplyEffectWithWrongColor() throws NoSuchStudentException, TooManyStudentsException {
         ExpertIsland testIsland = (ExpertIsland) board.getIslandList().get(1);
-        board.setup4CharacterTesting(1);
+        board.extract4CharacterTesting(1);
         Generic monkCharacter
                 = board.getAvailableCharacterCards().get(1);
         ExpertIsland island
@@ -152,14 +152,14 @@ public class StudentTestMonk {
         List<Color> availableStudent;
         ExpertIsland island = ((ExpertIsland) board.getIslandList().get(1));
         Map<Color, Integer> presentStudents = island.getStudents();
-        board.setup4CharacterTesting(1);
+        board.extract4CharacterTesting(1);
         monkChar = board.getAvailableCharacterCards().get(1);
         availableStudent = ((List<Color>) monkChar.getEffect().get(Parameters.STUDENTLIST));
         //note: I pass 4 colors and the MONK adds only the first
         //the effect should be applied only for the fist time (1 coin is present)
-        assertTrue(board.playExpertCard(1, island, 0, availableStudent), "Assertion playExpertCardFailed #1");
+        assertTrue(board.playExpertCard(1, island, availableStudent), "Assertion playExpertCardFailed #1");
         assertEquals(0, ((ExpertCastle) board.getCastle(board.getCurrentPlayer())).getCoins(), "Error: coins");
-        assertFalse(board.playExpertCard(1, island, 0, availableStudent), "Assertion playExpertCardFailed #2");
+        assertFalse(board.playExpertCard(1, island, availableStudent), "Assertion playExpertCardFailed #2");
         assertEquals(0, ((ExpertCastle) board.getCastle(board.getCurrentPlayer())).getCoins(), "Error: coins");
         //check if it works as expected
         for (Color c: presentStudents.keySet()){

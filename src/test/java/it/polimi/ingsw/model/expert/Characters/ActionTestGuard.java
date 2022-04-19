@@ -4,14 +4,10 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
-import it.polimi.ingsw.model.expert.ExpertCastle;
 import it.polimi.ingsw.model.expert.ExpertIsland;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.security.Guard;
-import java.security.spec.ECField;
-import java.time.temporal.Temporal;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +22,7 @@ public class ActionTestGuard { //THIRD CHARACTER
     void setUp() {
         Turn t = new Turn(Arrays.asList("Federico", "Lorenzo"));
         board = new ExpertBoard("Federico", "Lorenzo", t);
-        board.setup4CharacterTesting(3);
+        board.extract4CharacterTesting(3);
         guardChar = board.getAvailableCharacterCards().get(3);
         ParametersMap = new HashMap<>();
         i++;

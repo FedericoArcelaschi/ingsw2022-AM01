@@ -41,13 +41,13 @@ public class Action extends Generic {
             return true;
         }
         if (idChar == 4) {
-            Integer move;
-            move = (Integer) (ParametersMap.get(Parameters.MOVE)) + 2;
+            Integer move
+                    = ((Integer)ParametersMap.get(Parameters.MOVE) + 2);
             ParametersMap.replace(Parameters.MOVE, move);
-            cost = characterName.getCost() +1;
+            cost = characterName.getCost() + 1;
             return true;
         }
-        throw new IllegalArgumentException("Wrong character summoned: should be either 3 or 4");
+        throw new IllegalArgumentException("Wrong character summoned: should either be 3 or 4");
     }
 
     @Override

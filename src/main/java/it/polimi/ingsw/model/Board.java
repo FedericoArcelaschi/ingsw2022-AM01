@@ -380,4 +380,5 @@ public class Board {
         return professorsMap;
     }
 
+    public int getPossibleMovingSteps() {return possibleMovingSteps;}
 }

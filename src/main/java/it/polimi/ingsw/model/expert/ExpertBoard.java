@@ -59,7 +59,6 @@ public class ExpertBoard extends Board {
 
     /**
      * Initializes <code>expertCharactersCards</code>. It's a factory method
-     * @returns ArrayList<Characters>
      */
     private void drawExpertCharacters() {
         tavern = new Tavern(bag);
@@ -72,7 +71,7 @@ public class ExpertBoard extends Board {
      * @return if works -> true else false
      * @throws
      */
-    public boolean playExpertCard(int idChar, ExpertIsland island, int move, List<Color> studentsList) throws NoSuchStudentException, TooManyStudentsException {
+    public boolean playExpertCard(int idChar, ExpertIsland island, List<Color> studentsList) throws NoSuchStudentException, TooManyStudentsException {
         String playerID = this.getCurrentPlayer();
         Generic ec = expertCharactersCards.get(idChar);
         if (ec != null && ((ExpertCastle) castleMap.get(playerID)).payCharacter(ec.getCost())) {
@@ -86,10 +85,9 @@ public class ExpertBoard extends Board {
                 Parameters.CASTLEMAP, castleMap,
                 Parameters.PROFESSORSMAP, professorsMap,
                 Parameters.STUDENTLIST, studentsList,
-                Parameters.MOVE, move));
+                Parameters.MOVE, possibleMovingSteps));
             boolean returnValue = ec.applyEffect(parametersMap);
             if (idChar == 4) possibleMovingSteps = (Integer) parametersMap.get(Parameters.MOVE);
-            //TODO: do we actually need a retun value with those exceptions?!
             if (returnValue)
                 return true;
             else ((ExpertCastle) castleMap.get(playerID)).unpayCharacter(ec.getCost());
@@ -101,14 +99,13 @@ public class ExpertBoard extends Board {
     /**
      * Smaller version of the playExpertCard()
      * Removes the coins from the Castle and calls the applyEffect() of the right character.
-     * @param idChar
-     * @param studentsList
+     * @param idChar char number to call the method on the right object
      * @return true if the character worked
      * @throws NoSuchStudentException
      * @throws TooManyStudentsException
      */
     public boolean playExpertCard(int idChar, List<Color> studentsList) throws NoSuchStudentException, TooManyStudentsException {
-        return playExpertCard(idChar, (ExpertIsland) this.getIslandList().get(0), 0, studentsList);
+        return playExpertCard(idChar, (ExpertIsland) this.getIslandList().get(0), studentsList);
     }
 
     /**
@@ -120,8 +117,8 @@ public class ExpertBoard extends Board {
      */
     public boolean playExpertCard(int idChar) throws NoSuchStudentException, TooManyStudentsException {
         if(idChar == 4 && expertCharactersCards.get(4) != null)
-            return playExpertCard(idChar, (ExpertIsland) this.getIslandList().get(0),
-                    possibleMovingSteps,
+            return playExpertCard(idChar,
+                    (ExpertIsland) this.getIslandList().get(0),
                     List.of());
         return false;
     }
@@ -129,8 +126,10 @@ public class ExpertBoard extends Board {
     /**Adds to the available Characters also the Character #idChar.
      * @param idChar
      */
-    public void setup4CharacterTesting(int idChar){
-        expertCharactersCards.set(idChar, tavern.extract4testing(idChar));
+    public Generic extract4CharacterTesting(int idChar){
+        Generic ec = tavern.extract4testing(idChar);
+        expertCharactersCards.set(idChar, ec);
+        return ec;
     }
 
     /**

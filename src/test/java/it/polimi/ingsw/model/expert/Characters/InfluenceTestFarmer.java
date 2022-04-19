@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.expert.Characters;
 
-import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.Turn;
@@ -29,7 +28,7 @@ class InfluenceTestFarmer {
     @BeforeEach
     void setUp() throws TooManyStudentsException {
         board = new ExpertBoard("Lorenzo", "Giovanni2069", t);
-        board.setup4CharacterTesting(2);
+        board.extract4CharacterTesting(2);
         castleA = (ExpertCastle) board.getCastle("Lorenzo"); //WHITE
         castleB = (ExpertCastle) board.getCastle("Giovanni2069");//BLACK
         charInfl = board.getAvailableCharacterCards().get(2);
@@ -67,7 +66,7 @@ class InfluenceTestFarmer {
         assertEquals(expectedProfessorsMap, professorsMap
                     , "before applyEffect() use. Initialization check.");
 
-        board.playExpertCard(2, (ExpertIsland) board.getIslandList().get(0), 0, Arrays.asList());
+        board.playExpertCard(2, (ExpertIsland) board.getIslandList().get(0), Arrays.asList());
 
         professorsMap = board.getProfessorsMap();
         expectedProfessorsMap = Map.of(

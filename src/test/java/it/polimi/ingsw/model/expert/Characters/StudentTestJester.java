@@ -19,7 +19,7 @@ class StudentTestJester {
     void setUp() {
         Turn t = new Turn(List.of("Lollo99", "FedericaPellegrini"));
         board = new ExpertBoard("Lollo99", "FedericaPellegrini", t);
-        board.setup4CharacterTesting(7);
+        board.extract4CharacterTesting(7);
         jester = board.getAvailableCharacterCards().get(7);
     }
 

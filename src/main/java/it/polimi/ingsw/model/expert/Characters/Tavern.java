@@ -18,10 +18,15 @@ public class Tavern {
     private final int numberOfCharacters = 12;
     private final int numberOfPlayableCharacter = 3;
 
+    /**
+     * @param bag for Student Character generation
+     */
     public Tavern(Bag bag){
         seed = bag.getSeed();
         this.bag = bag;
     }
+    /**Constructor for tests*/
+    public Tavern(){}
 
     /**
      * extract 3 different cards for the game
