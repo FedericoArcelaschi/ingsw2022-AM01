@@ -14,7 +14,7 @@ public class CastleTest{
     @Test
     public void testAddStudentWR() throws TooManyStudentsException, NoSuchStudentException {
         Bag b = new Bag(24);
-        Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
+        Castle c = new Castle("Lorenzo", Team.BLACK, 3, b.extractForCastleSetup(3));
         List<Color> s = new ArrayList<>();
         List<Color> newStudents = new ArrayList<>();
         s.add(c.getWaitingRoom().get(0));

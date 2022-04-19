@@ -38,7 +38,7 @@ public class Turn {
     /** Sets the current turn to the player besides him.
      * @return playerTurn
      */
-    public String nextTurnPlanification(){
+    public String nextTurnPlanning(){
         return currentPlayerTurn = next(sittingOrder,currentPlayerTurn);
     }
 
@@ -48,11 +48,9 @@ public class Turn {
      * @return playerTurn
      */
     public String nextTurnAction(){
-        //actionOrder.get(0)
-        //actionOrder.remove(0)
         int nextPlayerPosition = actionOrder.indexOf(currentPlayerTurn) + 1;
         if(nextPlayerPosition == sittingOrder.size())
-            return null; //"It's Planification Time!!"
+            return null; //"It's planning Time!!"
         return currentPlayerTurn = actionOrder.get(nextPlayerPosition);
     }
 

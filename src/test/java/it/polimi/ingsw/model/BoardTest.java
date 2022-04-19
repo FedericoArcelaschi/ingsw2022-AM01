@@ -78,9 +78,9 @@ public class BoardTest{
         assertEquals(4, cl4.size());
 
         //test dimension of clouds
-        assertEquals(4, cl2.get(0).getSize());
-        assertEquals(3, cl3.get(0).getSize());
-        assertEquals(4, cl4.get(0).getSize());
+        assertEquals(3, cl2.get(0).getSize());
+        assertEquals(4, cl3.get(0).getSize());
+        assertEquals(3, cl4.get(0).getSize());
     }
     @Test
     public void testResetClouds() {
@@ -100,21 +100,24 @@ public class BoardTest{
     }
     @Test
     public void testMoveStudentToIsland() throws NoSuchStudentException, NotYourTurnException {
-        List<Color> cl =  new ArrayList<>();
+        List<Color> colorList =  new ArrayList<>();
 
-        cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
-        cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(1));
+        colorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
+        colorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(1));
         Map<Color, Integer> students = new HashMap<>();
         for(Color c : Color.values()){
             students.put(c,0);
         }
-        for(Color c : cl){
-            students.replace(c, students.get(c)+1);
+        for(Color c : colorList){
+            students.replace(c, students.get(c) + 1);
         }
         //test if the method returns correctly
-        assertTrue(b.moveStudentToIsland(player1, 0, cl));
+        assertTrue(b.moveStudentToIsland(player1, 0, colorList));
         //test if the student get removed from castle waiting room
-        assertEquals(9-cl.size(),b.getCastleMap().get(player1).getWaitingRoom().size());
+        assertEquals(7 - colorList.size(),
+                b.getCastle(player1).getWaitingRoom().size(),
+                colorList.size() + " students should have been removed from the waiting room, but " +
+                        (7 - b.getCastle(player1).getWaitingRoom().size()) + "students were removed");
         //test if the student get added to the island
         Map<Color, Integer> studentsOnIsland = b.getIslandList().get(0).getStudents();
         assertEquals(students, studentsOnIsland);

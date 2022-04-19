@@ -8,19 +8,15 @@ public class Cloud {
     private int size;
 
     public Cloud(Bag bag, int size){
-        this.bag=bag;
+        this.bag = bag;
         this.size = size;
         this.studentList = new ArrayList<>();
         refill();
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public boolean refill(){
+    public boolean refill() {
         studentList.clear();
-        for(int i=0; i<size; i++){
+        for(int i = 0; i < size; i++) {
             studentList.add(bag.extract());
         }
         return true;
@@ -32,4 +28,9 @@ public class Cloud {
         studentList.clear();
         return students;
     }
+
+    public int getSize() {
+        return size;
+    }
+
 }
