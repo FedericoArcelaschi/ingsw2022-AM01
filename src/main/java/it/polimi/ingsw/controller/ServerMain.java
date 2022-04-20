@@ -5,23 +5,27 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ServerMain {
 
     private final int port;
-    private int numPlayers = 0;
+
+    ExecutorService executor = Executors.newCachedThreadPool();
+    ServerSocket serverSocket;
 
     public ServerMain(int port) {
         this.port = port;
     }
 
     public void startServer() {
-        ExecutorService executor = Executors.newCachedThreadPool();
-        ServerSocket serverSocket;
+        executor = Executors.newCachedThreadPool();
 
         //creating serverSocket
+        System.out.println("Starting server...");
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -30,21 +34,35 @@ public class ServerMain {
         }
 
         System.out.println("Server ready");
+    }
+
+    public void acceptPlayers(){
+        int gameId = 0;
         while (true) {
-            try {
-                Socket socket = serverSocket.accept();
-                executor.submit(new ClientServerHandler(socket));
-                numPlayers += 1;
+            List<Socket> sList= new ArrayList<>();
+            try{
+                for (int numPlayers = 0; numPlayers < 2; numPlayers++) {
+                    System.out.println("waiting for player to connect");
+                    Socket socket = serverSocket.accept();
+                    System.out.println(socket.toString());
+                    sList.add(socket);
+                }
+                System.out.println("creating game " + gameId);
+                Game g = new Game(gameId);
+                for(Socket s : sList){
+                    executor.submit(new ClientServerHandler(s, g));
+                }
             } catch(IOException e) {
                 break; // Entrerei qui se serverSocket venisse chiuso
             }
+            gameId++;
         }
         executor.shutdown();
     }
     public static void main(String[] args) {
         ServerMain echoServer = new ServerMain(1234);
 
-        System.out.println("Starting server...");
         echoServer.startServer();
+        echoServer.acceptPlayers();
     }
 }
