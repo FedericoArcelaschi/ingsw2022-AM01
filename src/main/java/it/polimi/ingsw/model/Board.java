@@ -123,7 +123,8 @@ public class Board {
      * @return if the move is legal and played or not
      */
     public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException {
-        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
+        if(!turn.getCurrentPlayer().equals(PlayerID))
+            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. " + PlayerID + " can't choose a cloud.");
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
         return castle.addStudentsInWaitingRoom(cloud.choose());
@@ -160,7 +161,8 @@ public class Board {
      * @throws TooManyStudentsException if the castle dining room already contains 9 students
      */
     public void moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
-        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
+        if(!turn.getCurrentPlayer().equals(PlayerID))
+            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. " + PlayerID + " can't move a student to the dining room");
         Castle castle = castleMap.get(PlayerID);
         castle.removeStudentsFromWaitingRoom(students);
         castle.addStudentsInDiningRoom(students);
@@ -174,7 +176,8 @@ public class Board {
      * @return if the move is legal and played or not
      */
     public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException, NotYourTurnException {
-        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
+        if(!turn.getCurrentPlayer().equals(PlayerID))
+            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. " + PlayerID + " can't move a student to an island");
         castleMap.get(PlayerID).removeStudentsFromWaitingRoom(students);
         for(Color c : students){
             islandList.get(islandNumber).addStudent(c);
@@ -188,7 +191,8 @@ public class Board {
      * @return if the move is legal and played or not
      */
     public boolean playCard(String PlayerID, int card) throws NotYourTurnException {//true if the move is legal, false otherwise
-        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
+        if(!turn.getCurrentPlayer().equals(PlayerID))
+            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s planning turn. " + PlayerID + " can't choose a card to play");
         Castle castle = castleMap.get(PlayerID);
         possibleMovingSteps = (card+1)/2;
         return castle.playCard(card);

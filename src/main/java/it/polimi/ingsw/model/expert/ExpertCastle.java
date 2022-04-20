@@ -49,7 +49,7 @@ public class ExpertCastle extends Castle {
             diningRoom.replace(color, diningRoom.get(color)-1);
         }
         else
-            throw new NoSuchStudentException();
+            throw new NoSuchStudentException("Student " + color + "not in dining room");
     }
 
     /**Checks if the player can pay and if possible

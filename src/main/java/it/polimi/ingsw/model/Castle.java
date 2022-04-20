@@ -13,7 +13,7 @@ public class Castle {
     private final Team towerColor;
     private final int waitingRoomSize;
     //constants
-    private static final int diningRoomSize = 9;
+    private static final int diningRoomSize = 10;
     private static final int waitingRoomSize2Players = 9;
     private static final int waitingRoomSize3Players = 7;
     private static final int numberOfCards = 10;
@@ -32,6 +32,70 @@ public class Castle {
         for(int i=0; i<10; i++) cards[i] = false;
     }
 
+    /**
+     * Add a list of students to the waiting room
+     * @param students The list of students to add to the waiting room.
+     * @return boolean that checks whether the operation was successful or not.
+     */
+    public boolean addStudentsInWaitingRoom(List<Color> students) throws TooManyStudentsException{
+        if(students.size() + waitingRoom.size() > waitingRoomSize) {
+            throw new TooManyStudentsException("there are already " + waitingRoomSize + " students in the waiting room");
+        }
+        waitingRoom.addAll(students);
+        return true;
+    }
+
+    /**
+     * Adds a single student to the dining room
+     * @param student color
+     */
+    public void addStudentInDiningRoom(Color student) throws TooManyStudentsException{
+        if (diningRoom.get(student) == diningRoomSize) {
+            throw new TooManyStudentsException("There are alredy 10 students of" + student + "color in the Dining Room");
+        }
+        diningRoom.put(student, diningRoom.get(student) + 1);
+    }
+
+    /**
+     * Adds a list of students to the dining room
+     * @param students – The list of students to add to the dining room.
+     */
+    public void addStudentsInDiningRoom(List<Color> students)throws TooManyStudentsException {
+        for (Color c : students) {
+            addStudentInDiningRoom(c);
+        }
+    }
+
+    /**
+     * Removes a list of students from the waiting room.
+     * @param students – The list of students to remove.
+     * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
+     */
+    public void removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException{
+        List<Color> temp = getWaitingRoom();
+        for(Color s : students){
+            if(!temp.remove(s)){
+                throw new NoSuchStudentException("Student " + s + " not in the WaitingRoom");
+            }
+        }
+        for (Color col : students) {
+            waitingRoom.remove(col);
+        }
+    }
+
+    /**
+     * Method that allows the player to play the card.
+     * @param i priority of the card
+     * @return true if the card was played correctly
+     */
+    public boolean playCard(int i){
+        if(cards[i-1]) return false;
+        else {
+            cards[i-1] = true;
+            lastPlayedCard = i;
+            return true;
+        }
+    }
 
     public List<Color> getWaitingRoom(){
         return new ArrayList<>(waitingRoom);
@@ -53,73 +117,4 @@ public class Castle {
         return Arrays.copyOf(cards, cards.length);
     }
 
-    /**
-     * Add a list of students to the waiting room
-     * @param students The list of students to add to the waiting room.
-     * @return boolean that checks whether the operation was successful or not.
-     */
-    public boolean addStudentsInWaitingRoom(List<Color> students) throws TooManyStudentsException{
-        if(students.size()+waitingRoom.size() > waitingRoomSize) {
-            throw new TooManyStudentsException();
-        }
-        waitingRoom.addAll(students);
-        return true;
-    }
-
-    /**
-     * Adds a single student to the dining room
-     * @param student color
-     */
-    public void addStudentInDiningRoom(Color student) throws TooManyStudentsException{
-        if (diningRoom.get(student) == diningRoomSize) {
-            throw new TooManyStudentsException();
-        }
-        diningRoom.put(student, diningRoom.get(student) + 1);
-    }
-
-    /**
-     * Adds a list of students to the dining room
-     * @param students – The list of students to add to the dining room.
-     */
-    public void addStudentsInDiningRoom(List<Color> students)throws TooManyStudentsException {
-        for (Color c : students) {
-            addStudentInDiningRoom(c);
-        }
-    }
-
-    /**
-     * Removes a list of students from the waiting room.
-     * @param students – The list of students to remove.
-     * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
-     */
-    public void removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException{
-        if(!waitingRoom.containsAll(students) || students.size()>waitingRoomSize){
-            throw new NoSuchStudentException();
-        }
-        else{
-            List<Color> temp = getWaitingRoom();
-            for(Color s : students){
-                if(!temp.remove(s)){
-                    throw new NoSuchStudentException();
-                }
-            }
-        }
-        for (Color col : students) {
-            waitingRoom.remove(col);
-        }
-    }
-
-    /**
-     * Method that allows the player to play the card.
-     * @param i priority of the card
-     * @return true if the card was played correctly
-     */
-    public boolean playCard(int i){
-        if(cards[i-1]) return false;
-        else {
-            cards[i-1] = true;
-            lastPlayedCard = i;
-            return true;
-        }
-    }
 }
