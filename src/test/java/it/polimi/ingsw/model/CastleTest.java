@@ -14,7 +14,7 @@ public class CastleTest{
     @Test
     public void testAddStudentWR() throws TooManyStudentsException, NoSuchStudentException {
         Bag b = new Bag(24);
-        Castle c = new Castle("Lorenzo", Team.BLACK, 3, b.extractForCastleSetup(3));
+        Castle c = new Castle(Team.BLACK, 3, b.extractForCastleSetup(3));
         List<Color> s = new ArrayList<>();
         List<Color> newStudents = new ArrayList<>();
         s.add(c.getWaitingRoom().get(0));
@@ -30,7 +30,7 @@ public class CastleTest{
     @Test
     public void testNoSuchStudentException(){
         Bag b = new Bag(24);
-        Castle c = new Castle("Lorenzo", Team.BLACK, 1, b.multipleExtract(9));
+        Castle c = new Castle(Team.BLACK, 1, b.multipleExtract(9));
         List<Color> students = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             students.add(Color.YELLOW);
@@ -41,7 +41,7 @@ public class CastleTest{
     @Test
     public void testTooManyStudentException(){
         Bag b = new Bag(24);
-        Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
+        Castle c = new Castle(Team.BLACK, 2, b.multipleExtract(9));
         //test adding student in a full waiting room
         List<Color> newStudents = new ArrayList<>();
         newStudents.add(Color.BLUE);
@@ -53,7 +53,7 @@ public class CastleTest{
     @Test
     public void testAddStudentDR() throws TooManyStudentsException {
         Bag b = new Bag(24);
-        Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
+        Castle c = new Castle(Team.BLACK, 2, b.multipleExtract(9));
         List<Color> s = new ArrayList<>();
         Map<Color, Integer> oldList = c.getDiningRoom();
         s.add(Color.BLUE);
@@ -69,7 +69,7 @@ public class CastleTest{
     public void testRemoveWR() throws NoSuchStudentException {
         Bag b = new Bag(24);
         List<Color> students = b.multipleExtract(9);
-        Castle c = new Castle("Lorenzo", Team.BLACK, 2, students);
+        Castle c = new Castle(Team.BLACK, 2, students);
         List<Color> rm = new ArrayList<>();
 
         Color remove = students.get(0);
@@ -81,7 +81,7 @@ public class CastleTest{
     @Test
     public void testPlayCard(){
         Bag b = new Bag(24);
-        Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
+        Castle c = new Castle(Team.BLACK, 2, b.multipleExtract(9));
         assertTrue(c.playCard(3));
         assertEquals(3, c.getLastCardPlayed());
         assertFalse(c.playCard(3));

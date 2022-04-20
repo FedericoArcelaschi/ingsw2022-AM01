@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest{
 
-    private String player1 = "a", player2= "2";
+    private final String player1 = "a", player2= "2";
     private Board b;
 
     @BeforeEach
@@ -160,6 +160,7 @@ public class BoardTest{
     @Test
     public void testMoveMotherNature() {
         b.moveMotherNature(1);
+        assertNull(b.isWinningPosition());
     }
 
     /**

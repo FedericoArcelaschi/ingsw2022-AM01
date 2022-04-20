@@ -31,8 +31,8 @@ public class IslandTest{
         Map<Team, Integer> influence = new HashMap<>();
         Map<Color, Integer> students = new HashMap<>();
 
-        Castle c1 = new Castle("a", Team.WHITE, 2, new ArrayList<>());
-        Castle c2 = new Castle("b", Team.BLACK, 2, new ArrayList<>());
+        Castle c1 = new Castle(Team.WHITE, 2, new ArrayList<>());
+        Castle c2 = new Castle(Team.BLACK, 2, new ArrayList<>());
 
         for(Color c : Color.values()){
             professors.put(c,c1.getTeam());

@@ -18,7 +18,7 @@ public class Castle {
     private static final int waitingRoomSize3Players = 9;
     private static final int numberOfCards = 10;
 
-    public Castle(String PLayerID, Team team, int nPlayer, List<Color> students) {
+    public Castle(Team team, int nPlayer, List<Color> students) {
         if(nPlayer == 3) this.waitingRoomSize = waitingRoomSize3Players;
         else this.waitingRoomSize = waitingRoomSize2Players;
         this.waitingRoom = new ArrayList<>(students);
@@ -72,7 +72,7 @@ public class Castle {
      * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
      */
     public void removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException {
-        if(!waitingRoom.containsAll(students) || students.size() > waitingRoomSize){
+        if(!new HashSet<>(waitingRoom).containsAll(students) || students.size() > waitingRoomSize){
             throw new NoSuchStudentException();
         }
         else{
