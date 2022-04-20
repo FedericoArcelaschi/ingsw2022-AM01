@@ -8,9 +8,11 @@ import java.util.Scanner;
 public class ClientServerHandler implements Runnable {
 
     private final Socket socket;
+    private final Game game;
 
-    public ClientServerHandler(Socket socket) {
+    public ClientServerHandler(Socket socket, Game game) {
         this.socket = socket;
+        this.game = game;
     }
     @Override
     public void run() {
@@ -23,10 +25,12 @@ public class ClientServerHandler implements Runnable {
                 if (line.equals("quit")) {
                     break;
                 } else {
+                    game.executeCommand(line);
                     out.println("Received: " + line);
                     out.flush();
                 }
             }
+            System.out.println("closing socket: "+ socket.toString());
             // Closing stream and client socket
             in.close();
             out.close();
