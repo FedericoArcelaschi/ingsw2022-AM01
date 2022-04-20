@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Board {
-    private static final int numOfStudentsPerColor=24;
+    private static final int numOfStudentsPerColor = 24;
     protected int motherNaturePosition = 0;
     protected int nPlayer;
     protected final Bag bag = new Bag(numOfStudentsPerColor);
@@ -19,7 +19,7 @@ public class Board {
     protected final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Team> professorsMap;
     protected final Turn turn;
-    protected int possibleMovingSteps;//calculated form the card: must be stored in memory til the player action turn
+    protected int possibleMovingSteps; //calculated form the card: must be stored in memory til the player action turn
 
 
     public Board(String playerID1, String playerID2, Turn turn){
@@ -207,7 +207,7 @@ public class Board {
     /**
      * @return a map that contains the number of placed towers on the islands for each team
      */
-    private Map<Team,Integer> sumTowers() {
+    protected Map<Team,Integer> sumTowers() {
         Map<Team, Integer> nTowers = new HashMap<>();
         for (Team t : Team.values()) { //fill nTowers map for all team at 0
             nTowers.put(t, 0);
@@ -225,7 +225,7 @@ public class Board {
      * @param nTowers map that contains team and towers of the team on the islands
      * @return the team with most towers
      */
-    private Team teamWithMoreTowers(Map<Team,Integer> nTowers){
+    protected Team teamWithMoreTowers(Map<Team,Integer> nTowers){
         int max;
         Team winner;
 
@@ -256,7 +256,7 @@ public class Board {
      * Checks if the cards are ended
      * @return number of card left
      */
-    private int remainingCards(){
+    protected int remainingCards(){
         int cardsLeft = 0;
         for(Castle castle : castleMap.values()) cardsLeft += (int) Arrays.stream(castle.getCards()).filter(card -> card != null && !card).count();
         return cardsLeft;
@@ -266,7 +266,7 @@ public class Board {
      * Checks if the game is won after a player turn
      * @return the winner team
      */
-    private Team isWinningPosition(){
+    protected Team isWinningPosition(){
         Map <Team, Integer> nTowers = sumTowers();
         Team winner = null;
         if(islandList.size()<=3){
@@ -321,6 +321,7 @@ public class Board {
      * @param move number of steps forward of mother nature
      */
     public void moveMotherNature(int move) {
+        if(move >= possibleMovingSteps) throw new IllegalArgumentException("too many steps");
         if (motherNaturePosition + move / islandList.size() >= 1) motherNaturePosition += move - islandList.size();
         else motherNaturePosition += move;
         conquerIsland(islandList.get(motherNaturePosition));
