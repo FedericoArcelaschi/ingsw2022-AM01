@@ -4,14 +4,14 @@ import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.*;
 
-public class CastleTest{
+
+public class CastleTest {
     @Test
     public void testAddStudentWR() throws TooManyStudentsException, NoSuchStudentException {
         Bag b = new Bag(24);
@@ -29,14 +29,15 @@ public class CastleTest{
     }
 
     @Test
-    public void testNoSuchStudentException(){
+    public void testNoSuchStudentException() {
         Bag b = new Bag(24);
         Castle c = new Castle("Lorenzo", Team.BLACK, 1, b.multipleExtract(9));
         List<Color> students = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             students.add(Color.YELLOW);
         }
-        assertThrows(NoSuchStudentException.class, () -> c.removeStudentsFromWaitingRoom(students), "");
+        assertThrows(NoSuchStudentException.class, () -> c.removeStudentsFromWaitingRoom(students),
+                "10 yellow students can't be present in the waitingroom. (size=9)");
     }
 
     @Test

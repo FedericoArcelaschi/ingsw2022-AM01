@@ -1,14 +1,16 @@
 package it.polimi.ingsw.model.expert;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.Bag;
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpertCastleTest{
@@ -23,7 +25,6 @@ public class ExpertCastleTest{
         board = new ExpertBoard(players.get(0), players.get(1), players.get(2), t);
         bag = board.getBag();
         expertCastle = (ExpertCastle) board.getCastle(players.get(0));
-
     }
 
     @Test

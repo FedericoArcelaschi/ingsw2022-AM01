@@ -1,12 +1,10 @@
 package it.polimi.ingsw.model.expert.Characters;
 
-import java.lang.IllegalArgumentException;
 import it.polimi.ingsw.model.Bag;
-import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.expert.ExpertBoard;
 
-import javax.crypto.NullCipher;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  *factory method for Generic generation
@@ -23,7 +21,7 @@ public class Tavern {
      */
     public Tavern(Bag bag){
         seed = bag.getSeed();
-        this.bag = bag;
+        Tavern.bag = bag;
     }
     /**Constructor for tests*/
     public Tavern(){}
@@ -54,23 +52,20 @@ public class Tavern {
 
     /**
      * Factory method that calls the right Character constructor
+     *
      * @param idChar - integer between 1 and 12 identifier of the character
      * @return Generic - abstract superclass of all character
      */
-    private Generic getExpertCharacter(int idChar) throws IllegalArgumentException{
+    private Generic getExpertCharacter(int idChar) throws IllegalArgumentException {
         Generic ec;
-        switch (idChar){
-            case 1, 7, 10, 11:
-                return ec = new Student(idChar, bag);
-            case 2, 6, 8, 9, 12:
-                return ec = new Influence(idChar);
-            case 3, 4:
-                return ec = new Action(idChar);
-            case 5:
-                return ec = new Block(idChar);
-            default:
-                throw new IllegalArgumentException();
-        }
+        return switch (idChar) {
+            case 1, 7, 11 -> ec = new Student(idChar, bag);
+            case 10 -> ec = new Student(idChar);
+            case 2, 6, 8, 9, 12 -> ec = new Influence(idChar);
+            case 3, 4 -> ec = new Action(idChar);
+            case 5 -> ec = new Block(idChar);
+            default -> throw new IllegalArgumentException();
+        };
     }
     public Generic extract4testing(int idChar){
         return getExpertCharacter(idChar);

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Island{
     private final Map<Color, Integer> students;
@@ -73,12 +74,13 @@ public class Island{
 
     /**
      * Calculates the influence that the students have on the island
+     *
      * @param influenceMap map that contains the sum of influences per team
      * @param professorMap map that contains the team owners of each professor
      */
-    private void studentInfluence(Map<Team, Integer> influenceMap, Map<Color, Team> professorMap){
-        for(Color c : Color.values()){
-            if(professorMap.get(c) != null) {
+    protected void studentInfluence(Map<Team, Integer> influenceMap, Map<Color, Team> professorMap) {
+        for (Color c : Color.values()) {
+            if (professorMap.get(c) != null) {
                 Team t = professorMap.get(c); //gets the team of professor's owner
                 influenceMap.replace
                         (t, influenceMap.get(t) + students.get(c));  //add influence for the color to the owner of the professor

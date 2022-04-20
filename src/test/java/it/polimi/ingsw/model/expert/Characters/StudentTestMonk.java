@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.expert.Characters;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import it.polimi.ingsw.model.expert.ExpertCastle;
@@ -21,6 +22,7 @@ public class StudentTestMonk {
 
     private static Turn t;
     private static ExpertBoard board;
+
     @BeforeEach
     void setUp() {
         t = new Turn(Arrays.asList("Lorenzo", "Giovanni"));
@@ -32,47 +34,79 @@ public class StudentTestMonk {
      * Problem: doesn't know for sure if there is a YELLOW in MONK
      */
     @Test
-    public void testApplyEffectFromBoard() throws NoSuchStudentException, TooManyStudentsException {
+    public void testApplyEffectException() {
+
+    }
+
+    @Test
+    public void testApplyEffectFromBoard() throws TooManyStudentsException {
         ExpertIsland testIsland = (ExpertIsland) board.getIslandList().get(1);
         board.extract4CharacterTesting(1);
         int countAll = 0;
-        for (Color c: Color.values()){
-            countAll +=  testIsland.getStudents().get(c);
+        for (Color c : Color.values()) {
+            countAll += testIsland.getStudents().get(c);
         }
 
-        int countYellows =  testIsland.getStudents().get(Color.YELLOW).intValue();
-        if(board.playExpertCard(1, testIsland, List.of(Color.YELLOW)))
-            assertEquals(countYellows + 1, testIsland.getStudents().get(Color.YELLOW).intValue());
-        else
-            assertEquals(countYellows, testIsland.getStudents().get(Color.YELLOW).intValue());
+        int countYellows = testIsland.getStudents().get(Color.YELLOW).intValue();
+        try {
+            if (board.playExpertCard(1, testIsland, List.of(Color.YELLOW))) {
+                assertEquals(countYellows + 1, testIsland.getStudents().get(Color.YELLOW).intValue());
+                return;
+            } else
+                assertEquals(countYellows, testIsland.getStudents().get(Color.YELLOW).intValue());
+        } catch (StudentException e) {
+            System.out.println("yellow: " + e);
+        }
 
-        int countGreen =  testIsland.getStudents().get(Color.GREEN).intValue();
-        if(board.playExpertCard(1, testIsland, List.of(Color.GREEN)))
-            assertEquals(countGreen + 1, testIsland.getStudents().get(Color.GREEN).intValue());
-        else
-            assertEquals(countGreen, testIsland.getStudents().get(Color.GREEN).intValue());
+        int countGreen = testIsland.getStudents().get(Color.GREEN).intValue();
+        try {
+            if (board.playExpertCard(1, testIsland, List.of(Color.GREEN))) {
+                assertEquals(countGreen + 1, testIsland.getStudents().get(Color.GREEN).intValue());
+                return;
+            } else
+                assertEquals(countGreen, testIsland.getStudents().get(Color.GREEN).intValue());
+        } catch (StudentException e) {
+            System.out.println("green: " + e);
+        }
 
-        int countPink =  testIsland.getStudents().get(Color.PINK).intValue();
-        if(board.playExpertCard(1, testIsland, List.of(Color.PINK)))
-            assertEquals(countPink + 1, testIsland.getStudents().get(Color.PINK).intValue());
-        else
-            assertEquals(countPink, testIsland.getStudents().get(Color.PINK).intValue());
+        int countPink = testIsland.getStudents().get(Color.PINK).intValue();
+        try {
+            if (board.playExpertCard(1, testIsland, List.of(Color.PINK))) {
+                assertEquals(countPink + 1, testIsland.getStudents().get(Color.PINK).intValue());
+                return;
+            } else
+                assertEquals(countPink, testIsland.getStudents().get(Color.PINK).intValue());
+        } catch (StudentException e) {
+            System.out.println("pink: " + e);
+        }
 
-        int countBlue =  testIsland.getStudents().get(Color.BLUE).intValue();
-        if(board.playExpertCard(1, testIsland, List.of(Color.BLUE)))
-            assertEquals(countBlue + 1, testIsland.getStudents().get(Color.BLUE).intValue());
-        else
-            assertEquals(countBlue, testIsland.getStudents().get(Color.BLUE).intValue());
+        int countBlue = testIsland.getStudents().get(Color.BLUE).intValue();
+        try {
+            if (board.playExpertCard(1, testIsland, List.of(Color.BLUE))) {
+                assertEquals(countBlue + 1, testIsland.getStudents().get(Color.BLUE).intValue());
+                return;
+            } else
+                assertEquals(countBlue, testIsland.getStudents().get(Color.BLUE).intValue());
 
-        int countRed =  testIsland.getStudents().get(Color.RED).intValue();
-        if(board.playExpertCard(1, testIsland, List.of(Color.RED)))
-            assertEquals(countRed + 1, testIsland.getStudents().get(Color.RED).intValue());
-        else
-            assertEquals(countRed, testIsland.getStudents().get(Color.RED).intValue());
+        } catch (StudentException e) {
+            System.out.println("blue: " + e);
+        }
+
+        int countRed = testIsland.getStudents().get(Color.RED).intValue();
+        try {
+            if (board.playExpertCard(1, testIsland, List.of(Color.RED))) {
+                assertEquals(countRed + 1, testIsland.getStudents().get(Color.RED).intValue());
+                return;
+            } else
+                assertEquals(countRed, testIsland.getStudents().get(Color.RED).intValue());
+        } catch (StudentException e) {
+            System.out.println("red: " + e);
+        }
+
 
         int CountAfter = 0;
-        for (Color c: Color.values()) {
-            CountAfter +=  testIsland.getStudents().get(c);
+        for (Color c : Color.values()) {
+            CountAfter += testIsland.getStudents().get(c);
         }
         assertEquals(countAll + 1, CountAfter,
                 "I don't know witch one, but at least one student was added");
@@ -92,21 +126,20 @@ public class StudentTestMonk {
                 = (ExpertIsland) board.getIslandList().get(0);
         int numberOfStudentsBefore; //can be either zero or one
         int numberOfStudentsAfter; //can be either one or two
-        Color availableStudent
-                = ((List<Color>) board
+        List<Color> availableStudent
+                = (List<Color>) board
                 .getAvailableCharacterCards()
                 .get(1)
                 .getEffect()
-                .get(Parameters.STUDENTLIST))
-                .get(0);//gets the first student that "the character can place"
+                .get(Parameters.STUDENTLIST);//gets the students that "the character can place"
         Map<Parameters, Object> parametersMap
                 = new HashMap<>(Map.of(
-                    Parameters.STUDENTLIST, List.of(availableStudent),
-                    Parameters.ISLAND, island));
-        numberOfStudentsBefore = island.getStudents().get(availableStudent);
+                Parameters.STUDENTLIST, availableStudent,
+                Parameters.ISLAND, island));
+        numberOfStudentsBefore = island.getStudents().get(availableStudent.get(0));
         //In this test I invoke directly the Character's method
-        assertTrue(monkCharacter.applyEffect(parametersMap));
-        numberOfStudentsAfter = island.getStudents().get(availableStudent);
+        monkCharacter.applyEffect(parametersMap);
+        numberOfStudentsAfter = island.getStudents().get(availableStudent.get(0));
         assertEquals(numberOfStudentsBefore + 1, numberOfStudentsAfter,
                 "The student number of color " + availableStudent + " must be increased (but isn't).");
     }
@@ -140,14 +173,14 @@ public class StudentTestMonk {
         );
         numberOfStudentsBefore = island.getStudents().get(notAvailableStudent);
         //In this test I call directly the Character's method
-        assertFalse(monkCharacter.applyEffect(parametersMap));
+        monkCharacter.applyEffect(parametersMap);
         numberOfStudentsAfter = island.getStudents().get(notAvailableStudent);
         assertEquals(numberOfStudentsBefore, numberOfStudentsAfter,
                 "The student number of color " + notAvailableStudent + " must be increased.");
     }
 
     @Test
-    public void testPlayExpertCards4MONK() throws NoSuchStudentException, TooManyStudentsException {
+    public void testPlayExpertCards4MONK() throws StudentException {
         Generic monkChar;
         List<Color> availableStudent;
         ExpertIsland island = ((ExpertIsland) board.getIslandList().get(1));
@@ -155,18 +188,21 @@ public class StudentTestMonk {
         board.extract4CharacterTesting(1);
         monkChar = board.getAvailableCharacterCards().get(1);
         availableStudent = ((List<Color>) monkChar.getEffect().get(Parameters.STUDENTLIST));
+
         //note: I pass 4 colors and the MONK adds only the first
         //the effect should be applied only for the fist time (1 coin is present)
-        assertTrue(board.playExpertCard(1, island, availableStudent), "Assertion playExpertCardFailed #1");
+        assertTrue(board.playExpertCard(1, island, availableStudent),
+                "Assertion playExpertCardFailed #1");
         assertEquals(0, ((ExpertCastle) board.getCastle(board.getCurrentPlayer())).getCoins(), "Error: coins");
-        assertFalse(board.playExpertCard(1, island, availableStudent), "Assertion playExpertCardFailed #2");
+        assertFalse(board.playExpertCard(1, island, availableStudent),
+                "Monk was played once and now the player is out of money.");
         assertEquals(0, ((ExpertCastle) board.getCastle(board.getCurrentPlayer())).getCoins(), "Error: coins");
         //check if it works as expected
-        for (Color c: presentStudents.keySet()){
-            if(c == availableStudent.get(0))
-                assertEquals(presentStudents.get(c) + 1 , island.getStudents().get(c), "Assertion color "+ c +" failed");
+        for (Color c : presentStudents.keySet()) {
+            if (c == availableStudent.get(0))
+                assertEquals(presentStudents.get(c) + 1, island.getStudents().get(c), "Assertion color " + c + " failed");
             else
-                assertEquals(presentStudents.get(c), island.getStudents().get(c),"Assertion color "+ c +" failed");
+                assertEquals(presentStudents.get(c), island.getStudents().get(c), "Assertion color " + c + " failed");
         }
     }
 }

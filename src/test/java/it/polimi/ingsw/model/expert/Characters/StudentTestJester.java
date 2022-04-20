@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.expert.Characters;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import it.polimi.ingsw.model.expert.ExpertCastle;
@@ -24,7 +25,7 @@ class StudentTestJester {
     }
 
     @Test
-    void applyEffectJESTER() throws NoSuchStudentException, TooManyStudentsException {
+    void applyEffectJESTER() throws StudentException {
         List<Color> availableStudents
             = ((List<Color>)jester
                     .getEffect()

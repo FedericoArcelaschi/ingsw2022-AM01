@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TurnTest{
+
     @Test
     public void testGetTurn() {
         List<String> players = Arrays.asList("pippo","pluto","paperino");
@@ -15,6 +17,7 @@ public class TurnTest{
             turn.nextTurnPlanification();
         }
     }
+
     @Test
     public void testSetTurnAction() {
         List<String> players = Arrays.asList("pippo","pluto","paperino");
@@ -38,5 +41,6 @@ public class TurnTest{
     }
     @Test
     public void testNextTurnAction() {
+
     }
 }

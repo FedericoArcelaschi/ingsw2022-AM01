@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.expert.Characters;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Team;
+import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
@@ -8,15 +10,19 @@ import it.polimi.ingsw.model.expert.ExpertIsland;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ActionTestGuard { //THIRD CHARACTER
     private ExpertBoard board;
     private Generic guardChar;
     private Map<Parameters, Object> ParametersMap;
-    private int i=0; //wanted to try a global loop, didn't work
+    private final int i = 0; //wanted to try a global loop, didn't work
 
     @BeforeEach
     void setUp() {
@@ -25,7 +31,6 @@ public class ActionTestGuard { //THIRD CHARACTER
         board.extract4CharacterTesting(3);
         guardChar = board.getAvailableCharacterCards().get(3);
         ParametersMap = new HashMap<>();
-        i++;
     }
 
     @Test
@@ -42,7 +47,7 @@ public class ActionTestGuard { //THIRD CHARACTER
         for (int j = 0; j < 12; j++) {//loop: Federico conquers every island(first and 6th have no students on them)
             ExpertIsland island =
                     (ExpertIsland) board.getIslandList().get(j);
-            assertTrue(island.getOwnership() == null,
+            assertNull(island.getOwnership(),
                     "First every island is initialized");
             ParametersMap.putAll(
                     Map.of(
@@ -62,7 +67,7 @@ public class ActionTestGuard { //THIRD CHARACTER
                             "all green and red islands should go to BlACK team");
             }
             if(j == 0 || j == 6)
-                assertEquals(null, island.getOwnership(),
+                assertNull(island.getOwnership(),
                         "those islands contain no students --> therefore have no owner");
             //System.out.println("isola dopo: " + j + " " + board.getIslandList().get(j).toString());
         }

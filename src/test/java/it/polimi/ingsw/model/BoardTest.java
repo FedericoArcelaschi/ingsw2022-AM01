@@ -5,15 +5,15 @@ import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BoardTest{
+public class BoardTest {
 
-    private String player1 = "a", player2= "2";
+    private final String player1 = "a";
+    private final String player2 = "2";
     private Board b;
 
     @BeforeEach
@@ -23,7 +23,7 @@ public class BoardTest{
     }
 
     @Test
-    public void testBoardIslandNumber(){
+    public void testBoardIslandNumber() {
 
         assertEquals(12, b.getIslandList().size());
     }
@@ -154,8 +154,10 @@ public class BoardTest{
     public void testIsNotWonByResources() {
         assertNull(b.isWonByResources());
     }
+
     @Test
-    public void testMoveMotherNature() {
+    public void testMoveMotherNature() throws NotYourTurnException {
+        b.playCard(player1, 3);
         b.moveMotherNature(1);
     }
 

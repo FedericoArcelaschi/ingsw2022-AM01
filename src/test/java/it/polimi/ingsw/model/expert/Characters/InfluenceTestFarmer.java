@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import it.polimi.ingsw.model.expert.ExpertCastle;
@@ -36,7 +37,7 @@ class InfluenceTestFarmer {
     }
 
     @Test
-    void applyEffect() throws TooManyStudentsException, NoSuchStudentException {//Lorenzo's turn
+    void applyEffect() throws StudentException {//Lorenzo's turn
         castleB.addStudentsInDiningRoom(//BLACK
                 Arrays.asList(
                     Color.YELLOW,

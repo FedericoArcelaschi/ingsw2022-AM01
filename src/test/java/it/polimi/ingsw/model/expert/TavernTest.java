@@ -2,13 +2,15 @@ package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.expert.Characters.*;
-import it.polimi.ingsw.model.expert.ExpertBoard;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TavernTest{
     private static Turn t;
@@ -24,54 +26,53 @@ public class TavernTest{
 
     @Test
     public void testExtraction() {
-        List<Generic> expCards = new ArrayList<>();
+        List<Generic> expCards;
         expCards = tavern.extract();
         board.getBag().extract();
         assertEquals(13, expCards.size());
-        assertEquals(true,
-                expCards.contains(new Student(1, board.getBag()))
-                    ||expCards.contains(new Student(7, board.getBag()))
-                    ||expCards.contains(new Student(10, board.getBag()))
-                    ||expCards.contains(new Student(11, board.getBag()))
-                    ||expCards.contains(new Influence(2))
-                    ||expCards.contains(new Influence(6))
-                    ||expCards.contains(new Influence(8))
-                    ||expCards.contains(new Influence(9))
-                    ||expCards.contains(new Action(3))
-                    ||expCards.contains(new Action(4))
-                    ||expCards.contains(new Block(5))
-                );
+        assertTrue(expCards.contains(new Student(1, board.getBag()))
+                || expCards.contains(new Student(7, board.getBag()))
+                || expCards.contains(new Student(10))
+                || expCards.contains(new Student(11, board.getBag()))
+                || expCards.contains(new Influence(2))
+                || expCards.contains(new Influence(6))
+                || expCards.contains(new Influence(8))
+                || expCards.contains(new Influence(9))
+                || expCards.contains(new Action(3))
+                || expCards.contains(new Action(4))
+                || expCards.contains(new Block(5))
+        );
         int i = 0;
-        for (Generic a: expCards) {
+        for (Generic a : expCards) {
             if (a != null)
                 i++;
         }
-        assertEquals(3,i);
+        assertEquals(3, i);
     }
 
-    
+
     @Test
-    public void testExtract4Testing(){
+    public void testExtract4Testing() {
         List<CharactersList> expertModeCharacters = new ArrayList<>();
-        List<CharactersList> expertModeCharactersList4Comparison = new ArrayList<>();
         for (int i = 1; i < 13; i++) {
             expertModeCharacters.add(tavern.extract4testing(i).getCharacterName());
         }
         //System.out.println(tavern.extract4testing(3).getCharacterName().name());
-        expertModeCharactersList4Comparison
-            .addAll(Arrays.asList(
-                CharactersList.MONK,
-                CharactersList.FARMER,
-                CharactersList.GUARD,
-                CharactersList.MAILMAN,
-                CharactersList.WITCH,
-                CharactersList.CENTAUR,
-                CharactersList.JESTER,
-                CharactersList.KNIGHT,
-                CharactersList.COOK,
-                CharactersList.STORYTELLER,
-                CharactersList.QUEEN,
-                CharactersList.TAXMAN));
+        List<CharactersList> expertModeCharactersList4Comparison
+                = new ArrayList<>(
+                Arrays.asList(
+                        CharactersList.MONK,
+                        CharactersList.FARMER,
+                        CharactersList.GUARD,
+                        CharactersList.MAILMAN,
+                        CharactersList.WITCH,
+                        CharactersList.CENTAUR,
+                        CharactersList.JESTER,
+                        CharactersList.KNIGHT,
+                        CharactersList.COOK,
+                        CharactersList.STORYTELLER,
+                        CharactersList.QUEEN,
+                        CharactersList.TAXMAN));
         assertEquals(expertModeCharactersList4Comparison, expertModeCharacters,
                 "both CharacterList-lists should contain all characters names");//TODO: understand why lc is null (in debugging isn't)
     }

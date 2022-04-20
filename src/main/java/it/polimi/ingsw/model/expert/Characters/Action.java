@@ -15,12 +15,10 @@ public class Action extends Generic {
     /**
      * Method for GUARD: the given island could be conquered.
      * Method for MAILMAN: increases the MN move range.
-     * @return true if move is increased by 2.
-     * @return true if the given island was conquered
      */
     @Override
-    public boolean applyEffect(Map<Parameters, Object> ParametersMap) throws IllegalArgumentException{
-        if(idChar==3) {
+    public void applyEffect(Map<Parameters, Object> ParametersMap) {
+        if (idChar == 3) {
             ExpertIsland island;
             Map<Color, Team> professorsMap;
             Map<Team, Integer> influenceMap;
@@ -37,17 +35,11 @@ public class Action extends Generic {
                     teamOwner = island.getOwnership(); //owner doesn't change
             }
             island.setOwnership(teamOwner);
-            cost = characterName.getCost() +1;
-            return true;
-        }
-        if (idChar == 4) {
-            Integer move
-                    = ((Integer)ParametersMap.get(Parameters.MOVE) + 2);
-            ParametersMap.replace(Parameters.MOVE, move);
             cost = characterName.getCost() + 1;
-            return true;
-        }
-        throw new IllegalArgumentException("Wrong character summoned: should either be 3 or 4");
+        } else if (idChar == 4) {
+            cost = characterName.getCost() + 1;
+        } else
+            throw new IllegalArgumentException("Wrong character summoned: should either be 3 or 4");
     }
 
     @Override

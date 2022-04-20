@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.expert;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.Characters.Student;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,7 +38,7 @@ public class ExpertBoardTest{
      * @throws TooManyStudentsException
      */
     @Test
-    public void testPlayExpertCard() throws NoSuchStudentException, TooManyStudentsException, NotYourTurnException {
+    public void testPlayExpertCard() throws StudentException, NotYourTurnException {
         board.playCard("Lorenzo", 1);
         if(board.getAvailableCharacterCards().get(4) == null) {
             assertFalse(board.playExpertCard(4));
