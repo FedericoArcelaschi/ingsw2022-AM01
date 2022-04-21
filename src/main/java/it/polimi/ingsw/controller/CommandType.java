@@ -1,12 +1,18 @@
 package it.polimi.ingsw.controller;
 
 public enum CommandType {
-    PLAY_CARD,
-    MOVE_STUDENT_TO_ISLAND,
-    MOVE_STUDENT_TO_DINING_ROOM,
-    CHOOSE_CLOUD,
-    MOVE_MOTHER_NATURE,
-    GET_DECK,
-    GET_CASTLE,
-    GET_ISLANDS,
+    PLAY_CARD("playcard"),
+    CHOOSE_CLOUD("choosecloud"),
+    MOVE_STUDENT("movestudent"),
+    MOVE_MOTHER_NATURE("movemothernature"),
+    GET("get");
+
+    private final String commandString;
+    CommandType(String commandString) {
+        this.commandString = commandString;
+    }
+
+    public String getCommandString(){
+        return commandString;
+    }
 }
