@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Board {
     private static final int numOfStudentsPerColor=24;
@@ -202,7 +201,7 @@ public class Board {
      * @return a list of not yet played card
      */
 
-    public Boolean[] getAvaliableCard(String PlayerID){
+    public Boolean[] getAvailableCards(String PlayerID){
         Castle castle = castleMap.get(PlayerID);
         return castle.getCards();
     }
