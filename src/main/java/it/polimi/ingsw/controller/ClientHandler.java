@@ -1,22 +1,25 @@
 package it.polimi.ingsw.controller;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class ClientServerHandler implements Runnable {
+public class ClientHandler implements Runnable {
 
     private final Socket socket;
     private final Game game;
 
-    public ClientServerHandler(Socket socket, Game game) {
+    public ClientHandler(Socket socket, Game game) {
         this.socket = socket;
         this.game = game;
     }
     @Override
     public void run() {
         try {
+            Gson parser = new Gson();
             Scanner in = new Scanner(socket.getInputStream());
             PrintWriter out = new PrintWriter(socket.getOutputStream());
             // Leggo e scrivo nella connessione finche' non ricevo "quit"
@@ -25,12 +28,15 @@ public class ClientServerHandler implements Runnable {
                 if (line.equals("quit")) {
                     break;
                 } else {
-                    game.executeCommand(line);
-                    out.println("Received: " + line);
+                    String responseMessage = game.executeCommand(parser.fromJson(line, Command.class));
+                    System.out.println(responseMessage);
+                    Response response = new Response(responseMessage);
+                    System.out.println(parser.toJson(response));
+                    out.println(parser.toJson(response));
                     out.flush();
                 }
             }
-            System.out.println("closing socket: "+ socket.toString());
+            System.out.println("closing socket: "+ socket);
             // Closing stream and client socket
             in.close();
             out.close();
