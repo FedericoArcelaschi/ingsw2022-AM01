@@ -61,7 +61,7 @@ public class Board {
         setupProfessorMap();
     }
 
-    /**Contructor for ExpertBoard
+    /**Constructor for ExpertBoard
      */
     protected Board(Turn turn){
         this.turn = turn;
@@ -88,7 +88,7 @@ public class Board {
     }
 
     /**
-     * generate the islands
+     * Generates the islands.
      */
 
     private void setupIslands(){
@@ -105,7 +105,7 @@ public class Board {
     }
 
     /**
-     * refill all the cloud with new students
+     * Refills each cloud with new students.
      * @return if the move is legal and played or not
      */
     public boolean refillClouds() {
@@ -116,7 +116,7 @@ public class Board {
     }
 
     /**
-     * move students form a chosen cloud to the waiting room of the player
+     * Moves students from the selected cloud to the waiting room of the current player.
      * @param PlayerID the id of the player that ask for this move
      * @param cloudID the cloud that is chosen
      * @return if the move is legal and played or not
@@ -129,7 +129,7 @@ public class Board {
     }
 
     /**
-     * Checks witch player has more students of each color and assigns the professors.
+     * Checks which player has more students of each color and assigns the professors.
      */
 
     public void updateProfessorsOwners() {
@@ -151,14 +151,14 @@ public class Board {
     }
 
     /**
-     * move students form the waiting room to the dining room
+     * Moves students from the waiting room to the dining room.
      * @param PlayerID the id of the player that ask for this move
      * @param students a list of students you want to move
      * @throws NoSuchStudentException if the student is not in the Waiting Room of the current player
      * @throws NotYourTurnException if the player in the argument is not the current player
      * @throws TooManyStudentsException if the castle dining room already contains 9 students
      */
-    public void moveStudentToDR(String PlayerID, List<Color> students)
+    public void moveStudentToDiningRoom(String PlayerID, List<Color> students)
             throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
@@ -223,9 +223,9 @@ public class Board {
     }
 
     /**
-     * Calculate who has the highest Integer in the map that he receives
+     * Calculates who has the highest Integer in the map that he receives
      * @param map map that contains team and a generic Integer
-     * @return the team with most towers
+     * @return the team with the most towers.
      */
     private Team findMaxTeam(Map<Team,Integer> map){
         int max;
@@ -246,8 +246,8 @@ public class Board {
     }
 
     /**
-     * Checks if the cards are ended
-     * @return number of card left
+     * Checks if there are no more cards.
+     * @return number of cards left.
      */
     private int remainingCards(){
         int cardsLeft = 0;
@@ -256,7 +256,7 @@ public class Board {
     }
 
     /**
-     * Checks if the game is won after a player turn
+     * Checks if the game is won after a player finishes his turn.
      * @return the winner team
      */
     public Team isWinningPosition() {
@@ -276,6 +276,10 @@ public class Board {
         return winner;
     }
 
+    /**
+     * Returns the team with the most professors.
+     * @return the team with the most professors.
+     */
     private Team teamWithMostProfessors() {
         Team more = null;
         int max = 0;
@@ -296,7 +300,8 @@ public class Board {
     }
 
     /**
-     * Checks if the game is won after all players turn when cards or student in the bag are finished
+     * Checks if the game is won after each player's turn is over by checking whether the players don't have any more
+     * cards or if there are no more students in the bag.
      * @return the winner team
      */
     public Team isWonByResources() {
@@ -310,7 +315,7 @@ public class Board {
     }
 
     /**
-     * Joins the islands and put the new island into the list
+     * Joins the islands and puts the new island in the list.
      */
     public void joinIslands(@NotNull List<Island> islandList) {
         int firstIslandIndex
@@ -334,9 +339,9 @@ public class Board {
 
     /**
      * Calculates the influence and sets a new owner
-     * on the current island mother nature lands on.
-     * Checks if nearby islands have the same owner and possibly joins them.
-     * Checks if someone won the game after an island is conquered
+     * on the island mother nature lands on.
+     * Checks if nearby islands have the same owner and, if possible, joins them.
+     * Checks if someone won the game after an island is conquered.
      * @param move number of steps forward of mother nature
      */
     public void moveMotherNature(int move) {
@@ -347,7 +352,7 @@ public class Board {
     }
 
     /**
-     * Calculates influence on island and sets a new owner if possible
+     * Calculates influence on given island and sets a new owner if possible.
      * @param island the current island mother nature is on
      */
     protected void conquerIsland(@NotNull Island island) {
@@ -358,7 +363,7 @@ public class Board {
     }
 
     /**
-     * Checks if neighbouring island have the same owner and joins them to the current island
+     * Checks if neighbouring islands have the same owner and joins them to the current island
      * @param island the island mother nature is on
      */
     protected void checkJoinIsland(Island island) {
@@ -381,6 +386,9 @@ public class Board {
         if(island.getOwnership() != null && next.getOwnership() == island.getOwnership()) islandToJoin.add(next);
         if(islandToJoin.size() == 2 || islandToJoin.size() == 3) joinIslands(islandToJoin);
     }
+
+
+    //getters
 
     public String getCurrentPlayer() {
         return turn.getCurrentPlayer();

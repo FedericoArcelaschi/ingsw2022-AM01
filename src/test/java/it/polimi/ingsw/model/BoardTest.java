@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Isolated;
 
 import java.util.*;
 
@@ -94,7 +93,7 @@ public class BoardTest{
         for(int i=0; i<4;i++){
             cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(i));
         }
-        b.moveStudentToDR(player1, cl);
+        b.moveStudentToDiningRoom(player1, cl);
         //move the students from cloud to WR
         assertTrue(b.chooseCloud(player1, 0));
     }
@@ -139,7 +138,7 @@ public class BoardTest{
     @Test
     public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         List<Color> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
-        b.moveStudentToDR(player1, students);
+        b.moveStudentToDiningRoom(player1, students);
 
         //test professor get assigned
         Map<Color,Team> pm1 = b.getProfessorsMap();
