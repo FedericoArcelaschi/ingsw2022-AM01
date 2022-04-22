@@ -1,9 +1,9 @@
 package it.polimi.ingsw.controller;
 
 public enum CommandAttribute {
-    ID,
-    PLAYER,
+    ID, //Numeric attribute
     DISTANCE,
-    WHERE,
+    STUDENTS, //student list
+    WHERE, //new student location
     WHAT
 }
