@@ -33,21 +33,30 @@ public class ClientMain {
             String userInput;
             while (!socket.isClosed()) {
                 System.out.println("run a command:");
-                if((userInput = stdIn.readLine()) == null) break;
+                if((userInput = stdIn.readLine()) == null) {
+                    socket.close();
+                    break;
+                }
                 String[] command = userInput.split(" ");
                 Command c = null;
+                //If the user input finds a corresponding value in CommandAttribute enum
+                //a corresponding Command is constructed.
                 for (CommandType ct : CommandType.values()) {
                     if(command[0].toLowerCase().equals(ct.getCommandString()))
                         c=new Command(playerID, ct, Arrays.copyOfRange(command, 1, command.length));
                 }
                 if(c == null){
-                    System.out.println("command error");
+                    System.out.println("Input has not been parsed.");
                 }
                 else{
                     String json = parser.toJson(c);
                     out.println(json);
+                    //Obtain the Response equivalent of String json
                     Response response = parser.fromJson(in.readLine(), Response.class);
-                    if(response == null) socket.close();
+                    if(response == null) {
+                        socket.close();
+                        break;
+                    }
                     System.out.println(response.toString());
                 }
             }
@@ -60,7 +69,4 @@ public class ClientMain {
             System.exit(1);
         }
     }
-
-
-
 }
