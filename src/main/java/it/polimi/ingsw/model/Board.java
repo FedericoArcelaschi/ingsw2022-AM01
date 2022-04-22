@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Board {
     private static final int numOfStudentsPerColor = 24;
@@ -25,27 +24,27 @@ public class Board {
     public Board(String playerID1, String playerID2, Turn turn){
         nPlayer = 2;
         construct();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
-        this.turn=turn;
-    }
-
-    public Board(String playerID1, String playerID2, String playerID3, Turn turn){
-        nPlayer = 3;
-        construct();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(7)));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(7)));
-        castleMap.put(playerID3, new Castle(playerID3, Team.GREY, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.multipleExtract(9)));
         this.turn = turn;
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn){
+    public Board(String playerID1, String playerID2, String playerID3, Turn turn) {
+        nPlayer = 3;
+        construct();
+        castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID3, new Castle(Team.GREY, nPlayer, bag.multipleExtract(7)));
+        this.turn = turn;
+    }
+
+    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn) {
         nPlayer = 4;
         construct();
-        castleMap.put(playerID1, new Castle(playerID1, Team.WHITE, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID2, new Castle(playerID2, Team.BLACK, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID3, new Castle(playerID3, Team.WHITE, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID4, new Castle(playerID4, Team.BLACK, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID3, new Castle(Team.WHITE, nPlayer, bag.multipleExtract(9)));
+        castleMap.put(playerID4, new Castle(Team.BLACK, nPlayer, bag.multipleExtract(9)));
         this.turn = turn;
     }
 

@@ -3,9 +3,6 @@ package it.polimi.ingsw.model.expert.Characters;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.Turn;
-import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.StudentException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import it.polimi.ingsw.model.expert.ExpertCastle;
 import it.polimi.ingsw.model.expert.ExpertIsland;
@@ -18,6 +15,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Test for the second character.
+ */
 class InfluenceTestFarmer {
     private final Turn t = new Turn(Arrays.asList("Lorenzo", "Giovanni2069"));
     private ExpertBoard board;
@@ -27,7 +27,7 @@ class InfluenceTestFarmer {
 
 
     @BeforeEach
-    void setUp() throws TooManyStudentsException {
+    void setUp() {
         board = new ExpertBoard("Lorenzo", "Giovanni2069", t);
         board.extract4CharacterTesting(2);
         castleA = (ExpertCastle) board.getCastle("Lorenzo"); //WHITE
@@ -37,15 +37,16 @@ class InfluenceTestFarmer {
     }
 
     @Test
-    void applyEffect() throws StudentException {//Lorenzo's turn
-        castleB.addStudentsInDiningRoom(//BLACK
+    @SuppressWarnings("empty")
+    void applyEffect() throws Exception { //Lorenzo's turn
+        castleB.addStudentsInDiningRoom( //BLACK
                 Arrays.asList(
-                    Color.YELLOW,
-                    Color.YELLOW,
-                    Color.YELLOW,
-                    Color.RED,
-                    Color.PINK,
-                    Color.GREEN));
+                        Color.YELLOW,
+                        Color.YELLOW,
+                        Color.YELLOW,
+                        Color.RED,
+                        Color.PINK,
+                        Color.GREEN));
         board.updateProfessorsOwners();
         castleA.addStudentsInDiningRoom( //WHITE - //Lorenzo has 2 coins.
                 Arrays.asList(
@@ -65,7 +66,7 @@ class InfluenceTestFarmer {
                 Color.BLUE, Team.WHITE,
                 Color.RED, Team.BLACK));
         assertEquals(expectedProfessorsMap, professorsMap
-                    , "before applyEffect() use. Initialization check.");
+                , "before applyEffect() use. Initialization check.");
 
         board.playExpertCard(2, (ExpertIsland) board.getIslandList().get(0), Arrays.asList());
 
@@ -79,5 +80,6 @@ class InfluenceTestFarmer {
         assertEquals(expectedProfessorsMap, professorsMap,
                 "after applyEffect() application.");
     }
+
 
 }

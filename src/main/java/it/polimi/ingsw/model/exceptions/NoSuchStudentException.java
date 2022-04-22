@@ -1,16 +1,36 @@
 package it.polimi.ingsw.model.exceptions;
 
-public class NoSuchStudentException extends StudentException{
+import it.polimi.ingsw.model.Color;
 
-    public NoSuchStudentException(String message){
+public class NoSuchStudentException extends StudentException {
+
+    private Color student;
+
+    public NoSuchStudentException(String message) {
         super(message);
     }
 
-    public NoSuchStudentException(){
+    public NoSuchStudentException() {
         super();
     }
 
     public NoSuchStudentException(Throwable cause) {
         super(cause);
     }
+
+    public NoSuchStudentException(Color color) {
+        this.student = color;
+    }
+
+    public NoSuchStudentException(String message, Color color) {
+        super(message);
+        this.student = color;
+    }
+
+    public Color getColor() {
+        return student;
+    }
+
+
 }
+

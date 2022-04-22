@@ -25,7 +25,7 @@ public abstract class Generic {
     }
 
 
-    public abstract void applyEffect(Map<Parameters, Object> ParameterMap) throws NoSuchStudentException, TooManyStudentsException;
+    public abstract void applyEffect(Map<Parameters, Object> ParameterMap) throws NoSuchStudentException, TooManyStudentsException, IllegalArgumentException;
 
     public abstract Map<Parameters, Object> getEffect();
 
@@ -44,8 +44,7 @@ public abstract class Generic {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Generic)) return false;
-        Generic generic = (Generic) o;
+        if (!(o instanceof Generic generic)) return false;
         return getCost() == generic.getCost() && idChar == generic.idChar && Objects.equals(getExplanation(), generic.getExplanation()) && getCharacterName() == generic.getCharacterName();
     }
 

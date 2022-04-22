@@ -7,14 +7,11 @@ import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertCastle;
 import it.polimi.ingsw.model.expert.ExpertIsland;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Student extends Generic {
     private static Bag bag;
-    private static final List<Color> availableStudents = new ArrayList<>();
+    private final List<Color> availableStudents = new ArrayList<>();
     private int numberOfAvailableStudents;
 
     public Student(int idChar) {
@@ -38,56 +35,68 @@ public class Student extends Generic {
      * QUEEN: Adds one student from the card to the dining room
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void applyEffect(Map<Parameters, Object> parameterMap) throws NoSuchStudentException, TooManyStudentsException { //Note: the map could be used to return errors.
-        List<Color> studentList;
+        List<Color> studentList = (List<Color>) parameterMap.get(Parameters.STUDENTLIST);
         ExpertIsland island;
         Color student;
         ExpertCastle playerCastle;
         switch (idChar) {
             case 1 -> {//MONK
-                studentList = (List<Color>) parameterMap.get(Parameters.STUDENTLIST);
                 student = studentList.get(0);
+                if (student == null)
+                    throw new IllegalArgumentException("no student");
                 island = (ExpertIsland) parameterMap.get(Parameters.ISLAND);
-                if (availableStudents.contains(student)) {
-                    island.addStudent(student);//Adds one student per use.
-                    availableStudents.remove(student);
-                    availableStudents.add(bag.extract());
-                    cost = characterName.getCost() + 1;
-                    break;
-                } else
-                    System.out.println("monk test print");
-                throw new NoSuchStudentException("Students not available");
+                if (island == null)
+                    throw new IllegalArgumentException("no island");
+                if (!availableStudents.contains(student)) {
+                    throw new NoSuchStudentException("Students not available");
+                }
+                island.addStudent(student);//Adds one student per use.
+                availableStudents.remove(student);
+                availableStudents.add(bag.extract());
+                cost = characterName.getCost() + 1;
             }
             case 7 -> { //JESTER
-                studentList = (List<Color>) parameterMap.get(Parameters.STUDENTLIST);
-                if (studentList.size() == 6) {
-                    //Passaggio parametri: i primi 3 studenti della list sono quelli del giocoliere(da spostare nel castello)
-                    //i seocondi tre studenti sono quelli da togliere dal castello e mettere nel giocoliere
-                    if (availableStudents.containsAll(studentList.subList(0, 3))) {
-                        //needs to handle the case with less than three students to move.(null in list or number of students in Move)
-                        String currentPlayer = (String) parameterMap.get(Parameters.PLAYERID);
-                        playerCastle = ((Map<String, ExpertCastle>) parameterMap
-                                .get(Parameters.CASTLEMAP))
-                                .get(currentPlayer);
-                        playerCastle.removeStudentsFromWaitingRoom(studentList.subList(3, 6));
-                        playerCastle.addStudentsInWaitingRoom(studentList.subList(0, 3));
-                        availableStudents.addAll(studentList.subList(3, 6));
-                        availableStudents.removeAll(studentList.subList(0, 3));
-                        cost = characterName.getCost() + 1;
-                    } else
-                        throw new IllegalArgumentException("JESTER doesn't contain these students" + availableStudents);
-                } else
-                    throw new IllegalArgumentException("should receive a list of 2 or more student");
+                if (studentList == null)
+                    throw new IllegalArgumentException("no students list");
+                if (!Arrays.asList(2, 4, 6) //legal studentList sizes
+                        .contains(studentList.size()))
+                    throw new IllegalArgumentException("should receive a list of 2, 4 or 6 students");
+                int numberOfStudentsToMove = studentList.size() / 2;
+                //Passaggio parametri: i primi 3 studenti della list sono quelli del giocoliere(da spostare nel castello)
+                //i seocondi tre studenti sono quelli da togliere dal castello e mettere nel giocoliere
+                List<Color> studentsToAdd = studentList.subList(0, numberOfStudentsToMove);
+                List<Color> studentsToRemove = studentList.subList(numberOfStudentsToMove, numberOfStudentsToMove * 2);
+                if (!availableStudents.containsAll(studentsToAdd)) {
+                    List<Color> temp = new ArrayList<>(availableStudents);
+                    for (Color c : studentsToAdd) {
+                        if (!temp.contains(c))
+                            throw new NoSuchStudentException("jester doesn't contain this student: ", c);
+                        temp.remove(c);
+                    }
+                }
+                String currentPlayer = (String) parameterMap.get(Parameters.PLAYERID);
+                playerCastle
+                        = ((Map<String, ExpertCastle>) parameterMap
+                        .get(Parameters.CASTLEMAP))
+                        .get(currentPlayer);
+                playerCastle.removeStudentsFromWaitingRoom(studentsToRemove); //here is thrown the StudentException
+                playerCastle.addStudentsInWaitingRoom(studentsToAdd);
+                for (Color c : studentsToAdd)
+                    availableStudents.remove(c);
+                availableStudents.addAll(3, studentsToRemove);
+                cost = characterName.getCost() + 1;
             }
-            case 11 ->//QUEEN
-                    cost = characterName.getCost() + 1;
+            case 11 -> {//QUEEN
+                cost = characterName.getCost() + 1;
+            }
         }
     }
 
     public Map<Parameters, Object> getEffect(){
         Map<Parameters, Object> parameterMap = new HashMap<>();
-        List<Color> students = new ArrayList<>(availableStudents);
-        parameterMap.put(Parameters.STUDENTLIST, students);
+        parameterMap.put(Parameters.STUDENTLIST, new ArrayList<>(availableStudents));
         return parameterMap;
     }
 }

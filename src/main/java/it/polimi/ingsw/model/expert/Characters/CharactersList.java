@@ -25,7 +25,7 @@ public enum CharactersList { //TODO: complete characters' explaination
             -More MAILMAN: \s"""),
     WITCH(5, """
             Witch: this character can prevent anyone from conquering
-            an island, the effect is valid through someone moves 
+            an island, the effect is valid through someone moves
             mother nature on that island.
             call function: -Pay WITCH
             -More WITCH: \s"""),
@@ -66,20 +66,30 @@ public enum CharactersList { //TODO: complete characters' explaination
             call function: -Pay TAXMAN: Color
             -More TAXMAN: \s""");
 
-    private int id;
+    private final int id;
     private String explanation;
 
     /**
      * The cost is also dynamically added to the explanation
      */
-    CharactersList(int id, String explanation){
+    CharactersList(int id, String explanation) {
         this.id = id;
         this.explanation = explanation;
     }
-    protected String getExplanation(){ //TODO: finish explainations
+
+    CharactersList(int id) {
+        this.id = id;
+    }
+
+    static CharactersList getChar(int charId) {
+        return CharactersList.values()[charId - 1];
+    }
+
+    String getExplanation() { //TODO: finish explainations
         return this.explanation;
     }
-    protected int getCost(){
+
+    int getCost() {
         return id % 3;
     }
 

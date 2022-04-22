@@ -9,16 +9,26 @@ import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import java.util.List;
 
 public class ExpertCastle extends Castle {
+
     private int coins;
-    public ExpertCastle(String PLayerID, Team team, int nPlayer, List<Color> Students) {
-        super(PLayerID, team, nPlayer, Students);
+
+    /**
+     * Castle default constructor
+     *
+     * @param team        team the owner of the castle plays in
+     * @param nPlayer     number of players in the game
+     * @param studentList student list to initialize the waiting room
+     */
+    public ExpertCastle(Team team, int nPlayer, List<Color> studentList) {
+        super(team, nPlayer, studentList);
         coins = 1;
     }
 
     /**
      * Adds also a coin to the player
+     *
      * @param color color of the student to add
-     * @return if the bounds are respected
+     * @throws TooManyStudentsException if the dining room already contains 10 students of the color <code>color</code>
      */
     public void addStudentInDiningRoom(Color color) throws TooManyStudentsException {
         super.addStudentInDiningRoom(color);
@@ -28,8 +38,9 @@ public class ExpertCastle extends Castle {
 
     /**
      * Adds a coin to this player
-     * @param students – The list of students to add to the dining room.
-     * @throws TooManyStudentsException
+     *
+     * @param students The list of students to add to the dining room.
+     * @throws TooManyStudentsException if the dining room already contains 10 students of one of the colors
      */
     public void addStudentsInDiningRoom(List<Color> students) throws TooManyStudentsException {
         boolean check = true;
@@ -49,7 +60,7 @@ public class ExpertCastle extends Castle {
             diningRoom.replace(color, diningRoom.get(color)-1);
         }
         else
-            throw new NoSuchStudentException("Student " + color + "not in dining room");
+            throw new NoSuchStudentException("Student " + color + "not in dining room", color);
     }
 
     /**Checks if the player can pay and if possible
@@ -67,7 +78,8 @@ public class ExpertCastle extends Castle {
 
     /**
      * If the character doesn't <em>apply the effect</em> gives back to the player the money
-     * @param price
+     *
+     * @param price the same price as paid before
      */
     public void unpayCharacter(int price){
         this.coins += price;

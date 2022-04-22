@@ -74,6 +74,6 @@ public class TavernTest{
                         CharactersList.QUEEN,
                         CharactersList.TAXMAN));
         assertEquals(expertModeCharactersList4Comparison, expertModeCharacters,
-                "both CharacterList-lists should contain all characters names");//TODO: understand why lc is null (in debugging isn't)
+                "both CharacterList-lists should contain all characters names");
     }
 }

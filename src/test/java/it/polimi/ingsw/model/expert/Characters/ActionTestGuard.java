@@ -3,8 +3,7 @@ package it.polimi.ingsw.model.expert.Characters;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.Turn;
-import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import it.polimi.ingsw.model.expert.ExpertIsland;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +33,7 @@ public class ActionTestGuard { //THIRD CHARACTER
     }
 
     @Test
-    void applyEffectTest() throws NoSuchStudentException, TooManyStudentsException {
+    void applyEffectTest() throws StudentException {
         Map<Color, Team> professorsMap
                 = new HashMap<>(
                 Map.of(

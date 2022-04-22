@@ -2,9 +2,8 @@ package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.NotYourTurnException;
-import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.model.expert.Characters.CharactersList;
 import it.polimi.ingsw.model.expert.Characters.Student;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -34,19 +33,21 @@ public class ExpertBoardTest{
 
     /**
      * Tries the easiest implementation of the method - Deeper testing in each Character test class
+     *
      * @throws NoSuchStudentException
      * @throws TooManyStudentsException
      */
+    //TODO: test exceptions
     @Test
-    public void testPlayExpertCard() throws StudentException, NotYourTurnException {
+    public void testPlayExpertCard() throws Exception {
         board.playCard("Lorenzo", 1);
-        if(board.getAvailableCharacterCards().get(4) == null) {
-            assertFalse(board.playExpertCard(4));
+        if (board.getAvailableCharacterCards().get(4) == null) {
+            assertThrows(Exception.class, () -> board.playExpertCard(4),
+                    "Mailman not in extracted");
             board.extract4CharacterTesting(4);
-            assertTrue(board.playExpertCard(4));
-        }else
-            assertTrue(board.playExpertCard(4));
-
+        }
+        board.playExpertCard(4);
+        assertEquals(CharactersList.MAILMAN, board.getActiveChar());
     }
 
 

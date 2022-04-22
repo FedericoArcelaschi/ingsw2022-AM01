@@ -4,7 +4,7 @@ import java.util.*;
 public class Bag {
 
     private final Map<Color, Integer> students;
-    private long seed;
+    private final long seed;
     private final Random random;
 
     public Bag(int studentsPerColor){
@@ -15,10 +15,10 @@ public class Bag {
         random.setSeed(seed);
     }
 
-    public Bag(int studentsPerColor, long seed){
+    public Bag(int studentsPerColor, long seed) {//TODO: use in Board
         this.seed = seed;
         students = new HashMap<>();
-        for(Color c: Color.values()) students.put(c,studentsPerColor);
+        for (Color c : Color.values()) students.put(c, studentsPerColor);
         random = new Random(seed);
     }
 
@@ -43,12 +43,13 @@ public class Bag {
 
     /**
      * extract random students from the pool of students represented with the Map students multiple times
+     *
      * @param n number of student to extract
      * @return a list of colors of the students extracted
      */
-    public List<Color> multipleExtract(int n){
+    public List<Color> multipleExtract(int n) {
         List<Color> l = new ArrayList<>();
-        for(int i=0; i<n; i++){
+        for (int i = 0; i < n; i++) {
             l.add(this.extract());
         }
         return l;

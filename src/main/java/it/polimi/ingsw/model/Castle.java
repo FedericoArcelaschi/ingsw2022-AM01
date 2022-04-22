@@ -18,18 +18,18 @@ public class Castle {
     private static final int waitingRoomSize3Players = 7;
     private static final int numberOfCards = 10;
 
-    public Castle(String PLayerID, Team team, int nPlayer, List<Color> students){
-        if(nPlayer == 3) this.waitingRoomSizePerColor = waitingRoomSize3Players;
+    public Castle(Team team, int nPlayer, List<Color> students) {
+        if (nPlayer == 3) this.waitingRoomSizePerColor = waitingRoomSize3Players;
         else this.waitingRoomSizePerColor = waitingRoomSize2Players;
         this.waitingRoom = new ArrayList<>(students);
         this.diningRoom = new HashMap<>();
-        for(Color c : Color.values()){
+        for (Color c : Color.values()) {
             diningRoom.put(c, 0);
         }
         this.cards = new Boolean[numberOfCards];
         this.towerColor = team;
         this.lastPlayedCard = -1;
-        for(int i=0; i<10; i++) cards[i] = false;
+        for (int i = 0; i < 10; i++) cards[i] = false;
     }
 
     /**
@@ -51,7 +51,7 @@ public class Castle {
      */
     public void addStudentInDiningRoom(Color student) throws TooManyStudentsException{
         if (diningRoom.get(student) == diningRoomSize) {
-            throw new TooManyStudentsException("There are alredy 10 students of" + student + "color in the Dining Room");
+            throw new TooManyStudentsException("There are alredy 10 students of" + student + "color in the Dining Room", student);
         }
         diningRoom.put(student, diningRoom.get(student) + 1);
     }
