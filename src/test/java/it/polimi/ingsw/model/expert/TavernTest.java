@@ -55,7 +55,7 @@ public class TavernTest{
     public void testExtract4Testing() {
         List<CharactersList> expertModeCharacters = new ArrayList<>();
         for (int i = 1; i < 13; i++) {
-            expertModeCharacters.add(tavern.extract4testing(i).getCharacterName());
+            expertModeCharacters.add(tavern.extract4testing(i).getCharacterType());
         }
         //System.out.println(tavern.extract4testing(3).getCharacterName().name());
         List<CharactersList> expertModeCharactersList4Comparison

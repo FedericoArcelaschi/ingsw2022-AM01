@@ -70,6 +70,7 @@ class InfluenceTestFarmer {
 
         board.playExpertCard(2, (ExpertIsland) board.getIslandList().get(0), Arrays.asList());
 
+
         professorsMap = board.getProfessorsMap();
         expectedProfessorsMap = Map.of(
                 Color.YELLOW, Team.WHITE,

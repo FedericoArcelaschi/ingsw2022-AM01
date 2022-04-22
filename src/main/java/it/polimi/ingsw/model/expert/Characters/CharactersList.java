@@ -81,16 +81,20 @@ public enum CharactersList { //TODO: complete characters' explaination
         this.id = id;
     }
 
-    static CharactersList getChar(int charId) {
+    public static CharactersList getChar(int charId) {
         return CharactersList.values()[charId - 1];
     }
 
-    String getExplanation() { //TODO: finish explainations
+    String getExplanation() {
         return this.explanation;
     }
 
     int getCost() {
+        if(id == 3) return 3;
         return id % 3;
     }
 
+    public int getId() {
+        return id;
+    }
 }

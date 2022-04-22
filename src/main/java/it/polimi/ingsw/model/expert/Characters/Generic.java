@@ -19,7 +19,7 @@ public abstract class Generic {
      */
     public Generic(int idChar) {
         this.idChar = idChar;
-        this.characterName = CharactersList.values()[idChar - 1];
+        this.characterName = CharactersList.getChar(idChar);
         cost = characterName.getCost();
         explanation = characterName.getExplanation();
     }
@@ -29,7 +29,7 @@ public abstract class Generic {
 
     public abstract Map<Parameters, Object> getEffect();
 
-    public CharactersList getCharacterName() {
+    public CharactersList getCharacterType() {
         return characterName;
     }
 
@@ -45,11 +45,11 @@ public abstract class Generic {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Generic generic)) return false;
-        return getCost() == generic.getCost() && idChar == generic.idChar && Objects.equals(getExplanation(), generic.getExplanation()) && getCharacterName() == generic.getCharacterName();
+        return getCost() == generic.getCost() && idChar == generic.idChar && Objects.equals(getExplanation(), generic.getExplanation()) && getCharacterType() == generic.getCharacterType();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCost(), getExplanation(), idChar, getCharacterName());
+        return Objects.hash(getCost(), getExplanation(), idChar, getCharacterType());
     }
 }

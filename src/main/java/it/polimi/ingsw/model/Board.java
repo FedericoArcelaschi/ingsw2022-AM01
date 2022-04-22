@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class Board {
+
     private static final int numOfStudentsPerColor = 24;
     protected int motherNaturePosition = 0;
     protected int nPlayer;
@@ -321,12 +322,12 @@ public class Board {
      * on the current island mother nature lands on.
      * Checks if nearby islands have the same owner and possibly joins them.
      * Checks if someone won the game after an island is conquered
-     * @param move number of steps forward of mother nature
+     * @param steps number of steps forward of mother nature
      */
-    public void moveMotherNature(int move) {
-        if(move >= possibleMovingSteps) throw new IllegalArgumentException("too many steps");
-        if (motherNaturePosition + move / islandList.size() >= 1) motherNaturePosition += move - islandList.size();
-        else motherNaturePosition += move;
+    public void moveMotherNature(int steps) {
+        if(steps >= possibleMovingSteps) throw new IllegalArgumentException("too many steps");
+        if (motherNaturePosition + steps / islandList.size() >= 1) motherNaturePosition += steps - islandList.size();
+        else motherNaturePosition += steps;
         conquerIsland(islandList.get(motherNaturePosition));
     }
 
@@ -384,5 +385,7 @@ public class Board {
         return professorsMap;
     }
 
-    public int getPossibleMovingSteps() {return possibleMovingSteps;}
+    public int getPossibleMovingSteps() {
+        return possibleMovingSteps;
+    }
 }

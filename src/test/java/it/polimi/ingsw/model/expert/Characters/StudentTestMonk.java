@@ -30,7 +30,6 @@ public class StudentTestMonk {
 
     /**
      * Tests adding a student to the island.
-     * Using the new method <code>.GetEffect()</code>
      */
     @Test
     @SuppressWarnings("unchecked")
@@ -68,7 +67,6 @@ public class StudentTestMonk {
         numberOfStudentsAfter = island.getStudents().get(availableStudent.get(0));
         assertEquals(numberOfStudentsBefore + 1, numberOfStudentsAfter,
                 "The student number of color " + availableStudent + " must be increased");
-        //TODO: mappa confrontata con lista!
         for (Color c : Color.values()) {
             for (int i = 0; i < island.getStudents().get(c); i++) {
                 studentsOnIsland.remove(c);
@@ -127,13 +125,17 @@ public class StudentTestMonk {
         monkChar = board.getAvailableCharacterCards().get(1);
         availableStudent = ((List<Color>) monkChar.getEffect().get(Parameters.STUDENTLIST));
 
-        //note: I pass 4 colors and the MONK adds only the first
         //the effect should be applied only for the fist time (1 coin is present)
-        board.playExpertCard(1, island, availableStudent);
+                                                                //>passes only one student as list.
+        board.playExpertCard(1, island, availableStudent.subList(0, 1));
+
         assertEquals(0, ((ExpertCastle) board.getCastle(board.getCurrentPlayer())).getCoins(), "Error: coins");
+
         assertThrows(Exception.class, () -> board.playExpertCard(1, island, availableStudent),
                 "Monk was played once and now the player is out of money.");
+
         assertEquals(0, ((ExpertCastle) board.getCastle(board.getCurrentPlayer())).getCoins(), "Error: coins");
+
         //check if it works as expected
         for (Color c : presentStudents.keySet()) {
             if (c == availableStudent.get(0))
@@ -141,5 +143,6 @@ public class StudentTestMonk {
             else
                 assertEquals(presentStudents.get(c), island.getStudents().get(c), "Assertion color " + c + " failed");
         }
+
     }
 }
