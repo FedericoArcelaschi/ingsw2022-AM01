@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Turn;
@@ -26,7 +27,8 @@ public class Game{
         if(command.getType() == CommandType.GET){
             switch (command.getAttributesMap().get(CommandAttribute.WHAT)){
                 case "deck" -> {
-                    return getDeck(command.getPlayerID());
+                    Gson gson = new Gson();
+                    return gson.toJson(getDeck(command.getPlayerID()));
                 }
             }
         }
@@ -38,13 +40,7 @@ public class Game{
      * @param playerID the player that called the command
      * @return String that shows availability for each card of the deck
      */
-    private String getDeck(String playerID){
-        Boolean[] deck = board.getAvailableCards(playerID);
-        StringBuilder s = new StringBuilder(playerID+"'s deck:\n");
-        for (int i = 0; i < deck.length; i++) {
-            String isPlayed = deck[i] ? "not available" : "available";
-            s.append(i+1).append(": ").append(isPlayed).append("\n");
-        }
-        return s.toString();
+    private Boolean[] getDeck(String playerID){
+        return board.getAvailableCards(playerID);
     }
 }
