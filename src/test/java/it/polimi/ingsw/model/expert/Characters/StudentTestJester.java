@@ -19,9 +19,14 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+/**
+ * test for the seventh character.
+ */
 class StudentTestJester {
     private ExpertBoard board;
     private Generic jester;
+
     @BeforeEach
     void setUp() {
         Turn t = new Turn(List.of("Lollo99", "FedericaPellegrini"));
@@ -53,8 +58,9 @@ class StudentTestJester {
                 studentsInWaitingRoom.get(0),
                 studentsInWaitingRoom.get(1),
                 studentsInWaitingRoom.get(2)));
-        System.out.println("before: availableStudents" + availableStudents);
+        System.out.println("Jester Effect:\nbefore: availableStudents" + availableStudents);
         System.out.println("before: waitingroom" + studentsInWaitingRoom);
+
         board.playExpertCard(7, studentListForJester);
 
         System.out.println("after: availableStudents" + jester
@@ -99,6 +105,7 @@ class StudentTestJester {
         } catch (IllegalArgumentException e) {
             assertEquals("should receive a list of 2, 4 or 6 students", e.getMessage());
         } catch (StudentException e) {
+            e.printStackTrace();
             fail("wrong exception");
         }
     }
@@ -155,7 +162,8 @@ class StudentTestJester {
             notAvailableStudents.addAll(
                     Arrays.asList(Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE));
         Map<Parameters, Object> parametersMap
-                = Map.of(Parameters.STUDENTLIST, notAvailableStudents);
+                = Map.of(Parameters.PLAYERID, board.getCurrentPlayer(),
+                Parameters.STUDENTLIST, notAvailableStudents);
         try {
             jester.applyEffect(parametersMap);
         } catch (NoSuchStudentException e) {
@@ -163,6 +171,7 @@ class StudentTestJester {
             assertEquals(notAvailableStudents.get(0), e.getColor(),
                     "jester doesn't contain " + e.getColor() + " student");
         } catch (IllegalArgumentException | TooManyStudentsException e) {
+            e.printStackTrace();
             fail("should not arrive here");
         }
     }

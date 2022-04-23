@@ -5,12 +5,9 @@ import it.polimi.ingsw.model.exceptions.CoinException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
-import it.polimi.ingsw.model.expert.Characters.CharactersList;
-import it.polimi.ingsw.model.expert.Characters.Generic;
-import it.polimi.ingsw.model.expert.Characters.Parameters;
-import it.polimi.ingsw.model.expert.Characters.Tavern;
+import it.polimi.ingsw.model.expert.Characters.*;
 
-import java.lang.reflect.Executable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,13 +88,13 @@ public class ExpertBoard extends Board {
     /**
      * Tries to pay for the card and then calls applyEffect with the right parameters
      *
-     * @param idChar character id correspondingo to CharacterList's position
+     * @param idChar      character id correspondingo to CharacterList's position
+     * @param islandIndex - index as seen in the view (user input)
      * @throws IllegalStateException    another Character was already activated this turn
      * @throws IllegalArgumentException the selected character was not extracted during this turn
-     * @throws Exception                if the player doesn't have the needed coins to pay
+     * @throws CoinException if the player doesn't have the needed coins to pay
      */
-
-    public void playExpertCard(int idChar, ExpertIsland island, List<Color> studentsList) throws IllegalStateException, IllegalArgumentException, CoinException, StudentException {
+    public void playExpertCard(int idChar, int islandIndex, List<Color> studentsList) throws StudentException {
         Generic ec = checkLegalExpertCard(idChar);
         ExpertCastle currPlayerCastle = (ExpertCastle) castleMap.get(getCurrentPlayer());
         int cost = ec.getCost();
@@ -106,14 +103,8 @@ public class ExpertBoard extends Board {
 
         //in/out parameters for the applyEffect method
         //Parameter for setup (will clean code up)
-        if (island == null) island = (ExpertIsland) getIslandList().get(0);
-        Map<Parameters, Object> parametersMap
-                = new HashMap<>(Map.of(
-                Parameters.PLAYERID, getCurrentPlayer(),
-                Parameters.ISLAND, island,
-                Parameters.CASTLEMAP, castleMap,
-                Parameters.PROFESSORSMAP, professorsMap,
-                Parameters.STUDENTLIST, studentsList));
+
+        Map<Parameters, Object> parametersMap = initializeExpertCharacterParameters(idChar, islandIndex, studentsList);
 
         try {
             ec.applyEffect(parametersMap);
@@ -127,7 +118,30 @@ public class ExpertBoard extends Board {
             //TODO handle the exception
             return;
         }
+
+        outExpertCharacterParameters(parametersMap);
+        if (isWinningPosition() != null) ;
+        //TODO: end game --> valore di uscita
+
         activeChar = ec;
+    }
+
+    private void outExpertCharacterParameters(Map<Parameters, Object> parametersMap) {
+        possibleMovingSteps = (Integer) parametersMap.get(Parameters.STEPS);
+    }
+
+    private Map<Parameters, Object> initializeExpertCharacterParameters(int idChar, int islandIndex, List<Color> studentsList) {
+        Map<Parameters, Object> parametersMap = new HashMap<>(
+                Map.of(
+                        Parameters.PLAYERID, getCurrentPlayer(),
+                        Parameters.ISLAND, getIslandList().get(islandIndex),
+                        Parameters.CASTLEMAP, castleMap,
+                        Parameters.PROFESSORSMAP, professorsMap,
+                        Parameters.STUDENTLIST, studentsList,
+                        Parameters.STEPS, possibleMovingSteps));
+
+        //TODO: possibly pass the right parameters
+        return parametersMap;
     }
 
     private Generic checkLegalExpertCard(int idChar) {
@@ -147,24 +161,30 @@ public class ExpertBoard extends Board {
 
     /**
      * Method only for Mailman call
+     *
      * @param idChar number of the character as defined in the Enum
      */
-    public void playExpertCard(int idChar) throws CoinException {
-        Generic ec = checkLegalExpertCard(idChar);
-        if(idChar != 4)
-            throw new IllegalArgumentException("This method only works for the MailMan");
-        String currentPlayer = this.getCurrentPlayer();
-        int cost = ec.getCost();
-        ExpertCastle currPlayerCastle = (ExpertCastle) castleMap.get(currentPlayer);
-        if (!currPlayerCastle.payCharacter(cost)) {
-            throw new CoinException(cost, currPlayerCastle.getCoins());
-        }
-        activeChar = expertCharactersCards.get(4);
+    public void playExpertCard(int idChar) throws CoinException, StudentException {
+        playExpertCard(idChar, 0, Arrays.asList());
+    }
 
+    /**
+     * Smaller version of the playExpertCard()
+     * Removes the coins from the Castle and calls the applyEffect() of the right character.
+     *
+     * @param idChar char number to call the method on the right object
+     */
+    public void playExpertCard(int idChar, List<Color> studentsList) throws CoinException, StudentException {
+        playExpertCard(idChar, 0, studentsList);
+    }
+
+    public void playExpertCard(int idChar, int islandIndex, Color student) throws StudentException {
+        playExpertCard(idChar, 0, List.of(student));
     }
 
     /**
      * Adds to the available Characters also the Character #idChar.
+     *
      * @param idChar number of the character as defined in the enum
      */
     public Generic extract4CharacterTesting(int idChar) {
@@ -188,17 +208,9 @@ public class ExpertBoard extends Board {
             conquerIsland(currIsland);
         else {
             currIsland.unlockIsland();
+            ((Block) expertCharactersCards.get(5)).addBlockTile();
             //TODO: char.add(blockTile);
         }
-    }
-
-    /**
-     * Smaller version of the playExpertCard()
-     * Removes the coins from the Castle and calls the applyEffect() of the right character.
-     * @param idChar char number to call the method on the right object
-     */
-    public void playExpertCard(int idChar, List<Color> studentsList) throws IllegalStateException, CoinException, StudentException {
-            playExpertCard(idChar, (ExpertIsland) this.getIslandList().get(0), studentsList);
     }
 
     /**

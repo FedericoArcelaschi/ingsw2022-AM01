@@ -17,7 +17,10 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class ActionTestGuard { //THIRD CHARACTER
+/**
+ * test for the third character.
+ */
+public class ActionTestGuard {
     private ExpertBoard board;
     private Generic guardChar;
     private Map<Parameters, Object> ParametersMap;
@@ -33,7 +36,7 @@ public class ActionTestGuard { //THIRD CHARACTER
     }
 
     @Test
-    void applyEffectTest() throws StudentException {
+    void applyEffectTest() throws StudentException { //THIRD CHARACTER
         Map<Color, Team> professorsMap
                 = new HashMap<>(
                 Map.of(
@@ -47,7 +50,7 @@ public class ActionTestGuard { //THIRD CHARACTER
             ExpertIsland island =
                     (ExpertIsland) board.getIslandList().get(j);
             assertNull(island.getOwnership(),
-                    "First every island is initialized");
+                    "First every island is well initialized");
             ParametersMap.putAll(
                     Map.of(
                             Parameters.ISLAND, island,

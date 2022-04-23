@@ -8,5 +8,6 @@ public enum Parameters {
     CASTLEMAP,
     PROFESSORSMAP,
     STUDENTLIST,
-    MOVE
+    STEPS,
+    AVAILABLEBLOCKTILES
 }

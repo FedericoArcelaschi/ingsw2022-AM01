@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import it.polimi.ingsw.model.expert.ExpertCastle;
-import it.polimi.ingsw.model.expert.ExpertIsland;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +36,6 @@ class InfluenceTestFarmer {
     }
 
     @Test
-    @SuppressWarnings("empty")
     void applyEffect() throws Exception { //Lorenzo's turn
         castleB.addStudentsInDiningRoom( //BLACK
                 Arrays.asList(
@@ -65,12 +63,9 @@ class InfluenceTestFarmer {
                 Color.PINK, Team.BLACK,
                 Color.BLUE, Team.WHITE,
                 Color.RED, Team.BLACK));
-        assertEquals(expectedProfessorsMap, professorsMap
-                , "before applyEffect() use. Initialization check.");
-
-        board.playExpertCard(2, (ExpertIsland) board.getIslandList().get(0), Arrays.asList());
-
-
+        assertEquals(expectedProfessorsMap, professorsMap,
+                "before applyEffect() use. Initialization check.");
+        board.playExpertCard(2);
         professorsMap = board.getProfessorsMap();
         expectedProfessorsMap = Map.of(
                 Color.YELLOW, Team.WHITE,
@@ -81,6 +76,5 @@ class InfluenceTestFarmer {
         assertEquals(expectedProfessorsMap, professorsMap,
                 "after applyEffect() application.");
     }
-
 
 }

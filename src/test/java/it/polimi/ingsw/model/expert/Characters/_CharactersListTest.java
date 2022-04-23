@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.expert.Characters;
 
 import org.junit.jupiter.api.Test;
 
+import static it.polimi.ingsw.model.expert.Characters.CharactersList.getChar;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class _CharactersListTest {
@@ -28,7 +29,7 @@ public class _CharactersListTest {
 
     @Test
     void testGetChar() {
-        assertEquals(CharactersList.MONK, CharactersList.getChar(1));
-        assertEquals(CharactersList.CENTAUR, CharactersList.getChar(6));
+        assertEquals(CharactersList.MONK, getChar(1));
+        assertEquals(CharactersList.CENTAUR, getChar(6));
     }
 }

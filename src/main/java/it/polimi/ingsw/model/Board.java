@@ -17,9 +17,9 @@ public class Board {
     protected final List<Cloud> cloudList = new ArrayList<>();
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
-    protected Map<Color, Team> professorsMap;
+    protected Map<Color, Team> professorsMap = new HashMap<>();
     protected final Turn turn;
-    protected int possibleMovingSteps; //calculated form the card: must be stored in memory til the player action turn
+    protected Integer possibleMovingSteps = 0; //calculated form the card: must be stored in memory til the player action turn
 
 
     public Board(String playerID1, String playerID2, Turn turn){
@@ -194,7 +194,7 @@ public class Board {
         if(!turn.getCurrentPlayer().equals(PlayerID))
             throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s planning turn. " + PlayerID + " can't choose a card to play");
         Castle castle = castleMap.get(PlayerID);
-        possibleMovingSteps = (card+1)/2;
+        possibleMovingSteps = (card + 1) / 2;
         return castle.playCard(card);
     }
 
@@ -329,6 +329,7 @@ public class Board {
         if (motherNaturePosition + steps / islandList.size() >= 1) motherNaturePosition += steps - islandList.size();
         else motherNaturePosition += steps;
         conquerIsland(islandList.get(motherNaturePosition));
+
     }
 
     /**

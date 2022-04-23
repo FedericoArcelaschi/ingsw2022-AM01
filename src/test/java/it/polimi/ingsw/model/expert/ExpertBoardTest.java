@@ -7,8 +7,6 @@ import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.Characters.CharactersList;
 import it.polimi.ingsw.model.expert.Characters.Student;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +23,7 @@ public class ExpertBoardTest{
     public void setUp() throws Exception {
         Turn t = new Turn(Arrays.asList("Lorenzo", "Federico", "Giovanni"));
         board = new ExpertBoard("Lorenzo", "Federico", "Giovanni", t);
+        board.playCard("Lorenzo", 3);
     }
 
     @Test
@@ -44,23 +43,25 @@ public class ExpertBoardTest{
      */
     //TODO: test exceptions
     @Test
-    public void testPlayExpertCard(){
+    public void testPlayExpertCard() {
         if (board.getAvailableCharacterCards().get(4) == null) {
             assertThrows(IllegalArgumentException.class, () -> board.playExpertCard(4),
                     "Mailman not in extracted");
             board.extract4CharacterTesting(4);
         }
-        try{
+        int expectedPossibleMovingSteps = board.getPossibleMovingSteps() + 2;
+        try {
             board.playExpertCard(4);
+        } catch (Exception e) {
+            fail("playExpertCard() method throw exception " + e);
         }
-        catch(Exception e){
-            fail();
-        }
+        assertEquals(expectedPossibleMovingSteps, board.getPossibleMovingSteps());
         assertEquals(CharactersList.MAILMAN, board.getActiveChar());
     }
 
     @Test
     void testPlayExpertCardException1(){
+
         board.extract4CharacterTesting(4);
 
         try{
@@ -82,6 +83,7 @@ public class ExpertBoardTest{
     }
 
     @Test
+    @SuppressWarnings("empty")
     void testPlayExpertCardException2(){
         int i;
         for (i = 1; i < 13; i++) {
@@ -99,6 +101,7 @@ public class ExpertBoardTest{
     }
 
     @Test
+    @SuppressWarnings("empty")
     void testPlayExpertCardException3(){
         board.extract4CharacterTesting(4);
         try {
@@ -110,7 +113,7 @@ public class ExpertBoardTest{
 
         try {
             board.playExpertCard(4);
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | StudentException e) {
             assertEquals("MAILMAN is already active in this turn.", e.getMessage());
         }
 
@@ -129,37 +132,28 @@ public class ExpertBoardTest{
     }
 
     @Test
-    void testPlayExpertCardException4(){
+    @SuppressWarnings("empty")
+    void testPlayExpertCardException4() {
         ExpertCastle currentPlayerCastle = (ExpertCastle) board.getCastle(board.getCurrentPlayer());
         currentPlayerCastle.payCharacter(1);
         board.extract4CharacterTesting(4);
         try {
             board.playExpertCard(4);
             fail();
-        } catch (CoinException e){
+        } catch (CoinException e) {
             assertEquals("You had only 0 coins, while 1 coin was needed.",
                     e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             fail();
         }
         board.extract4CharacterTesting(3);
         try {
             board.playExpertCard(3, Arrays.asList());
             fail();
-        } catch (CoinException e){
+        } catch (CoinException e) {
             assertEquals("You had only 0 coins, while 3 coins were needed.",
                     e.getMessage());
-        } catch (Exception e){
-            e.printStackTrace();
-            fail();
-        }
-        try {
-            board.playExpertCard(3);
-            fail();
-        } catch (IllegalArgumentException e){
-            assertEquals("This method only works for the MailMan",
-                    e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             fail();
         }

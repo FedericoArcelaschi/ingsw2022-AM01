@@ -25,7 +25,7 @@ public abstract class Generic {
     }
 
 
-    public abstract void applyEffect(Map<Parameters, Object> ParameterMap) throws NoSuchStudentException, TooManyStudentsException, IllegalArgumentException;
+    public abstract void applyEffect(Map<Parameters, Object> parameterMap) throws NoSuchStudentException, TooManyStudentsException, IllegalArgumentException;
 
     public abstract Map<Parameters, Object> getEffect();
 

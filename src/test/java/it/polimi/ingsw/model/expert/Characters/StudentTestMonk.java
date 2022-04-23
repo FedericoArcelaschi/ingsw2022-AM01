@@ -127,11 +127,11 @@ public class StudentTestMonk {
 
         //the effect should be applied only for the fist time (1 coin is present)
                                                                 //>passes only one student as list.
-        board.playExpertCard(1, island, availableStudent.subList(0, 1));
+        board.playExpertCard(1, 1, availableStudent.subList(0, 1));
 
         assertEquals(0, ((ExpertCastle) board.getCastle(board.getCurrentPlayer())).getCoins(), "Error: coins");
 
-        assertThrows(Exception.class, () -> board.playExpertCard(1, island, availableStudent),
+        assertThrows(Exception.class, () -> board.playExpertCard(1, 1, availableStudent),
                 "Monk was played once and now the player is out of money.");
 
         assertEquals(0, ((ExpertCastle) board.getCastle(board.getCurrentPlayer())).getCoins(), "Error: coins");
