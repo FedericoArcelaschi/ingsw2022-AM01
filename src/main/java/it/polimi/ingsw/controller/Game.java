@@ -43,7 +43,12 @@ public class Game{
             }
             case PLAY_CARD -> {
                 String player = command.getPlayerID();
-                board.getCastleMap().get(player).playCard(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
+                try {
+                    board.playCard(command.getPlayerID() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
+                } catch (NotYourTurnException e) {
+                    e.printStackTrace();
+                    return "It's not your turn yet!";
+                }
                 return "Card has been played successfully!";
             }
             case MOVE_STUDENT -> { //Here for now I assume that the list of students in input is
