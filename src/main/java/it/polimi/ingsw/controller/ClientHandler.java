@@ -25,7 +25,7 @@ public class ClientHandler implements Runnable {
             // Leggo e scrivo nella connessione finche' non ricevo "quit"
             while (true) {
                 String line = in.nextLine();
-                if (line.equals("quit")) {
+                if (line.equals("quit")) { //needs to be changed accordingly to how we want to interrupt connection
                     break;
                 } else {
                     String responseMessage = game.executeCommand(parser.fromJson(line, Command.class));

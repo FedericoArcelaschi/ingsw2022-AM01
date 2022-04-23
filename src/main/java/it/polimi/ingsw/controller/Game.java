@@ -32,86 +32,19 @@ public class Game{
     public String executeCommand(Command command){
         switch(command.getType()) {
             case GET -> {
-                switch (command.getAttributesMap().get(CommandAttribute.WHAT)) {
-                    case "deck" -> {
-                        return gson.toJson(getDeck(command.getPlayerID()));
-                    }
-                    case "professors" -> {
-                        return gson.toJson(getProfessorMap());
-                    }
-                }
+                return getCommand(command);
             }
             case PLAY_CARD -> {
-                String player = command.getPlayerID();
-                try {
-                    board.playCard(command.getPlayerID() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
-                } catch (NotYourTurnException e) {
-                    e.printStackTrace();
-                    return "It's not your turn yet!";
-                }
-                return "Card has been played successfully!";
+                return playCardCommand(command);
             }
-            case MOVE_STUDENT -> { //Here for now I assume that the list of students in input is
-                                   //given as a single string of Color separated by commas.
-                                   //Needs to be changed accordingly if the convention changes.
-                List<String> studentList;
-                studentList = Arrays.asList(command.getAttributesMap().get(CommandAttribute.ID).split("\\s*,\\s*"));
-                List<Color> students = new ArrayList<>();
-                for (String stud : studentList) {
-                    switch (stud){
-                        case "Yellow" -> {
-                            students.add(Color.YELLOW);
-                        }case "Blue" -> {
-                            students.add(Color.BLUE);
-                        }case "Green" -> {
-                            students.add(Color.GREEN);
-                        }case "Red" -> {
-                            students.add(Color.RED);
-                        }case "Pink" -> {
-                            students.add(Color.PINK);
-                        }
-                    }
-                }
-                switch (CommandAttribute.WHERE.toString()){
-                    case "Dining room" -> {
-                        try {
-                            board.moveStudentToDR(command.getPlayerID(), students);
-                        } catch (NoSuchStudentException e) {
-                            e.printStackTrace();
-                        } catch (NotYourTurnException e) {
-                            e.printStackTrace();
-                        } catch (TooManyStudentsException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    case "Island" -> {
-                        //the current player moves the list of students in the third parameter
-                        //to the island of which the id was chosen.
-                        try {
-                            board.moveStudentToIsland(command.getPlayerID(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)), students);
-                        } catch (NoSuchStudentException e) {
-                            e.printStackTrace();
-                        } catch (NotYourTurnException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+            case MOVE_STUDENT -> {
+                return moveStudentCommand(command);
             }
             case MOVE_MOTHER_NATURE -> {
-                board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
-                return "Mother nature has been moved successfully!";
+                return moveMotherNatureCommand(command);
             }
             case CHOOSE_CLOUD -> {
-                try {
-                    board.chooseCloud(command.getPlayerID(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
-                    return "The cloud has been chosen successfully!";
-                } catch (NotYourTurnException e) {
-                    e.printStackTrace();
-                    return "It is not your turn.";
-                } catch (TooManyStudentsException e) {
-                    e.printStackTrace();
-                    return "You can't choose this cloud yet.";
-                }
+                return chooseCloudCommand(command);
             }
         }
         return command.toString();
@@ -128,5 +61,107 @@ public class Game{
 
     private Map<Color, Team> getProfessorMap(){
         return board.getProfessorsMap();
+    }
+
+    /**
+     * Private method that handles a command of "get" type.
+     * @param command, get command.
+     * @return the command, so that the server can send the information back.
+     */
+    private String getCommand(Command command){
+        switch (command.getAttributesMap().get(CommandAttribute.WHAT)) {
+            case "deck" -> {
+                return gson.toJson(getDeck(command.getPlayerID()));
+            }
+            case "professors" -> {
+                return gson.toJson(getProfessorMap());
+            }
+        }
+        return "Command was not successful. Please, try again.";
+    }
+
+    private String playCardCommand(Command command){
+        String player = command.getPlayerID();
+        try {
+            board.playCard(command.getPlayerID() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
+        } catch (NotYourTurnException e) {
+            e.printStackTrace();
+            return "It's not your turn yet!";
+        }
+        return "Card has been played successfully!";
+    }
+
+    private String moveStudentCommand(Command command){
+        //Here for now I assume that the list of students in input is
+        //given as a single string of Color separated by commas.
+        //Needs to be changed accordingly if the convention changes.
+        List<String> studentList;
+        studentList = Arrays.asList(command.getAttributesMap().get(CommandAttribute.ID).split("\\s*,\\s*"));
+        List<Color> students = new ArrayList<>();
+        for (String stud : studentList) {
+            switch (stud){
+                case "Yellow" -> {
+                    students.add(Color.YELLOW);
+                }case "Blue" -> {
+                    students.add(Color.BLUE);
+                }case "Green" -> {
+                    students.add(Color.GREEN);
+                }case "Red" -> {
+                    students.add(Color.RED);
+                }case "Pink" -> {
+                    students.add(Color.PINK);
+                }
+            }
+        }
+        switch (CommandAttribute.WHERE.toString()){
+            case "Dining room" -> {
+                try {
+                    board.moveStudentToDR(command.getPlayerID(), students);
+                } catch (NoSuchStudentException e) {
+                    e.printStackTrace();
+                } catch (NotYourTurnException e) {
+                    e.printStackTrace();
+                    return "It's not your turn yet!";
+                } catch (TooManyStudentsException e) {
+                    e.printStackTrace();
+                    return "The dining room is full!";
+                }
+            }
+            case "Island" -> {
+                //the current player moves the list of students in the third parameter
+                //to the island of which the id was chosen.
+                try {
+                    board.moveStudentToIsland(command.getPlayerID(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)), students);
+                } catch (NoSuchStudentException e) {
+                    e.printStackTrace();
+                } catch (NotYourTurnException e) {
+                    e.printStackTrace();
+                    return "It's not your turn yet!";
+                }
+            }
+        }
+        return "Input not valid. Please, try again.";
+    }
+
+    private String moveMotherNatureCommand(Command command){
+        board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
+        return "Mother nature has been moved successfully!";
+    }
+
+    private String chooseCloudCommand(Command command){
+        try {
+            board.chooseCloud(command.getPlayerID(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
+            return "The cloud has been chosen successfully!";
+        } catch (NotYourTurnException e) {
+            e.printStackTrace();
+            return "It is not your turn.";
+        } catch (TooManyStudentsException e) {
+            e.printStackTrace();
+            return "You can't choose this cloud yet.";
+        }
+    }
+
+    private String notifyStatusUpdate(){
+        return "The game state has been modified.";
     }
 }
