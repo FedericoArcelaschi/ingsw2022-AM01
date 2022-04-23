@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.expert.Characters;
 
+import java.lang.reflect.Executable;
+
 public enum CharactersList { //TODO: complete characters' explaination
     MONK(1, """
             Monk: this character offers the opportunity to add
@@ -68,6 +70,7 @@ public enum CharactersList { //TODO: complete characters' explaination
 
     private final int id;
     private String explanation;
+    private Executable function;
 
     /**
      * The cost is also dynamically added to the explanation

@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.expert.ExpertIsland;
 import java.util.Map;
 
 public class Block extends Generic {
+    /**
+     * must be 0 ≤ x ≤ 4
+     */
     private int availableBlockTile;
 
     public Block(int idChar) {
@@ -14,25 +17,27 @@ public class Block extends Generic {
 
     /**
      * WITCH character: blocks islands
-     *
      * @param parameterMap contains the island to block
      */
     @Override
     public void applyEffect(Map<Parameters, Object> parameterMap) {
-        boolean result = false;
-        if (availableBlockTile > 0) {
-            ExpertIsland island = (ExpertIsland) parameterMap.get(Parameters.ISLAND);
-            if (island.blockIsland()) {
-                availableBlockTile--;
-                cost = characterName.getCost() + 1;
-            } else
-                throw new IllegalArgumentException("Island is already blocked");
-        } else
+        if (availableBlockTile <= 0)
             throw new IllegalArgumentException("4 islands are already blocked");
+
+        ExpertIsland island = (ExpertIsland) parameterMap.get(Parameters.ISLAND);
+        if (!island.blockIsland())
+            throw new IllegalArgumentException("Island is already blocked");
+
+        availableBlockTile--;
+        cost = characterName.getCost() + 1;
     }
 
     @Override
     public Map<Parameters, Object> getEffect() {
-        return null;
+        return Map.of(Parameters.AVAILABLEBLOCKTILES, availableBlockTile);
+    }
+
+    public void addBlockTile(){
+        availableBlockTile++;
     }
 }
