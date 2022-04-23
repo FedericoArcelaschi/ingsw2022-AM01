@@ -8,6 +8,7 @@ public enum CommandType {
     GET("get");
 
     private final String commandString;
+
     CommandType(String commandString) {
         this.commandString = commandString;
     }
