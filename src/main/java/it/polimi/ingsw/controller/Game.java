@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -91,13 +92,14 @@ public class Game{
         return "Card has been played successfully!";
     }
 
-    private String moveStudentCommand(Command command){
+    private String moveStudentCommand(@NotNull Command command){
         //Here for now I assume that the list of students in input is
         //given as a single string of Color separated by commas.
         //Needs to be changed accordingly if the convention changes.
         List<String> studentList;
         studentList = Arrays.asList(command.getAttributesMap().get(CommandAttribute.ID).split("\\s*,\\s*"));
         List<Color> students = new ArrayList<>();
+        String s = new String();
         for (String stud : studentList) {
             switch (stud){
                 case "Yellow" -> {
@@ -113,18 +115,22 @@ public class Game{
                 }
             }
         }
-        switch (CommandAttribute.WHERE.toString()){
+        switch (command.getAttributesMap().get(CommandAttribute.WHERE)){
             case "Dining room" -> {
                 try {
                     board.moveStudentToDR(command.getPlayerID(), students);
+                    s = "The students have been moved to the dining room.";
+                    return s;
                 } catch (NoSuchStudentException e) {
                     e.printStackTrace();
                 } catch (NotYourTurnException e) {
                     e.printStackTrace();
-                    return "It's not your turn yet!";
+                    s = "It's not your turn yet!";
+                    return s;
                 } catch (TooManyStudentsException e) {
                     e.printStackTrace();
-                    return "The dining room is full!";
+                    s =  "The dining room is full!";
+                    return s;
                 }
             }
             case "Island" -> {
@@ -132,15 +138,18 @@ public class Game{
                 //to the island of which the id was chosen.
                 try {
                     board.moveStudentToIsland(command.getPlayerID(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)), students);
+                    s = "The students have been moved to the chosen island.";
+                    return s;
                 } catch (NoSuchStudentException e) {
                     e.printStackTrace();
                 } catch (NotYourTurnException e) {
                     e.printStackTrace();
-                    return "It's not your turn yet!";
+                    s = "It's not your turn yet!";
+                    return s;
                 }
             }
         }
-        return "Input not valid. Please, try again.";
+        return s;
     }
 
     private String moveMotherNatureCommand(Command command){
