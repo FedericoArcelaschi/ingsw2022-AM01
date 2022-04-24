@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.exceptions;
 
-public class CoinException extends IllegalArgumentException{
+public class CoinException extends Exception{
     private int expectedCoins;
     private int availableCoins;
 

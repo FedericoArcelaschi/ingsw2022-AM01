@@ -102,7 +102,7 @@ public class ExpertBoardTest{
 
     @Test
     @SuppressWarnings("empty")
-    void testPlayExpertCardException3(){
+    void testPlayExpertCardException3() throws CoinException {
         board.extract4CharacterTesting(4);
         try {
             board.playExpertCard(4);
@@ -115,6 +115,8 @@ public class ExpertBoardTest{
             board.playExpertCard(4);
         } catch (IllegalStateException | StudentException e) {
             assertEquals("MAILMAN is already active in this turn.", e.getMessage());
+        } catch (CoinException e) {
+            fail();
         }
 
         for (int i = 1; i < 13; i++) {

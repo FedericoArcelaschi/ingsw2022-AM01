@@ -94,7 +94,7 @@ public class ExpertBoard extends Board {
      * @throws IllegalArgumentException the selected character was not extracted during this turn
      * @throws CoinException if the player doesn't have the needed coins to pay
      */
-    public void playExpertCard(int idChar, int islandIndex, List<Color> studentsList) throws StudentException {
+    public void playExpertCard(int idChar, int islandIndex, List<Color> studentsList) throws StudentException, CoinException {
         Generic ec = checkLegalExpertCard(idChar);
         ExpertCastle currPlayerCastle = (ExpertCastle) castleMap.get(getCurrentPlayer());
         int cost = ec.getCost();
@@ -124,6 +124,32 @@ public class ExpertBoard extends Board {
         //TODO: end game --> valore di uscita
 
         activeChar = ec;
+    }
+
+
+    /**
+     * Method only for Mailman call
+     * @param idChar number of the character as defined in the Enum
+     */
+    public void playExpertCard(int idChar) throws CoinException, StudentException {
+        playExpertCard(idChar, 0, Arrays.asList());
+    }
+
+    public void playExpertCard(int idChar, int islandIndex) throws StudentException, CoinException {
+        playExpertCard(idChar, islandIndex, Arrays.asList());
+    }
+
+    /**
+     * Smaller version of the playExpertCard()
+     * Removes the coins from the Castle and calls the applyEffect() of the right character.
+     * @param idChar char number to call the method on the right object
+     */
+    public void playExpertCard(int idChar, List<Color> studentsList) throws CoinException, StudentException {
+        playExpertCard(idChar, 0, studentsList);
+    }
+
+    public void playExpertCard(int idChar, int islandIndex, Color student) throws StudentException, CoinException {
+        playExpertCard(idChar, 0, List.of(student));
     }
 
     private void outExpertCharacterParameters(Map<Parameters, Object> parametersMap) {
@@ -157,29 +183,6 @@ public class ExpertBoard extends Board {
             throw new IllegalArgumentException(CharactersList.getChar(idChar) + " was not an extracted character.\n" +
                     "Available characters are: " + expertCharactersCards);
         return ec;
-    }
-
-    /**
-     * Method only for Mailman call
-     *
-     * @param idChar number of the character as defined in the Enum
-     */
-    public void playExpertCard(int idChar) throws CoinException, StudentException {
-        playExpertCard(idChar, 0, Arrays.asList());
-    }
-
-    /**
-     * Smaller version of the playExpertCard()
-     * Removes the coins from the Castle and calls the applyEffect() of the right character.
-     *
-     * @param idChar char number to call the method on the right object
-     */
-    public void playExpertCard(int idChar, List<Color> studentsList) throws CoinException, StudentException {
-        playExpertCard(idChar, 0, studentsList);
-    }
-
-    public void playExpertCard(int idChar, int islandIndex, Color student) throws StudentException {
-        playExpertCard(idChar, 0, List.of(student));
     }
 
     /**
