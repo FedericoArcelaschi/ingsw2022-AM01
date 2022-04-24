@@ -66,7 +66,7 @@ public class Island{
      * @param influenceMap map that contains the sum of influences per team
      */
     private void towerInfluence(Map<Team, Integer> influenceMap){
-        if(ownership != null){
+        if(ownership != null) {
             int influence = influenceMap.get(ownership);
             influenceMap.replace(ownership, influence + getIslandNumber());
         }
@@ -89,7 +89,7 @@ public class Island{
     }
 
     /**
-     * calculate the influence on the island per team
+     * Calculates the influence on the island per team
      * @param professorsMap map that contains the sum of influences per team
      * @return influenceMap map containing the sum of influences per team
      */

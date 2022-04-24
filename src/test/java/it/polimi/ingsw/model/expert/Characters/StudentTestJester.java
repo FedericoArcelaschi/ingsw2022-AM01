@@ -162,12 +162,13 @@ class StudentTestJester {
             notAvailableStudents.addAll(
                     Arrays.asList(Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE));
         Map<Parameters, Object> parametersMap
-                = Map.of(Parameters.PLAYERID, board.getCurrentPlayer(),
-                Parameters.STUDENTLIST, notAvailableStudents);
+                = Map.of(   Parameters.PLAYERID, board.getCurrentPlayer(),
+                            Parameters.CASTLEMAP, board.getCastleMap(),
+                            Parameters.STUDENTLIST, notAvailableStudents);
         try {
             jester.applyEffect(parametersMap);
         } catch (NoSuchStudentException e) {
-            System.out.println("jester doeesn' contain a " + e.getColor() + " student");
+            System.out.println("jester doesn't contain a " + e.getColor() + " student");
             assertEquals(notAvailableStudents.get(0), e.getColor(),
                     "jester doesn't contain " + e.getColor() + " student");
         } catch (IllegalArgumentException | TooManyStudentsException e) {

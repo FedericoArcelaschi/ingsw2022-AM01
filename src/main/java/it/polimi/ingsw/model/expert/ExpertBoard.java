@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.Characters.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -214,6 +215,17 @@ public class ExpertBoard extends Board {
             ((Block) expertCharactersCards.get(5)).addBlockTile();
             //TODO: char.add(blockTile);
         }
+    }
+
+    protected void conquerIsland(@NotNull ExpertIsland island) {
+        Map<Team, Integer> influence;
+        if (activeChar.getCharacterType().getId() == 6)
+            influence = island.calculateInfluenceNoTowers(professorsMap);
+        else
+            influence = island.calculateInfluence(professorsMap);
+        Team t = teamWithMoreInfluence(influence);
+        if (t != null) island.setOwnership(t);
+        checkJoinIsland(island);
     }
 
     /**

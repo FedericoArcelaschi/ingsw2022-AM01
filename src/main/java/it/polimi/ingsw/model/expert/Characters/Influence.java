@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.expert.Characters;
 
 import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.expert.ExpertIsland;
 import org.jetbrains.annotations.NotNull;
