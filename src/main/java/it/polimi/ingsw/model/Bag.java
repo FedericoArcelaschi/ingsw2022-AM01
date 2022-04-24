@@ -71,6 +71,16 @@ public class Bag {
         return extractedList;
     }
 
+    public List<Color> extractForCastleSetup(int nPlayers){
+        final int waitingRoomSize2Players = 7;
+        final int waitingRoomSize3Players = 9;
+        return switch (nPlayers) {
+            case 2, 4 -> multipleExtract(waitingRoomSize2Players);
+            case 3 -> multipleExtract(waitingRoomSize3Players);
+            default -> throw new IllegalArgumentException("Not a valid number of Players");
+        };
+    }
+
     /**
      * sum the number of remaining students per color
      * @return the sum

@@ -14,7 +14,7 @@ public class TurnTest{
         Turn turn = new Turn(players);
         for (String pl: players) {
             assertEquals(turn.getCurrentPlayer(), pl);
-            turn.nextTurnPlanification();
+            turn.nextTurnPlanning();
         }
     }
 
@@ -36,7 +36,7 @@ public class TurnTest{
         List<String> players = Arrays.asList("pippo","pluto","paperino");
         Turn turn = new Turn(players);
         turn.setTurnAction(players);
-        turn.nextTurnPlanification();
+        turn.nextTurnPlanning();
         assertEquals("pluto", turn.getCurrentPlayer());
     }
     @Test

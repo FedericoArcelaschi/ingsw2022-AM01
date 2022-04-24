@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Board {
 
@@ -21,32 +22,39 @@ public class Board {
     protected final Turn turn;
     protected Integer possibleMovingSteps = 0; //calculated form the card: must be stored in memory til the player action turn
 
+    //constants
+    private final int numberOfIslands = 12;
+    private final int numberOfIslandsToEndGame = 3;
+    private final int numberOfTowersToPlace = 8;
+    private final int[] cloudSize = {0, 0, 3, 4, 3};
 
-    public Board(String playerID1, String playerID2, Turn turn){
+
+    public Board(String playerID1, String playerID2, Turn turn) {
         nPlayer = 2;
+        castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
+        castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
+        nPlayer = castleMap.size();
         construct();
-        castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.multipleExtract(9)));
-        this.turn = turn;
+        this.turn=turn;
     }
 
     public Board(String playerID1, String playerID2, String playerID3, Turn turn) {
         nPlayer = 3;
-        construct();
-        castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.multipleExtract(7)));
-        castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.multipleExtract(7)));
-        castleMap.put(playerID3, new Castle(Team.GREY, nPlayer, bag.multipleExtract(7)));
+        castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
+        castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
+        castleMap.put(playerID3, new Castle(Team.GREY, nPlayer, bag.extractForCastleSetup(nPlayer)));
         this.turn = turn;
+        construct();
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn) {
+    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn){
         nPlayer = 4;
+        castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
+        castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
+        castleMap.put(playerID3, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
+        castleMap.put(playerID4, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
         construct();
-        castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID3, new Castle(Team.WHITE, nPlayer, bag.multipleExtract(9)));
-        castleMap.put(playerID4, new Castle(Team.BLACK, nPlayer, bag.multipleExtract(9)));
-        this.turn = turn;
+        this.turn=turn;
     }
 
     /**Cleans the constructor implementation
@@ -57,7 +65,7 @@ public class Board {
         setupProfessorMap();
     }
 
-    /**Contructor for ExpertBoard
+    /**Constructor for ExpertBoard
      */
     protected Board(Turn turn){
         this.turn = turn;
@@ -70,12 +78,7 @@ public class Board {
      */
 
     protected void setupClouds(){
-        if(nPlayer == 3) {
-            for (int i = 0; i < nPlayer; i++) cloudList.add(new Cloud(bag, 3));
-        }
-        else{
-            for(int i=0; i<nPlayer;i++)   cloudList.add(new Cloud(bag,4));
-        }
+        for (int i = 0; i < nPlayer; i++) cloudList.add(new Cloud(bag, cloudSize[nPlayer]));
     }
 
     /**
@@ -89,13 +92,13 @@ public class Board {
     }
 
     /**
-     * generate the islands
+     * Generates the islands.
      */
 
     private void setupIslands(){
         List<Color> s = bag.extractForIslandSetup();
-        for(int i=0, c=0; i<12; i++){
-            if(i%6 == 0){
+        for(int i = 0, c = 0; i < numberOfIslands; i++){
+            if( i % (numberOfIslands / 2) == 0){
                 islandList.add(new Island());
             }
             else{
@@ -106,10 +109,10 @@ public class Board {
     }
 
     /**
-     * refill all the cloud with new students
+     * Refills each cloud with new students.
      * @return if the move is legal and played or not
      */
-    public boolean refillClouds(){
+    public boolean refillClouds() {
         for(Cloud c: cloudList){
             if (!c.refill()) return false;
         }
@@ -117,7 +120,7 @@ public class Board {
     }
 
     /**
-     * move students form a chosen cloud to the waiting room of the player
+     * Moves students from the selected cloud to the waiting room of the current player.
      * @param PlayerID the id of the player that ask for this move
      * @param cloudID the cloud that is chosen
      * @return if the move is legal and played or not
@@ -131,13 +134,13 @@ public class Board {
     }
 
     /**
-     * Checks who has more student for each color and reassign the professors
+     * Checks which player has more students of each color and assigns the professors.
      */
 
-    public void updateProfessorsOwners(){
+    public void updateProfessorsOwners() {
         for(Color color : Color.values()) {
             int max = 0;
-            Castle newOwner = null;
+            Team newOwner = professorsMap.get(color);
             for (Castle castle : castleMap.values())
                 if(professorsMap.get(color) == castle.getTeam())
                     max = castle.getDiningRoom().get(color);
@@ -145,24 +148,24 @@ public class Board {
                 int n = castle.getDiningRoom().get(color);
                 if(n > max){
                     max = n;
-                    newOwner = castle;
+                    newOwner = castle.getTeam();
                 }
             }
-            if(newOwner != null) professorsMap.replace(color, newOwner.getTeam());
+            if(newOwner != null) professorsMap.replace(color, newOwner);
         }
     }
 
     /**
-     * move students form the waiting room to the dining room
+     * Moves students from the waiting room to the dining room.
      * @param PlayerID the id of the player that ask for this move
      * @param students a list of students you want to move
      * @throws NoSuchStudentException if the student is not in the Waiting Room of the current player
      * @throws NotYourTurnException if the player in the argument is not the current player
      * @throws TooManyStudentsException if the castle dining room already contains 9 students
      */
-    public void moveStudentToDR(String PlayerID, List<Color> students) throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
-        if(!turn.getCurrentPlayer().equals(PlayerID))
-            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. " + PlayerID + " can't move a student to the dining room");
+    public void moveStudentToDiningRoom(String PlayerID, List<Color> students)
+            throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
+        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         castle.removeStudentsFromWaitingRoom(students);
         castle.addStudentsInDiningRoom(students);
@@ -170,14 +173,15 @@ public class Board {
     }
 
     /**
-     * @param PlayerID the id of the player that ask for this move
+     * Moves the students in the list <code>students</code> from <code>Player</code> 's wating room
+     * to the island n°<code>islandNumber</code>.
+     * @param Player the id of the player that ask for this move
      * @param islandNumber the number of the island where you want to move the students
      * @param students a list of students you want to move
-     * @return if the move is legal and played or not
+     * @return true if the students are present and added to the island.
      */
     public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException, NotYourTurnException {
-        if(!turn.getCurrentPlayer().equals(PlayerID))
-            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. " + PlayerID + " can't move a student to an island");
+        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         castleMap.get(PlayerID).removeStudentsFromWaitingRoom(students);
         for(Color c : students){
             islandList.get(islandNumber).addStudent(c);
@@ -188,13 +192,11 @@ public class Board {
     /**
      * @param PlayerID  the id of the player that ask for this move
      * @param card the number of the card the player want to use
-     * @return if the move is legal and played or not
+     * @return if the move is legal and played, false otherwise
      */
-    public boolean playCard(String PlayerID, int card) throws NotYourTurnException {//true if the move is legal, false otherwise
-        if(!turn.getCurrentPlayer().equals(PlayerID))
-            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s planning turn. " + PlayerID + " can't choose a card to play");
+    public boolean playCard(String PlayerID, int card) throws NotYourTurnException {
+        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
-        possibleMovingSteps = (card + 1) / 2;
         return castle.playCard(card);
     }
 
@@ -211,7 +213,7 @@ public class Board {
     /**
      * @return a map that contains the number of placed towers on the islands for each team
      */
-    protected Map<Team,Integer> sumTowers() {
+    private Map<Team,Integer> sumTowers() {
         Map<Team, Integer> nTowers = new HashMap<>();
         for (Team t : Team.values()) { //fill nTowers map for all team at 0
             nTowers.put(t, 0);
@@ -225,82 +227,104 @@ public class Board {
     }
 
     /**
-     * Calculate who has the highest number of towers in the map that he receives
-     * @param nTowers map that contains team and towers of the team on the islands
-     * @return the team with most towers
+     * Calculates who has the highest Integer in the map that he receives
+     * @param map map that contains team and a generic Integer
+     * @return the team with the most towers.
      */
-    protected Team teamWithMoreTowers(Map<Team,Integer> nTowers){
+    private Team teamWithMoreTowers(Map<Team,Integer> map){
         int max;
         Team winner;
 
-        max = nTowers.get(Team.WHITE);
+        max = map.get(Team.WHITE);
         winner = Team.WHITE;
-        if(nTowers.get(Team.BLACK) > max){
-            max = nTowers.get(Team.BLACK);
+        if(map.get(Team.BLACK) > max){
+            max = map.get(Team.BLACK);
             winner = Team.BLACK;
         }
-        else if (nTowers.get(Team.BLACK) == max) winner = null;
-        if(nTowers.get(Team.GREY) > max){
+        else if (map.get(Team.BLACK) == max) winner = null;
+        if(map.get(Team.GREY) > max){
             winner = Team.GREY;
         }
-        else if (nTowers.get(Team.GREY) == max) winner = null;
+        else if (map.get(Team.GREY) == max) winner = null;
         return winner;
     }
 
     /**
-     * Use the teamWithMoreTowers algorithm to determine who has more influence
-     * @param influence map that contains influence for each team
-     * @return the team with more influence
+     * Checks if there are no more cards.
+     * @return number of cards left.
      */
-    protected Team teamWithMoreInfluence(Map<Team, Integer> influence){
-        return teamWithMoreTowers(influence);
-    }
-
-    /**
-     * Checks if the cards are ended
-     * @return number of card left
-     */
-    protected int remainingCards(){
+    private int remainingCards(){
         int cardsLeft = 0;
         for(Castle castle : castleMap.values()) cardsLeft += (int) Arrays.stream(castle.getCards()).filter(card -> card != null && !card).count();
         return cardsLeft;
     }
 
     /**
-     * Checks if the game is won after a player turn
+     * Checks if the game is won after a player finishes his turn.
      * @return the winner team
      */
-    protected Team isWinningPosition(){
+    public Team isWinningPosition() {
         Map <Team, Integer> nTowers = sumTowers();
         Team winner = null;
-        if(islandList.size()<=3){
-            winner = teamWithMoreTowers(nTowers);
+        if(islandList.size() <= numberOfIslandsToEndGame){
+            winner = findMaxTeam(nTowers);
+            if(winner == null){
+                winner = teamWithMostProfessors();
+            }
         }
         else{
             for(Team t : Team.values()){
-                if(nTowers.get(t) >= 8) winner = t;
+                if(nTowers.get(t) >= numberOfTowersToPlace) winner = t;
             }
         }
         return winner;
     }
 
     /**
-     * Checks if the game is won after all players turn when cards or student in the bag are finished
+     * Returns the team with the most professors.
+     * @return the team with the most professors.
+     */
+    private Team teamWithMostProfessors() {
+        Team more = null;
+        int max = 0;
+        for(Team t1 : Team.values()){
+            int sum = 0;
+            for(Team t2 : professorsMap.values()){
+                if(t1 == t2) sum++;
+            }
+            if(sum > max){
+                max = sum;
+                more = t1;
+            }
+            else if (sum == max) {
+                more = null;
+            }
+        }
+        return more;
+    }
+
+    /**
+     * Checks if the game is won after each player's turn is over by checking whether the players don't have any more
+     * cards or if there are no more students in the bag.
      * @return the winner team
      */
-    public Team isWonByResources(){
+    public Team isWonByResources() {
         if(bag.remainingStudents() == 0 || remainingCards() == 0){
             Map <Team, Integer> nTowers = sumTowers();
-            return teamWithMoreTowers(nTowers);
+            Team teamWithMostTowers = findMaxTeam(nTowers);
+            if(teamWithMostTowers == null) return teamWithMostProfessors();
+            return teamWithMostTowers;
         }
         else return null;
     }
 
     /**
-     * Joins the islands and put the new island into the list
+     * Joins the islands and puts the new island in the list.
      */
-    public void joinIslands(@NotNull List<Island> islandList){
-        int firstIslandIndex = this.islandList.indexOf(islandList.get(0));
+    public void joinIslands(@NotNull List<Island> islandList) {
+        int firstIslandIndex
+                = this.islandList
+                .indexOf(islandList.get(0));
         if(firstIslandIndex == -1)
             throw new IllegalArgumentException("island: " + islandList.get(0).toString() + "not found!");
         Island newIsland = null;
@@ -329,25 +353,24 @@ public class Board {
         if (motherNaturePosition + steps / islandList.size() >= 1) motherNaturePosition += steps - islandList.size();
         else motherNaturePosition += steps;
         conquerIsland(islandList.get(motherNaturePosition));
-
     }
 
     /**
-     * Calculates influence on island and sets a new owner if possible
+     * Calculates influence on given island and sets a new owner if possible.
      * @param island the current island mother nature is on
      */
     protected void conquerIsland(@NotNull Island island) {
         Map<Team, Integer> influence = island.calculateInfluence(professorsMap);
-        Team t = teamWithMoreInfluence(influence);
+        Team t = findMaxTeam(influence);
         if (t != null) island.setOwnership(t);
         checkJoinIsland(island);
     }
 
     /**
-     * Checks if neighbouring island have the same owner and joins them to the current island
+     * Checks if neighbouring islands have the same owner and joins them to the current island
      * @param island the island mother nature is on
      */
-    protected void checkJoinIsland(Island island){
+    protected void checkJoinIsland(Island island) {
         Island previous, next;
         List<Island> islandToJoin = new ArrayList<>();
         islandToJoin.add(island);
@@ -367,16 +390,26 @@ public class Board {
         if(island.getOwnership() != null && next.getOwnership() == island.getOwnership()) islandToJoin.add(next);
 
         if(islandToJoin.size() == 2 || islandToJoin.size() == 3) joinIslands(islandToJoin);
-
     }
 
-    public String getCurrentPlayer(){return turn.getCurrentPlayer();}
 
-    public List<Cloud> getCloudList() {return new ArrayList<>(cloudList);}
+    //getters
 
-    public List<Island> getIslandList() {return new ArrayList<>(islandList);}
+    public String getCurrentPlayer() {
+        return turn.getCurrentPlayer();
+    }
 
-    public Map<String, Castle> getCastleMap() {return new HashMap<>(castleMap);}
+    public List<Cloud> getCloudList() {
+        return new ArrayList<>(cloudList);
+    }
+
+    public List<Island> getIslandList() {
+        return new ArrayList<>(islandList);
+    }
+
+    public Map<String, Castle> getCastleMap() {
+        return new HashMap<>(castleMap);
+    }
 
     public Castle getCastle(String playerID){//TODO: make return only a copy
         return castleMap.get(playerID);

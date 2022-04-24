@@ -11,25 +11,25 @@ public class Castle {
     private final Boolean[] cards;
     private int lastPlayedCard;
     private final Team towerColor;
-    private final int waitingRoomSizePerColor;
+    private final int waitingRoomSize;
     //constants
-    private static final int diningRoomSize = 10;
-    private static final int waitingRoomSize2Players = 9;
-    private static final int waitingRoomSize3Players = 7;
+    private static final int diningRoomSize = 9;
+    private static final int waitingRoomSize2Players = 7;
+    private static final int waitingRoomSize3Players = 9;
     private static final int numberOfCards = 10;
 
     public Castle(Team team, int nPlayer, List<Color> students) {
-        if (nPlayer == 3) this.waitingRoomSizePerColor = waitingRoomSize3Players;
-        else this.waitingRoomSizePerColor = waitingRoomSize2Players;
+        if(nPlayer == 3) this.waitingRoomSize = waitingRoomSize3Players;
+        else this.waitingRoomSize = waitingRoomSize2Players;
         this.waitingRoom = new ArrayList<>(students);
         this.diningRoom = new HashMap<>();
-        for (Color c : Color.values()) {
+        for(Color c : Color.values()){
             diningRoom.put(c, 0);
         }
         this.cards = new Boolean[numberOfCards];
         this.towerColor = team;
         this.lastPlayedCard = -1;
-        for (int i = 0; i < 10; i++) cards[i] = false;
+        for(int i = 0; i < 10; i++) cards[i] = false;
     }
 
     /**
@@ -37,7 +37,7 @@ public class Castle {
      * @param students The list of students to add to the waiting room.
      * @return boolean that checks whether the operation was successful or not.
      */
-    public boolean addStudentsInWaitingRoom(List<Color> students) throws TooManyStudentsException{
+    public boolean addStudentsInWaitingRoom(List<Color> students) throws TooManyStudentsException {
         if(students.size() + waitingRoom.size() > waitingRoomSizePerColor) {
             throw new TooManyStudentsException("there are already " + waitingRoomSizePerColor + " students in the waiting room");
         }
@@ -51,7 +51,7 @@ public class Castle {
      */
     public void addStudentInDiningRoom(Color student) throws TooManyStudentsException{
         if (diningRoom.get(student) == diningRoomSize) {
-            throw new TooManyStudentsException("There are alredy 10 students of" + student + "color in the Dining Room", student);
+            throw new TooManyStudentsException();
         }
         diningRoom.put(student, diningRoom.get(student) + 1);
     }
@@ -71,7 +71,11 @@ public class Castle {
      * @param students – The list of students to remove.
      * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
      */
-    public void removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException{
+    public void removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException {
+        if(!new HashSet<>(waitingRoom).containsAll(students) || students.size() > waitingRoomSize){
+            throw new NoSuchStudentException();
+        }
+        else{
         List<Color> temp = getWaitingRoom();
         for(Color s : students){
             if(!temp.remove(s)){
@@ -88,7 +92,7 @@ public class Castle {
      * @param i priority of the card
      * @return true if the card was played correctly
      */
-    public boolean playCard(int i){
+    public boolean playCard(int i) {
         if(cards[i-1]) return false;
         else {
             cards[i-1] = true;
@@ -97,24 +101,24 @@ public class Castle {
         }
     }
 
+
     public List<Color> getWaitingRoom(){
         return new ArrayList<>(waitingRoom);
     }
 
-    public Map<Color, Integer> getDiningRoom(){
+    public Map<Color, Integer> getDiningRoom() {
         return new HashMap<>(diningRoom);
     }
 
-    public Team getTeam(){
+    public Team getTeam() {
         return towerColor;
     }
 
-    public int getLastCardPlayed(){
+    public int getLastCardPlayed() {
         return lastPlayedCard;
     }
 
     public Boolean[] getCards() {
         return Arrays.copyOf(cards, cards.length);
     }
-
 }
