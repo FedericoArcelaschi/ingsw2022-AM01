@@ -1,8 +1,7 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Board;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import it.polimi.ingsw.communication.Command;
+import it.polimi.ingsw.communication.CommandType;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class GameTest {
         players.add("L");
         players.add("F");
         players.add("G");
-        Game g = new Game(1234, players);
+        Game g = new Game(1234, players, null);
         String where = "Island";
         String what = "Yellow, Blue, Red";
         String id = "1";

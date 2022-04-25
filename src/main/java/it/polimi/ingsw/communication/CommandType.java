@@ -1,4 +1,4 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.communication;
 
 public enum CommandType {
     PLAY_CARD("playcard"),

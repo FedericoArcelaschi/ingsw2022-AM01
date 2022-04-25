@@ -1,6 +1,7 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.controller.Game;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,9 +31,9 @@ public class ClientHandler implements Runnable {
                 } else {
                     String responseMessage = game.executeCommand(parser.fromJson(line, Command.class));
                     System.out.println(responseMessage);
-                    Response response = new Response(responseMessage);
-                    System.out.println(parser.toJson(response));
-                    out.println(parser.toJson(response));
+                    Response response = new Response(responseMessage, game.getBoard());
+                    System.out.println(parser.toJson(response, Response.class));
+                    out.println(parser.toJson(response, Response.class));
                     out.flush();
                 }
             }

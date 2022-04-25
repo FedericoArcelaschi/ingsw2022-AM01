@@ -1,6 +1,12 @@
 package it.polimi.ingsw.controller;
 
+import com.google.gson.Gson;
+import it.polimi.ingsw.communication.ClientHandler;
+import it.polimi.ingsw.communication.Preferences;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -35,7 +41,7 @@ public class ServerMain {
             return;
         }
 
-        System.out.println("Server ready");
+        System.out.println("Server ready on IP: " + serverSocket.getInetAddress() + " port: " + serverSocket.getLocalPort());
     }
 
     /**
@@ -43,21 +49,26 @@ public class ServerMain {
      */
     public void acceptPlayers(){
         int gameId = 0;
+        Gson parser = new Gson();
         while (true) {
-            List<Socket> gameList= new ArrayList<>();
+            List<Socket> gameSocketList= new ArrayList<>();
             List<String> nicknameList= new ArrayList<>();
             try{
                 for (int numPlayers = 0; numPlayers < 2; numPlayers++) {
                     System.out.println("waiting for player to connect");
                     Socket socket = serverSocket.accept();
-                    String nickname = new Scanner(socket.getInputStream()).nextLine();
+                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    String input = in.readLine();
+                    System.out.println(input);
+                    Preferences preferences = parser.fromJson(input, Preferences.class);
+                    String nickname = preferences.username();
                     System.out.println(nickname+" joined in");
-                    gameList.add(socket);
+                    gameSocketList.add(socket);
                     nicknameList.add(nickname);
                 }
                 System.out.println("creating game " + gameId);
-                Game g = new Game(gameId, nicknameList);
-                for(Socket player : gameList){
+                Game g = new Game(gameId, nicknameList, gameSocketList);
+                for(Socket player : gameSocketList){
                     executor.submit(new ClientHandler(player, g));
                 }
             } catch(IOException e) {

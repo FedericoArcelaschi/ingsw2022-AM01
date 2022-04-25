@@ -1,5 +1,6 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.communication;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,14 +8,14 @@ import java.util.Map;
  * a representation of the command the player can compose and ask to be executed
  */
 public class Command {
-    private final CommandType type;
-    private final String playerID;
-    private final Map<CommandAttribute, String> attributesMap;
+    private CommandType type;
+    private String username;
+    private Map<CommandAttribute, String> attributesMap;
 
-    public Command(String playerID, CommandType type, String[] attributes) {
+    public Command(String username, CommandType type, String[] attributes) {
         this.type = type;
         this.attributesMap = new HashMap<>();
-        this.playerID = playerID;
+        this.username = username;
         switch (type){
             case PLAY_CARD -> attributesMap.put(CommandAttribute.ID, attributes[0]);
             case MOVE_STUDENT -> {
@@ -27,12 +28,21 @@ public class Command {
         }
     }
 
+    public static Command createCommand(String username, String command){
+        String[] splitCommand = command.split(" ");
+        for (CommandType ct : CommandType.values()) {
+            if(splitCommand[0].toLowerCase().equals(ct.getCommandString()))
+                return new Command(username, ct, Arrays.copyOfRange(splitCommand, 1, splitCommand.length));
+        }
+        return null;
+    }
+
     public CommandType getType() {
         return type;
     }
 
-    public String getPlayerID() {
-        return playerID;
+    public String getUsername() {
+        return username;
     }
 
     public Map<CommandAttribute, String> getAttributesMap() {
