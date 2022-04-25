@@ -61,4 +61,13 @@ public class Turn {
             return list.get(0);
         else return list.get(index +1);
     }
+
+    @Override
+    public String toString() {
+        return "Turn{" +
+                "sittingOrder=" + sittingOrder +
+                ", actionOrder=" + actionOrder +
+                ", currentPlayerTurn='" + currentPlayerTurn + '\'' +
+                '}';
+    }
 }

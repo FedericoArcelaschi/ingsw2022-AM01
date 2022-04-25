@@ -83,7 +83,8 @@ public class CastleTest{
         Bag b = new Bag(24);
         Castle c = new Castle(Team.BLACK, 2, b.multipleExtract(9));
         assertTrue(c.playCard(3));
-        assertEquals(3, c.getLastCardPlayed());
+        //check priority of last card played
+        assertEquals(new Card(3,2,false), c.getLastCardPlayed());
         assertFalse(c.playCard(3));
     }
 }

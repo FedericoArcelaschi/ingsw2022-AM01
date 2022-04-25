@@ -201,9 +201,9 @@ public class Board {
      * @return a list of not yet played card
      */
 
-    public Boolean[] getAvaliableCard(String PlayerID){
+    public List<Card> getAvaliableCard(String PlayerID){
         Castle castle = castleMap.get(PlayerID);
-        return castle.getCards();
+        return castle.getDeck();
     }
 
     /**
@@ -251,7 +251,7 @@ public class Board {
      */
     private int remainingCards(){
         int cardsLeft = 0;
-        for(Castle castle : castleMap.values()) cardsLeft += (int) Arrays.stream(castle.getCards()).filter(card -> card != null && !card).count();
+        for(Castle castle : castleMap.values()) cardsLeft += (int) castle.getDeck().stream().filter(card -> card.isAvailable()).count();
         return cardsLeft;
     }
 
@@ -426,5 +426,17 @@ public class Board {
         return playerUsernames;
     }
 
-
+    @Override
+    public String toString() {
+        return "Board{" +
+                "motherNaturePosition=" + motherNaturePosition +
+                ", nPlayer=" + nPlayer +
+                ", bag=" + bag +
+                ", cloudList=" + cloudList +
+                ", islandList=" + islandList +
+                ", castleMap=" + castleMap +
+                ", professorsMap=" + professorsMap +
+                ", turn=" + turn +
+                '}';
+    }
 }

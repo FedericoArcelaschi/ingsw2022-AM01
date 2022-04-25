@@ -33,4 +33,10 @@ public class Cloud {
         return size;
     }
 
+    @Override
+    public String toString() {
+        return "Cloud{" +
+                "studentList=" + studentList +
+                '}';
+    }
 }

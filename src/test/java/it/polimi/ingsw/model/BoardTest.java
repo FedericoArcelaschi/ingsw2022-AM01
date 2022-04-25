@@ -29,7 +29,7 @@ public class BoardTest{
 
     @Test
     public void testGetAvailableCard() throws NotYourTurnException {
-        assertEquals(10, Arrays.stream(b.getCastleMap().get(player1).getCards()).filter(card -> card != null && !card).count());
+        assertEquals(10, b.getCastle(player1).getDeck().stream().filter(card -> card.isAvailable()).count());
         b.playCard(player1, 1);
         b.playCard(player1, 2);
         b.playCard(player1, 3);
@@ -40,7 +40,7 @@ public class BoardTest{
         b.playCard(player1, 8);
         b.playCard(player1, 9);
         b.playCard(player1, 10);
-        assertEquals(0, Arrays.stream(b.getCastleMap().get(player1).getCards()).filter(card -> card != null && !card).count());
+        assertEquals(0, b.getCastle(player1).getDeck().stream().filter(card -> card.isAvailable()).count());
     }
 
     @Test
@@ -124,14 +124,14 @@ public class BoardTest{
     @Test
     public void testPlayCard() throws NotYourTurnException {
         //check if the card is not used at the beginning
-        assertFalse(b.getCastleMap().get(player1).getCards()[0]);
+        assertTrue(b.getCastleMap().get(player1).getDeck().get(0).isAvailable());
         //check if the card is played correctly
         assertTrue(b.playCard(player1,1));
         //check if the card is set as used
-        assertTrue(b.getCastleMap().get(player1).getCards()[0]);
+        assertFalse(b.getCastleMap().get(player1).getDeck().get(0).isAvailable());
         //check if last card played is the one we played
-        assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed());
-        assertEquals(1, (b.getCastleMap().get(player1).getLastCardPlayed()+1)/2);
+        assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed().priority());
+        assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed().distance());
         //check if the card can't be reused
         assertFalse(b.playCard(player1,1));
     }
@@ -208,5 +208,10 @@ public class BoardTest{
                 "also the next island is untouched");
         assertEquals(oldList.get(1).getOwnership(), b.islandList.get(2).getOwnership(),
                 "no owner should be present");
+    }
+
+    @Test
+    void testToString(){
+        System.out.println(b.toString());
     }
 }
