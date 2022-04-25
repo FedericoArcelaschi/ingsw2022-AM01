@@ -61,4 +61,8 @@ public class Turn {
             return list.get(0);
         else return list.get(index +1);
     }
+
+    public boolean equals(Turn t){
+        return this.actionOrder.equals(t.actionOrder) && this.sittingOrder.equals(t.sittingOrder) && this.currentPlayerTurn.equals(t.currentPlayerTurn);
+    }
 }

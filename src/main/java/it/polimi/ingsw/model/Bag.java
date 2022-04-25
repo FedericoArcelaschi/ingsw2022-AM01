@@ -88,6 +88,15 @@ public class Bag {
         return students.values().stream().reduce(0, Integer::sum);
     }
 
+    /**
+     * Checks if two bags contain the same students.
+     * @param b bag to confront
+     * @return true if they are equal, false if they aren't
+     */
+    public boolean equals(Bag b){
+        return this.students.equals(b.students);
+    }
+
     public long getSeed() {
         return seed;
     }

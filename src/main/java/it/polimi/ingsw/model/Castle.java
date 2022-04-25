@@ -102,6 +102,10 @@ public class Castle {
         }
     }
 
+    public boolean equals(Castle c){
+        return this.waitingRoom.equals(c.waitingRoom) && this.diningRoom.equals(c.diningRoom) &&
+                Arrays.equals(this.cards, c.cards) && this.towerColor == c.towerColor;
+    }
 
     public List<Color> getWaitingRoom(){
         return new ArrayList<>(waitingRoom);

@@ -387,6 +387,20 @@ public class Board {
         if(islandToJoin.size() == 2 || islandToJoin.size() == 3) joinIslands(islandToJoin);
     }
 
+    //    private static final int numOfStudentsPerColor=24;
+    //    protected int motherNaturePosition = 0;
+    //    protected int nPlayer;
+    //    protected final Bag bag = new Bag(numOfStudentsPerColor);
+    //    protected final List<Cloud> cloudList = new ArrayList<>();
+    //    protected final List<Island> islandList = new ArrayList<>();
+    //    protected final Map<String, Castle> castleMap = new HashMap<>();
+    //    protected Map<Color, Team> professorsMap;
+    //    protected final Turn turn;
+    public boolean equals(Board b){
+        return this.motherNaturePosition == b.motherNaturePosition && this.nPlayer == b.nPlayer &&
+                this.islandList.equals(b.islandList) && this.bag.equals(b.bag) && this.cloudList.equals(b.cloudList) &&
+                this.castleMap.equals(b.castleMap) && this.professorsMap.equals(b.professorsMap) && this.turn.equals(b.turn);
+    }
 
     //getters
 
