@@ -1,26 +1,32 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.communication.Command;
+import it.polimi.ingsw.communication.CommandAttribute;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Game{
     private final int gameId;
-    private Board board;
+    private final Board board;
+
     private Turn turn;
     private static Gson gson = new Gson();
+    private List<Socket> gameSocketList;
 
-    public Game(int gameId, List<String> nicknameList) {
+    public Game(int gameId, List<String> nicknameList, List<Socket> gameSocketList) {
         this.gameId = gameId;
+        this.gameSocketList = new ArrayList<>();
+        this.gameSocketList.addAll(gameSocketList);
         turn = new Turn(nicknameList);
         board = new BoardFactory().getBoard(nicknameList, turn);
     }
@@ -72,7 +78,7 @@ public class Game{
     private String getCommand(Command command){
         switch (command.getAttributesMap().get(CommandAttribute.WHAT)) {
             case "deck" -> {
-                return gson.toJson(getDeck(command.getPlayerID()));
+                return gson.toJson(getDeck(command.getUsername()));
             }
             case "professors" -> {
                 return gson.toJson(getProfessorMap());
@@ -82,9 +88,9 @@ public class Game{
     }
 
     private String playCardCommand(Command command){
-        String player = command.getPlayerID();
+        String player = command.getUsername();
         try {
-            board.playCard(command.getPlayerID() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
+            board.playCard(command.getUsername() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
         } catch (NotYourTurnException e) {
             e.printStackTrace();
             return "It's not your turn yet!";
@@ -99,26 +105,27 @@ public class Game{
         List<String> studentList;
         studentList = Arrays.asList(command.getAttributesMap().get(CommandAttribute.ID).split("\\s*,\\s*"));
         List<Color> students = new ArrayList<>();
-        String s = new String();
+        String s = "";
+        //TODO: replace with a toString() from Color enum: e.g. Color.YELLOW.toString() instead of "Yellow"
         for (String stud : studentList) {
             switch (stud){
-                case "Yellow" -> {
+                case "Yellow" ->
                     students.add(Color.YELLOW);
-                }case "Blue" -> {
+                case "Blue" ->
                     students.add(Color.BLUE);
-                }case "Green" -> {
+                case "Green" ->
                     students.add(Color.GREEN);
-                }case "Red" -> {
+                case "Red" ->
                     students.add(Color.RED);
-                }case "Pink" -> {
+                case "Pink" ->
                     students.add(Color.PINK);
-                }
+
             }
         }
         switch (command.getAttributesMap().get(CommandAttribute.WHERE)){
             case "Dining room" -> {
                 try {
-                    board.moveStudentToDR(command.getPlayerID(), students);
+                    board.moveStudentToDR(command.getUsername(), students);
                     s = "The students have been moved to the dining room.";
                     return s;
                 } catch (NoSuchStudentException e) {
@@ -137,7 +144,7 @@ public class Game{
                 //the current player moves the list of students in the third parameter
                 //to the island of which the id was chosen.
                 try {
-                    board.moveStudentToIsland(command.getPlayerID(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)), students);
+                    board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)), students);
                     s = "The students have been moved to the chosen island.";
                     return s;
                 } catch (NoSuchStudentException e) {
@@ -159,7 +166,7 @@ public class Game{
 
     private String chooseCloudCommand(Command command){
         try {
-            board.chooseCloud(command.getPlayerID(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
+            board.chooseCloud(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
             return "The cloud has been chosen successfully!";
         } catch (NotYourTurnException e) {
             e.printStackTrace();
@@ -172,5 +179,9 @@ public class Game{
 
     private String notifyStatusUpdate(){
         return "The game state has been modified.";
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }
