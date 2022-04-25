@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -9,13 +10,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BoardFactoryTest {
 
+    private int seed;
+
+    @BeforeEach
+    void setUp(){
+        seed = 1;
+    }
+
     @Test
     void testGetBoard2Player(){
         List<String> users = Arrays.asList("fede","gio");
         Turn turn = new Turn(users);
         Board board1 = BoardFactory.getBoard(users, turn);
-        Board board2 = new Board("fede", "gio", turn);
-        assertEquals(board2.getnPlayer(), board1.getnPlayer());
+        Board board2 = new Board("fede", "gio", turn, seed);
+        assertEquals(board2.getNPlayer(), board1.getNPlayer());
         assertEquals(board2.getPlayerUsernames(), board1.getPlayerUsernames());
     }
 
@@ -24,8 +32,8 @@ class BoardFactoryTest {
         List<String> users = Arrays.asList("fede","gio","lore");
         Turn turn = new Turn(users);
         Board board1 = BoardFactory.getBoard(users, turn);
-        Board board2 = new Board("fede", "gio", "lore", turn);
-        assertEquals(board2.getnPlayer(), board1.getnPlayer());
+        Board board2 = new Board("fede", "gio", "lore", turn, seed);
+        assertEquals(board2.getNPlayer(), board1.getNPlayer());
         assertEquals(board2.getPlayerUsernames(), board1.getPlayerUsernames());
     }
 
@@ -34,8 +42,8 @@ class BoardFactoryTest {
         List<String> users = Arrays.asList("fede","gio", "lore", "fede");
         Turn turn = new Turn(users);
         Board board1 = BoardFactory.getBoard(users, turn);
-        Board board2 = new Board("fede", "gio", "lore", "fede", turn);
-        assertEquals(board2.getnPlayer(), board1.getnPlayer());
+        Board board2 = new Board("fede", "gio", "lore", "fede", turn, seed);
+        assertEquals(board2.getNPlayer(), board1.getNPlayer());
         assertEquals(board2.getPlayerUsernames(), board1.getPlayerUsernames());
     }
 

@@ -18,6 +18,7 @@ public class Board {
     protected final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Team> professorsMap;
     protected final Turn turn;
+    private final int seed;
     //constants
     private final int numberOfIslands = 12;
     private final int numberOfIslandsToEndGame = 3;
@@ -25,7 +26,8 @@ public class Board {
     private final int[] cloudSize = {0, 0, 3, 4, 3};
 
 
-    public Board(String playerID1, String playerID2, Turn turn){
+    public Board(String playerID1, String playerID2, Turn turn, int seed){
+        this.seed = seed;
         nPlayer = 2;
         castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
         castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
@@ -34,7 +36,8 @@ public class Board {
         this.turn=turn;
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, Turn turn){
+    public Board(String playerID1, String playerID2, String playerID3, Turn turn, int seed){
+        this.seed = seed;
         nPlayer = 3;
         castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
         castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
@@ -43,7 +46,8 @@ public class Board {
         construct();
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn){
+    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn, int seed){
+        this.seed = seed;
         nPlayer = 4;
         castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
         castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
@@ -63,8 +67,9 @@ public class Board {
 
     /**Constructor for ExpertBoard
      */
-    protected Board(Turn turn){
+    protected Board(Turn turn, int seed){
         this.turn = turn;
+        this.seed = seed;
         setupClouds();
         setupProfessorMap();
     }
@@ -428,7 +433,7 @@ public class Board {
         return professorsMap;
     }
 
-    public int getnPlayer() {
+    public int getNPlayer() {
         return nPlayer;
     }
 

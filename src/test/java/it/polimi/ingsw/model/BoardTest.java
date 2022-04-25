@@ -14,11 +14,13 @@ public class BoardTest{
 
     private final String player1 = "a", player2= "2";
     private Board b;
+    private Turn t;
+    private int seed = 1;
 
     @BeforeEach
     void setUp() {
-        Turn t = new Turn(Arrays.asList(player1, player2));
-        b = new Board(player1, player2, t);
+        t = new Turn(Arrays.asList(player1, player2));
+        b = new Board(player1, player2, t, seed);
     }
 
     @Test
@@ -64,9 +66,9 @@ public class BoardTest{
         Turn t1 = new Turn(Arrays.asList(player1,player2));
         Turn t2 = new Turn(Arrays.asList(player1,player2,player3));
         Turn t3 = new Turn(Arrays.asList(player1,player2,player3,player4));
-        Board b2=new Board(player1,player2,t1);
-        Board b3=new Board(player1,player2,player3,t2);
-        Board b4=new Board(player1,player2,player3,player4,t3);
+        Board b2=new Board(player1,player2,t1, seed);
+        Board b3=new Board(player1,player2,player3,t2, seed);
+        Board b4=new Board(player1,player2,player3,player4,t3, seed);
         List<Cloud> cl2 = b2.getCloudList();
         List<Cloud> cl3 = b3.getCloudList();
         List<Cloud> cl4 = b4.getCloudList();
