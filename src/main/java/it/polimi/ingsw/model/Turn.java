@@ -62,6 +62,15 @@ public class Turn {
         else return list.get(index +1);
     }
 
+    @Override
+    public String toString() {
+        return "Turn{" +
+                "sittingOrder=" + sittingOrder +
+                ", actionOrder=" + actionOrder +
+                ", currentPlayerTurn='" + currentPlayerTurn + '\'' +
+                '}';
+    }
+
     public boolean equals(Turn t){
         return this.actionOrder.equals(t.actionOrder) && this.sittingOrder.equals(t.sittingOrder) && this.currentPlayerTurn.equals(t.currentPlayerTurn);
     }

@@ -8,8 +8,8 @@ import java.util.*;
 public class Castle {
     private final List<Color> waitingRoom;
     protected final Map<Color, Integer> diningRoom;
-    private final Boolean[] cards;
-    private int lastPlayedCard;
+    private final List<Card> deck;
+    private Card lastPlayedCard;
     private final Team towerColor;
     private final int waitingRoomSize;
     //constants
@@ -26,10 +26,10 @@ public class Castle {
         for(Color c : Color.values()){
             diningRoom.put(c, 0);
         }
-        this.cards = new Boolean[numberOfCards];
+        this.deck = new ArrayList<>();
         this.towerColor = team;
-        this.lastPlayedCard = -1;
-        for(int i = 0; i < 10; i++) cards[i] = false;
+        this.lastPlayedCard = null;
+        for(int i = 1; i <= 10; i++) deck.add(new Card(i,(i+1)/2,true));
     }
 
     /**
@@ -94,12 +94,14 @@ public class Castle {
      * @return true if the card was played correctly
      */
     public boolean playCard(int i) {
-        if(cards[i-1]) return false;
-        else {
-            cards[i-1] = true;
-            lastPlayedCard = i;
+        if(i<1 || i>10) throw new IllegalArgumentException();
+        Card play = deck.get(i-1);
+        if(play.isAvailable()){
+            play.setAvailable(false);
+            lastPlayedCard = play;
             return true;
         }
+        else return false;
     }
 
     public boolean equals(Castle c){
@@ -119,11 +121,22 @@ public class Castle {
         return towerColor;
     }
 
-    public int getLastCardPlayed() {
+    public Card getLastCardPlayed() {
         return lastPlayedCard;
     }
 
-    public Boolean[] getCards() {
-        return Arrays.copyOf(cards, cards.length);
+    public List<Card> getDeck() {
+        return new ArrayList<>(deck);
+    }
+
+    @Override
+    public String toString() {
+        return "Castle{" +
+                "waitingRoom=" + waitingRoom +
+                ", diningRoom=" + diningRoom +
+                ", deck=" + deck +
+                ", lastPlayedCard=" + lastPlayedCard +
+                ", towerColor=" + towerColor +
+                '}';
     }
 }
