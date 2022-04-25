@@ -414,4 +414,17 @@ public class Board {
         return professorsMap;
     }
 
+    public int getnPlayer() {
+        return nPlayer;
+    }
+
+    public List<String> getPlayerUsernames(){
+        List<String> playerUsernames = new ArrayList<>();
+        for (String username: castleMap.keySet()) {
+            playerUsernames.add(username);
+        }
+        return playerUsernames;
+    }
+
+
 }
