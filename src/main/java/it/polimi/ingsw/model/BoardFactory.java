@@ -4,10 +4,12 @@ import it.polimi.ingsw.model.expert.ExpertBoard;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Random;
 
 public class BoardFactory {
     public static Board getBoard(List<String> playerList, boolean expert, Turn turn){
-        int seed = 1; //TODO: need to randomize
+        Random random = new Random();
+        long seed = random.nextLong();
         if (expert)
             return createExpertBoard(playerList, turn, seed);
         else
@@ -21,7 +23,7 @@ public class BoardFactory {
             return createBoard(playerList, turn, seed);
     }
 
-    private static Board createBoard(List<String> playerList, Turn turn, int seed) {
+    private static Board createBoard(List<String> playerList, Turn turn, long seed) {
         Board b;
         switch (playerList.size()){
             case 2 -> b = new Board(playerList.get(0),playerList.get(1), turn, seed);
@@ -32,7 +34,7 @@ public class BoardFactory {
         return b;
     }
 
-    private static ExpertBoard createExpertBoard(List<String> playerList, Turn turn, int seed) {
+    private static ExpertBoard createExpertBoard(List<String> playerList, Turn turn, long seed) {
         ExpertBoard b;
         switch (playerList.size()){
             case 2 -> b = new ExpertBoard(playerList.get(0),playerList.get(1), turn, seed);
