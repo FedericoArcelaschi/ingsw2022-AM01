@@ -1,10 +1,11 @@
-* Comunicazione half duplex da parte del server, full duplex da parte del client.
-
+* Comunicazione half duplex da parte del server, full duplex da parte del client:
+  * il server rimane in ascolto dei client e risponde solo su richiesta
+  * il client puó eseguire comandi in qualsiasi momento e allo stesso tempo deve poter ricevere update del modello dal server.
 
 
 
 * Il client, nell'istante precedente alla connessione, richiede all'utente il suo username e le preferenze rispetto al tipo
-  di partita che vuole giocare (n giocatori, regole di base/esperto); in seguito, viene instaurata la connessione al server.
+  di partita che vuole giocare (n giocatori, regole di base/esperto).
 
 
 
