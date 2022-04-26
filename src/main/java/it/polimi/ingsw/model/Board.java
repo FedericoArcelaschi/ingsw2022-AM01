@@ -132,7 +132,7 @@ public class Board {
      * Checks witch player has more students of each color and assigns the professors.
      */
 
-    public void updateProfessorsOwners() {
+    private void updateProfessorsOwners() {
         for(Color color : Color.values()) {
             int max = 0;
             Team newOwner = professorsMap.get(color);
