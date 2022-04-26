@@ -106,20 +106,14 @@ public class Game{
         studentList = Arrays.asList(command.getAttributesMap().get(CommandAttribute.ID).split("\\s*,\\s*"));
         List<Color> students = new ArrayList<>();
         String s = "";
-        //TODO: replace with a toString() from Color enum: e.g. Color.YELLOW.toString() instead of "Yellow"
         for (String stud : studentList) {
-            switch (stud){
-                case "Yellow" ->
-                    students.add(Color.YELLOW);
-                case "Blue" ->
-                    students.add(Color.BLUE);
-                case "Green" ->
-                    students.add(Color.GREEN);
-                case "Red" ->
-                    students.add(Color.RED);
-                case "Pink" ->
-                    students.add(Color.PINK);
-
+            Color c = Color.valueOf(stud);
+            switch (c) {
+                case YELLOW -> students.add(Color.YELLOW);
+                case BLUE -> students.add(Color.BLUE);
+                case GREEN -> students.add(Color.GREEN);
+                case RED -> students.add(Color.RED);
+                case PINK -> students.add(Color.PINK);
             }
         }
         switch (command.getAttributesMap().get(CommandAttribute.WHERE)){

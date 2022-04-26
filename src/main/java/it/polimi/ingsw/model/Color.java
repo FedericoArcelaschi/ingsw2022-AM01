@@ -1,15 +1,24 @@
 package it.polimi.ingsw.model;
 
 public enum Color {
-    YELLOW(1),
-    GREEN(2),
-    PINK(3),
-    BLUE(4),
-    RED(5);
+    YELLOW("yellow"),
+    GREEN("green"),
+    PINK("pink"),
+    BLUE("blue"),
+    RED("red");
 
-    private final int id;
+    public final String str;
 
-    Color(int id){
-        this.id = id;
+    public String getStr() {
+        return str;
     }
+
+    Color(String str){
+        this.str = str;
+    }
+
+    String getName(){
+        return str;
+    }
+
 }
