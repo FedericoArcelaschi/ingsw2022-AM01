@@ -19,14 +19,14 @@ public class ExpertBoard extends Board {
     private Generic activeChar = null;
 
     public ExpertBoard(String playerID1, String playerID2, Turn t, long seed) {
-        super(t, 2, seed);
+        super(t, seed, 2);
         castleMap.put(playerID1, new ExpertCastle(Team.WHITE, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID2, new ExpertCastle(Team.BLACK, nPlayer, bag.multipleExtract(7)));
         construct();
     }
 
     public ExpertBoard(String playerID1, String playerID2, String playerID3, Turn t, long seed) {
-        super(t, 3, seed);
+        super(t, seed, 3);
         castleMap.put(playerID1, new ExpertCastle(Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID2, new ExpertCastle(Team.BLACK, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID3, new ExpertCastle(Team.GREY, nPlayer, bag.multipleExtract(9)));
@@ -34,7 +34,7 @@ public class ExpertBoard extends Board {
     }
 
     public ExpertBoard(String playerID1, String playerID2, String playerID3, String playerID4, Turn t, long seed) {
-        super(t, 4, seed);
+        super(t, seed, 4);
         castleMap.put(playerID1, new ExpertCastle(Team.WHITE, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID2, new ExpertCastle(Team.BLACK, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID3, new ExpertCastle(Team.WHITE, nPlayer, bag.multipleExtract(7)));
