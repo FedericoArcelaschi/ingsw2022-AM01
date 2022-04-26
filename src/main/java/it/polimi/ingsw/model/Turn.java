@@ -9,7 +9,7 @@ public class Turn {
     private String currentPlayerTurn;
 
     /**
-     * For the first round the PlanificationTurn is the Sitting Order
+     * For the first round the PlanningPhase is the Sitting Order
      * @param sittingOrder players in the ordered they joined the server
      */
     public Turn(List<String> sittingOrder){
