@@ -33,22 +33,37 @@ class InfluenceTestKnight {
     }
 
     @Test
-    void testApplyEffect() throws StudentException, CoinException {
-        board.getCastleMap().get("lorenzo").addStudentsInDiningRoom(Arrays.asList(Color.PINK, Color.PINK, Color.PINK));
-        assertEquals(2,((ExpertCastle) board.getCastleMap().get("lorenzo")).getCoins());
-        ExpertIsland island = (ExpertIsland) board.getIslandList().get(7);
-        island.addStudent(
-                Map.of(Color.PINK,5,
-                Color.GREEN, 2));
-        Map<Color, Team> professorsMap = new HashMap<>();
-        assertEquals(0, island.calculateInfluence(professorsMap).get(Team.WHITE));
-        professorsMap.put(Color.PINK, Team.WHITE);
-        professorsMap.put(Color.GREEN, Team.BLACK);
-        assertEquals(5, island.calculateInfluence(professorsMap).get(Team.WHITE));
-        assertEquals(2, island.calculateInfluence(professorsMap).get(Team.BLACK));
-        island.setOwnership(Team.BLACK);
-        board.playExpertCard(8);
-        assertEquals(3, island.calculateInfluence(professorsMap).get(Team.BLACK));
-        assertEquals(2, island.calculateInfluenceNoTowers(professorsMap).get(Team.BLACK));
+    void testApplyEffect() {
+        try {
+            board.getCastleMap().get("lorenzo").addStudentsInDiningRoom(Arrays.asList(Color.PINK, Color.PINK, Color.PINK));
+            assertEquals(2, ((ExpertCastle) board.getCastleMap().get("lorenzo")).getCoins());
+            ExpertIsland island = (ExpertIsland) board.getIslandList().get(7);
+            Color student = null;
+            for (Color c:Color.values()) {
+               if(island.getStudents().get(c) == 1) student = c;
+            }
+            island.addStudent(
+                    Map.of(student, 1,
+                            Color.GREEN, 2));
+            Map<Color, Team> professorsMap = new HashMap<>();
+
+            assertEquals(0, island.calculateInfluence(professorsMap).get(Team.WHITE));
+            assertEquals(0, island.calculateInfluence(professorsMap).get(Team.BLACK));
+
+            professorsMap.put(student, Team.WHITE);
+            professorsMap.put(Color.GREEN, Team.BLACK);
+            assertEquals(2, island.calculateInfluence(professorsMap).get(Team.WHITE));
+            island.setOwnership(Team.BLACK);
+            assertEquals(2, island.calculateInfluenceNoTowers(professorsMap).get(Team.BLACK));
+            assertEquals(3, island.calculateInfluence(professorsMap).get(Team.BLACK));
+            board.playExpertCard(8);
+            board.playCard("lorenzo", 8);
+            board.moveMotherNature(3);
+            board.moveMotherNature(4);
+            assertEquals(Team.WHITE, island.getOwnership(), "White should conquer this island");
+        }catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception thrown");
+        }
     }
 }

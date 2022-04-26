@@ -123,6 +123,7 @@ class StudentTestJester {
         String currentPlayer = "Lollo99";
         ExpertCastle castle = new ExpertCastle(Team.WHITE, 2,
                 Arrays.asList(Color.GREEN, Color.GREEN, Color.GREEN));
+
         notAvailableStudents.addAll(Arrays.asList(Color.PINK, Color.PINK, Color.PINK));
 
         Map<Parameters, Object> parametersMap
@@ -132,6 +133,7 @@ class StudentTestJester {
 
         assertThrowsExactly(NoSuchStudentException.class, () -> jester.applyEffect(parametersMap),
                 "NoSuchStudentException not thrown");
+        
         try {
             jester.applyEffect(parametersMap);
         } catch (StudentException e) {
