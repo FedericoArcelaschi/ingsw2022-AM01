@@ -48,7 +48,8 @@ public class BoardTest{
 
     @Test
     public void testNotYourTurnException(){
-        assertThrows(NotYourTurnException.class, () -> b.chooseCloud(player2,0), "");
+        assertThrowsExactly(NotYourTurnException.class, () -> b.playCard(player2,1), "player can't move because it's not his turn");
+        assertDoesNotThrow(() -> b.playCard(player1,1), "player should be able to move because it's his turn");
     }
 
     @Test
