@@ -96,6 +96,7 @@ public class ExpertBoard extends Board {
      * @throws IllegalArgumentException the selected character was not extracted during this turn
      * @throws CoinException if the player doesn't have the needed coins to pay
      */
+    //MONK,
     public void playExpertCard(int idChar, int islandIndex, List<Color> studentsList) throws StudentException, CoinException {
         Generic ec = checkLegalExpertCard(idChar);
         ExpertCastle currPlayerCastle = (ExpertCastle) castleMap.get(getCurrentPlayer());
@@ -128,28 +129,26 @@ public class ExpertBoard extends Board {
 
 
     /**
-     * Method only for Mailman, Centaur, Knight call
-     * @param idChar number of the character as defined in the Enum
+     * Method only for Farmer, Mailman, Centaur, Knight call
+     * number of the character as defined in the Enum
      */
     public void playExpertCard(int idChar) throws CoinException, StudentException {
         playExpertCard(idChar, 0, Arrays.asList());
     }
 
+    /**
+     * Method for Guard, Witch
+     */
     public void playExpertCard(int idChar, int islandIndex) throws StudentException, CoinException {
         playExpertCard(idChar, islandIndex, Arrays.asList());
     }
 
     /**
-     * Smaller version of the playExpertCard()
-     * Removes the coins from the Castle and calls the applyEffect() of the right character.
+     * Method for Jester, Cook, Storyteller, Queen, Taxman
      * @param idChar char number to call the method on the right object
      */
     public void playExpertCard(int idChar, List<Color> studentsList) throws CoinException, StudentException {
         playExpertCard(idChar, 0, studentsList);
-    }
-
-    public void playExpertCard(int idChar, int islandIndex, Color student) throws StudentException, CoinException {
-        playExpertCard(idChar, 0, List.of(student));
     }
 
     private void outExpertCharacterParameters(Map<Parameters, Object> parametersMap) {
@@ -204,8 +203,8 @@ public class ExpertBoard extends Board {
     public void moveMotherNature (int steps) {
         if (steps > possibleMovingSteps)
             throw new IllegalArgumentException("too many steps");
-        if ((motherNaturePosition + steps)/(islandList.size()) >= 1) motherNaturePosition += steps - islandList.size();
-        else motherNaturePosition += steps;
+        if (motherNaturePosition + steps > islandList.size() - 1) steps -= islandList.size();
+        motherNaturePosition += steps;
         ExpertIsland currIsland = (ExpertIsland) islandList.get(motherNaturePosition);
         if (!currIsland.isBLocked())
             conquerIsland(currIsland);

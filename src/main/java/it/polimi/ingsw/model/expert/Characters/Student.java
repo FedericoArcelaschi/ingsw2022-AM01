@@ -81,9 +81,9 @@ public class Student extends Generic {
                         = ((Map<String, ExpertCastle>) parameterMap
                         .get(Parameters.CASTLEMAP))
                         .get(currentPlayer);
-                playerCastle.removeStudentsFromWaitingRoom(studentsToRemove); //here is thrown the StudentException
+                playerCastle.removeStudentsFromWaitingRoom(studentsToRemove); //here could be thrown the StudentException
                 playerCastle.addStudentsInWaitingRoom(studentsToAdd);
-                for (Color c : studentsToAdd)
+                for(Color c : studentsToAdd)
                     availableStudents.remove(c);
                 availableStudents.addAll(3, studentsToRemove);
                 cost = characterName.getCost() + 1;

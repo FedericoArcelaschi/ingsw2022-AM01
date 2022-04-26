@@ -76,13 +76,11 @@ public class Castle {
         if(students.size() > waitingRoom.size())
             throw new NoSuchStudentException("there aren't " + students.size() + " in waiting room." +
                     "Actual size: " + waitingRoom.size());//FIXME;
-        else if(!students.containsAll(students)) {
+        if(!waitingRoom.containsAll(students)){
             List<Color> temp = getWaitingRoom();
-            for(Color s : students) {
-                if (!temp.remove(s)) {
+            for(Color s : students)
+                if (!temp.remove(s))
                     throw new NoSuchStudentException("Student " + s + " not in the WaitingRoom");
-                }
-            }
         }
         for (Color col : students) {
             waitingRoom.remove(col);

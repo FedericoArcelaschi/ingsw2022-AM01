@@ -4,8 +4,6 @@ import it.polimi.ingsw.model.Color;
 
 public class NoSuchStudentException extends StudentException {
 
-    private Color student;
-
     public NoSuchStudentException(String message) {
         super(message);
     }
