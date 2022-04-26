@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.expert.Characters;
 
+import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Turn;
@@ -25,7 +26,7 @@ class InfluenceTestCentaur {
     @BeforeEach
     void setUp() {
         Turn t = new Turn(Arrays.asList("piero", "angela"));
-        board = new ExpertBoard("piero", "angela", t);
+        board = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("piero", "angela"), true, t);
     }
 
     @Test

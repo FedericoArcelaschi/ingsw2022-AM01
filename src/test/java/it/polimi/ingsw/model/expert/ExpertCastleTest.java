@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.Bag;
+import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
@@ -17,13 +18,11 @@ public class ExpertCastleTest{
     private static final List<String> players = Arrays.asList("pippo","pluto","paperino");
     private static final Turn t = new Turn(players);
     private static ExpertBoard board;
-    private static Bag bag;
     private static ExpertCastle expertCastle;
 
     @BeforeEach
     void setUp() {
-        board = new ExpertBoard(players.get(0), players.get(1), players.get(2), t);
-        bag = board.getBag();
+        board = (ExpertBoard) BoardFactory.getBoard(players, true, t);
         expertCastle = (ExpertCastle) board.getCastle(players.get(0));
     }
 

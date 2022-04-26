@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.expert.Characters;
 
+import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.Turn;
@@ -27,7 +28,7 @@ class InfluenceTestKnight {
     @BeforeEach
     void setUp() {
         Turn t = new Turn(Arrays.asList("lorenzo", "federico"));
-        board = new ExpertBoard("lorenzo", "federico", t);
+        board = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("lorenzo", "federico"), true, t);
         board.extract4CharacterTesting(8);
     }
 

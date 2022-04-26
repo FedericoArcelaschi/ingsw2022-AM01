@@ -7,11 +7,18 @@ import java.util.List;
 
 public class BoardFactory {
     public static Board getBoard(List<String> playerList, boolean expert, Turn turn){
-        return createBoard(playerList, turn, 1);
+        int seed = 1; //TODO: need to randomize
+        if (expert)
+            return createExpertBoard(playerList, turn, seed);
+        else
+            return createBoard(playerList, turn, seed);
     }
 
     public static Board getBoard(List<String> playerList, boolean expert, Turn turn, int seed){
-        return createBoard(playerList, turn, seed);
+        if (expert)
+            return createExpertBoard(playerList, turn, seed);
+        else
+            return createBoard(playerList, turn, seed);
     }
 
     private static Board createBoard(List<String> playerList, Turn turn, int seed) {

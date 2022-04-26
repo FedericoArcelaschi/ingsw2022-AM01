@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.expert.Characters;
 //TODO: ignore warnings
 
+import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.Turn;
@@ -30,7 +31,7 @@ class StudentTestJester {
     @BeforeEach
     void setUp() {
         Turn t = new Turn(List.of("Lollo99", "FedericaPellegrini"));
-        board = new ExpertBoard("Lollo99", "FedericaPellegrini", t);
+        board = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("Lollo99", "FedericaPellegrini"), true, t);
         if (board.getAvailableCharacterCards().get(7) == null) board.extract4CharacterTesting(7);
         jester = board.getAvailableCharacterCards().get(7);
     }

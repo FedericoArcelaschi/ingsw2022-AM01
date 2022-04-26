@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.expert.Characters;
 
+import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
@@ -25,7 +26,7 @@ public class StudentTestMonk {
     @BeforeEach
     void setUp() {
         t = new Turn(Arrays.asList("Lorenzo", "Giovanni"));
-        board = new ExpertBoard("Lorenzo", "Giovanni", t);
+        board = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("Lorenzo", "Giovanni"), true, t);
     }
 
     /**

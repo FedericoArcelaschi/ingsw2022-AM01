@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.expert;
 
+import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.expert.Characters.*;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,7 +21,7 @@ public class TavernTest{
     @BeforeAll
     static void beforeAll() {
         t = new Turn(Arrays.asList("a","b"));
-        board = new ExpertBoard("a", "b", t);
+        board = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("a","b"), true, t);
         tavern = new Tavern(board.getBag());
     }
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.expert.Characters;
 
+import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
@@ -21,7 +22,7 @@ class ActionTestMailMan {
     @BeforeEach
     void setUp() {
         Turn t = new Turn(Arrays.asList("LolloBenzo", "GiaCarte"));
-        board = new ExpertBoard("LolloBenzo", "GiaCarte", t);
+        board = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("LolloBenzo", "GiaCarte"), true, t);
         board.extract4CharacterTesting(4);
     }
 

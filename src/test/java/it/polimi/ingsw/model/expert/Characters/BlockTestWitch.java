@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.expert.Characters;
 
+import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.StudentException;
@@ -41,7 +42,7 @@ class BlockTestWitch {
 
     @Test
     void testApplyEffectErrorOutOfBlockTiles() throws NoSuchStudentException, TooManyStudentsException {
-        ExpertBoard board = new ExpertBoard("giovanni", "lorenzo", new Turn(Arrays.asList("giovanni", "lorenzo")));
+        ExpertBoard board = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("giovanni", "lorenzo"), true, new Turn(Arrays.asList("giovanni", "lorenzo")));
         Map<Parameters, Object> parameterMap = new HashMap<>();
         ExpertIsland island;
         for (int i = 0; i < 4; i++) {
