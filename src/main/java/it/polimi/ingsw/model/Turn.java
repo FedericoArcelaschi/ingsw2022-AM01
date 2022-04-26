@@ -39,7 +39,7 @@ public class Turn {
      * @return playerTurn
      */
     public String nextTurnPlanning(){
-        return currentPlayerTurn = next(sittingOrder,currentPlayerTurn);
+        return currentPlayerTurn = next(sittingOrder, currentPlayerTurn);
     }
 
     /** Sets the current turn to the next player chose in the planification turn.
@@ -61,4 +61,6 @@ public class Turn {
             return list.get(0);
         else return list.get(index +1);
     }
+
+    //TODO: DETERMINE ORDER OF ACTIONS
 }

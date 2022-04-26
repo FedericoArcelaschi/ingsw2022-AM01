@@ -59,8 +59,9 @@ public class ExpertBoard extends Board {
             if (i % 6 != 0) {
                 islandList.add(i, new ExpertIsland(s.get(0)));
                 s.remove(0);
-            } else
+            } else {
                 islandList.add(i, new ExpertIsland());
+            }
         }
     }
 
@@ -203,7 +204,7 @@ public class ExpertBoard extends Board {
     public void moveMotherNature (int steps) {
         if (steps > possibleMovingSteps)
             throw new IllegalArgumentException("too many steps");
-        if (motherNaturePosition + steps / islandList.size() >= 1) motherNaturePosition += steps - islandList.size();
+        if ((motherNaturePosition + steps)/(islandList.size()) >= 1) motherNaturePosition += steps - islandList.size();
         else motherNaturePosition += steps;
         ExpertIsland currIsland = (ExpertIsland) islandList.get(motherNaturePosition);
         if (!currIsland.isBLocked())

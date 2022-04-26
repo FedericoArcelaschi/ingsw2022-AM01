@@ -7,6 +7,7 @@ public class Bag {
     private final long seed;
     private final Random random;
 
+    @Deprecated
     public Bag(int studentsPerColor){
         students = new HashMap<>();
         for(Color c: Color.values()) students.put(c,studentsPerColor);
@@ -15,7 +16,7 @@ public class Bag {
         random.setSeed(seed);
     }
 
-    public Bag(int studentsPerColor, long seed) {//TODO: use in Board
+    public Bag(int studentsPerColor, long seed) {
         this.seed = seed;
         students = new HashMap<>();
         for (Color c : Color.values()) students.put(c, studentsPerColor);
@@ -67,7 +68,7 @@ public class Bag {
                 students.replace(c, students.get(c) - 1);
             }
         }
-        Collections.shuffle(extractedList);
+        Collections.shuffle(extractedList, random);
         return extractedList;
     }
 
