@@ -75,7 +75,7 @@ public class Game{
      * @param command, get command.
      * @return the command, so that the server can send the information back.
      */
-    private String getCommand(Command command){
+    private String getCommand(Command command){ //TODO: COMPLETE WITH MORE COMMANDS
         switch (command.getAttributesMap().get(CommandAttribute.WHAT)) {
             case "deck" -> {
                 return gson.toJson(getDeck(command.getUsername()));
@@ -117,7 +117,7 @@ public class Game{
             }
         }
         switch (command.getAttributesMap().get(CommandAttribute.WHERE)){
-            case "Dining room" -> {
+            case "dining room" -> {
                 try {
                     board.moveStudentToDR(command.getUsername(), students);
                     s = "The students have been moved to the dining room.";
@@ -134,7 +134,7 @@ public class Game{
                     return s;
                 }
             }
-            case "Island" -> {
+            case "island" -> {
                 //the current player moves the list of students in the third parameter
                 //to the island of which the id was chosen.
                 try {
