@@ -13,7 +13,7 @@ public class Castle {
     private final Team towerColor;
     private final int waitingRoomSize;
     //constants
-    private static final int diningRoomSize = 9;
+    private static final int waitingRoomSizePerColor = 9;
     private static final int waitingRoomSize2Players = 7;
     private static final int waitingRoomSize3Players = 9;
     private static final int numberOfCards = 10;
@@ -39,7 +39,8 @@ public class Castle {
      */
     public boolean addStudentsInWaitingRoom(List<Color> students) throws TooManyStudentsException {
         if(students.size() + waitingRoom.size() > waitingRoomSizePerColor) {
-            throw new TooManyStudentsException("there are already " + waitingRoomSizePerColor + " students in the waiting room");
+            throw new TooManyStudentsException("there are already " + waitingRoomSizePerColor +
+                    " students in the waiting room");
         }
         waitingRoom.addAll(students);
         return true;
@@ -50,7 +51,7 @@ public class Castle {
      * @param student color
      */
     public void addStudentInDiningRoom(Color student) throws TooManyStudentsException{
-        if (diningRoom.get(student) == diningRoomSize) {
+        if (diningRoom.get(student) == waitingRoomSizePerColor) {
             throw new TooManyStudentsException();
         }
         diningRoom.put(student, diningRoom.get(student) + 1);
@@ -71,15 +72,16 @@ public class Castle {
      * @param students – The list of students to remove.
      * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
      */
-    public void removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException {
-        if(!new HashSet<>(waitingRoom).containsAll(students) || students.size() > waitingRoomSize){
-            throw new NoSuchStudentException();
-        }
-        else{
-        List<Color> temp = getWaitingRoom();
-        for(Color s : students){
-            if(!temp.remove(s)){
-                throw new NoSuchStudentException("Student " + s + " not in the WaitingRoom");
+    public void removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException, TooManyStudentsException {
+        if(students.size() > waitingRoom.size())
+            throw new NoSuchStudentException("there aren't " + students.size() + " in waiting room." +
+                    "Actual size: " + waitingRoom.size());//FIXME;
+        else if(!students.containsAll(students)) {
+            List<Color> temp = getWaitingRoom();
+            for(Color s : students) {
+                if (!temp.remove(s)) {
+                    throw new NoSuchStudentException("Student " + s + " not in the WaitingRoom");
+                }
             }
         }
         for (Color col : students) {

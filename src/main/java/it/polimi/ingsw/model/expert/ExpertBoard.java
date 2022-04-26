@@ -18,23 +18,23 @@ public class ExpertBoard extends Board {
     private List<Generic> expertCharactersCards;
     private Generic activeChar = null;
 
-    public ExpertBoard(String playerID1, String playerID2, Turn t) {
-        super(t);
+    public ExpertBoard(String playerID1, String playerID2, Turn t, long seed) {
+        super(t, 2, seed);
         castleMap.put(playerID1, new ExpertCastle(Team.WHITE, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID2, new ExpertCastle(Team.BLACK, nPlayer, bag.multipleExtract(7)));
         construct();
     }
 
-    public ExpertBoard(String playerID1, String playerID2, String playerID3, Turn t) {
-        super(t);
+    public ExpertBoard(String playerID1, String playerID2, String playerID3, Turn t, long seed) {
+        super(t, 3, seed);
         castleMap.put(playerID1, new ExpertCastle(Team.WHITE, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID2, new ExpertCastle(Team.BLACK, nPlayer, bag.multipleExtract(9)));
         castleMap.put(playerID3, new ExpertCastle(Team.GREY, nPlayer, bag.multipleExtract(9)));
         construct();
     }
 
-    public ExpertBoard(String playerID1, String playerID2, String playerID3, String playerID4, Turn t) {
-        super(t);
+    public ExpertBoard(String playerID1, String playerID2, String playerID3, String playerID4, Turn t, long seed) {
+        super(t, 4, seed);
         castleMap.put(playerID1, new ExpertCastle(Team.WHITE, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID2, new ExpertCastle(Team.BLACK, nPlayer, bag.multipleExtract(7)));
         castleMap.put(playerID3, new ExpertCastle(Team.WHITE, nPlayer, bag.multipleExtract(7)));
@@ -119,17 +119,15 @@ public class ExpertBoard extends Board {
             //TODO handle the exception
             return;
         }
-
         outExpertCharacterParameters(parametersMap);
-        if (isWinningPosition() != null) ;
+        if (isWinningPosition() != null);
         //TODO: end game --> valore di uscita
-
         activeChar = ec;
     }
 
 
     /**
-     * Method only for Mailman call
+     * Method only for Mailman, Centaur, Knight call
      * @param idChar number of the character as defined in the Enum
      */
     public void playExpertCard(int idChar) throws CoinException, StudentException {
@@ -223,9 +221,18 @@ public class ExpertBoard extends Board {
             influence = island.calculateInfluenceNoTowers(professorsMap);
         else
             influence = island.calculateInfluence(professorsMap);
-        Team t = teamWithMoreInfluence(influence);
+        if(activeChar.getCharacterType().getId() == 8)
+            influence = addedInfluence(influence);
+        Team t = findMaxTeam(influence);
         if (t != null) island.setOwnership(t);
         checkJoinIsland(island);
+    }
+
+    private Map<Team, Integer> addedInfluence(Map<Team, Integer> influenceMap) {
+        Team currTeam = castleMap.get(getCurrentPlayer()).getTeam();
+        int influence = influenceMap.get(currTeam);
+        influenceMap.replace(currTeam, influence + 2);
+        return influenceMap;
     }
 
     /**

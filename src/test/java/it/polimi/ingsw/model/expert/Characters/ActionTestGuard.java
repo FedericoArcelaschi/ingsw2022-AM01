@@ -29,7 +29,7 @@ public class ActionTestGuard {
     @BeforeEach
     void setUp() {
         Turn t = new Turn(Arrays.asList("Federico", "Lorenzo"));
-        board = new ExpertBoard("Federico", "Lorenzo", t);
+        board = new ExpertBoard("Federico", "Lorenzo", t, 69420);
         board.extract4CharacterTesting(3);
         guardChar = board.getAvailableCharacterCards().get(3);
         ParametersMap = new HashMap<>();

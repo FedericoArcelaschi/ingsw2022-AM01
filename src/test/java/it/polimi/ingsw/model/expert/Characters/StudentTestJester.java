@@ -134,6 +134,7 @@ class StudentTestJester {
         try {
             jester.applyEffect(parametersMap);
         } catch (StudentException e) {
+            e.printStackTrace();
             assertEquals("Student PINK not in the WaitingRoom", e.getMessage());
         } catch (IllegalArgumentException e) {
             fail("The method shouldn't throw this exception: " + e.getMessage());

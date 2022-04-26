@@ -32,7 +32,7 @@ class InfluenceTestCentaur {
     void applyEffect() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         board.extract4CharacterTesting(6);
         List<Color> students = board.getCastle("piero").getWaitingRoom();
-        board.moveStudentToDR("piero", students);
+        board.moveStudentToDiningRoom("piero", students);
         //TODO: add 2 oins to the castle to invoke the method is unpleasant
     }
 }

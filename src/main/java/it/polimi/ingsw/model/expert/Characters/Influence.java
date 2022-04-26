@@ -51,12 +51,8 @@ public class Influence extends Generic {
                 }
                 cost = characterName.getCost() + 1;
             }
-            case 6 -> {
+            case 6 , 8->
                 cost = characterName.getCost() + 1;
-            }
-            case 8 -> {
-                cost = characterName.getCost() + 1;
-            }
             case 9 -> {
                 cost = characterName.getCost() + 1;
             }

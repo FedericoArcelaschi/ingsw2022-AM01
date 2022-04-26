@@ -99,7 +99,7 @@ public class BoardTest {
         assertTrue(b.chooseCloud(player1, 0));
     }
     @Test
-    public void testMoveStudentToIsland() throws NoSuchStudentException, NotYourTurnException {
+    public void testMoveStudentToIsland() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         List<Color> colorList =  new ArrayList<>();
 
         colorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));

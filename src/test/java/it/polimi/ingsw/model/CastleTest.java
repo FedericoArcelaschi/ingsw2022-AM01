@@ -14,7 +14,7 @@ public class CastleTest {
     @Test
     public void testAddStudentWR() throws TooManyStudentsException, NoSuchStudentException {
         Bag b = new Bag(24);
-        Castle c = new Castle("Lorenzo", Team.BLACK, 2, b.multipleExtract(9));
+        Castle c = new Castle(Team.BLACK, 2, b.multipleExtract(9));
         List<Color> s = new ArrayList<>();
         List<Color> newStudents = new ArrayList<>();
         s.add(c.getWaitingRoom().get(0));
@@ -37,6 +37,10 @@ public class CastleTest {
         }
         assertThrows(NoSuchStudentException.class, () -> c.removeStudentsFromWaitingRoom(students),
                 "10 yellow students can't be present in the waitingroom. (size=9)");
+        // FIXME: org.opentest4j.AssertionFailedError: 10 yellow students can't be present in the waitingroom.
+        // (size=9) ==> Unexpected exception type thrown ==>
+        // expected: <it.polimi.ingsw.model.exceptions.NoSuchStudentException>
+        // but was: <it.polimi.ingsw.model.exceptions.TooManyStudentsException>
     }
 
     @Test
@@ -49,6 +53,8 @@ public class CastleTest {
         newStudents.add(Color.GREEN);
         newStudents.add(Color.RED);
         assertThrows(TooManyStudentsException.class, () -> c.addStudentsInWaitingRoom(newStudents), "");
+
+
     }
 
     @Test
@@ -67,7 +73,7 @@ public class CastleTest {
         assertEquals(oldList, c.getDiningRoom());
     }
     @Test
-    public void testRemoveWR() throws NoSuchStudentException {
+    public void testRemoveWR() throws NoSuchStudentException, TooManyStudentsException {
         Bag b = new Bag(24);
         List<Color> students = b.multipleExtract(9);
         Castle c = new Castle(Team.BLACK, 2, students);

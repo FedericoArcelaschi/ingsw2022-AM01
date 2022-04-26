@@ -7,18 +7,17 @@ import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Board {
 
     private static final int numOfStudentsPerColor = 24;
     protected int motherNaturePosition = 0;
-    protected int nPlayer;
+    protected final int nPlayer;
     protected final Bag bag = new Bag(numOfStudentsPerColor);
     protected final List<Cloud> cloudList = new ArrayList<>();
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
-    protected Map<Color, Team> professorsMap = new HashMap<>();
+    protected final Map<Color, Team> professorsMap = new HashMap<>();
     protected final Turn turn;
     protected Integer possibleMovingSteps = 0; //calculated form the card: must be stored in memory til the player action turn
 
@@ -33,7 +32,6 @@ public class Board {
         nPlayer = 2;
         castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
         castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
-        nPlayer = castleMap.size();
         construct();
         this.turn=turn;
     }
@@ -67,7 +65,8 @@ public class Board {
 
     /**Constructor for ExpertBoard
      */
-    protected Board(Turn turn){
+    protected Board(Turn turn, int nPlayer, long seed){
+        this.nPlayer = nPlayer;
         this.turn = turn;
         setupClouds();
         setupProfessorMap();
@@ -85,7 +84,6 @@ public class Board {
      * instance at null the professor map
      */
     private void setupProfessorMap(){
-        professorsMap = new HashMap<>();
         for(Color c : Color.values()){
             professorsMap.put(c,null);
         }
@@ -173,16 +171,16 @@ public class Board {
     }
 
     /**
-     * Moves the students in the list <code>students</code> from <code>Player</code> 's wating room
+     * Moves the students in the list <code>students</code> from <code>Player</code> 's waiting room
      * to the island n°<code>islandNumber</code>.
      * @param Player the id of the player that ask for this move
      * @param islandNumber the number of the island where you want to move the students
      * @param students a list of students you want to move
      * @return true if the students are present and added to the island.
      */
-    public boolean moveStudentToIsland(String PlayerID, int islandNumber, List<Color> students) throws NoSuchStudentException, NotYourTurnException {
-        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
-        castleMap.get(PlayerID).removeStudentsFromWaitingRoom(students);
+    public boolean moveStudentToIsland(String Player, int islandNumber, List<Color> students) throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
+        if(!turn.getCurrentPlayer().equals(Player)) throw new NotYourTurnException();
+        castleMap.get(Player).removeStudentsFromWaitingRoom(students);
         for(Color c : students){
             islandList.get(islandNumber).addStudent(c);
         }
@@ -197,6 +195,7 @@ public class Board {
     public boolean playCard(String PlayerID, int card) throws NotYourTurnException {
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
+        possibleMovingSteps = (card + 1 )/2;
         return castle.playCard(card);
     }
 
@@ -231,7 +230,7 @@ public class Board {
      * @param map map that contains team and a generic Integer
      * @return the team with the most towers.
      */
-    private Team teamWithMoreTowers(Map<Team,Integer> map){
+    protected Team findMaxTeam(Map<Team, Integer> map){
         int max;
         Team winner;
 
@@ -319,29 +318,6 @@ public class Board {
     }
 
     /**
-     * Joins the islands and puts the new island in the list.
-     */
-    public void joinIslands(@NotNull List<Island> islandList) {
-        int firstIslandIndex
-                = this.islandList
-                .indexOf(islandList.get(0));
-        if(firstIslandIndex == -1)
-            throw new IllegalArgumentException("island: " + islandList.get(0).toString() + "not found!");
-        Island newIsland = null;
-        if(islandList.size()==2){
-            if(this.islandList.removeAll(Arrays.asList(islandList.get(0), islandList.get(1))))
-                newIsland = new Archipelago(islandList.get(0),islandList.get(1));
-        }
-        else if(islandList.size()==3){
-            if(this.islandList.removeAll(Arrays.asList(islandList.get(0), islandList.get(1), islandList.get(2))))
-                newIsland = new Archipelago(islandList.get(0),islandList.get(1),islandList.get(2));
-        }
-        else
-            throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
-        this.islandList.add(firstIslandIndex, newIsland);
-    }
-
-    /**
      * Calculates the influence and sets a new owner
      * on the current island mother nature lands on.
      * Checks if nearby islands have the same owner and possibly joins them.
@@ -392,6 +368,28 @@ public class Board {
         if(islandToJoin.size() == 2 || islandToJoin.size() == 3) joinIslands(islandToJoin);
     }
 
+    /**
+     * Joins the islands and puts the new island in the list.
+     */
+    public void joinIslands(@NotNull List<Island> islandList) {
+        int firstIslandIndex
+                = this.islandList
+                .indexOf(islandList.get(0));
+        if(firstIslandIndex == -1)
+            throw new IllegalArgumentException("island: " + islandList.get(0).toString() + "not found!");
+        Island newIsland = null;
+        if(islandList.size()==2){
+            if(this.islandList.removeAll(Arrays.asList(islandList.get(0), islandList.get(1))))
+                newIsland = new Archipelago(islandList.get(0),islandList.get(1));
+        }
+        else if(islandList.size()==3){
+            if(this.islandList.removeAll(Arrays.asList(islandList.get(0), islandList.get(1), islandList.get(2))))
+                newIsland = new Archipelago(islandList.get(0),islandList.get(1),islandList.get(2));
+        }
+        else
+            throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
+        this.islandList.add(firstIslandIndex, newIsland);
+    }
 
     //getters
 
