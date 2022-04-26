@@ -25,7 +25,7 @@ class InfluenceTestCentaur {
     @BeforeEach
     void setUp() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         t = new Turn(Arrays.asList("piero", "angela"));
-        board = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("piero", "angela"), true, t, 42069);
+        board = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("piero", "angela"), true, t, 42064);
         board.extract4CharacterTesting(6);
     }
 
@@ -35,23 +35,21 @@ class InfluenceTestCentaur {
     @Test
     void testApplyEffect(){
         try {
-            board.getCastleMap().get("piero").addStudentsInDiningRoom(Arrays.asList(Color.RED, Color.RED, Color.RED));
-            board.getCastleMap().get("angela").addStudentsInDiningRoom(Arrays.asList(Color.BLUE, Color.BLUE, Color.BLUE));
-            board.getCastleMap().get("piero").removeStudentsFromWaitingRoom(Arrays.asList(Color.GREEN));
-            board.getCastleMap().get("piero").addStudentsInWaitingRoom(Arrays.asList(Color.BLUE));
-            board.getCastleMap().get("angela").removeStudentsFromWaitingRoom(Arrays.asList(Color.YELLOW));
-            board.getCastleMap().get("angela").addStudentsInWaitingRoom(Arrays.asList(Color.YELLOW));
-            assertEquals(2, ((ExpertCastle) board.getCastleMap().get("piero")).getCoins());
+            System.out.println(board.getCastleMap().get("piero").getWaitingRoom()); //PIERO HA DUE ROSA
+            System.out.println(board.getCastleMap().get("angela").getWaitingRoom()); //ANGELA HA TRE ROSSI
+            System.out.println(board.getIslandList().get(3).getStudents());
+            assertEquals(1, ((ExpertCastle) board.getCastleMap().get("piero")).getCoins());
             board.playExpertCard(6, 4);
             board.playCard("piero", 6);
-            board.moveStudentToIsland("piero", 3, Arrays.asList(Color.BLUE));
+            t.nextTurnAction();
+            board.moveStudentToDiningRoom("piero", Arrays.asList(Color.PINK));
             board.moveMotherNature(3);
             System.out.println(board.getIslandList().get(3).getOwnership());
             t.nextTurnAction();
             board.playCard("angela", 10);
-            board.moveStudentToIsland("angela", 3, Arrays.asList(Color.BLUE, Color.BLUE));
-            board.moveStudentToDiningRoom("angela", Arrays.asList(Color.BLUE));
-            board.getCastleMap().get("angela").removeStudentsFromWaitingRoom(Arrays.asList(Color.BLUE, Color.BLUE, Color.BLUE));
+            board.moveStudentToIsland("angela", 3, Arrays.asList(Color.RED, Color.RED));
+            board.moveStudentToDiningRoom("angela", Arrays.asList(Color.RED));
+            board.getCastleMap().get("angela").removeStudentsFromWaitingRoom(Arrays.asList(Color.RED, Color.RED, Color.RED));
             board.moveMotherNature(5);
             t.nextTurnPlanning();
             board.playCard("piero", 8);
