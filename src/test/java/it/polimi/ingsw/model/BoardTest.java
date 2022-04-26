@@ -19,8 +19,9 @@ public class BoardTest{
 
     @BeforeEach
     void setUp() {
-        t = new Turn(Arrays.asList(player1, player2));
-        b = new Board(player1, player2, t, seed);
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        t = new Turn(listOfPlayer);
+        b =  BoardFactory.getBoard(listOfPlayer, t, seed);
     }
 
     @Test

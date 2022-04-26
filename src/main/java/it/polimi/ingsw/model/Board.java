@@ -12,49 +12,53 @@ public class Board {
     private static final int numOfStudentsPerColor=24;
     protected int motherNaturePosition = 0;
     protected int nPlayer;
-    protected final Bag bag = new Bag(numOfStudentsPerColor);
+    protected final Bag bag;
     protected final List<Cloud> cloudList = new ArrayList<>();
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
     protected Map<Color, Team> professorsMap;
     protected final Turn turn;
-    private final int seed;
+    private final long seed;
     //constants
     private final int numberOfIslands = 12;
     private final int numberOfIslandsToEndGame = 3;
     private final int numberOfTowersToPlace = 8;
-    private final int[] cloudSize = {0, 0, 3, 4, 3};
+    private static final int cloudSize2_4Player = 3;
+    private static final int cloudSize3Player = 4;
 
 
     public Board(String playerID1, String playerID2, Turn turn, int seed){
-        this.seed = seed;
         nPlayer = 2;
+        this.seed = seed;
+        bag = new Bag(numOfStudentsPerColor, seed);
+        this.turn=turn;
         castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
         castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
         nPlayer = castleMap.size();
         construct();
-        this.turn=turn;
     }
 
     public Board(String playerID1, String playerID2, String playerID3, Turn turn, int seed){
-        this.seed = seed;
         nPlayer = 3;
+        this.seed = seed;
+        bag = new Bag(numOfStudentsPerColor, seed);
+        construct();
         castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
         castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
         castleMap.put(playerID3, new Castle(Team.GREY, nPlayer, bag.extractForCastleSetup(nPlayer)));
         this.turn = turn;
-        construct();
     }
 
     public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn, int seed){
-        this.seed = seed;
         nPlayer = 4;
+        this.seed = seed;
+        bag = new Bag(numOfStudentsPerColor, seed);
+        this.turn=turn;
         castleMap.put(playerID1, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
         castleMap.put(playerID2, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
         castleMap.put(playerID3, new Castle(Team.WHITE, nPlayer, bag.extractForCastleSetup(nPlayer)));
         castleMap.put(playerID4, new Castle(Team.BLACK, nPlayer, bag.extractForCastleSetup(nPlayer)));
         construct();
-        this.turn=turn;
     }
 
     /**Cleans the constructor implementation
@@ -67,9 +71,11 @@ public class Board {
 
     /**Constructor for ExpertBoard
      */
-    protected Board(Turn turn, int seed){
+    protected Board(Turn turn, int seed, int nPlayer){
         this.turn = turn;
         this.seed = seed;
+        this.bag = new Bag(numOfStudentsPerColor, seed);
+        this.nPlayer = nPlayer;
         setupClouds();
         setupProfessorMap();
     }
@@ -79,7 +85,8 @@ public class Board {
      */
 
     protected void setupClouds(){
-        for (int i = 0; i < nPlayer; i++) cloudList.add(new Cloud(bag, cloudSize[nPlayer]));
+        int cloudSize = nPlayer == 3 ? cloudSize3Player : cloudSize2_4Player;
+        for (int i = 0; i < nPlayer; i++) cloudList.add(new Cloud(bag, cloudSize));
     }
 
     /**
