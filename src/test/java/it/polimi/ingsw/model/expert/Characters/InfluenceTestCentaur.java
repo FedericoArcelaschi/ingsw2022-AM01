@@ -37,12 +37,14 @@ class InfluenceTestCentaur {
         try {
             board.getCastleMap().get("piero").addStudentsInDiningRoom(Arrays.asList(Color.RED, Color.RED, Color.RED));
             board.getCastleMap().get("angela").addStudentsInDiningRoom(Arrays.asList(Color.BLUE, Color.BLUE, Color.BLUE));
+            board.getCastleMap().get("piero").removeStudentsFromWaitingRoom(Arrays.asList(Color.GREEN));
+            board.getCastleMap().get("piero").addStudentsInWaitingRoom(Arrays.asList(Color.BLUE));
+            board.getCastleMap().get("angela").removeStudentsFromWaitingRoom(Arrays.asList(Color.YELLOW));
+            board.getCastleMap().get("angela").addStudentsInWaitingRoom(Arrays.asList(Color.YELLOW));
             assertEquals(2, ((ExpertCastle) board.getCastleMap().get("piero")).getCoins());
             board.playExpertCard(6, 4);
             board.playCard("piero", 6);
-            board.moveStudentToIsland("piero", 3, Arrays.asList(Color.RED));
-            board.moveStudentToDiningRoom("piero", Arrays.asList(Color.RED, Color.RED));
-            board.getCastleMap().get("piero").removeStudentsFromWaitingRoom(Arrays.asList(Color.RED, Color.RED, Color.RED));
+            board.moveStudentToIsland("piero", 3, Arrays.asList(Color.BLUE));
             board.moveMotherNature(3);
             System.out.println(board.getIslandList().get(3).getOwnership());
             t.nextTurnAction();
@@ -61,7 +63,8 @@ class InfluenceTestCentaur {
             System.out.println(board.getProfessorsMap());
             assertEquals(Team.BLACK, board.getIslandList().get(3).getOwnership());
         }catch(Exception e){
-            fail();
+            e.printStackTrace();
+            fail("exception not expected");
         }
     }
 }
