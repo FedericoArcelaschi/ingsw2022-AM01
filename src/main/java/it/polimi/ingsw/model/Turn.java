@@ -7,6 +7,8 @@ public class Turn {
     private final List<String> sittingOrder;
     private List<String> actionOrder;
     private String currentPlayerTurn;
+    private final TurnPhases[] turnPhases;
+    private TurnPhases currentPhase;
 
     /**
      * For the first round the PlanningPhase is the Sitting Order
@@ -16,16 +18,18 @@ public class Turn {
         this.sittingOrder = new ArrayList<>(sittingOrder);
         actionOrder = new ArrayList<>(sittingOrder);
         currentPlayerTurn = sittingOrder.get(0);
+        turnPhases = TurnPhases.values();
     }
 
     /**
-     * @return the player who is playing
+     * @return the turn player
      */
     public String getCurrentPlayer(){
         return currentPlayerTurn;
     }
 
-    /**Changes the turn along the new action turn order
+    /** Changes the turn player according to the new turn order, determined in the planning phase.
+     * The method is called immediately after the planning phase is over.
      */
     public void setTurnAction(List<String> newerTurns) throws IllegalArgumentException{
         if(newerTurns.containsAll(actionOrder) && actionOrder.containsAll(newerTurns))
@@ -35,15 +39,15 @@ public class Turn {
         currentPlayerTurn = actionOrder.get(0);
     }
 
-    /** Sets the current turn to the player besides him.
+    /** Sets the current turn to the player besides him. Used only in the planning phase of the turn.
      * @return playerTurn
      */
     public String nextTurnPlanning(){
         return currentPlayerTurn = next(sittingOrder,currentPlayerTurn);
     }
 
-    /** Sets the current turn to the next player chose in the planification turn.
-     * Returns also the first player for the Planification turn
+    /** Sets the current turn to the next player chose in the planning phase.
+     * Returns also the first player for the planning phase.
      * Doesn't need tp be called for the first player. It's already on currentPlayerTurn
      * @return playerTurn
      */
