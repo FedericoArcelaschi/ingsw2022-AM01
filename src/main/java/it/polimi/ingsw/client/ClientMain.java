@@ -129,7 +129,7 @@ public class ClientMain {
         String username = command.getUsername();
         switch (attributeMap.get(CommandAttribute.WHAT)) {
             case "deck" -> {
-                return board.getAvailableCards(username).toString();
+                return board.getDeck(username).toString();
             }
             case "professors" -> {
                 return board.getProfessorsMap().toString();

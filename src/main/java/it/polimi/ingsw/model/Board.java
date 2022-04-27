@@ -213,7 +213,7 @@ public class Board {
      * @return a list of not yet played card
      */
 
-    public List<Card> getAvaliableCard(String PlayerID){
+    public List<Card> getDeck(String PlayerID){
         Castle castle = castleMap.get(PlayerID);
         return castle.getDeck();
     }
@@ -442,6 +442,10 @@ public class Board {
 
     public int getNPlayer() {
         return nPlayer;
+    }
+
+    public int getMotherNaturePosition() {
+        return motherNaturePosition;
     }
 
     public List<String> getPlayerUsernames(){

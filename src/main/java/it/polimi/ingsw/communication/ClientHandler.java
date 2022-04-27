@@ -31,7 +31,7 @@ public class ClientHandler implements Runnable {
                 } else {
                     String responseMessage = game.executeCommand(parser.fromJson(line, Command.class));
                     System.out.println(responseMessage);
-                    Response response = new Response(responseMessage, game.getBoard());
+                    Response response = new Response(ResponseType.UPDATE);
                     System.out.println(parser.toJson(response, Response.class));
                     out.println(parser.toJson(response, Response.class));
                     out.flush();

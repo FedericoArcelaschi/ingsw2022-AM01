@@ -3,9 +3,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cloud {
-    private Bag bag;
-    private List<Color> studentList;
-    private int size;
+    private final Bag bag;
+    private final List<Color> studentList;
+    private final int size;
 
     public Cloud(Bag bag, int size){
         this.bag = bag;
@@ -31,6 +31,10 @@ public class Cloud {
 
     public int getSize() {
         return size;
+    }
+
+    public List<Color> getStudentList() {
+        return new ArrayList<>(studentList);
     }
 
     @Override

@@ -62,8 +62,8 @@ public class Game{
      * @param playerID the player that called the command
      * @return String that shows availability for each card of the deck
      */
-    private Boolean[] getDeck(String playerID){
-        return board.getAvailableCards(playerID);
+    private List<Card> getDeck(String playerID){
+        return board.getDeck(playerID);
     }
 
     private Map<Color, Team> getProfessorMap(){
@@ -119,7 +119,7 @@ public class Game{
         switch (command.getAttributesMap().get(CommandAttribute.WHERE)){
             case "dining room" -> {
                 try {
-                    board.moveStudentToDR(command.getUsername(), students);
+                    board.moveStudentToDiningRoom(command.getUsername(), students);
                     s = "The students have been moved to the dining room.";
                     return s;
                 } catch (NoSuchStudentException e) {

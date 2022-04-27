@@ -6,11 +6,14 @@ import it.polimi.ingsw.client.ClientMain;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Timestamp;
 
 public class ClientReceiver implements Runnable{
     private final Socket socket;
     private final BufferedReader in;
+    private final PrintWriter out;
     private final ClientMain cm;
 
     public ClientReceiver(ClientMain cm, Socket socket){
@@ -18,6 +21,7 @@ public class ClientReceiver implements Runnable{
         this.cm = cm;
         try {
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -27,14 +31,22 @@ public class ClientReceiver implements Runnable{
     public void run() {
         Gson parser = new Gson();
         while(!socket.isClosed()){
-            Response r;
+            Response messageFromServer;
             try {
-                  r = parser.fromJson(in.readLine(), Response.class);
+                  messageFromServer = parser.fromJson(in.readLine(), Response.class);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println(r.message());
-            cm.setBoard(r.board());
+            switch (messageFromServer.type()){
+                case PING -> {
+                    Response heartbeatToServer = new Response(ResponseType.PING);
+                    out.println(parser.toJson(heartbeatToServer));
+                }
+                case UPDATE -> {
+                    //print data without saving it anywhere
+                    System.out.println(messageFromServer.data());
+                }
+            }
         }
     }
 }
