@@ -19,6 +19,7 @@ public class Tavern {
     /**
      * @param bag for Student Character generation
      */
+    @Deprecated
     public Tavern(Bag bag){
         seed = bag.getSeed();
         Tavern.bag = bag;
@@ -64,7 +65,7 @@ public class Tavern {
             case 2, 6, 8, 9, 12 -> ec = new Influence(idChar);
             case 3, 4 -> ec = new Action(idChar);
             case 5 -> ec = new Block(idChar);
-            default -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException(idChar + " is not a legal id for ExpertCharacters");
         };
     }
     public Generic extract4testing(int idChar){

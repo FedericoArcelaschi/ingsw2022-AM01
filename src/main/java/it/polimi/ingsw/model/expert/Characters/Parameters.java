@@ -5,9 +5,10 @@ package it.polimi.ingsw.model.expert.Characters;
 public enum Parameters {
     PLAYERID,
     ISLAND,
+    ISLANDINDEX,
     CASTLEMAP,
     PROFESSORSMAP,
     STUDENTLIST,
-    STEPS,
-    AVAILABLEBLOCKTILES
+    AVAILABLEBLOCKTILES,
+    STEPS
 }

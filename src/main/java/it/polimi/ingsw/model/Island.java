@@ -35,8 +35,9 @@ public class Island{
         return new HashMap<>(students);
     }
 
-    public void setOwnership(Team ownership) {
+    public Island setOwnership(Team ownership) {
         this.ownership = ownership;
+        return this;
     }
 
     /**
@@ -50,7 +51,7 @@ public class Island{
     }
 
     /**
-     * add multiple students to the island
+     * Adds multiple students to the island
      * @param s Map that contains how many students per color to add
      * @return check boolean
      */

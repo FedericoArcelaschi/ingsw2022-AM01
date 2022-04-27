@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.exceptions.CoinException;
-import it.polimi.ingsw.model.exceptions.NotYourTurnException;
-import it.polimi.ingsw.model.exceptions.StudentException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.expert.Characters.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,7 +61,6 @@ public class ExpertBoard extends Board {
             }
         }
     }
-
     /**
      * Initializes <code>expertCharactersCards</code>. It's a factory method
      */
@@ -88,7 +84,8 @@ public class ExpertBoard extends Board {
     }
 
     /**
-     * Tries to pay for the card and then calls applyEffect with the right parameters
+     * Called only for Monk
+     * Pays for the card and then calls applyEffect with the right parameters
      *
      * @param idChar      character id correspondingo to CharacterList's position
      * @param islandIndex - index as seen in the view (user input)
@@ -96,7 +93,6 @@ public class ExpertBoard extends Board {
      * @throws IllegalArgumentException the selected character was not extracted during this turn
      * @throws CoinException if the player doesn't have the needed coins to pay
      */
-    //MONK,
     public void playExpertCard(int idChar, int islandIndex, List<Color> studentsList) throws StudentException, CoinException {
         Generic ec = checkLegalExpertCard(idChar);
         ExpertCastle currPlayerCastle = (ExpertCastle) castleMap.get(getCurrentPlayer());
@@ -121,25 +117,24 @@ public class ExpertBoard extends Board {
             //TODO handle the exception
             return;
         }
+
+
         outExpertCharacterParameters(parametersMap);
-        if (isWinningPosition() != null);
-        //TODO: end game --> valore di uscita
         activeChar = ec;
     }
 
-
     /**
-     * Method only for Farmer, Mailman, Centaur, Knight call
+     * Method for Farmer, Mailman, Centaur, Knight call
      * number of the character as defined in the Enum
      */
-    public void playExpertCard(int idChar) throws CoinException, StudentException {
+    public void playExpertCard(@NotNull int idChar) throws CoinException, StudentException {
         playExpertCard(idChar, 0, Arrays.asList());
     }
 
     /**
      * Method for Guard, Witch
      */
-    public void playExpertCard(int idChar, int islandIndex) throws StudentException, CoinException {
+    public void playExpertCard(@NotNull int idChar, @NotNull int islandIndex) throws CoinException,StudentException {
         playExpertCard(idChar, islandIndex, Arrays.asList());
     }
 
@@ -147,25 +142,28 @@ public class ExpertBoard extends Board {
      * Method for Jester, Cook, Storyteller, Queen, Taxman
      * @param idChar char number to call the method on the right object
      */
-    public void playExpertCard(int idChar, List<Color> studentsList) throws CoinException, StudentException {
+    public void playExpertCard(@NotNull int idChar, @NotNull List<Color> studentsList) throws CoinException, StudentException {
         playExpertCard(idChar, 0, studentsList);
     }
 
     private void outExpertCharacterParameters(Map<Parameters, Object> parametersMap) {
         possibleMovingSteps = (Integer) parametersMap.get(Parameters.STEPS);
+        islandList.add((int)parametersMap.get(Parameters.ISLANDINDEX),
+                (ExpertIsland)parametersMap.get(Parameters.ISLAND));
     }
-
     private Map<Parameters, Object> initializeExpertCharacterParameters(int idChar, int islandIndex, List<Color> studentsList) {
         Map<Parameters, Object> parametersMap = new HashMap<>(
-                Map.of(
-                        Parameters.PLAYERID, getCurrentPlayer(),
-                        Parameters.ISLAND, getIslandList().get(islandIndex),
-                        Parameters.CASTLEMAP, castleMap,
-                        Parameters.PROFESSORSMAP, professorsMap,
-                        Parameters.STUDENTLIST, studentsList,
-                        Parameters.STEPS, possibleMovingSteps));
+            Map.of(
+                Parameters.PLAYERID, getCurrentPlayer(),
+                Parameters.ISLAND, getIslandList().get(islandIndex),
+                Parameters.ISLANDINDEX, islandIndex,
+                Parameters.CASTLEMAP, castleMap,
+                Parameters.PROFESSORSMAP, professorsMap,
+                Parameters.STUDENTLIST, studentsList,
+                Parameters.STEPS, possibleMovingSteps)
+            );
 
-        //TODO: possibly pass the right parameters
+        //TODO: eventually pass the right parameters
         return parametersMap;
     }
 
@@ -189,10 +187,9 @@ public class ExpertBoard extends Board {
      *
      * @param idChar number of the character as defined in the enum
      */
-    public Generic extract4CharacterTesting(int idChar) {
+    public void extract4CharacterTesting(int idChar) {
         Generic ec = tavern.extract4testing(idChar);
         expertCharactersCards.set(idChar, ec);
-        return ec;
     }
 
     /**
@@ -201,30 +198,26 @@ public class ExpertBoard extends Board {
      */
     @Override
     public void moveMotherNature (int steps) {
+        if(activeChar.getCharacterType().getId() == 6) possibleMovingSteps += 2;
         if (steps > possibleMovingSteps)
             throw new IllegalArgumentException("too many steps");
         if (motherNaturePosition + steps > islandList.size() - 1) steps -= islandList.size();
         motherNaturePosition += steps;
         ExpertIsland currIsland = (ExpertIsland) islandList.get(motherNaturePosition);
-        if (!currIsland.isBLocked())
-            conquerIsland(currIsland);
-        else {
-            currIsland.unlockIsland();
-            ((Block) expertCharactersCards.get(5)).addBlockTile();
-            //TODO: char.add(blockTile);
-        }
+        conquerIsland(currIsland);
     }
 
-    protected void conquerIsland(@NotNull ExpertIsland island) {
+    @Override
+    protected void conquerIsland(Island island) {
         Map<Team, Integer> influence;
         if (activeChar.getCharacterType().getId() == 6)
-            influence = island.calculateInfluenceNoTowers(professorsMap);
+            influence = ((ExpertIsland) island).calculateInfluenceNoTowers(professorsMap);
         else
             influence = island.calculateInfluence(professorsMap);
         if(activeChar.getCharacterType().getId() == 8)
             influence = addedInfluence(influence);
         Team t = findMaxTeam(influence);
-        if (t != null) island.setOwnership(t);
+        if (t != null) island =  island.setOwnership(t);
         checkJoinIsland(island);
     }
 
