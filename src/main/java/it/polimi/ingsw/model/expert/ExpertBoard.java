@@ -103,7 +103,8 @@ public class ExpertBoard extends Board {
         //in/out parameters for the applyEffect method
         //Parameter for setup (will clean code up)
 
-        Map<Parameters, Object> parametersMap = initializeExpertCharacterParameters(idChar, islandIndex, studentsList);
+        Map<Parameters, Object> parametersMap =
+                initializeExpertCharacterParameters(idChar, islandIndex, studentsList);
 
         try {
             ec.applyEffect(parametersMap);

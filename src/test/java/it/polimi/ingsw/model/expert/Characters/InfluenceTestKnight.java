@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.expert.Characters;
 
-import it.polimi.ingsw.model.BoardFactory;
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Team;
-import it.polimi.ingsw.model.Turn;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.CoinException;
 import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
@@ -42,26 +39,32 @@ class InfluenceTestKnight {
             for (Color c:Color.values()) {
                if(island.getStudents().get(c) == 1) student = c;
             }
-            island.addStudent(
-                    Map.of(student, 1,
-                            Color.GREEN, 2));
-            Map<Color, Team> professorsMap = new HashMap<>();
+            for (Color c : Color.values()) {
+                island = new ExpertIsland(student);
+                if (!student.equals(c)) {
+                    island.addStudent(
+                            Map.of(student, 1,
+                                    c, 2));
+                    Map<Color, Team> professorsMap = new HashMap<>();
 
-            assertEquals(0, island.calculateInfluence(professorsMap).get(Team.WHITE));
-            assertEquals(0, island.calculateInfluence(professorsMap).get(Team.BLACK));
+                    assertEquals(0, island.calculateInfluence(professorsMap).get(Team.WHITE));
+                    assertEquals(0, island.calculateInfluence(professorsMap).get(Team.BLACK));
 
-            professorsMap.put(student, Team.WHITE);
-            professorsMap.put(Color.GREEN, Team.BLACK);
-            assertEquals(2, island.calculateInfluence(professorsMap).get(Team.WHITE));
-            island.setOwnership(Team.BLACK);
-            assertEquals(2, island.calculateInfluenceNoTowers(professorsMap).get(Team.BLACK));
-            assertEquals(3, island.calculateInfluence(professorsMap).get(Team.BLACK));
-            board.playExpertCard(8);
-            board.playCard("lorenzo", 8);
-            board.moveMotherNature(3);
-            board.moveMotherNature(4);
-            assertEquals(Team.WHITE, island.getOwnership(), "White should conquer this island");
-        }catch (Exception e) {
+                    professorsMap.put(student, Team.WHITE);
+                    professorsMap.put(c, Team.BLACK);
+                    assertEquals(2, island.calculateInfluence(professorsMap).get(Team.WHITE));
+                    island.setOwnership(Team.BLACK);
+                    assertEquals(2, island.calculateInfluenceNoTowers(professorsMap).get(Team.BLACK));
+                    assertEquals(3, island.calculateInfluence(professorsMap).get(Team.BLACK));
+                    board.getIslandList().add(7, island);
+                    board.playCard("lorenzo", 8); //"planning" phase
+                    board.playExpertCard(8);
+                    board.moveMotherNature(3);
+                    board.moveMotherNature(4);
+                    assertEquals(Team.WHITE, island.getOwnership(), "White should conquer this island");
+                }
+            }//FIXME: NOT WORKING BUT I'M now gonna fix this and other problems in the branch Influence Decorator
+        } catch (Exception e) {
             e.printStackTrace();
             fail("Exception thrown");
         }

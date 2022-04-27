@@ -77,8 +77,7 @@ public class Board {
         this.seed = seed;
         this.bag = new Bag(numOfStudentsPerColor, seed);
         this.nPlayer = nPlayer;
-        setupClouds();
-        setupProfessorMap();
+        construct();
     }
 
     /**
@@ -337,8 +336,8 @@ public class Board {
      */
     public void moveMotherNature(int steps) {
         if(steps >= possibleMovingSteps) throw new IllegalArgumentException("too many steps");
-        if (motherNaturePosition + steps / islandList.size() >= 1) motherNaturePosition += steps - islandList.size();
-        else motherNaturePosition += steps;
+        if (motherNaturePosition + steps > islandList.size() - 1) steps -= islandList.size();
+        motherNaturePosition += steps;
         conquerIsland(islandList.get(motherNaturePosition));
     }
 
@@ -347,10 +346,12 @@ public class Board {
      * @param island the current island mother nature is on
      */
     protected void conquerIsland(@NotNull Island island) {
+        Team beforeComputing = island.getOwnership();
         Map<Team, Integer> influence = island.calculateInfluence(professorsMap);
         Team t = findMaxTeam(influence);
-        if (t != null) island.setOwnership(t);
-        checkJoinIsland(island);
+        if(t == null) return;
+        if (t.equals(beforeComputing)) return;
+        checkJoinIsland(island = island.setOwnership(t));
     }
 
     /**

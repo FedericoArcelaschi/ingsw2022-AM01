@@ -40,12 +40,8 @@ public class Action extends Generic {
                 cost = characterName.getCost() + 1;
             }
             case 4 -> {
-                Integer possibleMovingSteps = (Integer) parametersMap.get(Parameters.STEPS);
-                if (possibleMovingSteps == null)
-                    throw new IllegalArgumentException("steps is somehow null");
-                possibleMovingSteps += 2;
-                parametersMap.replace(Parameters.STEPS, possibleMovingSteps);
-                System.out.println("new possible moving steps: " + parametersMap.get(Parameters.STEPS));
+                int increasedPossibleSteps = (int)parametersMap.get(Parameters.STEPS) +2;
+                parametersMap.replace(Parameters.STEPS, increasedPossibleSteps);
                 cost = characterName.getCost() + 1;
             }
             default -> throw new IllegalArgumentException("Wrong character summoned: should either be 3 or 4");

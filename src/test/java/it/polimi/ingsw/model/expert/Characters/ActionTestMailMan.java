@@ -41,9 +41,10 @@ class ActionTestMailMan {
             System.out.println(wrongException.getMessage());
             fail();
         }
-        //--FIXME--
+
         assertEquals(expectedPossibleMovingDistance, board.getPossibleMovingSteps(),
                 "moving distance must be increased by two");
+
     }
 
 }
