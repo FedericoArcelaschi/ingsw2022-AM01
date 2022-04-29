@@ -1,4 +1,4 @@
-(to view with tab size 4)
+(to view with tab size 4.)
 Comunication Protocol:
 
 +---------------+												+---------------+
@@ -29,13 +29,13 @@ Comunication Protocol:
 		|																|
 		|											*ACTION TO MAKE*	| When is his turn, the server sends to the player a prompt to
 		|	<-------------------------------------------------------	| make an action
-		|																|
+		|	(e.g.: It's your turn to play a card)						|
 		|																|
 		|																|
 		|																|
 		|	*LEGAL ACTION*												|
 		|	------------------------------------------------------->	| The server receives a legal command from the client.
-		|								*UPDATE TO VIEW (broadcast)*	| The server updates the model and each time it sends
+		|	(e.g.: Move GREEN to Castle)*UPDATE TO VIEW (broadcast)*	| The server updates the model and each time it sends
 		|	<-------------------------------------------------------	| the updated view to all the clients in the game.
 		|	<-------------------------------------------------------	|
 		|																|
@@ -43,6 +43,6 @@ Comunication Protocol:
 		|																|
 		|	*ILLEGAL ACTION*											| In case a player sends an illegal move we don't update the model
 		|	------------------------------------------------------->	| and the server sends only to him an error message.
-		|											 *ERROR MESSAGE*	| Beacause the game has predefined turns and phases we'll wait for
+		|	(e.g: Move MotherNature 7)				 *ERROR MESSAGE*	| Beacause the game has predefined turns and phases we'll wait for
 		|	< - - - - - - - - - - - - - - - - - - - - - - - - - - - 	| each player to send a legal action before we can proced with the
 		|																| game-play
