@@ -22,7 +22,7 @@ Comunication Protocol:
 		|																|
 		|																|
 		|																|
-		|								 *BEGIN OF GAME (broadcast)* 	| If there is a game the player can join, assignes
+		|								    *GAME BEGINS (broadcast)* 	| If there is a game the player can join, assignes
 		|	<-------------------------------------------------------	| the player with his peers to a game and sends
 		|	<-------------------------------------------------------	| the game view to all the players in that game.
 		|																|
