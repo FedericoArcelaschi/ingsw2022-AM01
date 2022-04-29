@@ -1,0 +1,45 @@
+(to view with tab size 4)
+Comunication Protocol:
+																
++---------------+												+---------------+
+|Client			|												|Server			|
++---------------+												+---------------+
+		|																| SERVER IS LISTENING on PORT ??????
+		|																|
+		|																|
+		|	*FIRST MESSAGE*												|
+		|	------------------------------------------------------->	| Answers the first message, opens the Socket and assignes 
+		|	<-------------------------------------------------------	| to the client an unique ID.
+		|																| 
+		|																| 
+		|																| 
+		|													  *PING*	| 
+		|	<-------------------------------------------------------	| Heartbeat protocol:
+		|	*PONG*														| The server every 10 seconds sends a Ping message to the client
+		|	------------------------------------------------------->	| and waits for a Pong message. If the client doesn't answer within
+		|																| 10 seconds the Server sends a disconnect message?
+		|												*DISCONNECT*	| 
+		|	< - - - - - - - - - - - - - - - - - - - - - - - - - - - 	|
+??????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+		|																| 
+		|																| 
+		|																| 
+		|								 *BEGIN OF GAME (broadcast)* 	| If there is a game the player can join, assignes
+		|	<-------------------------------------------------------	| the player to a game and sends the game view
+		|	<-------------------------------------------------------	| to all the players in that game
+		|																| 
+		|																| 
+		|																| 
+		|	*LEGAL ACTION*												| 
+		|	------------------------------------------------------->	| The server receives a legal command from the client.
+		|								*UPDATE TO VIEW (broadcast)*	| Each time the server updates the model it needs to send to all
+		|	<-------------------------------------------------------	| the other clients an updated view.
+		|	<-------------------------------------------------------	| 
+		|																| 
+		|																| 
+		|																| 
+		|	*ILLEGAL ACTION*											| In case a player sends an illegal move we don't update the model
+		|	------------------------------------------------------->	| and the server sends only to him an error message.
+		|											 *ERROR MESSAGE*	| Beacause the game has predefined turns and phases we'll wait for
+		|	< - - - - - - - - - - - - - - - - - - - - - - - - - - - 	| each player to send a legal action before we can proced with the
+		|																| game-play
