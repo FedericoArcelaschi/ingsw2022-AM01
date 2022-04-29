@@ -4,7 +4,7 @@ Comunication Protocol:
 +---------------+												+---------------+
 |Client			|												|Server			|
 +---------------+												+---------------+
-		|																| SERVER IS LISTENING on PORT ????
+		|																| SERVER IS LISTENING on PORT 8888
 		|																|
 		|																|
 		|	*FIRST MESSAGE*												|
@@ -17,7 +17,7 @@ Comunication Protocol:
 		|	<-------------------------------------------------------	| Heartbeat protocol:
 		|	*PONG*														| The server every 10 seconds sends a Ping message to the client
 		|	------------------------------------------------------->	| and waits for a Pong message. If the client doesn't answer within
-		|												*DISCONNECT*	| 10 seconds the Server sends a disconnect message?
+		|												*DISCONNECT*	| 10 seconds the Server sends a disconnect message
 		|	< - - - - - - - - - - - - - - - - - - - - - - - - - - - 	|
 		|																|
 		|																|
