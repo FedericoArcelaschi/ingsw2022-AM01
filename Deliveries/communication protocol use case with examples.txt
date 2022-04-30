@@ -1,5 +1,5 @@
 (to view with tab size 4.)
-Comunication Protocol:
+Communication Protocol:
 
 +---------------+												+---------------+
 |Client			|												|Server			|
@@ -8,7 +8,7 @@ Comunication Protocol:
 		|																|
 		|																|
 		|	*FIRST MESSAGE*												|
-		|	------------------------------------------------------->	| Answers the first message, opens the Socket and assignes 
+		|	------------------------------------------------------->	| Answers the first message, opens the Socket and assigns
 		|	<-------------------------------------------------------	| an unique ID to the client.
 		|																|
 		|																|
@@ -22,7 +22,7 @@ Comunication Protocol:
 		|																|
 		|																|
 		|																|
-		|								    *GAME BEGINS (broadcast)* 	| If there is a game the player can join, assignes
+		|								    *GAME BEGINS (broadcast)* 	| If there is a game the player can join, assigns
 		|	<-------------------------------------------------------	| the player with his peers to a game and sends
 		|	<-------------------------------------------------------	| the game view to all the players in that game.
 		|																|
@@ -43,6 +43,6 @@ Comunication Protocol:
 		|																|
 		|	*ILLEGAL ACTION*											| In case a player sends an illegal move we don't update the model
 		|	------------------------------------------------------->	| and the server sends only to him an error message.
-		|	(e.g: Move MotherNature 7)				 *ERROR MESSAGE*	| Beacause the game has predefined turns and phases we'll wait for
-		|	< - - - - - - - - - - - - - - - - - - - - - - - - - - - 	| each player to send a legal action before we can proced with the
+		|	(e.g: Move MotherNature 7)				 *ERROR MESSAGE*	| Because the game has predefined turns and phases we'll wait for
+		|	< - - - - - - - - - - - - - - - - - - - - - - - - - - - 	| each player to send a legal action before we can proceed with the
 		|																| game-play
