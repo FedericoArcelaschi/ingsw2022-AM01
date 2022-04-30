@@ -1,6 +1,7 @@
 package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.controller.Game;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class ClientHandler implements Runnable {
                 } else {
                     String responseMessage = game.executeCommand(parser.fromJson(line, Command.class));
                     System.out.println(responseMessage);
-                    Response response = new Response(ResponseType.UPDATE);
+                    Response response = new Response(ResponseType.UPDATE, new BoardData("--",game.getBoard()));
                     System.out.println(parser.toJson(response, Response.class));
                     out.println(parser.toJson(response, Response.class));
                     out.flush();

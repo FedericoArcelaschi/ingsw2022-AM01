@@ -9,21 +9,26 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ServerMain {
+public class ServerMain implements Runnable{
 
     private final int port;
 
-    ExecutorService executor = Executors.newCachedThreadPool();
-    ServerSocket serverSocket;
+    private ExecutorService executor;
+    private ServerSocket serverSocket;
+    private final Map<String,Socket> connectedPlayers;
 
     public ServerMain(int port) {
         this.port = port;
+        this.connectedPlayers = new HashMap<>();
+    }
+
+    public void run(){
+        startServer();
+        acceptPlayers();
     }
 
     /**
@@ -33,7 +38,7 @@ public class ServerMain {
         executor = Executors.newCachedThreadPool();
 
         //creating serverSocket
-        System.out.println("Starting server...");
+        System.out.println("Server: Starting server...");
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -41,7 +46,7 @@ public class ServerMain {
             return;
         }
 
-        System.out.println("Server ready on IP: " + serverSocket.getInetAddress() + " port: " + serverSocket.getLocalPort());
+        System.out.println("Server: Server ready on IP: " + serverSocket.getInetAddress() + " port: " + serverSocket.getLocalPort());
     }
 
     /**
@@ -55,18 +60,21 @@ public class ServerMain {
             List<String> nicknameList= new ArrayList<>();
             try{
                 for (int numPlayers = 0; numPlayers < 2; numPlayers++) {
-                    System.out.println("waiting for player to connect");
-                    Socket socket = serverSocket.accept();
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    String input = in.readLine();
-                    System.out.println(input);
-                    Preferences preferences = parser.fromJson(input, Preferences.class);
-                    String nickname = preferences.username();
-                    System.out.println(nickname+" joined in");
-                    gameSocketList.add(socket);
-                    nicknameList.add(nickname);
+                        System.out.println("Server: waiting for player to connect");
+                        Socket socket = serverSocket.accept();
+                        synchronized (connectedPlayers){
+                            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                            String input = in.readLine();
+                            System.out.println(input);
+                            Preferences preferences = parser.fromJson(input, Preferences.class);
+                            String nickname = preferences.username();
+                            System.out.println(nickname+" joined in");
+                            connectedPlayers.put(nickname, socket);
+                            gameSocketList.add(socket);
+                            nicknameList.add(nickname);
+                        }
                 }
-                System.out.println("creating game " + gameId);
+                System.out.println("Server: creating game " + gameId);
                 Game g = new Game(gameId, nicknameList, gameSocketList);
                 for(Socket player : gameSocketList){
                     executor.submit(new ClientHandler(player, g));
@@ -78,10 +86,12 @@ public class ServerMain {
         }
         executor.shutdown();
     }
-    public static void main(String[] args) {
-        ServerMain echoServer = new ServerMain(1234);
 
-        echoServer.startServer();
-        echoServer.acceptPlayers();
+    public Map<String, Socket> getConnectedPlayers() {
+        Map<String,Socket> newConnectedPlayers;
+        synchronized (connectedPlayers){
+            newConnectedPlayers = new HashMap<>(connectedPlayers);
+            return newConnectedPlayers;
+        }
     }
 }

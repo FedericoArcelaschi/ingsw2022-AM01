@@ -2,6 +2,7 @@ package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.client.ClientMain;
+import it.polimi.ingsw.client.ViewDraw;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,8 +45,10 @@ public class ClientReceiver implements Runnable{
                 }
                 case UPDATE -> {
                     //print data without saving it anywhere
-                    System.out.println(messageFromServer.data());
+                    ViewDraw.drawCli(messageFromServer.data());
                 }
+                case END -> {}
+                case ERROR -> {}
             }
         }
     }
