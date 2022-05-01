@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication;
 
-public enum ResponseType {
+public enum MessageType {
     PING,
     UPDATE,
     ERROR,

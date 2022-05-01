@@ -9,47 +9,27 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.Timestamp;
 
-public class ClientReceiver implements Runnable{
-    private final Socket socket;
-    private final BufferedReader in;
-    private final PrintWriter out;
-    private final ClientMain cm;
+public class ClientReceiver extends Receiver{
 
-    public ClientReceiver(ClientMain cm, Socket socket){
-        this.socket = socket;
-        this.cm = cm;
-        try {
-            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.out = new PrintWriter(socket.getOutputStream(), true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public ClientReceiver(ClientMain cm, Socket socket) {
+        super(cm, socket);
     }
 
-    @Override
-    public void run() {
-        Gson parser = new Gson();
-        while(!socket.isClosed()){
-            Response messageFromServer;
-            try {
-                  messageFromServer = parser.fromJson(in.readLine(), Response.class);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+    void messageSwitch(Message message){
+        switch (message.type()){
+            case PING -> {
+                Message heartbeatToServer = new Message(message.id(), MessageType.PING);
+                System.out.println(cm.getUsername()+": ping received");
+                out.println(parser.toJson(heartbeatToServer));
+                System.out.println(cm.getUsername()+": pinged back");
             }
-            switch (messageFromServer.type()){
-                case PING -> {
-                    Response heartbeatToServer = new Response(ResponseType.PING);
-                    out.println(parser.toJson(heartbeatToServer));
-                }
-                case UPDATE -> {
-                    //print data without saving it anywhere
-                    ViewDraw.drawCli(messageFromServer.data());
-                }
-                case END -> {}
-                case ERROR -> {}
+            case UPDATE -> {
+                //print data without saving it anywhere
+                ViewDraw.drawCli(message.data());
             }
+            case END -> {}
+            case ERROR -> {}
         }
     }
 }

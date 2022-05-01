@@ -2,7 +2,9 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.ClientHandler;
+import it.polimi.ingsw.communication.HeartBeatServer;
 import it.polimi.ingsw.communication.Preferences;
+import it.polimi.ingsw.communication.ServerReceiver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +22,7 @@ public class ServerMain implements Runnable{
     private ExecutorService executor;
     private ServerSocket serverSocket;
     private final Map<String,Socket> connectedPlayers;
+    private HeartBeatServer heartBeatServer;
 
     public ServerMain(int port) {
         this.port = port;
@@ -47,6 +50,8 @@ public class ServerMain implements Runnable{
         }
 
         System.out.println("Server: Server ready on IP: " + serverSocket.getInetAddress() + " port: " + serverSocket.getLocalPort());
+        heartBeatServer = new HeartBeatServer();
+        executor.submit(heartBeatServer);
     }
 
     /**
@@ -73,11 +78,12 @@ public class ServerMain implements Runnable{
                             gameSocketList.add(socket);
                             nicknameList.add(nickname);
                         }
+                        heartBeatServer.addClient(socket);
                 }
                 System.out.println("Server: creating game " + gameId);
                 Game g = new Game(gameId, nicknameList, gameSocketList);
                 for(Socket player : gameSocketList){
-                    executor.submit(new ClientHandler(player, g));
+                    executor.submit(new ServerReceiver(player, heartBeatServer));
                 }
             } catch(IOException e) {
                 break; // Entrerei qui se serverSocket venisse chiuso

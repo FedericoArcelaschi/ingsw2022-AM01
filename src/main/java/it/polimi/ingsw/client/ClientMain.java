@@ -20,7 +20,7 @@ public class ClientMain {
     private final boolean preferenceExpertMode;
     private final String IP;
     private final int port;
-    private Socket socket = null;
+    public Socket socket = null;
     private ClientSender cs;
     private ClientReceiver cr;
     private Board board;
@@ -70,9 +70,6 @@ public class ClientMain {
         return true;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
 
     private String getCommand(Command command){
         Map<CommandAttribute,String> attributeMap = command.getAttributesMap();
@@ -86,5 +83,9 @@ public class ClientMain {
             }
         }
         return "Command was not successful. Please, try again.";
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
