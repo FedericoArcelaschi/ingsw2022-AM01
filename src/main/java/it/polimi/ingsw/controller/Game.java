@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Game{
+    private final GameType gameType;
     private final int gameId;
     private final Board board;
     private final List<String> usernameList;
@@ -23,7 +24,8 @@ public class Game{
     private static Gson gson = new Gson();
     private List<Socket> gameSocketList;
 
-    public Game(int gameId, List<String> nicknameList, List<Socket> gameSocketList) {
+    public Game(GameType gameType, int gameId, List<String> nicknameList, List<Socket> gameSocketList) {
+        this.gameType = gameType;
         this.gameId = gameId;
         this.gameSocketList = new ArrayList<>();
         this.gameSocketList.addAll(gameSocketList);
@@ -181,6 +183,10 @@ public class Game{
         return board;
     }
 
+    public GameType getGameType() {
+        return gameType;
+    }
+
     public String toStringPlayers() {
         StringBuilder r = new StringBuilder("");
         for (String username : usernameList) {
@@ -188,4 +194,6 @@ public class Game{
         }
         return r.toString();
     }
+
+
 }

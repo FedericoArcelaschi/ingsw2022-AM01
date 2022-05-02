@@ -19,16 +19,21 @@ import java.util.concurrent.Executors;
 public class ServerMain implements Runnable{
 
     private final int port;
-
     private ExecutorService executor;
     private ServerSocket serverSocket;
     private final Map<String,Socket> connectedPlayers;
     private HeartBeatServer heartBeatServer;
-    private WaitingRoom waitingRoom = new WaitingRoom();
+    private final WaitingRoom waitingRoom;
+    private final Map<GameType, Integer> gamesNumber;
 
     public ServerMain(int port) {
         this.port = port;
         this.connectedPlayers = new HashMap<>();
+        this.waitingRoom = new WaitingRoom();
+        this.gamesNumber = new HashMap<>();
+        for (GameType gt: GameType.values()) {
+            gamesNumber.put(gt,0);
+        }
     }
 
     public void run(){
@@ -78,11 +83,12 @@ public class ServerMain implements Runnable{
                 GameType playerGameType = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
                 waitingRoom.addPlayer(playerGameType, socket, nickname);
                 heartBeatServer.addClient(socket);
-                Game g = waitingRoom.computeGameType(gameId);
-                if(g != null) {
-                    System.out.println(Color.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + g.toStringPlayers() + "\u001B[0m");
-                    for (Socket player : g.getGameSocketList()) {
-                        executor.submit(new ServerReceiver(player, heartBeatServer, g));
+                Game game = waitingRoom.computeGameType(gameId);
+                if(game != null) {
+                    gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType())+1);
+                    System.out.println(Color.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
+                    for (Socket player : game.getGameSocketList()) {
+                        executor.submit(new ServerReceiver(player, heartBeatServer, game));
                     }
                     gameId++; //Has to be increased only if method returns null
                 }
@@ -99,5 +105,9 @@ public class ServerMain implements Runnable{
             newConnectedPlayers = new HashMap<>(connectedPlayers);
             return newConnectedPlayers;
         }
+    }
+
+    public int getGamesNumber(GameType type){
+        return gamesNumber.get(type);
     }
 }

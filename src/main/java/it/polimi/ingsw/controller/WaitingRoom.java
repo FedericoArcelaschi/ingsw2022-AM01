@@ -40,7 +40,7 @@ public class WaitingRoom {
                         List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-2), nicknameMap.get(g).size());
                         List<Socket> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-2), gameSocketMap.get(g).size());
                         oldsize2 = nicknameMap.get(g).size();
-                        return new Game(gameId, nickMap, socketMap);
+                        return new Game(GameType.NORMAL_2_PLAYER, gameId, nickMap, socketMap);
                     }
                 }
                 case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> {
@@ -48,7 +48,7 @@ public class WaitingRoom {
                         List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-3), nicknameMap.get(g).size());
                         List<Socket> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-3), gameSocketMap.get(g).size());
                         oldsize3 = nicknameMap.get(g).size();
-                        return new Game(gameId, nickMap, socketMap);
+                        return new Game(GameType.NORMAL_3_PLAYER, gameId, nickMap, socketMap);
                     }
                 }
                 case NORMAL_4_PLAYER, EXPERT_4_PLAYER -> {
@@ -56,7 +56,7 @@ public class WaitingRoom {
                         List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-4), nicknameMap.get(g).size());
                         List<Socket> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-4), gameSocketMap.get(g).size());
                         oldsize3 = nicknameMap.get(g).size();
-                        return new Game(gameId, nickMap, socketMap);
+                        return new Game(GameType.NORMAL_4_PLAYER, gameId, nickMap, socketMap);
                     }
                 }
             }

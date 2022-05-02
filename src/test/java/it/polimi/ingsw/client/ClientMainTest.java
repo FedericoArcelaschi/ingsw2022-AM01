@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.controller.GameType;
 import it.polimi.ingsw.controller.ServerMain;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +39,12 @@ class ClientMainTest {
         }
         Thread.sleep(500);
         assertEquals(n2+n3+n4, s.getConnectedPlayers().size(), "10 players should be connected");
+        assertEquals(50, s.getGamesNumber(GameType.NORMAL_2_PLAYER));
+        assertEquals(30, s.getGamesNumber(GameType.NORMAL_3_PLAYER));
+        assertEquals(25, s.getGamesNumber(GameType.NORMAL_4_PLAYER));
+        assertEquals(0, s.getGamesNumber(GameType.EXPERT_2_PLAYER));
+        assertEquals(0, s.getGamesNumber(GameType.EXPERT_3_PLAYER));
+        assertEquals(0, s.getGamesNumber(GameType.EXPERT_4_PLAYER));
     }
 
     @Test
