@@ -23,7 +23,7 @@ public class BagTest {
         assertNull(b.extract());
     }
     @Test
-    public void testExtractColor(){ //test that the extracted color is decresed
+    public void testExtractColor(){ //test that the extracted color is decreased
         Bag b = new Bag(24,1);
         Color c = b.extract();
         assertEquals(23, b.getStudents(c));
