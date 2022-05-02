@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.communication.ClientHandler;
 import it.polimi.ingsw.communication.HeartBeatServer;
 import it.polimi.ingsw.communication.Preferences;
 import it.polimi.ingsw.communication.ServerReceiver;
@@ -23,6 +22,7 @@ public class ServerMain implements Runnable{
     private ServerSocket serverSocket;
     private final Map<String,Socket> connectedPlayers;
     private HeartBeatServer heartBeatServer;
+    private WaitingRoom waitingRoom = new WaitingRoom();
 
     public ServerMain(int port) {
         this.port = port;
@@ -33,6 +33,7 @@ public class ServerMain implements Runnable{
         startServer();
         acceptPlayers();
     }
+
 
     /**
      * start the server
@@ -61,34 +62,30 @@ public class ServerMain implements Runnable{
         int gameId = 0;
         Gson parser = new Gson();
         while (true) {
-            List<Socket> gameSocketList= new ArrayList<>();
-            List<String> nicknameList= new ArrayList<>();
             try{
-                for (int numPlayers = 0; numPlayers < 2; numPlayers++) {
-                        System.out.println("Server: waiting for player to connect");
-                        Socket socket = serverSocket.accept();
-                        synchronized (connectedPlayers){
-                            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                            String input = in.readLine();
-                            System.out.println(input);
-                            Preferences preferences = parser.fromJson(input, Preferences.class);
-                            String nickname = preferences.username();
-                            System.out.println(nickname+" joined in");
-                            connectedPlayers.put(nickname, socket);
-                            gameSocketList.add(socket);
-                            nicknameList.add(nickname);
-                        }
-                        heartBeatServer.addClient(socket);
-                }
+                System.out.println("Server: waiting for player to connect");
+                Socket socket = serverSocket.accept();
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                String input = in.readLine();
+                System.out.println(input);
+                Preferences preferences = parser.fromJson(input, Preferences.class);
+                String nickname = preferences.username();
+                System.out.println(nickname+" joined in");
+                connectedPlayers.put(nickname, socket);
+                GameType playerGameType = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
+                waitingRoom.addPlayer(playerGameType, socket, nickname);
+                heartBeatServer.addClient(socket);
                 System.out.println("Server: creating game " + gameId);
-                Game g = new Game(gameId, nicknameList, gameSocketList);
-                for(Socket player : gameSocketList){
-                    executor.submit(new ServerReceiver(player, heartBeatServer));
+                Game g = waitingRoom.computeGameType(gameId);
+                if(g != null) {
+                    for (Socket player : g.getGameSocketList()) {
+                        executor.submit(new ServerReceiver(player, heartBeatServer));
+                    }
+                    gameId++; //Has to be increased only if method returns null
                 }
             } catch(IOException e) {
                 break; // Entrerei qui se serverSocket venisse chiuso
             }
-            gameId++;
         }
         executor.shutdown();
     }

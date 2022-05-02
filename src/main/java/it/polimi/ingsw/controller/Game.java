@@ -31,6 +31,10 @@ public class Game{
         board = new BoardFactory().getBoard(nicknameList, turn);
     }
 
+    public List<Socket> getGameSocketList() {
+        return gameSocketList;
+    }
+
     /**
      * execute the command requested
      * @param command description of the command requested
