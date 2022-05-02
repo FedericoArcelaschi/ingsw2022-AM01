@@ -35,26 +35,23 @@ public class WaitingRoom {
         for(GameType g : nicknameMap.keySet()){
             switch (g){
                 case NORMAL_2_PLAYER, EXPERT_2_PLAYER -> {
-                    if(nicknameMap.get(g).size() == 2) {
-                        List<String> nickMap = nicknameMap.get(g);
-                        List<Socket> socketMap = gameSocketMap.get(g);
-                        nicknameMap.get(g).clear();
+                    if(nicknameMap.get(g).size()%2 == 0 && nicknameMap.get(g).size()>1) {
+                        List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-2), nicknameMap.get(g).size());
+                        List<Socket> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-2), gameSocketMap.get(g).size());
                         return new Game(gameId, nickMap, socketMap);
                     }
                 }
                 case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> {
-                    if(nicknameMap.get(g).size() == 3) {
-                        List<String> nickMap = nicknameMap.get(g);
-                        List<Socket> socketMap = gameSocketMap.get(g);
-                        nicknameMap.get(g).clear();
+                    if(nicknameMap.get(g).size()%3==0 && nicknameMap.get(g).size()>1) {
+                        List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-3), nicknameMap.get(g).size());
+                        List<Socket> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-3), gameSocketMap.get(g).size());
                         return new Game(gameId, nickMap, socketMap);
                     }
                 }
                 case NORMAL_4_PLAYER, EXPERT_4_PLAYER -> {
-                    if(nicknameMap.get(g).size() == 4) {
-                        List<String> nickMap = nicknameMap.get(g);
-                        List<Socket> socketMap = gameSocketMap.get(g);
-                        nicknameMap.get(g).clear();
+                    if(nicknameMap.get(g).size()%4==0 && nicknameMap.get(g).size()>1) {
+                        List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-4), nicknameMap.get(g).size());
+                        List<Socket> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-4), gameSocketMap.get(g).size());
                         return new Game(gameId, nickMap, socketMap);
                     }
                 }

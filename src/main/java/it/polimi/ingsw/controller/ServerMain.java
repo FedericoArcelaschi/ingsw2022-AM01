@@ -77,9 +77,9 @@ public class ServerMain implements Runnable{
                 GameType playerGameType = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
                 waitingRoom.addPlayer(playerGameType, socket, nickname);
                 heartBeatServer.addClient(socket);
-                System.out.println("Server: creating game " + gameId);
                 Game g = waitingRoom.computeGameType(gameId);
                 if(g != null) {
+                    System.out.println("Server: created game " + gameId);
                     for (Socket player : g.getGameSocketList()) {
                         executor.submit(new ServerReceiver(player, heartBeatServer));
                     }

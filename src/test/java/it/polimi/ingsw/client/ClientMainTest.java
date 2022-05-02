@@ -28,7 +28,7 @@ class ClientMainTest {
         for (i = 1; i <= 10; i++) {
             new ClientMain("Lore"+i,2,false, "127.0.0.1", 1234).connect();
         }
-        Thread.sleep(100);
+        Thread.sleep(1000);
         assertEquals(10, s.getConnectedPlayers().size(), "10 players should be connected");
     }
 }
