@@ -1,9 +1,11 @@
 package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.communication.packet.CommandMessage;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.Preferences;
+import it.polimi.ingsw.model.Color;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,12 +25,18 @@ public class ClientSender {
         }
     }
 
-    public void sendCommand(Command command){
-        out.println(parser.toJson(command, Command.class));
+    public void sendCommand(CommandMessage commandMessage){
+        Packet packet = new Packet(MessageType.COMMAND, commandMessage);
+        out.println(parser.toJson(packet, Packet.class));
     }
 
     public void sendPreferences(Preferences preferences){
         Packet packet = new Packet(MessageType.PREFERENCES, preferences);
         out.println(parser.toJson(packet));
+    }
+
+    public void sendPacket(Packet packet){
+        out.println(parser.toJson(packet));
+        System.out.println(Color.RED.colorCode + parser.toJson(packet) + "\u001B[0m");
     }
 }

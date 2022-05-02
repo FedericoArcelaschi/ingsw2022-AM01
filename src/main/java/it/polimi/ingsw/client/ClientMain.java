@@ -1,6 +1,9 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.communication.*;
+import it.polimi.ingsw.communication.packet.CommandMessage;
+import it.polimi.ingsw.communication.packet.MessageType;
+import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.Preferences;
 import it.polimi.ingsw.model.Board;
 
@@ -21,6 +24,7 @@ public class ClientMain {
     private ClientSender cs;
     private ClientReceiver cr;
     private Board board;
+    private Boolean connected;
 
     public ClientMain(String username, int preferenceNPlayer, boolean preferenceExpertMode, String IP, int port) {
         this.username=username;
@@ -28,6 +32,7 @@ public class ClientMain {
         this.preferenceExpertMode=preferenceExpertMode;
         this.IP = IP;
         this.port = port;
+        this.connected = false;
     }
 
     public void connect(){
@@ -41,7 +46,8 @@ public class ClientMain {
             cr = new ClientReceiver(this,socket);
             //send player preferences to the server;
             Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
-            cs.sendPreferences(preferences);
+            Packet packet = new Packet(MessageType.PREFERENCES, preferences);
+            cs.sendPacket(packet);
             //run the ClientReceiver
             executor.submit(cr);
         } catch (UnknownHostException e) {
@@ -52,6 +58,7 @@ public class ClientMain {
                     IP);
             System.exit(1);
         }
+        connected = true;
     }
 
     public boolean runCommand(String stringCommand){
@@ -59,11 +66,9 @@ public class ClientMain {
             return false;
         }
         //compose command and send
-        Command command = Command.createCommand(username, stringCommand);
-        if((command != null ? command.getType() : null) == CommandType.GET){
-            System.out.println(getCommand(command));
-        }
-        else cs.sendCommand(command);
+        CommandMessage commandMessage = new CommandMessage(username, stringCommand);
+        Packet packet = new Packet(MessageType.COMMAND, commandMessage);
+        cs.sendPacket(packet);
         return true;
     }
 
@@ -84,5 +89,9 @@ public class ClientMain {
 
     public String getUsername() {
         return username;
+    }
+
+    public Boolean isConnected() {
+        return connected;
     }
 }

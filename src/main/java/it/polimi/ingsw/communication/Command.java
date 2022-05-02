@@ -24,7 +24,6 @@ public class Command {
                 attributesMap.put(CommandAttribute.ID, attributes[2]);
             }
             case MOVE_MOTHER_NATURE -> attributesMap.put(CommandAttribute.DISTANCE, attributes[0]);
-            case GET -> attributesMap.put(CommandAttribute.WHAT, attributes[0]);
         }
     }
 

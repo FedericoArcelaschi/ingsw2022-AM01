@@ -7,7 +7,8 @@ public enum MessageType {
     UPDATE(Update.class),
     ERROR(Error.class),
     PREFERENCES(Preferences.class),
-    END(Error.class);
+    END(Error.class),
+    COMMAND(CommandMessage.class);
 
     private Type type;
 

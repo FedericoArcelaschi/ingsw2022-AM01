@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.HeartBeatServer;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.Preferences;
 import it.polimi.ingsw.communication.ServerReceiver;
+import it.polimi.ingsw.model.Color;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -79,9 +80,9 @@ public class ServerMain implements Runnable{
                 heartBeatServer.addClient(socket);
                 Game g = waitingRoom.computeGameType(gameId);
                 if(g != null) {
-                    System.out.println("Server: created game " + gameId);
+                    System.out.println(Color.YELLOW.colorCode + "Server: created game " + gameId + "with players: " + g.toStringPlayers() + "\u001B[0m");
                     for (Socket player : g.getGameSocketList()) {
-                        executor.submit(new ServerReceiver(player, heartBeatServer));
+                        executor.submit(new ServerReceiver(player, heartBeatServer, g));
                     }
                     gameId++; //Has to be increased only if method returns null
                 }
