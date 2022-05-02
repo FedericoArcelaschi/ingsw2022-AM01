@@ -180,7 +180,7 @@ public class BoardTest{
         assertEquals(oldList.get(0), b.islandList.get(0),
                 "The first island should stay untouched");
         assertEquals(10, b.islandList.size(),
-                "the island list shoud decrease by 2");
+                "the island list should decrease by 2");
         assertEquals(3, b.islandList.get(1).getIslandNumber(),
                 "the second island is the union of three");
         Map<Color, Integer> EmptyStudentsMap = b.islandList.get(0).getStudents(); //first island is empty
