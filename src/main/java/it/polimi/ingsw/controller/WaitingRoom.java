@@ -35,13 +35,28 @@ public class WaitingRoom {
         for(GameType g : nicknameMap.keySet()){
             switch (g){
                 case NORMAL_2_PLAYER, EXPERT_2_PLAYER -> {
-                    if(nicknameMap.get(g).size() == 2) return new Game(gameId, nicknameMap.get(g), gameSocketMap.get(g));
+                    if(nicknameMap.get(g).size() == 2) {
+                        List<String> nickMap = nicknameMap.get(g);
+                        List<Socket> socketMap = gameSocketMap.get(g);
+                        nicknameMap.get(g).clear();
+                        return new Game(gameId, nickMap, socketMap);
+                    }
                 }
                 case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> {
-                    if(nicknameMap.get(g).size() == 3) return new Game(gameId, nicknameMap.get(g), gameSocketMap.get(g));
+                    if(nicknameMap.get(g).size() == 3) {
+                        List<String> nickMap = nicknameMap.get(g);
+                        List<Socket> socketMap = gameSocketMap.get(g);
+                        nicknameMap.get(g).clear();
+                        return new Game(gameId, nickMap, socketMap);
+                    }
                 }
                 case NORMAL_4_PLAYER, EXPERT_4_PLAYER -> {
-                    if(nicknameMap.get(g).size() == 4) return new Game(gameId, nicknameMap.get(g), gameSocketMap.get(g));
+                    if(nicknameMap.get(g).size() == 4) {
+                        List<String> nickMap = nicknameMap.get(g);
+                        List<Socket> socketMap = gameSocketMap.get(g);
+                        nicknameMap.get(g).clear();
+                        return new Game(gameId, nickMap, socketMap);
+                    }
                 }
             }
         }
