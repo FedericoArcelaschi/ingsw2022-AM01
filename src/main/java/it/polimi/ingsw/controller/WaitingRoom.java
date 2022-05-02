@@ -10,7 +10,7 @@ public class WaitingRoom {
 
     private Map<GameType, List<Socket>> gameSocketMap = new HashMap<>();
     private Map<GameType, List<String>> nicknameMap = new HashMap<>();
-    private int oldsize2, oldsize3, oldsize4;
+    private int oldsize2 = 0, oldsize3 = 0, oldsize4 = 0;
 
     public WaitingRoom(){
         for(GameType g : GameType.values()){
@@ -47,7 +47,9 @@ public class WaitingRoom {
                     if(nicknameMap.get(g).size()%3==0 && nicknameMap.get(g).size()>1 && nicknameMap.get(g).size()!=oldsize3) {
                         List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-3), nicknameMap.get(g).size());
                         List<Socket> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-3), gameSocketMap.get(g).size());
+                        System.out.println("Old list size is: " + oldsize3 + ", new size is: " + nicknameMap.get(g).size());
                         oldsize3 = nicknameMap.get(g).size();
+                        System.out.println("Now oldsize is: " + oldsize3);
                         return new Game(GameType.NORMAL_3_PLAYER, gameId, nickMap, socketMap);
                     }
                 }
@@ -55,7 +57,7 @@ public class WaitingRoom {
                     if(nicknameMap.get(g).size()%4==0 && nicknameMap.get(g).size()>1 && nicknameMap.get(g).size()!=oldsize4) {
                         List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-4), nicknameMap.get(g).size());
                         List<Socket> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-4), gameSocketMap.get(g).size());
-                        oldsize3 = nicknameMap.get(g).size();
+                        oldsize4 = nicknameMap.get(g).size();
                         return new Game(GameType.NORMAL_4_PLAYER, gameId, nickMap, socketMap);
                     }
                 }
