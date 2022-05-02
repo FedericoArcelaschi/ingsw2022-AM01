@@ -2,6 +2,10 @@ package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.exception.ClientNotRespondingException;
+import it.polimi.ingsw.communication.packet.Message;
+import it.polimi.ingsw.communication.packet.MessageType;
+import it.polimi.ingsw.communication.packet.Packet;
+import it.polimi.ingsw.communication.packet.Ping;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -49,9 +53,10 @@ public class HeartBeatServer implements Callable {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Message message = new Message(MessageType.PING);
+                Message message = new Ping();
+                Packet packet = new Packet(MessageType.PING, message);
                 heartBeats.put(client, message);
-                String jsonMessage = parser.toJson(message);
+                String jsonMessage = parser.toJson(packet, Packet.class);
                 out.println(jsonMessage);
                 System.out.println("HeartBeatServer: pinged " + client);
             }
@@ -73,7 +78,7 @@ public class HeartBeatServer implements Callable {
     }
 
     @Override
-    public Object call() throws Exception {
+    public Object call() throws ClientNotRespondingException {
         try {
             run();
         }

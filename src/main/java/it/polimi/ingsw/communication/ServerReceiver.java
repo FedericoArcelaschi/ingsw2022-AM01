@@ -1,5 +1,9 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.communication.packet.Message;
+import it.polimi.ingsw.communication.packet.MessageType;
+import it.polimi.ingsw.communication.packet.Ping;
+
 import java.net.Socket;
 
 public class ServerReceiver extends Receiver{
@@ -11,12 +15,12 @@ public class ServerReceiver extends Receiver{
         this.hbs = hbs;
     }
 
-    void messageSwitch(Message message){
-        switch (message.type()){
+    void messageSwitch(MessageType type, Message message){
+        switch (type){
             case PING -> {
-                Message heartbeatToServer = new Message(MessageType.PING);
+                Ping ping = (Ping) message;
                 System.out.println("Server: ping received");
-                hbs.validateResponse(message);
+                hbs.validateResponse(ping);
             }
             case UPDATE -> {
                 /*

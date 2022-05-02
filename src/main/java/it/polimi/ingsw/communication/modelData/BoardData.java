@@ -1,19 +1,20 @@
 package it.polimi.ingsw.communication.modelData;
 
 import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.Castle;
-import it.polimi.ingsw.model.Cloud;
-import it.polimi.ingsw.model.Island;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
+/**
+ * A representation of the model containing only data useful for the clients
+ */
 public record BoardData(
         String username,
         int nPlayer,
         int motherNaturePosition,
         List<CloudData> cloudList,
         List<IslandData> islandList,
+        CastleData myCastle,
         List<CastleData> otherCastles
 )
 {
@@ -22,7 +23,8 @@ public record BoardData(
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(CloudData::new).toList(),
                 board.getIslandList().stream().map(IslandData::new).toList(),
-                board.getCastleMap().keySet().stream().map(key -> new CastleData(key, board.getCastle(key))).toList()
+                new CastleData(username, board.getCastle(username)),
+                board.getCastleMap().keySet().stream().filter(key -> !Objects.equals(key, username)).map(key -> new CastleData(key, board.getCastle(key))).toList()
                 );
     }
 }

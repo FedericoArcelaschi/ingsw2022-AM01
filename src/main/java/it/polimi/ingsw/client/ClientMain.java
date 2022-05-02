@@ -1,13 +1,10 @@
 package it.polimi.ingsw.client;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.communication.*;
+import it.polimi.ingsw.communication.packet.Preferences;
 import it.polimi.ingsw.model.Board;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Map;
@@ -37,9 +34,9 @@ public class ClientMain {
         System.out.println(username + ":  attempting connection");
         try {
             ExecutorService executor = Executors.newCachedThreadPool();
-            Gson parser = new Gson();
             socket = new Socket(IP, port);
             System.out.println(username + ":  connected");
+
             cs = new ClientSender(socket);
             cr = new ClientReceiver(this,socket);
             //send player preferences to the server;

@@ -180,7 +180,7 @@ public class Board {
     }
 
     /**
-     * Moves the students in the list <code>students</code> from <code>Player</code> 's wating room
+     * Moves the students in the list <code>students</code> from <code>Player</code> 's waiting room
      * to the island n°<code>islandNumber</code>.
      * @param Player the id of the player that ask for this move
      * @param islandNumber the number of the island where you want to move the students
@@ -399,15 +399,6 @@ public class Board {
         if(islandToJoin.size() == 2 || islandToJoin.size() == 3) joinIslands(islandToJoin);
     }
 
-    //    private static final int numOfStudentsPerColor=24;
-    //    protected int motherNaturePosition = 0;
-    //    protected int nPlayer;
-    //    protected final Bag bag = new Bag(numOfStudentsPerColor);
-    //    protected final List<Cloud> cloudList = new ArrayList<>();
-    //    protected final List<Island> islandList = new ArrayList<>();
-    //    protected final Map<String, Castle> castleMap = new HashMap<>();
-    //    protected Map<Color, Team> professorsMap;
-    //    protected final Turn turn;
     public boolean equals(Board b){
         return this.motherNaturePosition == b.motherNaturePosition && this.nPlayer == b.nPlayer &&
                 this.islandList.equals(b.islandList) && this.bag.equals(b.bag) && this.cloudList.equals(b.cloudList) &&

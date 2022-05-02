@@ -2,7 +2,8 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.HeartBeatServer;
-import it.polimi.ingsw.communication.Preferences;
+import it.polimi.ingsw.communication.packet.Packet;
+import it.polimi.ingsw.communication.packet.Preferences;
 import it.polimi.ingsw.communication.ServerReceiver;
 
 import java.io.BufferedReader;
@@ -68,7 +69,8 @@ public class ServerMain implements Runnable{
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String input = in.readLine();
                 System.out.println(input);
-                Preferences preferences = parser.fromJson(input, Preferences.class);
+                Packet preferencesPacket = parser.fromJson(input, Packet.class);
+                Preferences preferences = parser.fromJson(preferencesPacket.getMessageJson(), Preferences.class);
                 String nickname = preferences.username();
                 System.out.println(nickname+" joined in");
                 connectedPlayers.put(nickname, socket);

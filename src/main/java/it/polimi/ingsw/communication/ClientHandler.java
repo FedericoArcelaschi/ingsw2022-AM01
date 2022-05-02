@@ -2,6 +2,9 @@ package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.communication.packet.Message;
+import it.polimi.ingsw.communication.packet.MessageType;
+import it.polimi.ingsw.communication.packet.Update;
 import it.polimi.ingsw.controller.Game;
 
 import java.io.IOException;
@@ -32,7 +35,7 @@ public class ClientHandler implements Runnable {
                 } else {
                     String responseMessage = game.executeCommand(parser.fromJson(line, Command.class));
                     System.out.println(responseMessage);
-                    Message message = new Message(MessageType.UPDATE, new BoardData("--",game.getBoard()));
+                    Message message = new Update(new BoardData("--",game.getBoard()));
                     System.out.println(parser.toJson(message, Message.class));
                     out.println(parser.toJson(message, Message.class));
                     out.flush();

@@ -1,13 +1,11 @@
 package it.polimi.ingsw.communication;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.client.ClientMain;
-import it.polimi.ingsw.client.ViewDraw;
+import it.polimi.ingsw.communication.packet.Message;
+import it.polimi.ingsw.communication.packet.MessageType;
+import it.polimi.ingsw.communication.packet.Packet;
+import it.polimi.ingsw.communication.packet.Ping;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientReceiver extends Receiver{
@@ -16,17 +14,17 @@ public class ClientReceiver extends Receiver{
         super(cm, socket);
     }
 
-    void messageSwitch(Message message){
-        switch (message.type()){
+    void messageSwitch(MessageType type, Message message){
+        switch (type){
             case PING -> {
-                Message heartbeatToServer = new Message(message.id(), MessageType.PING);
+                Ping ping = (Ping) message;
+                Packet heartbeatToServer = new Packet(MessageType.PING, ping);
                 System.out.println(cm.getUsername()+": ping received");
                 out.println(parser.toJson(heartbeatToServer));
-                System.out.println(cm.getUsername()+": pinged back");
             }
             case UPDATE -> {
                 //print data without saving it anywhere
-                ViewDraw.drawCli(message.data());
+                //ViewDraw.drawCli(message.data());
             }
             case END -> {}
             case ERROR -> {}
