@@ -80,7 +80,7 @@ public class ServerMain implements Runnable{
                 heartBeatServer.addClient(socket);
                 Game g = waitingRoom.computeGameType(gameId);
                 if(g != null) {
-                    System.out.println(Color.YELLOW.colorCode + "Server: created game " + gameId + "with players: " + g.toStringPlayers() + "\u001B[0m");
+                    System.out.println(Color.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + g.toStringPlayers() + "\u001B[0m");
                     for (Socket player : g.getGameSocketList()) {
                         executor.submit(new ServerReceiver(player, heartBeatServer, g));
                     }
