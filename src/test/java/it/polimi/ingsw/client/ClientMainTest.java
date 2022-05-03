@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client;
 
+import com.google.gson.Gson;
+import it.polimi.ingsw.communication.packet.message.ErrorMessage;
+import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.controller.GameType;
 import it.polimi.ingsw.controller.ServerMain;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,8 +39,8 @@ class ClientMainTest {
         for (i = 1; i <= n4; i++) {
             new ClientMain("Lore4-"+i,4,false, "127.0.0.1", 1234).connect();
         }
-        Thread.sleep(500);
-        assertEquals(n2+n3+n4, s.getConnectedPlayers().size(), "10 players should be connected");
+        Thread.sleep(1000);
+        assertEquals(n2+n3+n4, s.getConnectedPlayers().size(), "n players should be connected");
         assertEquals(50, s.getGamesNumber(GameType.NORMAL_2_PLAYER));
         assertEquals(30, s.getGamesNumber(GameType.NORMAL_3_PLAYER));
         assertEquals(25, s.getGamesNumber(GameType.NORMAL_4_PLAYER));
@@ -57,6 +60,16 @@ class ClientMainTest {
         Thread.sleep(3000);
         c1.runCommand("playcard 1");
         Thread.sleep(3000);
+    }
+
+    @Test
+    void gsonTest(){
+        Gson parser = new Gson();
+        Message message = new ErrorMessage(0,"errore");
+        String json = parser.toJson(message);
+        System.out.println(json);
+        Message messageD = parser.fromJson(json, ErrorMessage.class);
+        System.out.println(messageD);
     }
 
 }

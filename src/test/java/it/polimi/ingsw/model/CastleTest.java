@@ -85,6 +85,6 @@ public class CastleTest{
         assertTrue(c.playCard(3));
         //check priority of last card played
         assertEquals(new Card(3,2,false), c.getLastCardPlayed());
-        assertFalse(c.playCard(3));
+        assertThrowsExactly(IllegalArgumentException.class, () -> c.playCard(3));
     }
 }
