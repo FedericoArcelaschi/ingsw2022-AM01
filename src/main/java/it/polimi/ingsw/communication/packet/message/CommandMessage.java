@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.packet.message;
 
-public class CommandMessage extends Message{
+public final class CommandMessage extends Message{
     private final String username;
     private final String command;
 
