@@ -58,7 +58,6 @@ public class HeartBeatServer implements Callable {
                 heartBeats.put(client, message);
                 String jsonMessage = parser.toJson(packet, Packet.class);
                 out.println(jsonMessage);
-                System.out.println("HeartBeatServer: pinged " + client);
             }
             try {
                 int sleep;

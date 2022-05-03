@@ -37,6 +37,5 @@ public class ClientSender {
 
     public void sendPacket(Packet packet){
         out.println(parser.toJson(packet));
-        System.out.println(Color.RED.colorCode + parser.toJson(packet) + "\u001B[0m");
     }
 }

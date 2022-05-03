@@ -74,7 +74,6 @@ public class ServerMain implements Runnable{
                 Socket socket = serverSocket.accept();
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String input = in.readLine();
-                System.out.println(input);
                 Packet preferencesPacket = parser.fromJson(input, Packet.class);
                 Preferences preferences = parser.fromJson(preferencesPacket.getMessageJson(), Preferences.class);
                 String nickname = preferences.username();

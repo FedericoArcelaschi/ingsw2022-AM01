@@ -2,7 +2,6 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.controller.GameType;
 import it.polimi.ingsw.controller.ServerMain;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,8 +18,8 @@ class ClientMainTest {
     void beforeEach(){
         ExecutorService executorService = Executors.newCachedThreadPool();
         s = new ServerMain(1234);
-        c1 = new ClientMain("Fede",2,false, "0.0.0.0", 1234);
-        c2 = new ClientMain("Lore",2,false, "0.0.0.0", 1234);
+        c1 = new ClientMain("Fede",2,false, "127.0.0.1", 1234);
+        c2 = new ClientMain("Lore",2,false, "127.0.0.1", 1234);
         executorService.submit(s);
     }
 

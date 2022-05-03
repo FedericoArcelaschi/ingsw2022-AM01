@@ -19,7 +19,6 @@ public class ClientReceiver extends Receiver{
             case PING -> {
                 Ping ping = (Ping) message;
                 Packet heartbeatToServer = new Packet(MessageType.PING, ping);
-                System.out.println(cm.getUsername()+": ping received");
                 out.println(parser.toJson(heartbeatToServer));
             }
             case UPDATE -> {

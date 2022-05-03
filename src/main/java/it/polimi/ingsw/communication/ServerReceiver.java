@@ -22,7 +22,6 @@ public class ServerReceiver extends Receiver{
     void messageSwitch(MessageType type, Message message){
         switch (type){
             case PING -> {
-                System.out.println("Server: ping received");
                 hbs.validateResponse(message);
             }
             case COMMAND -> {
