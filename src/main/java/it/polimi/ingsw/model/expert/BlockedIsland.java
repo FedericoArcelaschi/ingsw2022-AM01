@@ -1,24 +1,27 @@
 package it.polimi.ingsw.model.expert;
 
-import it.polimi.ingsw.model.Island;
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
-import it.polimi.ingsw.model.expert.Characters.Block;
+import it.polimi.ingsw.model.expert.characters.Block;
+
+import java.util.Map;
 
 public class BlockedIsland extends ExpertIsland {
+    private final ExpertIsland island;
+    private final Block witch;
 
-    private final ExpertIsland i;
-    private final Block Expertcharacter;
-
-    public BlockedIsland(ExpertIsland i, Block Expertcharacter) {
-        //TODO: shouldn't block a blocked island
-        this.i = i;
-        this.Expertcharacter = Expertcharacter;
+    public BlockedIsland(ExpertIsland island, Block witch) {
+        this.island = island;
+        this.witch = witch;
     }
 
+    /**
+     * @return if blocked an unlocked island, if unlocked, the new island.
+     */
     @Override
     public ExpertIsland setOwnership(Team ownership) {
-        Expertcharacter.addBlockTile();
-        return i;
+        witch.addBlockTile();
+        return island;
     }
 
     @Override
@@ -26,4 +29,18 @@ public class BlockedIsland extends ExpertIsland {
         return true;
     }
 
+    @Override
+    public Map<Color, Integer> getStudents() {
+        return island.getStudents();
+    }
+
+    @Override
+    public boolean addStudent(Color c) {
+        return island.addStudent(c);
+    }
+
+    @Override
+    public boolean addStudent(Map<Color, Integer> s) {
+        return island.addStudent(s);
+    }
 }

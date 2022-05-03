@@ -33,4 +33,5 @@ public class ExpertIsland extends Island { //TODO: extend with interface
     public boolean isBlocked() {
         return false;
     }
+
 }
