@@ -52,9 +52,10 @@ class ClientMainTest {
         c2.connect();
 
         Thread.sleep(100);
+        c1.runCommand("playcard 1");
 
-        //c1.runCommand("playcard 1");
-
+        Thread.sleep(3000);
+        c1.runCommand("playcard 1");
         Thread.sleep(3000);
     }
 

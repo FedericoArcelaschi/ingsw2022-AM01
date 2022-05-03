@@ -64,6 +64,7 @@ public class Game{
     }
 
     public void sendUpdate(Packet packet){
+        System.out.println("--sending updates--");
         if(packet.getType() == MessageType.UPDATE){
             Gson parser = new Gson();
             for (Socket s: usernameSocketMap.values()) {
@@ -105,6 +106,8 @@ public class Game{
             board.playCard(command.getUsername() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
         } catch (NotYourTurnException e) {
             return createError(0, "NotYourTurn");
+        } catch (IllegalArgumentException e) {
+            return createError(0, "commandError");
         }
         return  createUpdate(new BoardData(command.getUsername(), board));
     }

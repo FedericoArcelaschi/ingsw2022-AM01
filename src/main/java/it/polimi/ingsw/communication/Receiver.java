@@ -1,6 +1,7 @@
 package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.client.ClientMain;
 import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.communication.packet.MessageType;
@@ -22,7 +23,7 @@ public abstract class Receiver implements Runnable{
     public Receiver(ClientMain cm, Socket socket){
         this.socket = socket;
         this.cm = cm;
-        this.parser = new Gson();
+        this.parser = new GsonBuilder().create();
         try {
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.out = new PrintWriter(socket.getOutputStream(), true);

@@ -101,7 +101,7 @@ public class Castle {
             lastPlayedCard = play;
             return true;
         }
-        else return false;
+        else throw new IllegalArgumentException();
     }
 
     public boolean equals(Castle c){

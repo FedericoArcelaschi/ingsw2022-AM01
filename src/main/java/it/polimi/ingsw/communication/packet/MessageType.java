@@ -25,4 +25,9 @@ public enum MessageType {
     public Type getTypeClass() {
         return type;
     }
+
+    @Override
+    public String toString() {
+        return type.toString();
+    }
 }

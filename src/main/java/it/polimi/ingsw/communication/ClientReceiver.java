@@ -1,6 +1,7 @@
 package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.client.ClientMain;
+import it.polimi.ingsw.communication.packet.message.ErrorMessage;
 import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
@@ -27,7 +28,12 @@ public class ClientReceiver extends Receiver{
                 //ViewDraw.drawCli(message.data());
             }
             case END -> {}
-            case ERROR -> {}
+            case ERROR -> {
+                ErrorMessage errorMessage = (ErrorMessage) message;
+                System.out.println("new error received: " + errorMessage.getMessage());
+                //print data without saving it anywhere
+                //ViewDraw.drawCli(message.data());
+            }
         }
     }
 }

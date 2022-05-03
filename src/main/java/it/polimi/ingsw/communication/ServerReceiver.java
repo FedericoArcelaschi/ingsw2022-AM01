@@ -30,7 +30,7 @@ public class ServerReceiver extends Receiver{
                  CommandMessage commandMessage = (CommandMessage) message;
                  Command command = Command.createCommand(commandMessage.getUsername(), commandMessage.getCommand());
                  Packet packet = game.executeCommand(command);
-                 out.println(parser.toJson(packet));
+                //out.println(parser.toJson(packet));
                  if(packet.getType() == MessageType.UPDATE)
                      game.sendUpdate(packet);
                  else

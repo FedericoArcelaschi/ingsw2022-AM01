@@ -69,6 +69,7 @@ public class ClientMain {
         CommandMessage commandMessage = new CommandMessage(username, stringCommand);
         Packet packet = new Packet(MessageType.COMMAND, commandMessage);
         cs.sendPacket(packet);
+        System.out.println("command sent");
         return true;
     }
 
