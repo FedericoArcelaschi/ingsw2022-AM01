@@ -4,6 +4,7 @@ package it.polimi.ingsw.model.expert.characters;
  */
 public enum PossibleParameter {
     CURRENTPLAYER,
+    ISLANDINDEX,
     ISLAND,
     CASTLEMAP,
     PROFESSORSMAP,
