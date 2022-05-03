@@ -137,7 +137,7 @@ public class BoardTest{
         assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed().priority());
         assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed().distance());
         //check if the card can't be reused
-        assertFalse(b.playCard(player1,1));
+        assertThrowsExactly(IllegalArgumentException.class,() -> b.playCard(player1,1));
     }
     @Test
     public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
