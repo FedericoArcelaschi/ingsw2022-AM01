@@ -202,10 +202,14 @@ public class Board {
      * @param card the number of the card the player want to use
      * @return if the move is legal and played, false otherwise
      */
+    //TODO: ADDS THE CARD TO A DATA STRUCTURE IN TURN TO DETERMINE NEW TURN ORDERS.
     public boolean playCard(String PlayerID, int card) throws NotYourTurnException {
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
-        return castle.playCard(card);
+        if(castle.playCard(card)){
+            turn.addCard(PlayerID, card);
+            return true;
+        }else return false;
     }
 
     /**

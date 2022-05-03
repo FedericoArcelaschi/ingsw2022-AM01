@@ -47,9 +47,7 @@ public class WaitingRoom {
                     if(nicknameMap.get(g).size()%3==0 && nicknameMap.get(g).size()>1 && nicknameMap.get(g).size()!=oldsize3) {
                         List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-3), nicknameMap.get(g).size());
                         List<Socket> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-3), gameSocketMap.get(g).size());
-                        System.out.println("Old list size is: " + oldsize3 + ", new size is: " + nicknameMap.get(g).size());
                         oldsize3 = nicknameMap.get(g).size();
-                        System.out.println("Now oldsize is: " + oldsize3);
                         return new Game(GameType.NORMAL_3_PLAYER, gameId, nickMap, socketMap);
                     }
                 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,35 +9,50 @@ import java.util.List;
 
 public class TurnTest{
     @Test
-    public void testGetTurn() {
-        List<String> players = Arrays.asList("pippo","pluto","paperino");
-        Turn turn = new Turn(players);
-        for (String pl: players) {
-            assertEquals(turn.getCurrentPlayer(), pl);
-            turn.nextTurnPlanning();
+    public void testChangePhase() {
+        try {
+            List<String> players = Arrays.asList("lore", "fede", "gio");
+            Turn t = new Turn(players);
+            Board b = BoardFactory.getBoard(players, t);
+            b.playCard("lore", 3);
+            t.changePhase();
+            b.playCard("fede", 4);
+            t.changePhase();
+            b.playCard("gio", 1);
+            t.changePhase();
+            List<String> order = Arrays.asList("gio", "lore", "fede");
+            assertEquals(order, t.getActionOrder());
+            assertEquals(TurnPhase.STUDENTS, t.getCurrentPhase());
+            assertEquals("gio", t.getCurrentPlayer());
+            t.changePhase();
+            assertEquals(TurnPhase.MOTHERNATURE, t.getCurrentPhase());
+            assertEquals("gio", t.getCurrentPlayer());
+            t.changePhase();
+            assertEquals(TurnPhase.CLOUD, t.getCurrentPhase());
+            assertEquals("gio", t.getCurrentPlayer());
+            t.changePhase();
+            assertEquals(TurnPhase.STUDENTS, t.getCurrentPhase());
+            assertEquals("lore", t.getCurrentPlayer());
+            t.changePhase();
+            t.changePhase();
+            t.changePhase();
+            assertEquals("fede", t.getCurrentPlayer());
+            assertEquals(TurnPhase.STUDENTS, t.getCurrentPhase());
+            t.changePhase();
+            t.changePhase();
+            t.changePhase();
+            assertEquals(TurnPhase.PLANNING, t.getCurrentPhase());
+            assertEquals("gio", t.getCurrentPlayer());
+            b.playCard("gio", 10);
+            t.changePhase();
+            b.playCard("lore", 1);
+            t.changePhase();
+            b.playCard("fede", 9);
+            t.changePhase();
+            List<String> newOrder = Arrays.asList("lore", "fede", "gio");;
+            assertEquals(newOrder, t.getActionOrder());
+        } catch (NotYourTurnException e) {
+            e.printStackTrace();
         }
-    }
-    @Test
-    public void testSetTurnAction() {
-        List<String> players = Arrays.asList("pippo","pluto","paperino");
-        Turn turn = new Turn(players);
-        players = Arrays.asList("pluto","paperino","pippo");
-        turn.setTurnAction(players);
-        for (String pl: players) {
-            assertEquals(turn.getCurrentPlayer(), pl);
-            turn.nextTurnAction();
-        }
-
-    }
-    @Test
-    public void testNextTurnPlanification() {
-        List<String> players = Arrays.asList("pippo","pluto","paperino");
-        Turn turn = new Turn(players);
-        turn.setTurnAction(players);
-        turn.nextTurnPlanning();
-        assertEquals("pluto", turn.getCurrentPlayer());
-    }
-    @Test
-    public void testNextTurnAction() {
     }
 }
