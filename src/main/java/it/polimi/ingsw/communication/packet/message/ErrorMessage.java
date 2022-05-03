@@ -1,10 +1,10 @@
-package it.polimi.ingsw.communication.packet;
+package it.polimi.ingsw.communication.packet.message;
 
-public final class Error extends Message {
+public final class ErrorMessage extends Message {
     private int errorCode;
     private String message;
 
-    public Error(int errorCode, String message) {
+    public ErrorMessage(int errorCode, String message) {
         this.errorCode = errorCode;
         this.message = message;
     }

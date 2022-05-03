@@ -1,10 +1,10 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.communication.*;
-import it.polimi.ingsw.communication.packet.CommandMessage;
+import it.polimi.ingsw.communication.packet.message.CommandMessage;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.Preferences;
+import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.model.Board;
 
 import java.io.IOException;

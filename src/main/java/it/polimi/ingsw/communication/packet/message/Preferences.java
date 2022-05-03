@@ -1,8 +1,8 @@
-package it.polimi.ingsw.communication.packet;
+package it.polimi.ingsw.communication.packet.message;
 
 import java.util.Objects;
 
-public final class Preferences extends Message{
+public final class Preferences extends Message {
     private final String username;
     private final int nPlayer;
     private final boolean expertMode;

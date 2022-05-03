@@ -1,6 +1,9 @@
 package it.polimi.ingsw.communication.packet;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.communication.packet.message.Message;
+
+import java.lang.reflect.Type;
 
 public final class Packet {
     private final MessageType type;
@@ -14,6 +17,10 @@ public final class Packet {
 
     public MessageType getType() {
         return type;
+    }
+
+    public Type getTypeClass(){
+        return type.getTypeClass();
     }
 
     public String getMessageJson() {

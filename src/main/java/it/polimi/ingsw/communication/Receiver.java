@@ -2,7 +2,7 @@ package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.client.ClientMain;
-import it.polimi.ingsw.communication.packet.Message;
+import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 
@@ -42,7 +42,7 @@ public abstract class Receiver implements Runnable{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            message = parser.fromJson(packet.getMessageJson(), packet.getType().getType());
+            message = parser.fromJson(packet.getMessageJson(), packet.getTypeClass());
             messageSwitch(packet.getType(), message);
         }
     }

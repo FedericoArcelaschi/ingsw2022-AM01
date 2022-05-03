@@ -1,10 +1,10 @@
 package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.client.ClientMain;
-import it.polimi.ingsw.communication.packet.Message;
+import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.Ping;
+import it.polimi.ingsw.communication.packet.message.Ping;
 
 import java.net.Socket;
 
@@ -23,6 +23,7 @@ public class ClientReceiver extends Receiver{
                 out.println(parser.toJson(heartbeatToServer));
             }
             case UPDATE -> {
+                System.out.println("new board received");
                 //print data without saving it anywhere
                 //ViewDraw.drawCli(message.data());
             }

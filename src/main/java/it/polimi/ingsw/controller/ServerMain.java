@@ -3,7 +3,7 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.HeartBeatServer;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.Preferences;
+import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.communication.ServerReceiver;
 import it.polimi.ingsw.model.Color;
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.communication.packet;
+package it.polimi.ingsw.communication.packet.message;
 
 import org.jetbrains.annotations.NotNull;
 

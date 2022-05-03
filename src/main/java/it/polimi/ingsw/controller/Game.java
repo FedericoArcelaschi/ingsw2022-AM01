@@ -3,39 +3,40 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.CommandAttribute;
+import it.polimi.ingsw.communication.CommandType;
+import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.communication.packet.MessageType;
+import it.polimi.ingsw.communication.packet.Packet;
+import it.polimi.ingsw.communication.packet.message.ErrorMessage;
+import it.polimi.ingsw.communication.packet.message.Message;
+import it.polimi.ingsw.communication.packet.message.Update;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Game{
     private final GameType gameType;
     private final int gameId;
     private final Board board;
-    private final List<String> usernameList;
-    private Turn turn;
-    private static Gson gson = new Gson();
-    private List<Socket> gameSocketList;
+    private final Turn turn;
+    private final Map<String, Socket> usernameSocketMap;
 
-    public Game(GameType gameType, int gameId, List<String> nicknameList, List<Socket> gameSocketList) {
+    public Game(GameType gameType, int gameId, List<String> usernameList, List<Socket> gameSocketList) {
         this.gameType = gameType;
         this.gameId = gameId;
-        this.gameSocketList = new ArrayList<>();
-        this.gameSocketList.addAll(gameSocketList);
-        this.usernameList = nicknameList;
-        turn = new Turn(nicknameList);
-        board = new BoardFactory().getBoard(nicknameList, turn);
-    }
-
-    public List<Socket> getGameSocketList() {
-        return gameSocketList;
+        this.usernameSocketMap = new HashMap<>();
+        for (int i = 0; i < usernameList.size(); i++) {
+            usernameSocketMap.put(usernameList.get(i), gameSocketList.get(i));
+        }
+        turn = new Turn(usernameList);
+        board = BoardFactory.getBoard(usernameList, turn);
     }
 
     /**
@@ -43,7 +44,7 @@ public class Game{
      * @param command description of the command requested
      * @return response to the command
      */
-    public String executeCommand(Command command){
+    public Packet executeCommand(Command command){
         switch(command.getType()) {
             case PLAY_CARD -> {
                 return playCardCommand(command);
@@ -58,51 +59,57 @@ public class Game{
                 return chooseCloudCommand(command);
             }
         }
-        return command.toString();
+
+        return createError(0, "Not valid command");
     }
 
-    /**
-     * return the availability for each card of the deck
-     * @param playerID the player that called the command
-     * @return String that shows availability for each card of the deck
-     */
-    private List<Card> getDeck(String playerID){
-        return board.getDeck(playerID);
-    }
-
-    private Map<Color, Team> getProfessorMap(){
-        return board.getProfessorsMap();
-    }
-
-    /**
-     * Private method that handles a command of "get" type.
-     * @param command, get command.
-     * @return the command, so that the server can send the information back.
-     */
-    private String getCommand(Command command){ //TODO: COMPLETE WITH MORE COMMANDS
-        switch (command.getAttributesMap().get(CommandAttribute.WHAT)) {
-            case "deck" -> {
-                return gson.toJson(getDeck(command.getUsername()));
-            }
-            case "professors" -> {
-                return gson.toJson(getProfessorMap());
+    public void sendUpdate(Packet packet){
+        if(packet.getType() == MessageType.UPDATE){
+            Gson parser = new Gson();
+            for (Socket s: usernameSocketMap.values()) {
+                PrintWriter out = null;
+                try {
+                    out = new PrintWriter(s.getOutputStream(), true);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                out.println(parser.toJson(packet));
             }
         }
-        return "Command was not successful. Please, try again.";
     }
 
-    private String playCardCommand(Command command){
-        String player = command.getUsername();
+    public void sendError(String username, Packet packet){
+        Socket s = usernameSocketMap.get(username);
+        Gson parser = new Gson();
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(s.getOutputStream(), true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        out.println(parser.toJson(packet));
+    }
+
+    private Packet createUpdate(BoardData boardData){
+        Message message = new Update(boardData);
+        return new Packet(MessageType.UPDATE, message);
+    }
+
+    private Packet createError(int errorCode, String errorMessage){
+        Message message = new ErrorMessage(errorCode, errorMessage);
+        return new Packet(MessageType.ERROR, message);
+    }
+
+    private Packet playCardCommand(Command command){
         try {
             board.playCard(command.getUsername() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
         } catch (NotYourTurnException e) {
-            e.printStackTrace();
-            return "It's not your turn yet!";
+            return createError(0, "NotYourTurn");
         }
-        return "Card has been played successfully!";
+        return  createUpdate(new BoardData(command.getUsername(), board));
     }
 
-    private String moveStudentCommand(@NotNull Command command){
+    private Packet moveStudentCommand(@NotNull Command command){
         //Here for now I assume that the list of students in input is
         //given as a single string of Color separated by commas.
         //Needs to be changed accordingly if the convention changes.
@@ -124,59 +131,45 @@ public class Game{
             case "dining room" -> {
                 try {
                     board.moveStudentToDiningRoom(command.getUsername(), students);
-                    s = "The students have been moved to the dining room.";
-                    return s;
                 } catch (NoSuchStudentException e) {
-                    e.printStackTrace();
+                    return createError(0, "There aren't enough students");
                 } catch (NotYourTurnException e) {
-                    e.printStackTrace();
-                    s = "It's not your turn yet!";
-                    return s;
+                    return createError(0, "It's not your turn yet!");
                 } catch (TooManyStudentsException e) {
-                    e.printStackTrace();
-                    s =  "The dining room is full!";
-                    return s;
+                    return createError(0, "The dining room is full!");
                 }
+                return  createUpdate(new BoardData(command.getUsername(), board));
             }
             case "island" -> {
                 //the current player moves the list of students in the third parameter
                 //to the island of which the id was chosen.
                 try {
                     board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)), students);
-                    s = "The students have been moved to the chosen island.";
-                    return s;
                 } catch (NoSuchStudentException e) {
-                    e.printStackTrace();
+                    return createError(0, "There aren't enough students");
                 } catch (NotYourTurnException e) {
-                    e.printStackTrace();
-                    s = "It's not your turn yet!";
-                    return s;
+                    return createError(0, "It's not your turn yet!");
                 }
+                return  createUpdate(new BoardData(command.getUsername(), board));
             }
         }
-        return s;
+        return createError(0, "Not valid moveStudent command");
     }
 
-    private String moveMotherNatureCommand(Command command){
+    private Packet moveMotherNatureCommand(Command command){
         board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
-        return "Mother nature has been moved successfully!";
+        return  createUpdate(new BoardData(command.getUsername(), board));
     }
 
-    private String chooseCloudCommand(Command command){
+    private Packet chooseCloudCommand(Command command){
         try {
             board.chooseCloud(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
-            return "The cloud has been chosen successfully!";
         } catch (NotYourTurnException e) {
-            e.printStackTrace();
-            return "It is not your turn.";
+            return createError(0, "It's not your turn yet!");
         } catch (TooManyStudentsException e) {
-            e.printStackTrace();
-            return "You can't choose this cloud yet.";
+            return createError(0, "The waiting room is full!");
         }
-    }
-
-    private String notifyStatusUpdate(){
-        return "The game state has been modified.";
+        return  createUpdate(new BoardData(command.getUsername(), board));
     }
 
     public Board getBoard() {
@@ -189,11 +182,14 @@ public class Game{
 
     public String toStringPlayers() {
         StringBuilder r = new StringBuilder("");
-        for (String username : usernameList) {
+        for (String username : usernameSocketMap.keySet()) {
             r.append(username).append(" ");
         }
         return r.toString();
     }
 
 
+    public List<Socket> getGameSocketList() {
+        return new ArrayList<>(usernameSocketMap.values());
+    }
 }

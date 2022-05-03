@@ -2,10 +2,10 @@ package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.exception.ClientNotRespondingException;
-import it.polimi.ingsw.communication.packet.Message;
+import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.Ping;
+import it.polimi.ingsw.communication.packet.message.Ping;
 
 import java.io.IOException;
 import java.io.PrintWriter;
