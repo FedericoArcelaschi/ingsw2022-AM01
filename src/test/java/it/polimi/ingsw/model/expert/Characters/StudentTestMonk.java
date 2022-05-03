@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.expert.Characters;
+package it.polimi.ingsw.model.expert.characters;
 
 import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Color;
@@ -36,7 +36,7 @@ public class StudentTestMonk {
     @SuppressWarnings("unchecked")
     public void testApplyEffectWithGetEffect() throws StudentException {
         board.extract4CharacterTesting(1);
-        Generic monkCharacter
+        MasterCharacter monkCharacter
                 = board.getAvailableCharacterCards().get(1);
         ExpertIsland island
                 = (ExpertIsland) board.getIslandList().get(3);
@@ -55,11 +55,11 @@ public class StudentTestMonk {
                 .getAvailableCharacterCards()
                 .get(1)
                 .getEffect()
-                .get(Parameters.STUDENTLIST);//gets the students that "the character can place"
-        Map<Parameters, Object> parametersMap
+                .get(PossibleParameter.STUDENTLIST);//gets the students that "the character can place"
+        Map<PossibleParameter, Object> parametersMap
                 = new HashMap<>(Map.of(
-                Parameters.STUDENTLIST, availableStudent,
-                Parameters.ISLAND, island));
+                PossibleParameter.STUDENTLIST, availableStudent,
+                PossibleParameter.ISLAND, island));
 
         numberOfStudentsBefore = island.getStudents().get(availableStudent.get(0));
         studentsOnIsland.add(availableStudent.get(0));
@@ -82,7 +82,7 @@ public class StudentTestMonk {
     public void testApplyEffectWithWrongColor() {
         ExpertIsland testIsland = (ExpertIsland) board.getIslandList().get(1);
         board.extract4CharacterTesting(1);
-        Generic monkCharacter
+        MasterCharacter monkCharacter
                 = board.getAvailableCharacterCards().get(1);
         ExpertIsland island
                 = (ExpertIsland) board.getIslandList().get(0);
@@ -92,7 +92,7 @@ public class StudentTestMonk {
                 .getAvailableCharacterCards()
                 .get(1)
                 .getEffect()
-                .get(Parameters.STUDENTLIST)); //gets all the available student that "the character can place"
+                .get(PossibleParameter.STUDENTLIST)); //gets all the available student that "the character can place"
         Color notAvailableStudent = null;
         for (Color c: Color.values()) {
             if(!availableStudents.contains(c))
@@ -100,10 +100,10 @@ public class StudentTestMonk {
         if (notAvailableStudent == null) return;
         int numberOfStudentsBefore; //can be either zero or one
         int numberOfStudentsAfter; //can be either one or two
-        Map<Parameters, Object> parametersMap
+        Map<PossibleParameter, Object> parametersMap
                 = new HashMap<>(Map.of(
-                Parameters.STUDENTLIST, List.of(notAvailableStudent),
-                Parameters.ISLAND, island)
+                PossibleParameter.STUDENTLIST, List.of(notAvailableStudent),
+                PossibleParameter.ISLAND, island)
         );
         numberOfStudentsBefore = island.getStudents().get(notAvailableStudent);
         //In this test I call directly the Character's method
@@ -118,13 +118,13 @@ public class StudentTestMonk {
     @Test
     @SuppressWarnings("unchecked")
     public void testPlayExpertCards4MONK() throws Exception {
-        Generic monkChar;
+        MasterCharacter monkChar;
         List<Color> availableStudent;
         ExpertIsland island = ((ExpertIsland) board.getIslandList().get(1));
         Map<Color, Integer> presentStudents = island.getStudents();
         board.extract4CharacterTesting(1);
         monkChar = board.getAvailableCharacterCards().get(1);
-        availableStudent = ((List<Color>) monkChar.getEffect().get(Parameters.STUDENTLIST));
+        availableStudent = ((List<Color>) monkChar.getEffect().get(PossibleParameter.STUDENTLIST));
 
         //the effect should be applied only for the fist time (1 coin is present)
                                                                 //>passes only one student as list.

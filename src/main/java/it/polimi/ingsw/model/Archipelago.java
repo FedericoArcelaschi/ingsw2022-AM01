@@ -5,8 +5,6 @@ public class Archipelago extends Island{
 
     /**
      * Contructor that bonds two islands
-     * @param island1
-     * @param island2
      */
     public Archipelago(Island island1, Island island2){
         super();
@@ -18,9 +16,6 @@ public class Archipelago extends Island{
 
     /**
      * Contructor that bonds three islands
-     * @param island1
-     * @param island2
-     * @param island3
      */
     public Archipelago(Island island1, Island island2, Island island3){
         super();
@@ -31,8 +26,9 @@ public class Archipelago extends Island{
         addStudent(island3.getStudents());
     }
 
-    /**number of island that where bonded into this Archipelago
-     * @return islandNumber >=2
+    /**
+     * Number of island that where bonded into this Archipelago
+     * @return islandNumber !>= 2
      */
     @Override
     public int getIslandNumber() {

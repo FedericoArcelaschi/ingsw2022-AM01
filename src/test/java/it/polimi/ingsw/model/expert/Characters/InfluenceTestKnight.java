@@ -1,9 +1,6 @@
-package it.polimi.ingsw.model.expert.Characters;
+package it.polimi.ingsw.model.expert.characters;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.exceptions.CoinException;
-import it.polimi.ingsw.model.exceptions.StudentException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import it.polimi.ingsw.model.expert.ExpertCastle;
 import it.polimi.ingsw.model.expert.ExpertIsland;

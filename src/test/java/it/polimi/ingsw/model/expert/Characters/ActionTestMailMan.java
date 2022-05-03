@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.expert.Characters;
+package it.polimi.ingsw.model.expert.characters;
 
 import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Turn;

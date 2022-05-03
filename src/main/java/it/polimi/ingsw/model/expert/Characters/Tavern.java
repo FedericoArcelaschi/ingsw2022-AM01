@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.expert.Characters;
+package it.polimi.ingsw.model.expert.characters;
 
 import it.polimi.ingsw.model.Bag;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- *factory method for Generic generation
+ *factory method for MasterCharacter generation
  * Could contain the board to init the characters. Could also implement the character extraction.
  **/
 public class Tavern {
@@ -19,7 +19,6 @@ public class Tavern {
     /**
      * @param bag for Student Character generation
      */
-    @Deprecated
     public Tavern(Bag bag){
         seed = bag.getSeed();
         Tavern.bag = bag;
@@ -29,11 +28,11 @@ public class Tavern {
 
     /**
      * extract 3 different cards for the game
-     * @return List<Generic>
+     * @return List<MasterCharacter>
      */
-    public List<Generic> extract(){
-        Generic ec;
-        List<Generic> expCards = new ArrayList<>();
+    public List<MasterCharacter> extract(){
+        MasterCharacter ec;
+        List<MasterCharacter> expCards = new ArrayList<>();
         Random rand = new Random(seed);
         int idChar;
         for(int i = 0; i < numberOfCharacters + 1; i++) {
@@ -55,10 +54,10 @@ public class Tavern {
      * Factory method that calls the right Character constructor
      *
      * @param idChar - integer between 1 and 12 identifier of the character
-     * @return Generic - abstract superclass of all character
+     * @return MasterCharacter - abstract superclass of all character
      */
-    private Generic getExpertCharacter(int idChar) throws IllegalArgumentException {
-        Generic ec;
+    private MasterCharacter getExpertCharacter(int idChar) throws IllegalArgumentException {
+        MasterCharacter ec;
         return switch (idChar) {
             case 1, 7, 11 -> ec = new Student(idChar, bag);
             case 10 -> ec = new Student(idChar);
@@ -68,7 +67,8 @@ public class Tavern {
             default -> throw new IllegalArgumentException(idChar + " is not a legal id for ExpertCharacters");
         };
     }
-    public Generic extract4testing(int idChar){
+
+    public MasterCharacter extract4testing(int idChar){
         return getExpertCharacter(idChar);
     }
 

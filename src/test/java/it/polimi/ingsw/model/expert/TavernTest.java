@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Turn;
-import it.polimi.ingsw.model.expert.Characters.*;
+import it.polimi.ingsw.model.expert.characters.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +27,7 @@ public class TavernTest{
 
     @Test
     public void testExtraction() {
-        List<Generic> expCards;
+        List<MasterCharacter> expCards;
         expCards = tavern.extract();
         board.getBag().extract();
         assertEquals(13, expCards.size());
@@ -44,7 +44,7 @@ public class TavernTest{
                 || expCards.contains(new Block(5))
         );
         int i = 0;
-        for (Generic a : expCards) {
+        for (MasterCharacter a : expCards) {
             if (a != null)
                 i++;
         }
@@ -54,27 +54,27 @@ public class TavernTest{
 
     @Test
     public void testExtract4Testing() {
-        List<CharactersList> expertModeCharacters = new ArrayList<>();
+        List<CharactersInfo> expertModeCharacters = new ArrayList<>();
         for (int i = 1; i < 13; i++) {
             expertModeCharacters.add(tavern.extract4testing(i).getCharacterType());
         }
         //System.out.println(tavern.extract4testing(3).getCharacterName().name());
-        List<CharactersList> expertModeCharactersList4Comparison
+        List<CharactersInfo> expertModeCharactersInfo4Comparison
                 = new ArrayList<>(
                 Arrays.asList(
-                        CharactersList.MONK,
-                        CharactersList.FARMER,
-                        CharactersList.GUARD,
-                        CharactersList.MAILMAN,
-                        CharactersList.WITCH,
-                        CharactersList.CENTAUR,
-                        CharactersList.JESTER,
-                        CharactersList.KNIGHT,
-                        CharactersList.COOK,
-                        CharactersList.STORYTELLER,
-                        CharactersList.QUEEN,
-                        CharactersList.TAXMAN));
-        assertEquals(expertModeCharactersList4Comparison, expertModeCharacters,
+                        CharactersInfo.MONK,
+                        CharactersInfo.FARMER,
+                        CharactersInfo.GUARD,
+                        CharactersInfo.MAILMAN,
+                        CharactersInfo.WITCH,
+                        CharactersInfo.CENTAUR,
+                        CharactersInfo.JESTER,
+                        CharactersInfo.KNIGHT,
+                        CharactersInfo.COOK,
+                        CharactersInfo.STORYTELLER,
+                        CharactersInfo.QUEEN,
+                        CharactersInfo.TAXMAN));
+        assertEquals(expertModeCharactersInfo4Comparison, expertModeCharacters,
                 "both CharacterList-lists should contain all characters names");
     }
 }

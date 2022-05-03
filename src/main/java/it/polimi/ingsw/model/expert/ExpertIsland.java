@@ -17,7 +17,8 @@ public class ExpertIsland extends Island { //TODO: extend with interface
         super();
     }
 
-    /**Calculates the influence on the island for each team
+    /**
+     * Calculates the influence on the island for each team
      * @param professorsMap map that contains the sum of influences per team
      * @return influenceMap map containing the sum of influences per team
      */

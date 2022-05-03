@@ -110,9 +110,4 @@ public class Island{
                 ", ownership=" + ownership +
                 '}';
     }
-
-    public Island joinTo(Island next) {
-        return next;
-    }
-    //TODO: method toJson!!
 }

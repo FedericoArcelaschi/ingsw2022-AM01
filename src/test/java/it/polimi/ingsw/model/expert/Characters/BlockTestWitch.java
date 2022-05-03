@@ -1,7 +1,6 @@
-package it.polimi.ingsw.model.expert.Characters;
+package it.polimi.ingsw.model.expert.characters;
 
 import it.polimi.ingsw.model.BoardFactory;
-import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.StudentException;
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class BlockTestWitch {
 
-    private Generic witchChar;
+    private MasterCharacter witchChar;
 
     @BeforeEach
     void setUp() {
@@ -35,28 +34,28 @@ class BlockTestWitch {
     void testApplyEffect() throws StudentException {
         ExpertIsland island = new ExpertIsland();
         assertFalse(island.isBlocked());
-        Map<Parameters, Object> parameterMap
+        Map<PossibleParameter, Object> parameterMap
                 = new HashMap<>(
-                Map.of(Parameters.ISLAND, island));
+                Map.of(PossibleParameter.ISLAND, island));
         witchChar.applyEffect(parameterMap);
-        island = (ExpertIsland) parameterMap.get(Parameters.ISLAND);
+        island = (ExpertIsland) parameterMap.get(PossibleParameter.ISLAND);
         assertTrue(island.isBlocked());
     }
 
     @Test
     void testApplyEffectErrorOutOfBlockTiles() throws NoSuchStudentException, TooManyStudentsException {
         ExpertBoard board = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("giovanni", "lorenzo"), true, new Turn(Arrays.asList("giovanni", "lorenzo")));
-        Map<Parameters, Object> parameterMap = new HashMap<>();
+        Map<PossibleParameter, Object> parameterMap = new HashMap<>();
         ExpertIsland island;
         for (int i = 0; i < 4; i++) {
             island = (ExpertIsland) board.getIslandList().get(i);
-            parameterMap.put(Parameters.ISLAND, island);
+            parameterMap.put(PossibleParameter.ISLAND, island);
             witchChar.applyEffect(parameterMap);
-            island = (ExpertIsland) parameterMap.get(Parameters.ISLAND);
+            island = (ExpertIsland) parameterMap.get(PossibleParameter.ISLAND);
             assertTrue(island.isBlocked());
         }
         island = (ExpertIsland) board.getIslandList().get(4);
-        parameterMap.put(Parameters.ISLAND, island);
+        parameterMap.put(PossibleParameter.ISLAND, island);
         try {
             witchChar.applyEffect(parameterMap);
         } catch (IllegalArgumentException e) {
@@ -71,7 +70,7 @@ class BlockTestWitch {
     void testApplyEffectErrorAlreadyBlocked() {
         ExpertIsland island = new BlockedIsland(new ExpertIsland(), (Block) witchChar);
         try {
-            witchChar.applyEffect(Map.of(Parameters.ISLAND, island));
+            witchChar.applyEffect(Map.of(PossibleParameter.ISLAND, island));
         } catch (IllegalArgumentException e) {
             assertEquals("Island is already blocked", e.getMessage());
         } catch (Exception e){
@@ -79,7 +78,7 @@ class BlockTestWitch {
         }
         System.out.println(
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> witchChar.applyEffect(Map.of(Parameters.ISLAND, island))).getMessage() +
+                () -> witchChar.applyEffect(Map.of(PossibleParameter.ISLAND, island))).getMessage() +
                 ": OK!");
     }
 }

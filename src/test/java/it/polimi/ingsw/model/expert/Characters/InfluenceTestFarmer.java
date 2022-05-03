@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.expert.Characters;
+package it.polimi.ingsw.model.expert.characters;
 
 import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Color;
@@ -23,7 +23,7 @@ class InfluenceTestFarmer {
     private ExpertBoard board;
     private Map<Color, Team> professorsMap;
     private ExpertCastle castleA, castleB;
-    private Generic charInfl;
+    private MasterCharacter charInfl;
 
 
     @BeforeEach

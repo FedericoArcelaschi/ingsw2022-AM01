@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.expert.Characters;
+package it.polimi.ingsw.model.expert.characters;
 //TODO: ignore warnings
 
 import it.polimi.ingsw.model.BoardFactory;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class StudentTestJester {
     private ExpertBoard board;
-    private Generic jester;
+    private MasterCharacter jester;
 
     @BeforeEach
     void setUp() {
@@ -42,7 +42,7 @@ class StudentTestJester {
         List<Color> availableStudents
                 = ((List<Color>) jester
                 .getEffect()
-                .get(Parameters.STUDENTLIST));
+                .get(PossibleParameter.STUDENTLIST));
         assertEquals(6, availableStudents.size(),
                 "Jester must contain only 6 students");
         String currentPlayer
@@ -66,7 +66,7 @@ class StudentTestJester {
 
         System.out.println("after: availableStudents" + jester
                 .getEffect()
-                .get(Parameters.STUDENTLIST));
+                .get(PossibleParameter.STUDENTLIST));
         System.out.println("after: waitingroom" + castle.getWaitingRoom());
 
         assertEquals(studentsInWaitingRoom.subList(3, 7), castle.getWaitingRoom().subList(0, 4),
@@ -75,14 +75,14 @@ class StudentTestJester {
                 "wrong students added");
         availableStudents = (List<Color>) jester
                 .getEffect()
-                .get(Parameters.STUDENTLIST);
+                .get(PossibleParameter.STUDENTLIST);
         assertEquals(6, availableStudents.size(),
                 "all the students on the card should be back in place");
     }
 
     @Test
     void applyEffectJesterError1() { //no students list
-        Map<Parameters, Object> parametersMap
+        Map<PossibleParameter, Object> parametersMap
                 = Map.of();
         assertThrowsExactly(IllegalArgumentException.class, () -> jester.applyEffect(parametersMap),
                 "IllegalArgumentException not thrown");
@@ -97,8 +97,8 @@ class StudentTestJester {
 
     @Test
     void applyEffectJesterError2() { //wrong sized list
-        Map<Parameters, Object> parametersMap
-                = Map.of(Parameters.STUDENTLIST, List.of(Color.YELLOW));
+        Map<PossibleParameter, Object> parametersMap
+                = Map.of(PossibleParameter.STUDENTLIST, List.of(Color.YELLOW));
         assertThrowsExactly(IllegalArgumentException.class, () -> jester.applyEffect(parametersMap),
                 "StudentException not thrown");
         try {
@@ -117,7 +117,7 @@ class StudentTestJester {
         List<Color> availableStudents
                 = ((List<Color>) jester
                 .getEffect()
-                .get(Parameters.STUDENTLIST));
+                .get(PossibleParameter.STUDENTLIST));
         List<Color> notAvailableStudents = availableStudents.subList(0, 3);
 
         String currentPlayer = "Lollo99";
@@ -126,10 +126,10 @@ class StudentTestJester {
 
         notAvailableStudents.addAll(Arrays.asList(Color.PINK, Color.PINK, Color.PINK));
 
-        Map<Parameters, Object> parametersMap
-                = Map.of(Parameters.STUDENTLIST, notAvailableStudents,
-                Parameters.CASTLEMAP, Map.of(currentPlayer, castle),
-                Parameters.PLAYERID, currentPlayer);
+        Map<PossibleParameter, Object> parametersMap
+                = Map.of(PossibleParameter.STUDENTLIST, notAvailableStudents,
+                PossibleParameter.CASTLEMAP, Map.of(currentPlayer, castle),
+                PossibleParameter.PLAYERID, currentPlayer);
 
         assertThrowsExactly(NoSuchStudentException.class, () -> jester.applyEffect(parametersMap),
                 "NoSuchStudentException not thrown");
@@ -150,7 +150,7 @@ class StudentTestJester {
         List<Color> availableStudents
                 = ((List<Color>) jester
                 .getEffect()
-                .get(Parameters.STUDENTLIST));
+                .get(PossibleParameter.STUDENTLIST));
         assertEquals(6, availableStudents.size(),
                 "Jester must contain only 6 students");
         //in maniera stocastica a volte ne ha di più (6, 10, 14, 16, 32, 96)
@@ -165,10 +165,10 @@ class StudentTestJester {
         if (notAvailableStudents.isEmpty())
             notAvailableStudents.addAll(
                     Arrays.asList(Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE));
-        Map<Parameters, Object> parametersMap
-                = Map.of(   Parameters.PLAYERID, board.getCurrentPlayer(),
-                            Parameters.CASTLEMAP, board.getCastleMap(),
-                            Parameters.STUDENTLIST, notAvailableStudents);
+        Map<PossibleParameter, Object> parametersMap
+                = Map.of(   PossibleParameter.PLAYERID, board.getCurrentPlayer(),
+                            PossibleParameter.CASTLEMAP, board.getCastleMap(),
+                            PossibleParameter.STUDENTLIST, notAvailableStudents);
         try {
             jester.applyEffect(parametersMap);
         } catch (NoSuchStudentException e) {

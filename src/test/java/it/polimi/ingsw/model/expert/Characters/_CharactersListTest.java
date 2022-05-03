@@ -1,8 +1,8 @@
-package it.polimi.ingsw.model.expert.Characters;
+package it.polimi.ingsw.model.expert.characters;
 
 import org.junit.jupiter.api.Test;
 
-import static it.polimi.ingsw.model.expert.Characters.CharactersList.getChar;
+import static it.polimi.ingsw.model.expert.characters.CharactersList.getChar;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class _CharactersListTest {

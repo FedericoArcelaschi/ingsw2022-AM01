@@ -1,9 +1,8 @@
-package it.polimi.ingsw.model.expert.Characters;
+package it.polimi.ingsw.model.expert.characters;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.Turn;
-import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.expert.ExpertBoard;
 import it.polimi.ingsw.model.expert.ExpertIsland;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class ActionTestGuard {
     private ExpertBoard board;
-    private Generic guardChar;
-    private Map<Parameters, Object> ParametersMap;
+    private MasterCharacter guardChar;
+    private Map<PossibleParameter, Object> ParametersMap;
 
     @BeforeEach
     void setUp() {
@@ -50,8 +49,8 @@ public class ActionTestGuard {
                         "First every island is well initialized");
                 ParametersMap.putAll(
                         Map.of(
-                                Parameters.ISLAND, island,
-                                Parameters.PROFESSORSMAP, professorsMap
+                                PossibleParameter.ISLAND, island,
+                                PossibleParameter.PROFESSORSMAP, professorsMap
                         ));
                 guardChar.applyEffect(ParametersMap);
                 //System.out.println("isola prima: " + j + " " +island);

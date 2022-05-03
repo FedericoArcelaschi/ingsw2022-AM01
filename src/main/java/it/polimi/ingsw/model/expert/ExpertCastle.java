@@ -14,9 +14,6 @@ public class ExpertCastle extends Castle {
 
     /**
      * Castle default constructor
-     *
-     * @param team        team the owner of the castle plays in
-     * @param nPlayer     number of players in the game
      * @param studentList student list to initialize the waiting room
      */
     public ExpertCastle(Team team, int nPlayer, List<Color> studentList) {
@@ -26,10 +23,10 @@ public class ExpertCastle extends Castle {
 
     /**
      * Adds also a coin to the player
-     *
      * @param color color of the student to add
      * @throws TooManyStudentsException if the dining room already contains 10 students of the color <code>color</code>
      */
+    @Override
     public void addStudentInDiningRoom(Color color) throws TooManyStudentsException {
         super.addStudentInDiningRoom(color);
         if (diningRoom.get(color) % 3 == 0)
@@ -38,22 +35,20 @@ public class ExpertCastle extends Castle {
 
     /**
      * Adds a coin to this player
-     *
      * @param students The list of students to add to the dining room.
      * @throws TooManyStudentsException if the dining room already contains 10 students of one of the colors
      */
+    @Override
     public void addStudentsInDiningRoom(List<Color> students) throws TooManyStudentsException {
-        boolean check = true;
         for (Color c: students) {
             addStudentInDiningRoom(c);
         }
     }
 
-
     /**
      * Removes a student from the Dining room.
      * Only available in Expert mode.
-     * @param color color of the student remove
+     * @param color color of the student to remove
      */
     public void removeStudentFromDiningRoom(Color color) throws NoSuchStudentException {
         if(diningRoom.get(color) > 0){
@@ -63,26 +58,14 @@ public class ExpertCastle extends Castle {
             throw new NoSuchStudentException("Student " + color + "not in dining room", color);
     }
 
-    /**Checks if the player can pay and if possible
-     * Removes coins from the castle
-     * @param price cost of the character that the player wants to buy
-     * @return true if the transaction was successful
-     */
-    public boolean payCharacter(int price) {
-        if(this.coins >= price) {
-            this.coins -= price;
-            return true;
-        }
-        return false;
-    }
-
     /**
-     * If the character doesn't <em>apply the effect</em> gives back to the player the money
-     *
-     * @param price the same price as paid before
+     * Removes the cost of coins from the castle
      */
-    public void unpayCharacter(int price){
-        this.coins += price;
+    public void payCharacter(int price) {
+        if(this.coins >= price)
+            this.coins -= price;
+        if(coins < 0)
+            throw new IllegalStateException("the player didn't have the money to pay for the character");
     }
 
     public int getCoins() {
