@@ -18,12 +18,16 @@ public class Command {
         this.username = username;
         switch (type){
             case PLAY_CARD -> attributesMap.put(CommandAttribute.ID, attributes[0]);
+            //e.g.: playcard 1
             case MOVE_STUDENT -> {
                 attributesMap.put(CommandAttribute.WHERE, attributes[0]); //Where is a number
                 attributesMap.put(CommandAttribute.WHAT, attributes[1]); //What **has** to be a list of students
                 attributesMap.put(CommandAttribute.ID, attributes[2]);
             }
+            //e.g.: movestudent Island 0 green
             case MOVE_MOTHER_NATURE -> attributesMap.put(CommandAttribute.DISTANCE, attributes[0]);
+            //e.g.: movemothernature 1
+            //TODO: case CHOOSE_CLOUD ->
         }
     }
 

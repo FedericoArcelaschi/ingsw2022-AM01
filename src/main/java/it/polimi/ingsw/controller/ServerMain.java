@@ -73,13 +73,18 @@ public class ServerMain implements Runnable{
                 System.out.println("Server: waiting for player to connect");
                 Socket socket = serverSocket.accept();
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String input = in.readLine();
-                Packet preferencesPacket = parser.fromJson(input, Packet.class);
-                Preferences preferences = parser.fromJson(preferencesPacket.getMessageJson(), Preferences.class);
-                String nickname = preferences.username();
-                System.out.println(nickname+" joined in");
+                String input
+                        = in.readLine();
+                Packet preferencesPacket
+                        = parser.fromJson(input, Packet.class);
+                Preferences preferences
+                        = parser.fromJson(preferencesPacket.getMessageJson(), Preferences.class);
+                String nickname
+                        = preferences.username();
+                System.out.println(nickname + " joined in");
                 connectedPlayers.put(nickname, socket);
-                GameType playerGameType = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
+                GameType playerGameType
+                        = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
                 waitingRoom.addPlayer(playerGameType, socket, nickname);
                 heartBeatServer.addClient(socket);
                 Game game = waitingRoom.computeGameType(gameId);
