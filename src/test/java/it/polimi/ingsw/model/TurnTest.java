@@ -34,6 +34,8 @@ public class TurnTest{
             assertEquals(TurnPhase.STUDENTS, t.getCurrentPhase());
             assertEquals("lore", t.getCurrentPlayer());
             t.changePhase();
+            assertEquals(TurnPhase.MOTHERNATURE, t.getCurrentPhase());
+            assertEquals("lore", t.getCurrentPlayer());
             t.changePhase();
             t.changePhase();
             assertEquals("fede", t.getCurrentPlayer());
@@ -49,7 +51,7 @@ public class TurnTest{
             t.changePhase();
             b.playCard("fede", 9);
             t.changePhase();
-            List<String> newOrder = Arrays.asList("lore", "fede", "gio");;
+            List<String> newOrder = Arrays.asList("lore", "fede", "gio");
             assertEquals(newOrder, t.getActionOrder());
         } catch (NotYourTurnException e) {
             e.printStackTrace();

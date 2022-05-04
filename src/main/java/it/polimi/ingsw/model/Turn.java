@@ -23,17 +23,6 @@ public class Turn {
         currentPhase = TurnPhase.PLANNING;
     }
 
-    /** Changes the turn player according to the new turn order, determined in the planning phase.
-     * The method is called immediately after the planning phase is over.
-     */
-    public void setTurnAction(List<String> newerTurns) throws IllegalArgumentException{
-        if(newerTurns.containsAll(sittingOrder) && sittingOrder.containsAll(newerTurns))
-            this.actionOrder = newerTurns;
-        else
-            throw new IllegalArgumentException();
-        currentPlayerTurn = actionOrder.get(0);
-    }
-
     /** Sets the current turn to the player besides him. Used in the planning phase of the turn.
      * @return playerTurn
      */
@@ -57,32 +46,51 @@ public class Turn {
     }
 
     /**
+     * Sets the new turn order.
+     * @param map to be sorted
+     */
+    private void setNewTurn(Map<String, Integer> map){
+        Map<String, Integer> sortedMap =  map.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        List<String> newOrder = new ArrayList<>(sortedMap.keySet());
+        setActionOrder(newOrder);
+        turnPhaseCounter = 0;
+        currentPhase = TurnPhase.STUDENTS; //The next player is now ready to play.
+    }
+
+    /**
+     * Support method for setNewTurn.
+     */
+    private void setActionOrder(List<String> newerTurns) throws IllegalArgumentException{
+        if(newerTurns.containsAll(sittingOrder) && sittingOrder.containsAll(newerTurns))
+            this.actionOrder = newerTurns;
+        else
+            throw new IllegalArgumentException();
+        currentPlayerTurn = actionOrder.get(0);
+    }
+
+    /**
      * Changes the phase and the player according to the rules of the game.
      */
     public void changePhase(){
-        if(currentPhase != TurnPhase.PLANNING){ //if we are not in the planning phase...
-            if(currentPhase==TurnPhase.CLOUD){ //and if the current phase is the cloud phase
-                if(Objects.equals(currentPlayerTurn, actionOrder.get(actionOrder.size() - 1))){ //and the current player is the last to play in the current turn order
-                    currentPhase = TurnPhase.PLANNING; //then we go back to planning
-                    currentPlayerTurn = actionOrder.get(0); //and set the player that has to be the first in the planning phase.
-                }else{ //If there are other players that need to play
-                    currentPlayerTurn = nextTurnAction(); //then we change the current player
-                    currentPhase = TurnPhase.STUDENTS; //and set the phase to students
-                }
-            }else{ //if the phase is NOT the cloud phase NOR the planning phase, then we can move on to the next phase as normal and the turn player stays the same
-                currentPhase = TurnPhase.values()[Arrays.asList(TurnPhase.values()).indexOf(currentPhase)+1];
-            }
-        }else{ //If we are in the planning phase
+        if (currentPhase.equals(TurnPhase.PLANNING)) { //If we are in the planning phase
             if(turnPhaseCounter != sittingOrder.size()-1){ //If we still have to go through the planning phase
                 currentPlayerTurn = nextTurnPlanning(); //we don't change phase, and we change the player that needs to play the card
             }else{ //If we're done all the way through the planning phase we can switch phase and set the new order
-                Map<String, Integer> playersInOrder = playedCards.entrySet().stream()
-                        .sorted(Map.Entry.comparingByValue())
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-                List<String> newOrder = new ArrayList<>(playersInOrder.keySet());
-                setTurnAction(newOrder); //Already sets the currentPlayer to the next one
-                turnPhaseCounter = 0;
-                currentPhase = TurnPhase.STUDENTS; //The next player is now ready to play.
+                setNewTurn(playedCards); //Method that sets the new order for the turn and switches turn player to the new one
+            }
+        } else { //if we are not in the planning phase...
+            if (!currentPhase.equals(TurnPhase.CLOUD)) { //if the phase is NOT the cloud phase NOR the planning phase
+                currentPhase = TurnPhase.values()[Arrays.asList(TurnPhase.values()).indexOf(currentPhase)+1]; //We can move on to the next phase as normal and the turn player stays the same
+            } else { //If the current phase is the cloud phase
+                if (!currentPlayerTurn.equals(actionOrder.get(actionOrder.size() - 1))){ //If there are other players that need to play
+                    currentPlayerTurn = nextTurnAction(); //then we change the current player
+                    currentPhase = TurnPhase.STUDENTS; //and set the phase to students
+                } else { //If we're done throughout the turn
+                    currentPhase = TurnPhase.PLANNING; //then we go back to planning
+                    currentPlayerTurn = actionOrder.get(0); //and set the right player as the first that has to play the card.
+                }
             }
         }
     }
@@ -90,10 +98,6 @@ public class Turn {
 
     public void addCard(String player, int c){
         playedCards.put(player, c);
-    }
-
-    public void setCurrentPhase(TurnPhase currentPhase){
-        this.currentPhase = currentPhase;
     }
 
     /**
