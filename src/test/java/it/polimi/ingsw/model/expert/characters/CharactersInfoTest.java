@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model.expert.characters;
 
+import it.polimi.ingsw.model.expert.charactersTypes.CharactersInfo;
 import org.junit.jupiter.api.Test;
 
-import static it.polimi.ingsw.model.expert.characters.CharactersInfo.getChar;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static it.polimi.ingsw.model.expert.charactersTypes.CharactersInfo.getChar;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class _CharactersInfoTest {
+class CharactersInfoTest {
+
     @Test
     public void testGetCost() {
         assertEquals(CharactersInfo.values()[0].getCost(), 1);
@@ -32,4 +34,5 @@ public class _CharactersInfoTest {
         assertEquals(CharactersInfo.MONK, getChar(1));
         assertEquals(CharactersInfo.CENTAUR, getChar(6));
     }
+
 }

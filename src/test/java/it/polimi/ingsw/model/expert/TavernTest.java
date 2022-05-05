@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Turn;
-import it.polimi.ingsw.model.expert.characters.*;
+import it.polimi.ingsw.model.expert.charactersTypes.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -35,12 +35,12 @@ public class TavernTest{
                 || expCards.contains(new Student(7, board.getBag()))
                 || expCards.contains(new Student(10))
                 || expCards.contains(new Student(11, board.getBag()))
-                || expCards.contains(new Influence(2))
-                || expCards.contains(new Influence(6))
-                || expCards.contains(new Influence(8))
-                || expCards.contains(new Influence(9))
-                || expCards.contains(new Action(3))
-                || expCards.contains(new Action(4))
+                || expCards.contains(new Main(2))
+                || expCards.contains(new Main(6))
+                || expCards.contains(new Main(8))
+                || expCards.contains(new Main(9))
+                || expCards.contains(new Main(3))
+                || expCards.contains(new Main(4))
                 || expCards.contains(new Block(5))
         );
         int i = 0;

@@ -1,4 +1,5 @@
-package it.polimi.ingsw.model.expert.characters;
+package it.polimi.ingsw.model.expert.charactersTypes;
+import java.util.Set;
 
 public enum CharactersInfo { //TODO: complete characters' explaination
     MONK(1, """
@@ -86,10 +87,6 @@ public enum CharactersInfo { //TODO: complete characters' explaination
         this.explanation = explanation;
     }
 
-    CharactersInfo(int id) {
-        this.id = id;
-    }
-
     public static CharactersInfo getChar(int charId) {
         return CharactersInfo.values()[charId - 1];
     }
@@ -98,7 +95,7 @@ public enum CharactersInfo { //TODO: complete characters' explaination
         return this.explanation;
     }
 
-    int getCost() {
+    public int getCost() {
         if(id == 3) return 3;
         return id % 3;
     }
@@ -106,4 +103,6 @@ public enum CharactersInfo { //TODO: complete characters' explaination
     public int getId() {
         return id;
     }
+    public static final Set<Integer> getCharacterThatMoveStudents = Set.of( MONK.id, GUARD.id, WITCH.id, JESTER.id, STORYTELLER.id, QUEEN.id );
+    public static final Set<Integer> getCharactersThatNeedAllCastles = Set.of( TAXMAN.id );
 }
