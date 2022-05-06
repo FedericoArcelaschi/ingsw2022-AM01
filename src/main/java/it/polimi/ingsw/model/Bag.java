@@ -97,4 +97,12 @@ public class Bag {
     public int getStudents(Color c) {
         return students.get(c);
     }
+
+    /**
+     * static method for extraction. Extracts up to 500 random students.
+     */
+    public static List<Color> extractMany(int n){
+        Bag bag = new Bag(100);
+        return bag.multipleExtract(n);
+    }
 }
