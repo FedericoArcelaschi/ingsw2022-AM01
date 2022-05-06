@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.Functionalnterfaces;
+package it.polimi.ingsw.model.functionalnterfaces;
 
 import it.polimi.ingsw.model.Team;
 
@@ -7,12 +7,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 public interface GreaterTeam extends Function<Map, Team> {
+
     static Team findGreaterTeam(Map<Team, Integer> teamIntegerMap){
         int max
                 = teamIntegerMap.get(Team.WHITE);
         Team winner
                 = Team.WHITE;
-
         if(teamIntegerMap.get(Team.BLACK) > max) {
             max = teamIntegerMap.get(Team.BLACK);
             winner = Team.BLACK;
@@ -25,4 +25,5 @@ public interface GreaterTeam extends Function<Map, Team> {
             winner = null;
         return winner;
     }
+
 }

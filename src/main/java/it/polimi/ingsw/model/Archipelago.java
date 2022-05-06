@@ -28,7 +28,7 @@ public class Archipelago extends Island{
 
     /**
      * Number of island that where bonded into this Archipelago
-     * @return islandNumber !>= 2
+     * @return islandNumber ! >= 2
      */
     @Override
     public int getIslandNumber() {

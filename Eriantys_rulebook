@@ -1,7 +1,7 @@
-*******************************************************************************
-******************************* E R I A N T Y S *******************************
-*******************************************************************************
-***************** Un gioco di Leo Colovini da 2 - 4 giocatori *****************
+***************************************************************************************************
+***************************************** E R I A N T Y S *****************************************
+***************************************************************************************************
+*************************** Un gioco di Leo Colovini da 2 - 4 giocatori ***************************
 
 
 Quante volte vi è sembrato di riconoscere forme fantastiche disegnate nelle nuvole?
@@ -18,24 +18,24 @@ Eriantys è un gioco ricco di strategia, tattica e colpi di scena. Pianificate a
 Il setup della board balza
 
 
------------------------------------------------------------------------------ Guida al regolamento -----------------------------------------------------------------------------
+-------------------------------------- Guida al regolamento --------------------------------------
 Eriantys offre diverse modalità di gioco in cui le regole di base cambiano leggermente a seconda del numero di giocatori. Inoltre potete scegliere se giocare la modalità Facile o per Esperti.
 Le seguenti regole sono una partita in modalità facile in 2 giocatori; a seguire, presenteremo le altre modalità. Vi consigliamo di giocare la vostra prima partita con la modalità facile per 2 giocatori prima di esplorare le altre modalità.
 Madre Natura offrirà alcuni suggerimenti per aiutarci nel gioco. 
 
 
----------------------------------------------------------------------------------- Panoramica ----------------------------------------------------------------------------------
+-------------------------------------------- Panoramica ---------------------------------------------
 Per vincere la partita dovete cercare di piazzare tutte le vostre Torri o avere il maggior numero di Torri quando la partita termina. Potrete piazzare una torre su un'Isola se avrete la maggior influenza quando questa viene visitata da Madre Natura. L'influenza si ottiene controllando i Professori dello stesso colore degli Studenti presenti sull'Isola (1 punto influenza per ciascuno studente). Se piazzate una Torre vicino a un'altra vostra Torre, le Isole verranno unificate, portando con se tutti gli Studenti e le Torri su di esse. In ogni round dovrete selezionare attettamente il vostro Assistente che determinerà l'ordine di turno e il movimento di Madre Natura.
 
 
------------------------------------------------------------------------------- Struttura del gioco -----------------------------------------------------------------------------
+---------------------------------------- Struttura del gioco ----------------------------------------
 La partita è divisa in una serie di round. Ogni round è poi suddiviso in due fasi da giocare nel seguente ordine: {Fase Pianificazione; Fase Azione}.
 
 =>La Fase Pianificazione consiste in due azioni: {Il ripristino degli studenti sulle tessere Nuvola; Giocare una carta Assistente}.
 Vengono visualizzate le nuvole selezionabili per l'attuale round;
 In ordine di turno, iniziando dal primo giocatore e procedendo in senso orario, giocate 1 carta Assistente dalla vostra mano. La carta che giocherete determinerà 3 cose: l'ordine di turno nella prossima Fase Azione, il primo giocatore nel prossimo round e il numero di movimenti che Madre Natura può effettuare.
 Questa carta sarà nota a tutti i giocatori.
-Non è possibile giocare la stessa carta Assistente già giocata da un altro giocatore nello stesso round. Nel raro caso in cui abbiatre in mano solo carte già giocate da altri, dovrete giocaarne comunque una. In questo caso, tuttavia, giocherete dopo il giocatore che ha giocato per primo quella carta.
+Non è possibile giocare la stessa carta Assistente già giocata da un altro giocatore nello stesso round. Nel raro caso in cui abbiate in mano solo carte già giocate da altri, dovrete giocarne comunque una. In questo caso, tuttavia, giocherete dopo il giocatore che ha giocato per primo quella carta.
 Sarà così visualizzata: #nomeAssistente, #valoreTurno, #numeroPassi
 	
 §tip di Madre Natura: giocate una carta dal valore più basso se volete giocare prima dei vostri avversari o giocate una carta di valore più alto se volete spostarmi più lontano sulle isole
@@ -49,7 +49,7 @@ Sarà così visualizzata: #nomeAssistente, #valoreTurno, #numeroPassi
 Quando spostate uno Studente nella vostra Sala, 
 
 
--------------------------------------------------------------------------------- Fine del Round --------------------------------------------------------------------------------
+---------------------------------------- Fine del Round ----------------------------------------
 
 
 ------------------------------------------------------------------------------ Fine della Partita ------------------------------------------------------------------------------

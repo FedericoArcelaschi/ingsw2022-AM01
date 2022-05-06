@@ -14,10 +14,10 @@ public class CoinException extends Exception{
     }
 
     @Override
-    public String getMessage() {
+    public final String getMessage() {
         if(expectedCoins == 1)
             return "You had only 0 coins, while 1 coin was needed.";
-        return  "You had only "+availableCoins+" coins, while " + expectedCoins + " coins were needed.";
+        return  "You had only " + availableCoins + " coins, while " + expectedCoins + " coins were needed.";
     }
 
 }
