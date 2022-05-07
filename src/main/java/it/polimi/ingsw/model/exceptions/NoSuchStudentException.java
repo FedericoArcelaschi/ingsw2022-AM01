@@ -8,27 +8,7 @@ public class NoSuchStudentException extends StudentException {
         super(message);
     }
 
-    public NoSuchStudentException() {
-        super();
-    }
-
-    public NoSuchStudentException(Throwable cause) {
-        super(cause);
-    }
-
-    public NoSuchStudentException(Color color) {
-        this.student = color;
-    }
-
-    public NoSuchStudentException(String message, Color color) {
-        super(message);
-        this.student = color;
-    }
-
-    public Color getColor() {
-        return student;
-    }
-
+    //TODO: public NoSuchStudentException(ErrorMessage message) {super(message);}
 
 }
 

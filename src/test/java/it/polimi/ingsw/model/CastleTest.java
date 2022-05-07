@@ -13,18 +13,23 @@ import java.util.Map;
 public class CastleTest {
     @Test
     public void testAddStudentWR() throws TooManyStudentsException, NoSuchStudentException {
-        Bag b = new Bag(24);
-        Castle c = new Castle(Team.BLACK, 2, b.multipleExtract(9));
-        List<Color> s = new ArrayList<>();
-        List<Color> newStudents = new ArrayList<>();
-        s.add(c.getWaitingRoom().get(0));
-        s.add(c.getWaitingRoom().get(1));
-        s.add(c.getWaitingRoom().get(2));
-        c.removeStudentsFromWaitingRoom(s);
-        newStudents.add(Color.BLUE);
-        newStudents.add(Color.GREEN);
-        newStudents.add(Color.RED);
-        assertTrue(c.addStudentsInWaitingRoom(newStudents));
+        try {
+            Bag b = new Bag(24);
+            Castle c = new Castle(Team.BLACK, 2, b.multipleExtract(7));
+            List<Color> s = new ArrayList<>();
+            List<Color> newStudents = new ArrayList<>();
+            s.add(c.getWaitingRoom().get(0));
+            s.add(c.getWaitingRoom().get(1));
+            s.add(c.getWaitingRoom().get(2));
+            c.removeStudentsFromWaitingRoom(s);
+            newStudents.add(Color.BLUE);
+            newStudents.add(Color.GREEN);
+            newStudents.add(Color.RED);
+            assertTrue(c.addStudentsInWaitingRoom(newStudents));
+        }catch(Exception e){
+            fail("no exception expected.");
+            e.printStackTrace();
+        }
     }
 
     @Test

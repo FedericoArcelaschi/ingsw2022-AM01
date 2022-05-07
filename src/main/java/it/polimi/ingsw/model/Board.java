@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model;
 
-
-import it.polimi.ingsw.model.Functionalnterfaces.*;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.model.functionalnterfaces.GreaterTeam;
+import it.polimi.ingsw.model.influence.Influence;
+import it.polimi.ingsw.model.influence.Professors;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -17,14 +19,13 @@ public class Board {
     protected final List<Cloud> cloudList = new ArrayList<>();
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
-    protected Map<Color, Team> professorsMap;
-    private final InfluenceComputing influenceFunction
-            = InfluenceMapCalculationFunctions.DEFAULT.getFunction();
-    private final ProfessorComputing professorFunction
-            = ProfessorsMapComputingFunction.DEFAULT.getFunction();
+
+    private Influence influence = new Influence(new Professors(castleMap));
+
     protected final Turn turn;
     private long seed;
-    protected Integer possibleMovingSteps = 0; //calculated form the card: must be stored in memory til the player action turn
+    protected IntegerBoxing possibleMovingSteps = new IntegerBoxing(0); //calculated form the card: must be stored in memory til the player action turn
+        //TODO: fix this in expert.
 
     //constants
     private final int numberOfIslands = 12;
@@ -72,10 +73,10 @@ public class Board {
     private void construct(){
         setupClouds();
         setupIslands();
-        setupProfessorMap();
     }
 
-    /**Constructor for ExpertBoard
+    /**
+     * Constructor for ExpertBoard
      */
     protected Board(Turn turn, long seed, int nPlayer){
         this.turn = turn;
@@ -92,16 +93,6 @@ public class Board {
     protected void setupClouds(){
         int cloudSize = nPlayer == 3 ? cloudSize3Player : cloudSize2_4Player;
         for (int i = 0; i < nPlayer; i++) cloudList.add(new Cloud(bag, cloudSize));
-    }
-
-    /**
-     * instance at null the professor map
-     */
-    private void setupProfessorMap(){
-        professorsMap = new HashMap<>();
-        for(Color c : Color.values()){
-            professorsMap.put(c,null);
-        }
     }
 
     /**
@@ -136,9 +127,10 @@ public class Board {
      * @return if the move is legal and played, false otherwise
      */
     public boolean playCard(String PlayerID, int card) throws NotYourTurnException {
-        if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
+        if(!turn.getCurrentPlayer().equals(PlayerID))
+            throw new NotYourTurnException("You can't play, It's " + getCurrentPlayer() + "'s turn.");
         Castle castle = castleMap.get(PlayerID);
-        possibleMovingSteps = (card + 1 )/2;
+        possibleMovingSteps.setInt((card + 1 )/2);
         return castle.playCard(card);
     }
 
@@ -159,7 +151,7 @@ public class Board {
         Castle castle = castleMap.get(playerID);
         castle.removeStudentsFromWaitingRoom(students);
         castle.addStudentsInDiningRoom(students);
-        professorsMap = professorFunction.computeProfessorsMap(castleMap, professorsMap, castleMap.get(getCurrentPlayer()).getTeam());
+        influence.updateProfessors();
     }
 
     /**
@@ -189,37 +181,28 @@ public class Board {
      * @param steps number of steps forward of mother nature
      */
     public void moveMotherNature(int steps) {
-        if (steps > possibleMovingSteps)
+        if (steps >
+                possibleMovingSteps.getInt())
             throw new IllegalArgumentException("too many steps");
         if (motherNaturePosition + steps > islandList.size() - 1) motherNaturePosition += steps - islandList.size();
         else motherNaturePosition += steps;
-        professorsMap = professorFunction
-                .computeProfessorsMap(castleMap,
-                        professorsMap,
-                        castleMap.get(getCurrentPlayer()).getTeam());
-        conquerIsland(islandList.get(motherNaturePosition), professorsMap);
+        conquerIsland(islandList.get(motherNaturePosition));
     }
 
     /**
      * Calculates influence on given island and sets a new owner if possible.
      * @param island the current island mother nature is on
      */
-    protected void conquerIsland(@NotNull Island island, Map<Color, Team> professorsMap) {
+    protected void conquerIsland(@NotNull Island island) {
         Team teamBeforeComputing = island.getOwnership();
-
-        Map<Team, Integer> influence
-                = influenceFunction
-                    .computeInfluenceMap(island,
-                        professorsMap,
-                        null);
         //TODO: should somehow change this studentColor from ExpertMode
         //idea-> decorator intorno all'interface
-        Team t = GreaterTeam.findGreaterTeam(influence);
+        Team t = GreaterTeam.findGreaterTeam(influence.getInfluenceMap(island));
         if(t == null || t.equals(teamBeforeComputing))
             //No one conquers the island. We may want to differentiate the cases to tell the client
             return;
         island = island.setOwnership(t);
-        conquerIsland(island, professorsMap);
+        checkJoinIsland(island);
     }
 
     /**
@@ -227,31 +210,54 @@ public class Board {
      * @param island the island mother nature is on
      */
     protected void checkJoinIsland(Island island) {
-        Island previous, next;
-        List<Island> islandToJoin = new ArrayList<>();
-        islandToJoin.add(island);
-        if(motherNaturePosition == 0){
-            previous = islandList.get(islandList.size()-1);
+        getNeighbouringIsland(island);
+        List<Island> islandToJoin = getSameOwner(getNeighbouringIsland(island));
+        if(islandToJoin != null) joinIslands(islandToJoin);
+    }
+
+    //todo: testing
+    private List<Island> getSameOwner(List<Island> neightbouringIsland) {
+        List<Island> islandToJoin = null;
+        if(neightbouringIsland.get(0).getOwnership() != null){
+            if(neightbouringIsland.get(0).getOwnership() == neightbouringIsland.get(1).getOwnership())
+                islandToJoin = neightbouringIsland.subList(0,2);
+            if(neightbouringIsland.get(1).getOwnership() == neightbouringIsland.get(2).getOwnership())
+                islandToJoin.add(neightbouringIsland.get(2));
+            return islandToJoin;
+        }
+        if(neightbouringIsland.get(1).getOwnership() == neightbouringIsland.get(2).getOwnership())//not the firstone for sure.
+            return islandToJoin = neightbouringIsland.subList(1,3);
+        return islandToJoin;
+    }
+
+    //TODO: testing
+    private  List<Island> getNeighbouringIsland(Island island) {
+        int islandIndex = islandList.indexOf(island);
+        return getNeighbouringIsland(islandIndex);
+    }
+
+    @Contract(pure = true)
+    protected List<Island> getNeighbouringIsland(int islandIndex) {
+        Island previous, next, island = islandList.get(islandIndex);
+        if(islandIndex == 0){
+            previous = islandList.get(islandList.size() - 1);
             next = islandList.get(1);
         }
-        else if(motherNaturePosition == islandList.size()) {
-            previous = islandList.get(islandList.size() - 1);
+        else if(islandIndex == islandList.size() - 1) {
+            previous = islandList.get(islandList.size() - 2);
             next = islandList.get(0);
         }
         else{
-            previous = islandList.get(motherNaturePosition - 1);
-            next = islandList.get(motherNaturePosition + 1);
+            previous = islandList.get(islandIndex - 1);
+            next = islandList.get(islandIndex + 1);
         }
-        if(island.getOwnership() != null && previous.getOwnership() == island.getOwnership()) islandToJoin.add(0,previous);
-        if(island.getOwnership() != null && next.getOwnership() == island.getOwnership()) islandToJoin.add(next);
-
-        if(islandToJoin.size() == 2 || islandToJoin.size() == 3) joinIslands(islandToJoin);
+        return new ArrayList<>(Arrays.asList(previous, island, next));
     }
 
     /**
      * Joins the islands and puts the new island in the list.
      */
-    protected void joinIslands(@NotNull List<Island> islandList) {
+    protected void joinIslands(@NotNull List<Island> islandList) { //todo: would be convenient to implement a 'List' with next
         int firstIslandIndex
                 = this.islandList
                 .indexOf(islandList.get(0));
@@ -259,17 +265,21 @@ public class Board {
             throw new IllegalArgumentException("island: " + islandList.get(0).toString() + "not found!");
         Island newIsland = null;
         if(islandList.size()==2){
-            if(this.islandList.removeAll(Arrays.asList(islandList.get(0), islandList.get(1))))
+            if(this.islandList.removeAll(islandList))
                 newIsland = new Archipelago(islandList.get(0),islandList.get(1));
         }
         else if(islandList.size()==3){
-            if(this.islandList.removeAll(Arrays.asList(islandList.get(0), islandList.get(1), islandList.get(2))))
+            if(this.islandList.removeAll(islandList))
                 newIsland = new Archipelago(islandList.get(0),islandList.get(1),islandList.get(2));
+            else
+                throw new IllegalStateException();
         }
         else
             throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
         this.islandList.add(firstIslandIndex, newIsland);
     }
+
+
 
     /**
      * Moves students from the selected cloud to the waiting room of the current player.
@@ -289,11 +299,10 @@ public class Board {
      * Refills each cloud with new students.
      * @return if the move is legal and played or not
      */
-    public boolean refillClouds() {
+    public void refillClouds() {
         for(Cloud c: cloudList){
-            if (!c.refill()) return false;
+            c.refill();
         }
-        return true;
     }
 
 //Ending of a game
@@ -347,13 +356,15 @@ public class Board {
 
     /**
      * Returns the team with the most professors.
+     * //TODO: test after modifications.
+     * todo: maybe implement with greaterTeam()
      */
     private Team teamWithMostProfessors() {
         Team withMoreProfessors = null;
         int max = 0;
         for(Team t1 : Team.values()){
             int sum = 0;
-            for(Team t2 : professorsMap.values()){
+            for(Team t2 : Team.values()){
                 if(t1 == t2) sum++;
             }
             if(sum > max){
@@ -409,11 +420,12 @@ public class Board {
         return castleMap.get(playerID);
     }
 
+    @Deprecated//todo: ne ho davvero bisogno?
     public Map<Color, Team> getProfessorsMap() {//TODO: make return only a copy
-        return professorsMap;
+        return influence.getProfessorsMap();
     }
 
     public int getPossibleMovingSteps() {
-        return possibleMovingSteps;
+        return possibleMovingSteps.getInt();
     }
 }

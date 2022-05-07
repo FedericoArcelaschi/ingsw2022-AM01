@@ -1,12 +1,13 @@
 package it.polimi.ingsw.model.functionalnterfaces;
 
 import it.polimi.ingsw.model.Team;
-
-import javax.management.ObjectInstance;
 import java.util.Map;
 import java.util.function.Function;
 
-public interface GreaterTeam extends Function<Map, Team> {
+/**
+ * Interface that contain this static method that we can reuse to find the
+ */
+public interface GreaterTeam extends Function<Map<Team, Integer>, Team> {
 
     static Team findGreaterTeam(Map<Team, Integer> teamIntegerMap){
         int max

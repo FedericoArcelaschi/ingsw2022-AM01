@@ -87,7 +87,7 @@ public class BoardTest {
     }
     @Test
     public void testResetClouds() {
-        assertTrue(b.refillClouds());
+        b.refillClouds();
     }
 
     @Test

@@ -2,10 +2,12 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.model.expert.boardInterfaces.StudentPlaces;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class Castle {
+public class Castle implements StudentPlaces {
     private final List<Color> waitingRoom;
     protected final Map<Color, Integer> diningRoom;
     private final Boolean[] cards;
@@ -13,7 +15,7 @@ public class Castle {
     private final Team towerColor;
     private final int waitingRoomSize;
     //constants
-    private static final int waitingRoomSizePerColor = 9;
+    private static final int diningRoomSizePerColor = 9;
     private static final int waitingRoomSize2Players = 7;
     private static final int waitingRoomSize3Players = 9;
     private static final int numberOfCards = 10;
@@ -38,8 +40,13 @@ public class Castle {
      * @return boolean that checks whether the operation was successful or not.
      */
     public boolean addStudentsInWaitingRoom(List<Color> students) throws TooManyStudentsException {
-        if(students.size() + waitingRoom.size() > waitingRoomSizePerColor) {
-            throw new TooManyStudentsException("there are already " + waitingRoomSizePerColor +
+        int x;
+        if(waitingRoom.isEmpty())
+            x = 0;
+        else
+            x = waitingRoom.size();
+        if(students.size() + x > waitingRoomSize) {
+            throw new TooManyStudentsException("there are already " + waitingRoomSize +
                     " students in the waiting room");
         }
         waitingRoom.addAll(students);
@@ -51,8 +58,8 @@ public class Castle {
      * @param student color
      */
     public void addStudentInDiningRoom(Color student) throws TooManyStudentsException{
-        if (diningRoom.get(student) == waitingRoomSizePerColor) {
-            throw new TooManyStudentsException();
+        if (diningRoom.get(student) == diningRoomSizePerColor) {
+            throw new TooManyStudentsException("THere are already " + diningRoomSizePerColor + " in your diningRoom");
         }
         diningRoom.put(student, diningRoom.get(student) + 1);
     }
@@ -72,11 +79,11 @@ public class Castle {
      * @param students – The list of students to remove.
      * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
      */
-    public void removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException, TooManyStudentsException {
+    public void removeStudentsFromWaitingRoom(@NotNull List<Color> students) throws NoSuchStudentException {
         if(students.size() > waitingRoom.size())
             throw new NoSuchStudentException("there aren't " + students.size() + " in waiting room." +
                     "Actual size: " + waitingRoom.size());//FIXME;
-        if(!waitingRoom.containsAll(students)){
+        if(!new HashSet<>(waitingRoom).containsAll(students)){
             List<Color> temp = getWaitingRoom();
             for(Color s : students)
                 if (!temp.remove(s))
@@ -120,5 +127,20 @@ public class Castle {
 
     public Boolean[] getCards() {
         return Arrays.copyOf(cards, cards.length);
+    }
+
+    @Override
+    public void adds(Color student, int place) throws IllegalAccessException, TooManyStudentsException {
+        throw new IllegalAccessException("method valid only for Expertmode");
+    }
+
+    @Override
+    public void adds(Color student) throws IllegalAccessException {
+        throw new IllegalAccessException("method valid only for Expertmode");
+    }
+
+    @Override
+    public void removes(Color student, int place) throws NoSuchStudentException, TooManyStudentsException, IllegalAccessException {
+        throw new IllegalAccessException("method valid only for Expertmode");
     }
 }
