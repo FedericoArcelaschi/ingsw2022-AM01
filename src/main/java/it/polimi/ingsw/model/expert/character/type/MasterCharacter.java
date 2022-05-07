@@ -1,12 +1,12 @@
-package it.polimi.ingsw.model.expert.charactersTypes;
+package it.polimi.ingsw.model.expert.character.type;
 
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
-import it.polimi.ingsw.model.expert.charactersFunctions.ApplyEffect;
-import it.polimi.ingsw.model.expert.charactersFunctions.CharactersFunction;
-import it.polimi.ingsw.model.expert.influence.ExpertInfluenceMap;
-import it.polimi.ingsw.model.expert.interfaces.StudentPlaces;
+import it.polimi.ingsw.model.IntegerBoxing;
+import it.polimi.ingsw.model.exceptions.StudentException;
+import it.polimi.ingsw.model.expert.character.functionalInterfaces.ApplyEffect;
+import it.polimi.ingsw.model.expert.character.costants.CharacterUtility;
+import it.polimi.ingsw.model.expert.boardInterfaces.StudentPlaces;
+import it.polimi.ingsw.model.influence.Influence;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,9 +15,8 @@ public abstract class MasterCharacter {
     protected final int idChar;
     protected int cost;
     protected final String explanation;
-    protected CharactersInfo characterName;
-
-    protected CharactersFunction charactersFunction;
+    protected CharacterUtility characterName;
+    protected ApplyEffect charactersFunction;
 
     /**
      * requires idChar between 1 and 12.
@@ -25,18 +24,18 @@ public abstract class MasterCharacter {
      */
     protected MasterCharacter(int idChar) {
         this.idChar = idChar;
-        characterName = CharactersInfo.getChar(idChar);
+        characterName = CharacterUtility.getInstance(idChar);
         cost = characterName.getCost();
         explanation = characterName.getExplanation();
-        charactersFunction = CharactersFunction.getCharacterFunction(idChar);
+        charactersFunction = characterName.getFunction();
     }
 
-    public abstract void applyEffect(List<Color> students, List<StudentPlaces> placesList, ExpertInfluenceMap influence, Integer steps)
-            throws NoSuchStudentException, TooManyStudentsException, IllegalAccessException;
+    public abstract void applyEffect(List<Color> students, List<StudentPlaces> placesList, Influence influence, IntegerBoxing steps)
+            throws StudentException, IllegalAccessException;
 
     public abstract String getEffect();
 
-    public CharactersInfo getCharacterType() {
+    public CharacterUtility getCharacterType() {
         return characterName;
     }
 

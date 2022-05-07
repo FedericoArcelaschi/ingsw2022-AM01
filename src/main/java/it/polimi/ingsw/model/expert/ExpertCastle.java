@@ -5,11 +5,14 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.model.expert.boardInterfaces.StudentPlaces;
 
+import java.util.Arrays;
 import java.util.List;
 
-public class ExpertCastle extends Castle {
+public class ExpertCastle extends Castle implements StudentPlaces {
 
+    //TODO: should use a decorator or a "sottoclasse"
     private int coins;
 
     /**
@@ -21,6 +24,8 @@ public class ExpertCastle extends Castle {
         coins = 1;
     }
 
+    //ONLY METHODS FOR EXPERTMODE:
+    //COINS:
     /**
      * Adds also a coin to the player
      * @param color color of the student to add
@@ -55,7 +60,7 @@ public class ExpertCastle extends Castle {
             diningRoom.replace(color, diningRoom.get(color)-1);
         }
         else
-            throw new NoSuchStudentException("Student " + color + "not in dining room", color);
+            throw new NoSuchStudentException("Student " + color + " not in dining room");
     }
 
     /**
@@ -64,7 +69,7 @@ public class ExpertCastle extends Castle {
     public void payCharacter(int price) {
         if(this.coins >= price)
             this.coins -= price;
-        if(coins < 0)
+        else
             throw new IllegalStateException("the player didn't have the money to pay for the character");
     }
 
@@ -72,4 +77,36 @@ public class ExpertCastle extends Castle {
         return coins;
     }
 
+//EXPERTCHARACTER IMPLEMENTATION:
+    @Override
+    public void adds(Color student, int place) throws TooManyStudentsException {
+        if(place == 0){
+            addStudentInDiningRoom(student);
+            return;
+        }
+        if(place == 1){
+            addStudentsInWaitingRoom(Arrays.asList(student));
+            return;
+        }
+        throw new IllegalArgumentException("You can only place a student in the dining room or the waiting room");
+    }
+
+    @Deprecated
+    @Override
+    public void adds(Color student) throws IllegalAccessException {
+        throw new IllegalAccessException("This method should be used only for Islands classes.");
+    }
+
+    @Override
+    public void removes(Color student, int place) throws NoSuchStudentException {
+        if(place == 0){
+            removeStudentFromDiningRoom(student);
+            return;
+        }
+        if(place == 1){
+            removeStudentsFromWaitingRoom(Arrays.asList(student));
+            return;
+        }
+        throw new IllegalArgumentException("You can only place a student in the dining room or the waiting room");
+    }
 }

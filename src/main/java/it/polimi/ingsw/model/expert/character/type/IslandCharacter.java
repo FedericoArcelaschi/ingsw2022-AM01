@@ -1,25 +1,25 @@
-package it.polimi.ingsw.model.expert.charactersTypes;
+package it.polimi.ingsw.model.expert.character.type;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.IntegerBoxing;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.expert.BlockedIsland;
 import it.polimi.ingsw.model.expert.ExpertIsland;
-import it.polimi.ingsw.model.expert.charactersFunctions.ApplyEffect;
-import it.polimi.ingsw.model.expert.influence.ExpertInfluenceMap;
-import it.polimi.ingsw.model.expert.interfaces.StudentPlaces;
+import it.polimi.ingsw.model.expert.character.functionalInterfaces.ApplyEffect;
+import it.polimi.ingsw.model.expert.boardInterfaces.StudentPlaces;
+import it.polimi.ingsw.model.influence.Influence;
 
 import java.util.List;
 
-public class Block extends MasterCharacter {
+public class IslandCharacter extends MasterCharacter {
     //must be
     // 0 ≤ x ≤ 4
     private int availableBlockTile;
     private ApplyEffect function;
 
-    public Block(int idChar) {
+    public IslandCharacter(int idChar) {
         super(idChar);
-        function = charactersFunction.getFunction();
         availableBlockTile = 4;
     }
 
@@ -28,7 +28,7 @@ public class Block extends MasterCharacter {
      * @ param island contains the island to block
      */
     @Override
-    public void applyEffect(List<Color> students, List<StudentPlaces> placesList, ExpertInfluenceMap influenceMap, Integer steps) throws NoSuchStudentException, TooManyStudentsException {
+    public void applyEffect(List<Color> students, List<StudentPlaces> placesList, Influence influenceMap, IntegerBoxing steps) throws NoSuchStudentException, TooManyStudentsException {
         if (availableBlockTile == 0)
             throw new IllegalArgumentException("4 islands are already blocked");
         ExpertIsland island = (ExpertIsland) placesList.get(2);

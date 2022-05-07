@@ -1,6 +1,7 @@
-package it.polimi.ingsw.model.expert.charactersTypes;
+package it.polimi.ingsw.model.expert.character.type;
 
 import it.polimi.ingsw.model.Bag;
+import it.polimi.ingsw.model.expert.character.costants.CharacterUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.Random;
 public class Tavern {
     private long seed;
     private static Bag bag;
-    private final int numberOfCharacters = CharactersInfo.values().length; //final = 12
+    private final int numberOfCharacters = CharacterUtility.values().length; //final = 12
     private final int numberOfPlayableCharacter = 3;
     private final ArrayList<MasterCharacter> extractedCharacters = new ArrayList<>();
 
@@ -56,11 +57,11 @@ public class Tavern {
     private MasterCharacter getExpertCharacter(int idChar) {
         if(idChar < 1 || idChar > numberOfCharacters)
             throw new IllegalArgumentException(idChar + " is not a legal id for ExpertCharacters");
-        //TODO: make more functional
+        //TODO: make more functionalInterfaces
         return switch (idChar) {
             case 1, 7, 11 -> new Student(idChar, bag);
             case 10 -> new Student(idChar);
-            case 5 -> new Block(idChar);
+            case 5 -> new IslandCharacter(idChar);
             default -> new Main(idChar);
         };
     }

@@ -1,37 +1,76 @@
 package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.expert.boardInterfaces.StudentPlaces;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class ExpertIsland extends Island { //TODO: extend with interface
+/**
+ * A decorator to the normal Island.
+ * Adds the Blocked boolean check.
+ */
+public class ExpertIsland extends Island implements StudentPlaces {
 
-    public ExpertIsland(Color student) {
-        super(student);
+    private Island island;
+
+    public ExpertIsland(@NotNull Island island) {
+        this.island = island;
     }
 
-    public ExpertIsland(){
-        super();
+    public ExpertIsland() {
     }
 
-    /**
-     * Calculates the influence on the island for each team
-     * @param professorsMap map that contains the sum of influences per team
-     * @return influenceMap map containing the sum of influences per team
-     */
-    public Map<Team, Integer> calculateInfluenceNoTowers(Map<Color, Team> professorsMap){
-        Map<Team, Integer> influenceMap = new HashMap<>();
-        for(Team t : Team.values())
-            influenceMap.put(t, 0);
-        super.studentInfluence(influenceMap, professorsMap);
-        return influenceMap;
-    }
-
+//For Witch Effect:
     public boolean isBlocked() {
         return false;
     }
+
+//Interface overriding:
+    @Override
+    public void adds(Color student, int place) throws IllegalAccessException {
+        island.addStudent(student);
+    }
+    @Override
+    public void removes(Color student, int place) throws IllegalAccessException {
+        island.removes(student, place);
+    }
+
+    //As for Base mode:
+    @Override
+    public Team getOwnership() {
+        return island.getOwnership();
+    }
+
+    @Override
+    public int getIslandNumber() {
+        return island.getIslandNumber();
+    }
+
+    @Override
+    public Map<Color, Integer> getStudents() {
+        return island.getStudents();
+    }
+
+    @Override
+    public ExpertIsland setOwnership(Team ownership) {
+        return new ExpertIsland(island.setOwnership(ownership));
+    }
+
+    @Override
+    public void addStudent(Color c) {
+        island.addStudent(c);
+    }
+
+    @Override
+    public boolean addStudent(Map<Color, Integer> s) {
+        return island.addStudent(s);
+    }
+
+    @Override
+    public String toString() {
+        return island.toString();
+    }
+
 
 }

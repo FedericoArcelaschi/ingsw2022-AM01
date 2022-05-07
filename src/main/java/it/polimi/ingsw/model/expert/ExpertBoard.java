@@ -2,18 +2,22 @@ package it.polimi.ingsw.model.expert;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.*;
-import it.polimi.ingsw.model.expert.Characters.*;
+import it.polimi.ingsw.model.expert.character.type.MasterCharacter;
+import it.polimi.ingsw.model.expert.character.type.Tavern;
+import it.polimi.ingsw.model.expert.character.costants.CharacterUtility;
+import it.polimi.ingsw.model.expert.boardInterfaces.StudentPlaces;
+import it.polimi.ingsw.model.expert.influence.InfluenceExpert;
+import it.polimi.ingsw.model.influence.Professors;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ExpertBoard extends Board {
+
     private Tavern tavern;
-    private List<Generic> expertCharactersCards;
-    private Generic activeChar = null;
+    private List<MasterCharacter> expertCharactersCards;
+    private int playedExpertCard = -1;
+    private InfluenceExpert influence = new InfluenceExpert(new Professors(castleMap));
 
     public ExpertBoard(String playerID1, String playerID2, Turn t, long seed) {
         super(t, seed, 2);
@@ -21,7 +25,6 @@ public class ExpertBoard extends Board {
         castleMap.put(playerID2, new ExpertCastle(Team.BLACK, nPlayer, bag.multipleExtract(7)));
         construct();
     }
-
     public ExpertBoard(String playerID1, String playerID2, String playerID3, Turn t, long seed) {
         super(t, seed, 3);
         castleMap.put(playerID1, new ExpertCastle(Team.WHITE, nPlayer, bag.multipleExtract(9)));
@@ -29,7 +32,6 @@ public class ExpertBoard extends Board {
         castleMap.put(playerID3, new ExpertCastle(Team.GREY, nPlayer, bag.multipleExtract(9)));
         construct();
     }
-
     public ExpertBoard(String playerID1, String playerID2, String playerID3, String playerID4, Turn t, long seed) {
         super(t, seed, 4);
         castleMap.put(playerID1, new ExpertCastle(Team.WHITE, nPlayer, bag.multipleExtract(7)));
@@ -43,24 +45,11 @@ public class ExpertBoard extends Board {
      * Cleans the contructors' implementation
      */
     private void construct() {
-        setupIslands();
+        for (int i = 0; i < 12; i++)
+            islandList.add(i, new ExpertIsland(islandList.get(i)));
         drawExpertCharacters();
     }
 
-    /**
-     * Sets up for the ExpertIslands
-     */
-    private void setupIslands() {
-        List<Color> s = bag.extractForIslandSetup();
-        for (int i = 0; i < 12; i++) {
-            if (i % 6 != 0) {
-                islandList.add(i, new ExpertIsland(s.get(0)));
-                s.remove(0);
-            } else {
-                islandList.add(i, new ExpertIsland());
-            }
-        }
-    }
     /**
      * Initializes <code>expertCharactersCards</code>. It's a factory method
      */
@@ -69,60 +58,54 @@ public class ExpertBoard extends Board {
         expertCharactersCards = tavern.extract();
     }
 
-    /**
-     * Needs to reset active char at the end of a turn;
-     * @param PlayerID the id of the player that ask for this move
-     * @param cloudID  the cloud that is chosen
-     * @return true -> the current player ends his turn
-     * @throws TooManyStudentsException error in adding a student to the waiting room (shouldn't occur)
-     */
-    @Override
-    public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException {
-        if (!super.chooseCloud(PlayerID, cloudID)) return false;
-        activeChar = null;
-        return true;
-    }
+//Steps phase
 
     /**
-     * Called only for Monk
      * Pays for the card and then calls applyEffect with the right parameters
-     *
      * @param idChar      character id correspondingo to CharacterList's position
-     * @param islandIndex - index as seen in the view (user input)
-     * @throws IllegalStateException    another Character was already activated this turn
+     * @param islandIndex - index choose for the effect application (as seen in the view)
+     * @throws IllegalStateException another Character was already activated this turn
      * @throws IllegalArgumentException the selected character was not extracted during this turn
      * @throws CoinException if the player doesn't have the needed coins to pay
      */
     public void playExpertCard(int idChar, int islandIndex, List<Color> studentsList) throws StudentException, CoinException {
-        Generic ec = checkLegalExpertCard(idChar);
+        MasterCharacter ec = checkLegalExpertCard(idChar);
+
         ExpertCastle currPlayerCastle = (ExpertCastle) castleMap.get(getCurrentPlayer());
+        /**
+         * 0 -> currentPlayerCastle
+         * 1 -> island before the one choose by the player
+         * 2 -> island choose by the player (when available)
+         * 3 -> island after the one choose by the player
+         * 4,5,[6,7] all castles
+         * null -> List not needed for the selected character.
+         */
+        List<StudentPlaces> studentPlaces = new ArrayList<>(Arrays.asList(currPlayerCastle));//index 0.
+        if(CharacterUtility.getCharacterThatMoveStudents.contains(idChar)) {
+            studentPlaces.addAll(getNeighbouringIsland(islandIndex));//index 1 to 3.
+        }
+        if(CharacterUtility.getCharactersThatNeedAllCastles.contains(idChar))
+            studentPlaces.addAll(castleMap.values().stream().toList());//index 1 to size().
+
         int cost = ec.getCost();
-        if (!currPlayerCastle.payCharacter(cost))
-            throw new CoinException(cost, currPlayerCastle.getCoins());
-
-        //in/out parameters for the applyEffect method
-        //Parameter for setup (will clean code up)
-
-        Map<Parameters, Object> parametersMap =
-                initializeExpertCharacterParameters(idChar, islandIndex, studentsList);
+        if (currPlayerCastle.getCoins() < cost)
+            throw new CoinException(cost, currPlayerCastle.getCoins()); //player doesn't the the money!
 
         try {
-            ec.applyEffect(parametersMap);
+
+            ec.applyEffect(studentsList, studentPlaces, influence, possibleMovingSteps);
+            //todo: all effect should either be correct of have NO action
+            currPlayerCastle.payCharacter(cost);
+            playedExpertCard = idChar;
+
         } catch (StudentException e) {
-            currPlayerCastle.unpayCharacter(cost);
             System.out.println(e.getMessage());
             throw new StudentException(e);
         } catch (Exception e) {
-            currPlayerCastle.unpayCharacter(cost);
             System.out.println(e.getMessage());
-            //TODO handle the exception
-            return;
         }
-
-
-        outExpertCharacterParameters(parametersMap);
-        activeChar = ec;
     }
+
 
     /**
      * Method for Farmer, Mailman, Centaur, Knight call
@@ -133,13 +116,6 @@ public class ExpertBoard extends Board {
     }
 
     /**
-     * Method for Guard, Witch
-     */
-    public void playExpertCard(@NotNull int idChar, @NotNull int islandIndex) throws CoinException,StudentException {
-        playExpertCard(idChar, islandIndex, Arrays.asList());
-    }
-
-    /**
      * Method for Jester, Cook, Storyteller, Queen, Taxman
      * @param idChar char number to call the method on the right object
      */
@@ -147,92 +123,57 @@ public class ExpertBoard extends Board {
         playExpertCard(idChar, 0, studentsList);
     }
 
-    private void outExpertCharacterParameters(Map<Parameters, Object> parametersMap) {
-        possibleMovingSteps = (Integer) parametersMap.get(Parameters.STEPS);
-        islandList.add((int)parametersMap.get(Parameters.ISLANDINDEX),
-                (ExpertIsland)parametersMap.get(Parameters.ISLAND));
-    }
-    private Map<Parameters, Object> initializeExpertCharacterParameters(int idChar, int islandIndex, List<Color> studentsList) {
-        Map<Parameters, Object> parametersMap = new HashMap<>(
-            Map.of(
-                Parameters.PLAYERID, getCurrentPlayer(),
-                Parameters.ISLAND, getIslandList().get(islandIndex),
-                Parameters.ISLANDINDEX, islandIndex,
-                Parameters.CASTLEMAP, castleMap,
-                Parameters.PROFESSORSMAP, professorsMap,
-                Parameters.STUDENTLIST, studentsList,
-                Parameters.STEPS, possibleMovingSteps)
-            );
-
-        //TODO: eventually pass the right parameters
-        return parametersMap;
-    }
-
-    private Generic checkLegalExpertCard(int idChar) {
-        String charName = CharactersList.getChar(idChar).name();
-        if (activeChar != null) { //there is an active character;
-            if (activeChar.getCharacterType().name().equals(charName))
+    private MasterCharacter checkLegalExpertCard(int idChar) {
+        String charName = CharacterUtility.getInstance(idChar).name();
+        if (playedExpertCard != -1)
+            if(idChar == playedExpertCard)
                 throw new IllegalStateException(charName + " is already active in this turn.");
-            throw new IllegalStateException("Not possible to play " + CharactersList.getChar(idChar) + " card. During this turn "
-                    + activeChar.getCharacterType().name() + " is already active.");
+            else
+                throw new IllegalStateException(
+                    "Not possible to play " + charName + " card. During this turn " +
+                    CharacterUtility.getInstance(playedExpertCard).name() + " is already active.");
+        MasterCharacter ec = expertCharactersCards.get(idChar);
+        if (ec == null) { //case where there is no active character but the card isn't available
+            List<String> charactersName = new ArrayList<>();
+            for (MasterCharacter m:expertCharactersCards) {
+                if(m != null)
+                    charactersName.add(m.getCharacterType().name());
+            }
+            throw new IllegalArgumentException(CharacterUtility.getInstance(idChar) + " was not an extracted character.\n" +
+                    "Available characters are: " + charactersName);
+        }return ec;
+    }
+
+    @Override
+    protected void joinIslands(@NotNull List<Island> islandList) {
+        int firstIslandIndex
+                = this.islandList
+                .indexOf(islandList.get(0));
+        if(firstIslandIndex == -1)
+            throw new IllegalArgumentException("island: " + islandList.get(0).toString() + "not found!");
+        Island newIsland = null;
+        if(islandList.size()==2){
+            if(this.islandList.removeAll(Arrays.asList(islandList.get(0), islandList.get(1))))
+                newIsland = new ExpertIsland(new Archipelago(islandList.get(0),islandList.get(1)));
         }
-        Generic ec = expertCharactersCards.get(idChar);
-        if (ec == null) //there is no active character but the card isn't available
-            throw new IllegalArgumentException(CharactersList.getChar(idChar) + " was not an extracted character.\n" +
-                    "Available characters are: " + expertCharactersCards);
-        return ec;
-    }
-
-    /**
-     * Adds to the available Characters also the Character #idChar.
-     *
-     * @param idChar number of the character as defined in the enum
-     */
-    public void extract4CharacterTesting(int idChar) {
-        Generic ec = tavern.extract4testing(idChar);
-        expertCharactersCards.set(idChar, ec);
-    }
-
-    /**
-     * As super but checks if the island is blocked.
-     * @param steps
-     */
-    @Override
-    public void moveMotherNature (int steps) {
-        if(activeChar.getCharacterType().getId() == 6) possibleMovingSteps += 2;
-        if (steps > possibleMovingSteps)
-            throw new IllegalArgumentException("too many steps");
-        if (motherNaturePosition + steps > islandList.size() - 1) steps -= islandList.size();
-        motherNaturePosition += steps;
-        ExpertIsland currIsland = (ExpertIsland) islandList.get(motherNaturePosition);
-        conquerIsland(currIsland);
-    }
-
-    @Override
-    protected void conquerIsland(Island island) {
-        Map<Team, Integer> influence;
-        if (activeChar.getCharacterType().getId() == 6)
-            influence = ((ExpertIsland) island).calculateInfluenceNoTowers(professorsMap);
+        else if(islandList.size()==3){
+            if(this.islandList.removeAll(Arrays.asList(islandList.get(0), islandList.get(1), islandList.get(2))))
+                newIsland = new ExpertIsland( new Archipelago(islandList.get(0),islandList.get(1),islandList.get(2)));
+        }
         else
-            influence = island.calculateInfluence(professorsMap);
-        if(activeChar.getCharacterType().getId() == 8)
-            influence = addedInfluence(influence);
-        Team t = findMaxTeam(influence);
-        if (t != null) island =  island.setOwnership(t);
-        checkJoinIsland(island);
+            throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
+        this.islandList.add(firstIslandIndex, newIsland);
+
     }
 
-    private Map<Team, Integer> addedInfluence(Map<Team, Integer> influenceMap) {
-        Team currTeam = castleMap.get(getCurrentPlayer()).getTeam();
-        int influence = influenceMap.get(currTeam);
-        influenceMap.replace(currTeam, influence + 2);
-        return influenceMap;
+    private void turnReset() {
+        cloudList.stream().forEach((boh) -> refillClouds());
+        playedExpertCard = -1;
     }
 
-    /**
-     * For testing: returns the list of available characters
-     */
-    public List<Generic> getAvailableCharacterCards() {
+//Getter
+
+    public List<MasterCharacter> getAvailableCharacterCards() {
         return expertCharactersCards;
     }
 
@@ -240,8 +181,12 @@ public class ExpertBoard extends Board {
         return bag;
     }
 
-    public CharactersList getActiveChar() {
-        return activeChar.getCharacterType();
+//FOR TESTING
+    /**Adds to the available characters also the Character #idChar.
+     * @param idChar number of the character as defined in the enum
+     */
+    protected void extract4CharacterTesting(int idChar) {
+        MasterCharacter ec = tavern.extract4testing(idChar);
+        expertCharactersCards.set(idChar, ec);
     }
-
 }
