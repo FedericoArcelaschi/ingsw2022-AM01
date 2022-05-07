@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-public enum Team {
+import it.polimi.ingsw.model.expert.influence.PossibleParameters;
+
+public enum Team implements PossibleParameters {
     BLACK,
     WHITE,
     GREY

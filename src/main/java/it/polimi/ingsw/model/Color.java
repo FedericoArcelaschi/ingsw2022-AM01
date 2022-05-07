@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-public enum Color {
+import it.polimi.ingsw.model.expert.influence.PossibleParameters;
+
+public enum Color implements PossibleParameters {
     YELLOW(1),
     GREEN(2),
     PINK(3),
