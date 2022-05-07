@@ -51,7 +51,7 @@ public class IslandTest {
         influence.put(Team.WHITE, 8);
         influence.put(Team.BLACK, 2);
         influence.put(Team.GREY, 0);
-
-        assertEquals(influence, i.calculateInfluence(professors));
+        Map<Team, Integer> influence2 = computeInfluenceMap(i, professors, null);
+        assertEquals(influence, influence2);
     }
 }
