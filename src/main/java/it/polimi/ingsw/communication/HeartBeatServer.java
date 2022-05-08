@@ -16,7 +16,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+/**
+ * Class that implements the heart-beat protocol.
+ * it uses a Map to save clients pinged and remove them from it when they ping back.
+ * if a client doesn't ping back before timeout it gets removed from his game (the game end) or queue.
+ */
 public class HeartBeatServer implements Callable {
+
+    private final int timeout = 5000;
     private final List<Socket> sockets;
     private final Map<Socket, Message> heartBeats;
 
@@ -29,18 +36,17 @@ public class HeartBeatServer implements Callable {
         sockets.add(newClient);
     }
 
-    public boolean removeClient(Socket client){
-        return sockets.remove(client);
+    public void removeClient(Socket client){
+        sockets.remove(client);
     }
 
-    public boolean validateResponse(Message response){
+    public void validateResponse(Message response){
         for(Socket key : heartBeats.keySet()){
             if (heartBeats.get(key).equals(response)){
                 heartBeats.remove(key);
-                return true;
+                return;
             }
         }
-        return false;
     }
 
     public void run() throws ClientNotRespondingException {
@@ -60,10 +66,7 @@ public class HeartBeatServer implements Callable {
                 out.println(jsonMessage);
             }
             try {
-                int sleep;
-                if(sockets.isEmpty()) sleep = 100;
-                else sleep = 2000;
-                Thread.sleep(sleep);
+                Thread.sleep(timeout);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -71,6 +74,7 @@ public class HeartBeatServer implements Callable {
         //String plural = heartBeats.size() == 1? "" : "s";
         //StringBuilder errorMessage = new StringBuilder("Client"+ plural +" disconnected: ");
         for (Socket s: heartBeats.keySet()) {
+            System.out.println("client didn't ping back in time");
             removeClient(s);
             //TODO: waitingRooms.removePlayer(s);
             //TODO: game.end(s);

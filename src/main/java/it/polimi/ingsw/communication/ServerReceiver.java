@@ -8,6 +8,9 @@ import it.polimi.ingsw.controller.Game;
 
 import java.net.Socket;
 
+/**
+ * Allow the server to receive packets from a client's socket and handle them.
+ */
 public class ServerReceiver extends Receiver{
 
     private final HeartBeatServer hbs;

@@ -10,6 +10,9 @@ import it.polimi.ingsw.communication.packet.message.Ping;
 
 import java.net.Socket;
 
+/**
+ * Allow the client to receive packets from the server socket and handle them.
+ */
 public class ClientReceiver extends Receiver{
 
     public ClientReceiver(ClientMain cm, Socket socket) {

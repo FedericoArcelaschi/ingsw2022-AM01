@@ -13,12 +13,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientSender {
-    private final Socket socket;
     private final PrintWriter out;
     Gson parser = new Gson();
 
     public ClientSender(@NotNull Socket socket) {
-        this.socket = socket;
         try {
             this.out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
