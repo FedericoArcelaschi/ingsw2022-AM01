@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.packet.message;
 
-public final class ErrorMessage extends Message {
+public class ErrorMessage extends Message {
     private int errorCode; //TODO: UPDATE ERROR CODES
     private String message;
 

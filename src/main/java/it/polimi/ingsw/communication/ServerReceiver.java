@@ -25,16 +25,10 @@ public class ServerReceiver extends Receiver{
                 hbs.validateResponse(message);
             }
             case COMMAND -> {
-
-                //TODO: The client is asking to run a command, so we need to check and execute it if is possible.
                  CommandMessage commandMessage = (CommandMessage) message;
                  Command command = Command.createCommand(commandMessage.getUsername(), commandMessage.getCommand());
-                 Packet packet = game.executeCommand(command);
-                //out.println(parser.toJson(packet));
-                 if(packet.getType() == MessageType.UPDATE)
-                     game.sendUpdate(packet);
-                 else
-                     game.sendError(commandMessage.getUsername(), packet);
+                 //the game already handle message back to clients
+                 game.executeCommand(command);
 
             }
             case END -> {

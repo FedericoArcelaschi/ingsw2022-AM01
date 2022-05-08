@@ -68,12 +68,15 @@ public class HeartBeatServer implements Callable {
                 throw new RuntimeException(e);
             }
         }
-        String plural = heartBeats.size() == 1? "" : "s";
-        StringBuilder errorMessage = new StringBuilder("Client"+ plural +" disconnected: ");
+        //String plural = heartBeats.size() == 1? "" : "s";
+        //StringBuilder errorMessage = new StringBuilder("Client"+ plural +" disconnected: ");
         for (Socket s: heartBeats.keySet()) {
-            errorMessage.append(s).append(", ");
+            removeClient(s);
+            //TODO: waitingRooms.removePlayer(s);
+            //TODO: game.end(s);
+            //errorMessage.append(s).append(", ");
         }
-        throw new ClientNotRespondingException(errorMessage.toString());
+        //throw new ClientNotRespondingException(errorMessage.toString());
     }
 
     @Override

@@ -7,9 +7,7 @@ import it.polimi.ingsw.communication.CommandType;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.ErrorMessage;
-import it.polimi.ingsw.communication.packet.message.Message;
-import it.polimi.ingsw.communication.packet.message.Update;
+import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
@@ -44,47 +42,62 @@ public class Game{
      * @param command description of the command requested
      * @return response to the command
      */
-    public Packet executeCommand(Command command){
+    public void executeCommand(Command command){
         switch(command.getType()) {
             case PLAY_CARD -> {
-                return playCardCommand(command);
+                playCardCommand(command);
             }
             case MOVE_STUDENT -> {
-                return moveStudentCommand(command);
+                moveStudentCommand(command);
             }
             case MOVE_MOTHER_NATURE -> {
-                return moveMotherNatureCommand(command);
+                moveMotherNatureCommand(command);
             }
             case CHOOSE_CLOUD -> {
-                return chooseCloudCommand(command);
+                chooseCloudCommand(command);
             }
         }
-
-        return createError(0, "Not valid command");
+        send(createError(0, "Not valid command"), usernameSocketMap.get(command.getUsername()));
     }
 
-    public void sendUpdate(Packet packet){
-        System.out.println("--sending updates--");
-        if(packet.getType() == MessageType.UPDATE){
-            Gson parser = new Gson();
-            for (Socket s: usernameSocketMap.values()) {
-                PrintWriter out = null;
-                try {
-                    out = new PrintWriter(s.getOutputStream(), true);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                out.println(parser.toJson(packet));
-            }
+    public void playerDisconnected(Socket s){
+        String user = null;
+        for (String username: usernameSocketMap.keySet()) {
+            if(usernameSocketMap.get(username).equals(s)) user = username;
+        }
+        if(user == null) throw new IllegalArgumentException("the player isn't part of this game");
+        Message message = new EndGameMessage(user + " disconnected");
+        Packet packet = new Packet(MessageType.END, message);
+        for (String username: usernameSocketMap.keySet()) {
+            PrintWriter out = null;
+            send(packet, usernameSocketMap.get(username));
         }
     }
 
-    public void sendError(String username, Packet packet){
-        Socket s = usernameSocketMap.get(username);
+    public void playerWin(String winner){
+        for (String username: usernameSocketMap.keySet()) {
+            PrintWriter out = null;
+            Message message = new WinUpdate(new BoardData(username, board), winner);
+            Packet packet  = new Packet(MessageType.UPDATE, message);
+            send(packet, usernameSocketMap.get(username));
+        }
+    }
+
+    private void sendAllUpdate(){
+        Gson parser = new Gson();
+        for (String username: usernameSocketMap.keySet()) {
+            PrintWriter out = null;
+            Message message = new Update(new BoardData(username, board));
+            Packet packet  = new Packet(MessageType.UPDATE, message);
+            send(packet, usernameSocketMap.get(username));
+        }
+    }
+
+    private void send(Packet packet, Socket socket){
         Gson parser = new Gson();
         PrintWriter out = null;
         try {
-            out = new PrintWriter(s.getOutputStream(), true);
+            out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -101,18 +114,18 @@ public class Game{
         return new Packet(MessageType.ERROR, message);
     }
 
-    private Packet playCardCommand(Command command){
+    private void playCardCommand(Command command){
         try {
             board.playCard(command.getUsername() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
         } catch (NotYourTurnException e) {
-            return createError(0, "NotYourTurn");
+            send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
         } catch (IllegalArgumentException e) {
-            return createError(0, "commandError");
+            send(createError(0, "Card specified doesn't exists or is already played"), usernameSocketMap.get(command.getUsername()));
         }
-        return  createUpdate(new BoardData(command.getUsername(), board));
+        sendAllUpdate();
     }
 
-    private Packet moveStudentCommand(@NotNull Command command){
+    private void moveStudentCommand(@NotNull Command command){
         //Here for now I assume that the list of students in input is
         //given as a single string of Color separated by commas.
         //Needs to be changed accordingly if the convention changes.
@@ -135,13 +148,13 @@ public class Game{
                 try {
                     board.moveStudentToDiningRoom(command.getUsername(), students);
                 } catch (NoSuchStudentException e) {
-                    return createError(0, "There aren't enough students");
+                    send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
                 } catch (NotYourTurnException e) {
-                    return createError(0, "It's not your turn yet!");
+                    send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
                 } catch (TooManyStudentsException e) {
-                    return createError(0, "The dining room is full!");
+                    send(createError(0, "The dining room is full!"), usernameSocketMap.get(command.getUsername()));
                 }
-                return  createUpdate(new BoardData(command.getUsername(), board));
+                sendAllUpdate();
             }
             case "island" -> {
                 //the current player moves the list of students in the third parameter
@@ -149,14 +162,14 @@ public class Game{
                 try {
                     board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)), students);
                 } catch (NoSuchStudentException e) {
-                    return createError(0, "There aren't enough students");
+                    send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
                 } catch (NotYourTurnException e) {
-                    return createError(0, "It's not your turn yet!");
+                    send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
                 }
-                return  createUpdate(new BoardData(command.getUsername(), board));
+                sendAllUpdate();
             }
         }
-        return createError(0, "Not valid moveStudent command");
+        send(createError(0, "Not valid destination for students"), usernameSocketMap.get(command.getUsername()));
     }
 
     private Packet moveMotherNatureCommand(Command command){
@@ -164,15 +177,15 @@ public class Game{
         return  createUpdate(new BoardData(command.getUsername(), board));
     }
 
-    private Packet chooseCloudCommand(Command command){
+    private void chooseCloudCommand(Command command){
         try {
             board.chooseCloud(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
         } catch (NotYourTurnException e) {
-            return createError(0, "It's not your turn yet!");
+            send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
         } catch (TooManyStudentsException e) {
-            return createError(0, "The waiting room is full!");
+            send(createError(0, "The waiting room is full!"), usernameSocketMap.get(command.getUsername()));
         }
-        return  createUpdate(new BoardData(command.getUsername(), board));
+        sendAllUpdate();
     }
 
     public Board getBoard() {

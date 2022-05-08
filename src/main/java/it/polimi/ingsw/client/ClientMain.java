@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
 
 public class ClientMain {
     private final String username;
+    private ClientState state;
     private final int preferenceNPlayer;
     private final boolean preferenceExpertMode;
     private final String IP;
@@ -23,8 +24,6 @@ public class ClientMain {
     public Socket socket = null;
     private ClientSender cs;
     private ClientReceiver cr;
-    private Board board;
-    private Boolean connected;
 
     public ClientMain(String username, int preferenceNPlayer, boolean preferenceExpertMode, String IP, int port) {
         this.username=username;
@@ -32,7 +31,7 @@ public class ClientMain {
         this.preferenceExpertMode=preferenceExpertMode;
         this.IP = IP;
         this.port = port;
-        this.connected = false;
+        this.state = ClientState.NOT_CONNECTED;
     }
 
     public void connect(){
@@ -58,7 +57,7 @@ public class ClientMain {
                     IP);
             System.exit(1);
         }
-        connected = true;
+        this.state = ClientState.WAITING_ROOM;
     }
 
     public boolean runCommand(String stringCommand){
@@ -73,26 +72,15 @@ public class ClientMain {
         return true;
     }
 
-
-    private String getCommand(Command command){
-        Map<CommandAttribute,String> attributeMap = command.getAttributesMap();
-        String username = command.getUsername();
-        switch (attributeMap.get(CommandAttribute.WHAT)) {
-            case "deck" -> {
-                return board.getDeck(username).toString();
-            }
-            case "professors" -> {
-                return board.getProfessorsMap().toString();
-            }
-        }
-        return "Command was not successful. Please, try again.";
-    }
-
     public String getUsername() {
         return username;
     }
 
-    public Boolean isConnected() {
-        return connected;
+    public ClientState getState() {
+        return state;
+    }
+
+    public void setState(ClientState state){
+        this.state = state;
     }
 }

@@ -23,13 +23,13 @@ public class ServerMain implements Runnable{
     private ServerSocket serverSocket;
     private final Map<String,Socket> connectedPlayers;
     private HeartBeatServer heartBeatServer;
-    private final WaitingRoom waitingRoom;
+    private final WaitingRooms waitingRooms;
     private final Map<GameType, Integer> gamesNumber;
 
     public ServerMain(int port) {
         this.port = port;
         this.connectedPlayers = new HashMap<>();
-        this.waitingRoom = new WaitingRoom();
+        this.waitingRooms = new WaitingRooms();
         this.gamesNumber = new HashMap<>();
         for (GameType gt: GameType.values()) {
             gamesNumber.put(gt,0);
@@ -85,9 +85,10 @@ public class ServerMain implements Runnable{
                 connectedPlayers.put(nickname, socket);
                 GameType playerGameType
                         = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
-                waitingRoom.addPlayer(playerGameType, socket, nickname);
-                heartBeatServer.addClient(socket);
-                Game game = waitingRoom.computeGameType(gameId);
+                waitingRooms.addPlayer(playerGameType, socket, nickname);
+                heartBeatServer.addClient(socket); //the heartbeat ping start before the game is started
+                //FIXME: if the client before game starting he must be removed from queue;
+                Game game = waitingRooms.computeGameType(gameId);
                 if(game != null) {
                     gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType())+1);
                     System.out.println(Color.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
