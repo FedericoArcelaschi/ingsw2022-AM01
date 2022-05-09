@@ -63,4 +63,23 @@ public class WaitingRoom {
         }
         return null;
     }
+
+    public void removeFromQueue(String player, GameType g){
+        switch (g){
+            case NORMAL_2_PLAYER, EXPERT_2_PLAYER ->{
+                if(nicknameMap.get(g).size()%2 != 0 && nicknameMap.get(g).get(nicknameMap.get(g).size()).equals(player)) nicknameMap.get(g).remove(player);
+            }
+            case NORMAL_3_PLAYER, EXPERT_3_PLAYER ->{
+                if(nicknameMap.get(g).size()%3 != 0 &&
+                        nicknameMap.get(g).subList((nicknameMap.get(g).size()-nicknameMap.get(g).size()%3), nicknameMap.get(g).size()).contains(player))
+                    nicknameMap.get(g).remove(player);
+            }
+            case NORMAL_4_PLAYER, EXPERT_4_PLAYER ->{
+                if(nicknameMap.get(g).size()%4 != 0 &&
+                        nicknameMap.get(g).subList((nicknameMap.get(g).size()-nicknameMap.get(g).size()%4), nicknameMap.get(g).size()).contains(player))
+                    nicknameMap.get(g).remove(player);
+            }
+        }
+        //nicknameMap.get(g).remove(player);
+    }
 }

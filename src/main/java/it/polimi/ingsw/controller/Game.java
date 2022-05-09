@@ -59,8 +59,7 @@ public class Game{
                 return chooseCloudCommand(command);
             }
         }
-
-        return createError(0, "Not valid command");
+        return createError(0, "Command not valid");
     }
 
     public void sendUpdate(Packet packet){
