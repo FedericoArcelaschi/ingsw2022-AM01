@@ -2,7 +2,7 @@ package it.polimi.ingsw.communication.packet.message;
 
 import it.polimi.ingsw.communication.modelData.BoardData;
 
-public final class Update extends Message {
+public class Update extends Message {
     private final BoardData boardData;
 
     public Update(BoardData boardData) {

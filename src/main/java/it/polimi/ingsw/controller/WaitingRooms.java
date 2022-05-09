@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WaitingRoom {
+public class WaitingRooms {
 
     private Map<GameType, List<Socket>> gameSocketMap = new HashMap<>();
     private Map<GameType, List<String>> nicknameMap = new HashMap<>();
     private int oldsize2 = 0, oldsize3 = 0, oldsize4 = 0;
 
-    public WaitingRoom(){
+    public WaitingRooms(){
         for(GameType g : GameType.values()){
             gameSocketMap.computeIfAbsent(g, k -> new ArrayList<>());
             nicknameMap.computeIfAbsent(g, k -> new ArrayList<>());
