@@ -8,15 +8,18 @@ import java.util.Objects;
 
 public final class CloudData {
     private final List<Color> studentList;
+    private final boolean available;
 
     public CloudData(
-            List<Color> studentList
+            List<Color> studentList,
+            boolean available
     ) {
         this.studentList = studentList;
+        this.available = available;
     }
 
     public CloudData(Cloud cloud) {
-        this(cloud.getStudentList());
+        this(cloud.getStudentList(), cloud.isAvailable());
     }
 
     public List<Color> studentList() {
@@ -38,8 +41,13 @@ public final class CloudData {
 
     @Override
     public String toString() {
-        return "CloudData[" +
-                "studentList=" + studentList + ']';
+        StringBuilder s = new StringBuilder();
+        for (Color student: studentList) {
+            s.append(student.str).append(", ");
+        }
+
+        s.append(available? "available": "already taken");
+        return s.toString();
     }
 
 }

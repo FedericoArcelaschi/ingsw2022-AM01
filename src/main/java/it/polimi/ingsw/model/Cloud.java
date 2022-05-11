@@ -6,11 +6,13 @@ public class Cloud {
     private final Bag bag;
     private final List<Color> studentList;
     private final int size;
+    private boolean available;
 
     public Cloud(Bag bag, int size){
         this.bag = bag;
         this.size = size;
         this.studentList = new ArrayList<>();
+        this.available = true;
         refill();
     }
 
@@ -23,14 +25,18 @@ public class Cloud {
     }
 
     public List<Color> choose() {
-        if(studentList.size() != size) return null;
+        if(studentList.size() != size && available) return null;
         List<Color> students = new ArrayList<>(studentList);
-        studentList.clear();
+        available = false;
         return students;
     }
 
     public int getSize() {
         return size;
+    }
+
+    public boolean isAvailable() {
+        return available;
     }
 
     public List<Color> getStudentList() {

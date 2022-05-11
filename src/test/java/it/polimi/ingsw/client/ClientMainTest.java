@@ -1,13 +1,23 @@
 package it.polimi.ingsw.client;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.communication.modelData.CastleData;
+import it.polimi.ingsw.communication.modelData.CloudData;
+import it.polimi.ingsw.communication.modelData.IslandData;
 import it.polimi.ingsw.communication.packet.message.ErrorMessage;
 import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.controller.GameType;
 import it.polimi.ingsw.controller.ServerMain;
+import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -62,14 +72,6 @@ class ClientMainTest {
         Thread.sleep(3000);
     }
 
-    @Test
-    void gsonTest(){
-        Gson parser = new Gson();
-        Message message = new ErrorMessage(0,"errore");
-        String json = parser.toJson(message);
-        System.out.println(json);
-        Message messageD = parser.fromJson(json, ErrorMessage.class);
-        System.out.println(messageD);
-    }
+
 
 }

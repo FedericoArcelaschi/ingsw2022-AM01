@@ -16,6 +16,7 @@ public final class BoardData {
     private final List<IslandData> islandList;
     private final CastleData myCastle;
     private final List<CastleData> otherCastles;
+    private final TurnData turn;
 
     /**
      */
@@ -26,7 +27,8 @@ public final class BoardData {
             List<CloudData> cloudList,
             List<IslandData> islandList,
             CastleData myCastle,
-            List<CastleData> otherCastles
+            List<CastleData> otherCastles,
+            TurnData turn
     ) {
         this.username = username;
         this.nPlayer = nPlayer;
@@ -35,6 +37,7 @@ public final class BoardData {
         this.islandList = islandList;
         this.myCastle = myCastle;
         this.otherCastles = otherCastles;
+        this.turn = turn;
     }
 
     public BoardData(String username, Board board) {
@@ -42,8 +45,9 @@ public final class BoardData {
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(CloudData::new).toList(),
                 board.getIslandList().stream().map(IslandData::new).toList(),
-                new CastleData(username, board.getCastle(username)),
-                board.getCastleMap().keySet().stream().filter(key -> !Objects.equals(key, username)).map(key -> new CastleData(key, board.getCastle(key))).toList()
+                new CastleData(username, board.getCastle(username), true),
+                board.getCastleMap().keySet().stream().filter(key -> !Objects.equals(key, username)).map(key -> new CastleData(key, board.getCastle(key), false)).toList(),
+                new TurnData(board.getTurn())
         );
     }
 
@@ -96,14 +100,29 @@ public final class BoardData {
 
     @Override
     public String toString() {
-        return "BoardData[" +
-                "username=" + username + ", " +
-                "nPlayer=" + nPlayer + ", " +
-                "motherNaturePosition=" + motherNaturePosition + ", " +
-                "cloudList=" + cloudList + ", " +
-                "islandList=" + islandList + ", " +
-                "myCastle=" + myCastle + ", " +
-                "otherCastles=" + otherCastles + ']';
+        StringBuilder s = new StringBuilder();
+        //Print Islands TODO: fix int i dimension in print
+        s.append("Islands:");
+        for (int i = 0; i < islandList.size(); i++) {
+            s.append("\n\tIsland ").append(i+1).append(": ").append(islandList.get(i).toString());
+            if(i == motherNaturePosition) s.append(", Mother Nature is Here!");
+        }
+        //Print Cloud
+        s.append("\nClouds:");
+        for (int i = 0; i < cloudList.size(); i++) {
+            s.append("\n\tCloud ").append(i+1).append(": ").append(cloudList.get(i).toString());
+        }
+        //Print Other Castle
+        s.append("\nOther Player Castle:");
+        for (int i = 0; i < otherCastles.size(); i++) {
+            s.append("\n\tCastle ").append(otherCastles.get(i).username()).append(": ").append(otherCastles.get(i).toString());
+        }
+        //Print Turn
+        s.append("\nTurn: ").append(turn);
+        //Print my Castle with Hand
+        s.append("\nMy Castle:");
+        s.append("\n\tCastle ").append(username).append(": ").append(myCastle.toString());
+        return s.toString();
     }
 
 }

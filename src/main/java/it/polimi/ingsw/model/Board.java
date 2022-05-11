@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import java.util.*;
 
@@ -203,7 +204,7 @@ public class Board {
      * @return if the move is legal and played, false otherwise
      */
     //TODO: ADDS THE CARD TO A DATA STRUCTURE IN TURN TO DETERMINE NEW TURN ORDERS.
-    public boolean playCard(String PlayerID, int card) throws NotYourTurnException {
+    public boolean playCard(String PlayerID, @Range(from = 0, to=10) int card) throws NotYourTurnException {
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         if(castle.playCard(card)){
@@ -403,6 +404,10 @@ public class Board {
         if(islandToJoin.size() == 2 || islandToJoin.size() == 3) joinIslands(islandToJoin);
     }
 
+    public void changePhase(){
+        turn.changePhase();
+    }
+
     public boolean equals(Board b){
         return this.motherNaturePosition == b.motherNaturePosition && this.nPlayer == b.nPlayer &&
                 this.islandList.equals(b.islandList) && this.bag.equals(b.bag) && this.cloudList.equals(b.cloudList) &&
@@ -433,6 +438,10 @@ public class Board {
 
     public Map<Color, Team> getProfessorsMap() {//TODO: make return only a copy
         return professorsMap;
+    }
+
+    public Turn getTurn(){
+        return turn;
     }
 
     public int getNPlayer() {

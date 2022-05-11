@@ -41,10 +41,6 @@ public final class Card {
 
     @Override
     public String toString() {
-        return "Card{" +
-                "priority=" + priority +
-                ", distance=" + distance +
-                ", isAvailable=" + isAvailable +
-                '}';
+        return "[" + priority + ", " + distance + "]";
     }
 }
