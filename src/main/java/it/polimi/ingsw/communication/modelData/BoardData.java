@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * A representation of the model containing only data useful for the clients
  */
-public final class BoardData {
+public class BoardData {
     private final String username;
     private final int nPlayer;
     private final int motherNaturePosition;
@@ -88,7 +88,6 @@ public final class BoardData {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        //Print Islands TODO: fix int i dimension in print
         s.append("Islands:");
         for (int i = 0; i < islandList.size(); i++) {
             s.append("\n\tIsland ").append(String.format("%2d",i+1)).append(": ").append(islandList.get(i).toString());
@@ -97,18 +96,18 @@ public final class BoardData {
         //Print Cloud
         s.append("\nClouds:");
         for (int i = 0; i < cloudList.size(); i++) {
-            s.append("\n\tCloud ").append(i+1).append(": ").append(cloudList.get(i).toString());
+            s.append("\n\tCloud ").append(i+1).append(": ").append(cloudList.get(i));
         }
         //Print Other Castle
         s.append("\nOther Player Castle:");
-        for (int i = 0; i < otherCastles.size(); i++) {
-            s.append("\n\tCastle ").append(otherCastles.get(i).username()).append(": ").append(otherCastles.get(i).toString());
+        for (CastleData otherCastle : otherCastles) {
+            s.append("\n\tCastle ").append(otherCastle.username()).append(": ").append(otherCastle);
         }
         //Print Turn
         s.append("\nTurn: ").append(turn);
         //Print my Castle with Hand
         s.append("\nMy Castle:");
-        s.append("\n\tCastle ").append(username).append(": ").append(myCastle.toString());
+        s.append("\n\tCastle ").append(username).append(": ").append(myCastle);
         return s.toString();
     }
 

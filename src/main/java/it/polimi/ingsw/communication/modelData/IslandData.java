@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.Team;
 import java.util.Map;
 import java.util.Objects;
 
-public final class IslandData {
+public class IslandData {
     private final Team ownership;
     private final Map<Color, Integer> students;
     private final int nIslands;

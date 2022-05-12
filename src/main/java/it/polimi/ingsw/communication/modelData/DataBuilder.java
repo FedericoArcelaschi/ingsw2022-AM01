@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.*;
 
 import java.util.Objects;
 
-public class DataBuilder {
+public abstract class DataBuilder {
     public static BoardData newBoardData(String username, Board board){
         return new BoardData(
                 username,
@@ -13,7 +13,10 @@ public class DataBuilder {
                 board.getCloudList().stream().map(DataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(DataBuilder::newIslandData).toList(),
                 newCastleData(username, board.getCastle(username), true),
-                board.getCastleMap().keySet().stream().filter(key -> !Objects.equals(key, username)).map(key -> newCastleData(key, board.getCastle(key), false)).toList(),
+                board.getCastleMap().keySet().stream()
+                        .filter(key -> !Objects.equals(key, username))
+                        .map(key -> newCastleData(key, board.getCastle(key), false))
+                        .toList(),
                 newTurnData(board.getTurn())
         );
     }
@@ -29,7 +32,14 @@ public class DataBuilder {
     }
 
     private static CastleData newCastleData(String username, Castle castle, boolean isMyCastle) {
-        return new CastleData(username, castle.getWaitingRoom(), castle.getDiningRoom(), castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList(), castle.getLastCardPlayed() != null ?castle.getLastCardPlayed().toString() : null, castle.getTeam(), isMyCastle);
+        return new CastleData(
+                username,
+                castle.getWaitingRoom(),
+                castle.getDiningRoom(),
+                isMyCastle ? castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList() : null,
+                castle.getLastCardPlayed() != null ?castle.getLastCardPlayed().toString() : null,
+                castle.getTeam(),
+                isMyCastle);
     }
 
     private static TurnData newTurnData(Turn t){

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public final class CastleData {
+public class CastleData {
     private final String username;
     private final List<Color> waitingRoom;
     private final Map<Color, Integer> diningRoom;
@@ -89,11 +89,11 @@ public final class CastleData {
         if (isMyCastle){
             s.append("\n\t\tAvailable Cards: ");
             for (String c : deck) {
-                s.append(c.toString()).append(", ");
+                s.append(c).append(", ");
             }
         }
         if(lastPlayedCard != null) {
-            s.append("\n\t\tThe last played card is: ").append(lastPlayedCard.toString());
+            s.append("\n\t\tThe last played card is: ").append(lastPlayedCard);
         }else{
             s.append("\n\t\tThe player has not played any cards yet.");
         }
