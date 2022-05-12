@@ -16,7 +16,9 @@ class BoardDataTest {
         Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"),new Turn(Arrays.asList("fede","gio")));
         b.playCard("fede", 1);
         b.changePhase();
-        BoardData bd = new BoardData("fede", b);
+        b.playCard("gio", 10);
+        b.changePhase();
+        BoardData bd = DataBuilder.newBoardData("fede", b);
         System.out.println(bd);
     }
 

@@ -1,7 +1,5 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.Board;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -38,17 +36,6 @@ public final class BoardData {
         this.myCastle = myCastle;
         this.otherCastles = otherCastles;
         this.turn = turn;
-    }
-
-    public BoardData(String username, Board board) {
-        this(username, board.getNPlayer(),
-                board.getMotherNaturePosition(),
-                board.getCloudList().stream().map(CloudData::new).toList(),
-                board.getIslandList().stream().map(IslandData::new).toList(),
-                new CastleData(username, board.getCastle(username), true),
-                board.getCastleMap().keySet().stream().filter(key -> !Objects.equals(key, username)).map(key -> new CastleData(key, board.getCastle(key), false)).toList(),
-                new TurnData(board.getTurn())
-        );
     }
 
     public String username() {
@@ -104,7 +91,7 @@ public final class BoardData {
         //Print Islands TODO: fix int i dimension in print
         s.append("Islands:");
         for (int i = 0; i < islandList.size(); i++) {
-            s.append("\n\tIsland ").append(i+1).append(": ").append(islandList.get(i).toString());
+            s.append("\n\tIsland ").append(String.format("%2d",i+1)).append(": ").append(islandList.get(i).toString());
             if(i == motherNaturePosition) s.append(", Mother Nature is Here!");
         }
         //Print Cloud

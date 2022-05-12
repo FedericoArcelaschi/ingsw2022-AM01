@@ -1,7 +1,6 @@
 package it.polimi.ingsw.communication.modelData;
 
 import it.polimi.ingsw.model.Card;
-import it.polimi.ingsw.model.Castle;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 
@@ -33,17 +32,6 @@ public final class CastleData {
         this.lastPlayedCard = lastPlayedCard;
         this.towerColor = towerColor;
         this.isMyCastle = isMyCastle;
-    }
-
-    public CastleData(String username, Castle castle, boolean isMyCastle) {
-        this(
-                username,
-                castle.getWaitingRoom(),
-                castle.getDiningRoom(),
-                castle.getDeck(),
-                castle.getLastCardPlayed(),
-                castle.getTeam(),
-                isMyCastle);
     }
 
     public String username() {
@@ -106,7 +94,7 @@ public final class CastleData {
             }
         }
         if(lastPlayedCard != null) {
-            s.append("\t\tThe last played card is: " + lastPlayedCard.toString());
+            s.append("\n\t\tThe last played card is: " + lastPlayedCard.toString());
         }else{
             s.append("\n\t\tThe player has not played any cards yet.");
         }

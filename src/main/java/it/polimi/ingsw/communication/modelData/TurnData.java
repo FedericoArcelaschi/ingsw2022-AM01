@@ -1,7 +1,5 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Turn;
 import it.polimi.ingsw.model.TurnPhase;
 
 import java.util.List;
@@ -17,10 +15,6 @@ public class TurnData {
         this.actionOrder = actionOrder;
         this.currentPhase = currentPhase;
         this.currentPlayer = currentPlayer;
-    }
-
-    public TurnData(Turn t){
-        this(t.getSittingOrder(), t.getActionOrder(), t.getCurrentPhase(), t.getCurrentPlayer());
     }
 
     public List<String> getSittingOrder() {

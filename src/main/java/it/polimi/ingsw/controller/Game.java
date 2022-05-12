@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.CommandAttribute;
 import it.polimi.ingsw.communication.CommandType;
 import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.communication.modelData.DataBuilder;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.*;
@@ -77,7 +78,7 @@ public class Game{
     public void playerWin(String winner){
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
-            Message message = new WinUpdate(new BoardData(username, board), winner);
+            Message message = new WinUpdate(DataBuilder.newBoardData(username, board), winner);
             Packet packet  = new Packet(MessageType.UPDATE, message);
             send(packet, usernameSocketMap.get(username));
         }
@@ -87,7 +88,7 @@ public class Game{
         Gson parser = new Gson();
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
-            Message message = new Update(new BoardData(username, board));
+            Message message = new Update(DataBuilder.newBoardData(username, board));
             Packet packet  = new Packet(MessageType.UPDATE, message);
             send(packet, usernameSocketMap.get(username));
         }
@@ -174,7 +175,7 @@ public class Game{
 
     private Packet moveMotherNatureCommand(Command command){
         board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
-        return  createUpdate(new BoardData(command.getUsername(), board));
+        return  createUpdate(DataBuilder.newBoardData(command.getUsername(), board));
     }
 
     private void chooseCloudCommand(Command command){

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.Cloud;
 import it.polimi.ingsw.model.Color;
 
 import java.util.List;
@@ -16,10 +15,6 @@ public final class CloudData {
     ) {
         this.studentList = studentList;
         this.available = available;
-    }
-
-    public CloudData(Cloud cloud) {
-        this(cloud.getStudentList(), cloud.isAvailable());
     }
 
     public List<Color> studentList() {

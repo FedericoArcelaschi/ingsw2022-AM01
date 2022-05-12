@@ -1,7 +1,6 @@
 package it.polimi.ingsw.communication.modelData;
 
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Island;
 import it.polimi.ingsw.model.Team;
 
 import java.util.Map;
@@ -20,10 +19,6 @@ public final class IslandData {
         this.ownership = ownership;
         this.students = students;
         this.nIslands = nIslands;
-    }
-
-    public IslandData(Island island) {
-        this(island.getOwnership(), island.getStudents(), island.getIslandNumber());
     }
 
     public Team ownership() {
