@@ -8,7 +8,7 @@ public class Cloud {
     private final int size;
     private boolean available;
 
-    public Cloud(Bag bag, int size){
+    public Cloud(Bag bag, int size) {
         this.bag = bag;
         this.size = size;
         this.studentList = new ArrayList<>();
@@ -25,7 +25,7 @@ public class Cloud {
     }
 
     public List<Color> choose() {
-        if(studentList.size() != size && available) return null;
+        if(!available) return null;
         List<Color> students = new ArrayList<>(studentList);
         available = false;
         return students;
