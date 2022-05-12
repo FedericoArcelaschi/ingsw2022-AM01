@@ -277,6 +277,7 @@ public class Board {
         else
             throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
         this.islandList.add(firstIslandIndex, newIsland);
+        motherNaturePosition = firstIslandIndex;
     }
 
 
