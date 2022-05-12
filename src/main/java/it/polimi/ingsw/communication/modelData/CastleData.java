@@ -1,6 +1,5 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.Card;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Team;
 
@@ -12,8 +11,8 @@ public final class CastleData {
     private final String username;
     private final List<Color> waitingRoom;
     private final Map<Color, Integer> diningRoom;
-    private final List<Card> deck;
-    private final Card lastPlayedCard;
+    private final List<String> deck;
+    private final String lastPlayedCard;
     private final Team towerColor;
     private final boolean isMyCastle;
 
@@ -21,8 +20,8 @@ public final class CastleData {
             String username,
             List<Color> waitingRoom,
             Map<Color, Integer> diningRoom,
-            List<Card> deck,
-            Card lastPlayedCard,
+            List<String> deck,
+            String lastPlayedCard,
             Team towerColor,
             boolean isMyCastle) {
         this.username = username;
@@ -46,11 +45,11 @@ public final class CastleData {
         return diningRoom;
     }
 
-    public List<Card> deck() {
+    public List<String> deck() {
         return deck;
     }
 
-    public Card lastPlayedCard() {
+    public String lastPlayedCard() {
         return lastPlayedCard;
     }
 
@@ -89,16 +88,16 @@ public final class CastleData {
         }
         if (isMyCastle){
             s.append("\n\t\tAvailable Cards: ");
-            for (Card c : deck.stream().filter(Card::isAvailable).toList()) {
+            for (String c : deck) {
                 s.append(c.toString()).append(", ");
             }
         }
         if(lastPlayedCard != null) {
-            s.append("\n\t\tThe last played card is: " + lastPlayedCard.toString());
+            s.append("\n\t\tThe last played card is: ").append(lastPlayedCard.toString());
         }else{
             s.append("\n\t\tThe player has not played any cards yet.");
         }
-        s.append("\n\t\tTeam: " + towerColor.toString());
+        s.append("\n\t\tTeam: ").append(towerColor.toString());
         return s.toString();
     }
 

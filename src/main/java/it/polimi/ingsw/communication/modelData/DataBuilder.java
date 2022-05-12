@@ -29,7 +29,7 @@ public class DataBuilder {
     }
 
     private static CastleData newCastleData(String username, Castle castle, boolean isMyCastle) {
-        return new CastleData(username, castle.getWaitingRoom(), castle.getDiningRoom(), castle.getDeck(), castle.getLastCardPlayed(), castle.getTeam(), isMyCastle);
+        return new CastleData(username, castle.getWaitingRoom(), castle.getDiningRoom(), castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList(), castle.getLastCardPlayed() != null ?castle.getLastCardPlayed().toString() : null, castle.getTeam(), isMyCastle);
     }
 
     private static TurnData newTurnData(Turn t){

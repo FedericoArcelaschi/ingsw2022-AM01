@@ -13,7 +13,7 @@ class BoardDataTest {
 
     @Test
     void gsonTest() throws NotYourTurnException, NoSuchStudentException {
-        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"),new Turn(Arrays.asList("fede","gio")));
+        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio","sara","lore"),new Turn(Arrays.asList("fede","gio","sara","lore")));
         b.playCard("fede", 1);
         b.changePhase();
         b.playCard("gio", 10);
