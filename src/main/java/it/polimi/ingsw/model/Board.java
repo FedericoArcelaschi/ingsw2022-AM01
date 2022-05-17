@@ -137,7 +137,7 @@ public class Board {
     public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException {
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
-        Cloud cloud = cloudList.get(cloudID);
+        Cloud cloud = cloudList.get(cloudID-1);
         return castle.addStudentsInWaitingRoom(cloud.choose());
     }
 
@@ -268,7 +268,7 @@ public class Board {
      */
     private int remainingCards(){
         int cardsLeft = 0;
-        for(Castle castle : castleMap.values()) cardsLeft += (int) castle.getDeck().stream().filter(card -> card.isAvailable()).count();
+        for(Castle castle : castleMap.values()) cardsLeft += (int) castle.getDeck().stream().filter(Card::isAvailable).count();
         return cardsLeft;
     }
 
@@ -365,7 +365,6 @@ public class Board {
         if (motherNaturePosition + move / islandList.size() >= 1) motherNaturePosition += move - islandList.size();
         else motherNaturePosition += move;
         conquerIsland(islandList.get(motherNaturePosition));
-
     }
 
     /**
@@ -453,11 +452,7 @@ public class Board {
     }
 
     public List<String> getPlayerUsernames(){
-        List<String> playerUsernames = new ArrayList<>();
-        for (String username: castleMap.keySet()) {
-            playerUsernames.add(username);
-        }
-        return playerUsernames;
+        return new ArrayList<>(castleMap.keySet());
     }
 
     @Override
