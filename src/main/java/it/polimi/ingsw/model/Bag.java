@@ -4,7 +4,7 @@ import java.util.*;
 public class Bag {
 
     private final Map<Color, Integer> students;
-    private long seed;
+    private final long seed;
     private final Random random;
 
     public Bag(int studentsPerColor){
@@ -66,7 +66,7 @@ public class Bag {
                 students.replace(c,students.get(c)-1);
             }
         }
-        Collections.shuffle(extractedList);
+        Collections.shuffle(extractedList, random);
         return extractedList;
     }
 

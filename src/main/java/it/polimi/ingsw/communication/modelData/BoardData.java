@@ -1,14 +1,12 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.Board;
-
 import java.util.List;
 import java.util.Objects;
 
 /**
  * A representation of the model containing only data useful for the clients
  */
-public final class BoardData {
+public class BoardData {
     private final String username;
     private final int nPlayer;
     private final int motherNaturePosition;
@@ -16,6 +14,7 @@ public final class BoardData {
     private final List<IslandData> islandList;
     private final CastleData myCastle;
     private final List<CastleData> otherCastles;
+    private final TurnData turn;
 
     /**
      */
@@ -26,7 +25,8 @@ public final class BoardData {
             List<CloudData> cloudList,
             List<IslandData> islandList,
             CastleData myCastle,
-            List<CastleData> otherCastles
+            List<CastleData> otherCastles,
+            TurnData turn
     ) {
         this.username = username;
         this.nPlayer = nPlayer;
@@ -35,16 +35,7 @@ public final class BoardData {
         this.islandList = islandList;
         this.myCastle = myCastle;
         this.otherCastles = otherCastles;
-    }
-
-    public BoardData(String username, Board board) {
-        this(username, board.getNPlayer(),
-                board.getMotherNaturePosition(),
-                board.getCloudList().stream().map(CloudData::new).toList(),
-                board.getIslandList().stream().map(IslandData::new).toList(),
-                new CastleData(username, board.getCastle(username)),
-                board.getCastleMap().keySet().stream().filter(key -> !Objects.equals(key, username)).map(key -> new CastleData(key, board.getCastle(key))).toList()
-        );
+        this.turn = turn;
     }
 
     public String username() {
@@ -96,14 +87,28 @@ public final class BoardData {
 
     @Override
     public String toString() {
-        return "BoardData[" +
-                "username=" + username + ", " +
-                "nPlayer=" + nPlayer + ", " +
-                "motherNaturePosition=" + motherNaturePosition + ", " +
-                "cloudList=" + cloudList + ", " +
-                "islandList=" + islandList + ", " +
-                "myCastle=" + myCastle + ", " +
-                "otherCastles=" + otherCastles + ']';
+        StringBuilder s = new StringBuilder();
+        s.append("Islands:");
+        for (int i = 0; i < islandList.size(); i++) {
+            s.append("\n\tIsland ").append(String.format("%2d",i+1)).append(": ").append(islandList.get(i).toString());
+            if(i == motherNaturePosition) s.append(", Mother Nature is Here!");
+        }
+        //Print Cloud
+        s.append("\nClouds:");
+        for (int i = 0; i < cloudList.size(); i++) {
+            s.append("\n\tCloud ").append(i+1).append(": ").append(cloudList.get(i));
+        }
+        //Print Other Castle
+        s.append("\nOther Player Castle:");
+        for (CastleData otherCastle : otherCastles) {
+            s.append("\n\tCastle ").append(otherCastle.username()).append(": ").append(otherCastle);
+        }
+        //Print Turn
+        s.append("\nTurn: ").append(turn);
+        //Print my Castle with Hand
+        s.append("\nMy Castle:");
+        s.append("\n\tCastle ").append(username).append(": ").append(myCastle);
+        return s.toString();
     }
 
 }

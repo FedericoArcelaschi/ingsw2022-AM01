@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import java.util.*;
 
@@ -136,7 +137,7 @@ public class Board {
     public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException {
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
-        Cloud cloud = cloudList.get(cloudID);
+        Cloud cloud = cloudList.get(cloudID-1);
         return castle.addStudentsInWaitingRoom(cloud.choose());
     }
 
@@ -203,7 +204,7 @@ public class Board {
      * @return if the move is legal and played, false otherwise
      */
     //TODO: ADDS THE CARD TO A DATA STRUCTURE IN TURN TO DETERMINE NEW TURN ORDERS.
-    public boolean playCard(String PlayerID, int card) throws NotYourTurnException {
+    public boolean playCard(String PlayerID, @Range(from = 0, to=10) int card) throws NotYourTurnException {
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
         if(castle.playCard(card)){
@@ -267,7 +268,7 @@ public class Board {
      */
     private int remainingCards(){
         int cardsLeft = 0;
-        for(Castle castle : castleMap.values()) cardsLeft += (int) castle.getDeck().stream().filter(card -> card.isAvailable()).count();
+        for(Castle castle : castleMap.values()) cardsLeft += (int) castle.getDeck().stream().filter(Card::isAvailable).count();
         return cardsLeft;
     }
 
@@ -364,7 +365,6 @@ public class Board {
         if (motherNaturePosition + move / islandList.size() >= 1) motherNaturePosition += move - islandList.size();
         else motherNaturePosition += move;
         conquerIsland(islandList.get(motherNaturePosition));
-
     }
 
     /**
@@ -403,6 +403,10 @@ public class Board {
         if(islandToJoin.size() == 2 || islandToJoin.size() == 3) joinIslands(islandToJoin);
     }
 
+    public void changePhase(){
+        turn.changePhase();
+    }
+
     public boolean equals(Board b){
         return this.motherNaturePosition == b.motherNaturePosition && this.nPlayer == b.nPlayer &&
                 this.islandList.equals(b.islandList) && this.bag.equals(b.bag) && this.cloudList.equals(b.cloudList) &&
@@ -435,6 +439,10 @@ public class Board {
         return professorsMap;
     }
 
+    public Turn getTurn(){
+        return turn;
+    }
+
     public int getNPlayer() {
         return nPlayer;
     }
@@ -444,11 +452,7 @@ public class Board {
     }
 
     public List<String> getPlayerUsernames(){
-        List<String> playerUsernames = new ArrayList<>();
-        for (String username: castleMap.keySet()) {
-            playerUsernames.add(username);
-        }
-        return playerUsernames;
+        return new ArrayList<>(castleMap.keySet());
     }
 
     @Override

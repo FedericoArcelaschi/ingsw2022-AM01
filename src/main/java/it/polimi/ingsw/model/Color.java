@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model;
 
 public enum Color {
-    YELLOW("yellow", "\u001B[33m"),
-    GREEN("green", "\u001B[32m"),
-    PINK("pink", "\u001B[35m"),
-    BLUE("blue", "\u001B[34m"),
-    RED("red", "\u001B[31m");
+    YELLOW("\u001B[33myellow\u001B[0m", "\u001B[33m"),
+    GREEN("\u001B[32mgreen\u001B[0m", "\u001B[32m"),
+    PINK("\u001B[35mpink\u001B[0m", "\u001B[35m"),
+    BLUE("\u001B[34mblue\u001B[0m", "\u001B[34m"),
+    RED("\u001B[31mred\u001B[0m", "\u001B[31m");
 
     public final String str;
     public final String colorCode;
