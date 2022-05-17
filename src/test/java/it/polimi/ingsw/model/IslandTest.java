@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.model.influence.Influence;
+import it.polimi.ingsw.model.influence.Professors;
+import it.polimi.ingsw.model.influence.functionalInterfaces.InfluenceComputing;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -7,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class IslandTest {
     @Test
@@ -30,28 +35,39 @@ public class IslandTest {
     @Test
     public void testCalculateInfluence() {
         Island i = new Island();
-        Map<Color, Team> professors = new HashMap<>();
-        Map<Team, Integer> influence = new HashMap<>();
-        Map<Color, Integer> students = new HashMap<>();
 
         Castle c1 = new Castle(Team.WHITE, 2, new ArrayList<>());
         Castle c2 = new Castle(Team.BLACK, 2, new ArrayList<>());
 
-        for (Color c : Color.values()) {
-            professors.put(c, c1.getTeam());
-        } //add professors to team white
+        Influence influence = new Influence(new Professors(Map.of("gio", c1,"faderwcio", c2)));
 
-        professors.put(Color.BLUE, c2.getTeam()); //add professor to team black
+        try {
+            for (Color c : Color.values()) {
+                c1.addStudentInDiningRoom(c);
+            } //add professors to team white
+        }
+        catch (Exception e){
+            fail();
+        }
 
+        try {
+            c2.addStudentInDiningRoom(Color.BLUE);
+            c2.addStudentInDiningRoom(Color.BLUE);
+            c2.addStudentInDiningRoom(Color.BLUE);
+        } catch (TooManyStudentsException e) {
+            fail();
+        }
+
+        Map<Color, Integer> students = new HashMap<>();
         for (Color c : Color.values()) {
             students.put(c, 2);  //add 2 student per color
         }
         i.addStudent(students); //put the students on the island
 
-        influence.put(Team.WHITE, 8);
-        influence.put(Team.BLACK, 2);
-        influence.put(Team.GREY, 0);
-        Map<Team, Integer> influence2 = computeInfluenceMap(i, professors, null);
-        assertEquals(influence, influence2);
+        Map<Team, Integer> fakeInfluence = new HashMap<>();
+        fakeInfluence.put(Team.WHITE, 8);
+        fakeInfluence.put(Team.BLACK, 2);
+        fakeInfluence.put(Team.GREY, 0);
+        assertEquals(fakeInfluence, influence.getInfluenceMap(i));
     }
 }

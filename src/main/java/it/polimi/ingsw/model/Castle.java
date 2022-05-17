@@ -134,10 +134,6 @@ public class Castle implements StudentPlaces {
         throw new IllegalAccessException("method valid only for Expertmode");
     }
 
-    @Override
-    public void adds(Color student) throws IllegalAccessException {
-        throw new IllegalAccessException("method valid only for Expertmode");
-    }
 
     @Override
     public void removes(Color student, int place) throws NoSuchStudentException, TooManyStudentsException, IllegalAccessException {

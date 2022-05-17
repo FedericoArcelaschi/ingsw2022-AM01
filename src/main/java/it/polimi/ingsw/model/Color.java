@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.expert.influence.PossibleParameters;
+import it.polimi.ingsw.model.expert.boardInterfaces.PossibleParameters;
 
 public enum Color implements PossibleParameters {
     YELLOW(1),

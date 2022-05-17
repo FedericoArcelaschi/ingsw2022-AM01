@@ -35,6 +35,7 @@ public class Professors implements ProfessorComputing {
 
     @Contract(pure = true)
     public Map<Color, Team> getProfessorsAssigning() {
+        this.updateProfessorsAssigning();
         return professorsMap;
     }
 

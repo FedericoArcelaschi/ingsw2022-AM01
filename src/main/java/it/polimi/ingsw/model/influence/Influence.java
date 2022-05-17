@@ -22,8 +22,6 @@ public class Influence implements InfluenceComputing {
         this.professorsMap = professorsMap;
     }
 
-
-
     /**
      * Method computes with the right function the influence
      * @param island to compute the influence onto
