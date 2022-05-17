@@ -9,12 +9,12 @@ public class BoardFactory {
         return createBoard(playerList, turn, 1);
     }
 
-    public static Board getBoard(List<String> playerList, Turn turn, int seed){
+    public static Board getBoard(List<String> playerList, Turn turn, long seed){
         return createBoard(playerList, turn, seed);
     }
 
     @NotNull
-    private static Board createBoard(List<String> playerList, Turn turn, int seed) {
+    private static Board createBoard(List<String> playerList, Turn turn, long seed) {
         Board b;
         switch (playerList.size()){
             case 2 -> b = new Board(playerList.get(0),playerList.get(1), turn, seed);

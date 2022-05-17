@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BoardDataTest {
 
+
     @Test
     void toStringTest() throws NotYourTurnException, NoSuchStudentException, TooManyStudentsException {
         BoardData bd;

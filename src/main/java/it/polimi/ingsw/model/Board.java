@@ -28,7 +28,7 @@ public class Board {
     private static final int cloudSize3Player = 4;
 
 
-    public Board(String playerID1, String playerID2, Turn turn, int seed){
+    public Board(String playerID1, String playerID2, Turn turn, long seed){
         nPlayer = 2;
         this.seed = seed;
         bag = new Bag(numOfStudentsPerColor, seed);
@@ -39,7 +39,7 @@ public class Board {
         construct();
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, Turn turn, int seed){
+    public Board(String playerID1, String playerID2, String playerID3, Turn turn, long seed){
         nPlayer = 3;
         this.seed = seed;
         bag = new Bag(numOfStudentsPerColor, seed);
@@ -50,7 +50,7 @@ public class Board {
         this.turn = turn;
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn, int seed){
+    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn, long seed){
         nPlayer = 4;
         this.seed = seed;
         bag = new Bag(numOfStudentsPerColor, seed);
