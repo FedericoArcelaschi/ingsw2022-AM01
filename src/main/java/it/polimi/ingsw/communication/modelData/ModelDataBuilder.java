@@ -16,7 +16,7 @@ public abstract class ModelDataBuilder {
                 board.getIslandList().stream().map(ModelDataBuilder::newIslandData).toList(),
                 newCastleData(username, board.getCastle(username), true),
                 board.getCastleMap().keySet().stream()
-                        .filter(key -> !Objects.equals(key, username))
+                        .filter(key -> !key.equals(username))
                         .map(key -> newCastleData(key, board.getCastle(key), false))
                         .toList(),
                 newTurnData(board.getTurn())
