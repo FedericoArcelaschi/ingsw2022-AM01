@@ -1,42 +1,37 @@
 package it.polimi.ingsw.gui;
 
+import it.polimi.ingsw.gui.preferencesPane.InputPane;
+import it.polimi.ingsw.gui.preferencesPane.PreferencePane;
+import it.polimi.ingsw.gui.preferencesPane.RadioButtonsPane;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
 
-import java.awt.*;
+import java.util.Arrays;
 
-public class Gui extends Application implements EventHandler<ActionEvent> {
-    private StackPane layout;
-    private Button button;
+public class Gui extends Application{
+    BorderPane layout;
 
-    public static void main(String[] args){
-        launch(args);
+    public void view(){
+        launch();
     }
 
     @Override
-    public void start(Stage stage) throws Exception{
+    public void start(Stage stage){
          stage.setTitle("Eriantys");
-         layout = new StackPane();
-         button = new Button("Play");
+         layout = new BorderPane();
+         layout.setBorder(new Border(new BorderStroke(Color.TRANSPARENT, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(10))));
 
-         button.setOnAction(this);
-         layout.getChildren().add(button);
-         Scene scene = new Scene(layout, 300, 300);
+         layout.setRight(new PreferencePane(10));
+         Scene scene = new Scene(layout, 1000, 1000);
          stage.setScene(scene);
          stage.show();
     }
 
-    @Override
-    public void handle(ActionEvent actionEvent) {
-        if(actionEvent.getSource() == button){
 
-        }
-    }
 }
