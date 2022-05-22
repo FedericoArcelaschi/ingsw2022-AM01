@@ -12,6 +12,9 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A VBox that contains label and horizontal list of RadioButton and select logics
+ */
 public class RadioButtonsPane extends VBox {
     private List<String> options;
     private List<RadioButton> buttons;

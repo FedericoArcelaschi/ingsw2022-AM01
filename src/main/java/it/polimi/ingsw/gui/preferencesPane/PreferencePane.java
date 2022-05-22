@@ -10,6 +10,9 @@ import javafx.scene.layout.VBox;
 
 import java.util.Arrays;
 
+/**
+ * VBox with elements to insert username and preferences for the game.
+ */
 public class PreferencePane extends VBox implements EventHandler<ActionEvent> {
 
     RadioButtonsPane playerPreference;

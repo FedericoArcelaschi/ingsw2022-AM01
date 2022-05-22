@@ -5,10 +5,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+/**
+ * A VBox that contains label and an inputField.
+ */
 public class InputPane extends VBox {
     private TextField field;
     private Label label;
 
+    /**
+     * @param s label string
+     */
     public InputPane(String s){
         field = new TextField();
         label = new Label(s+":");
