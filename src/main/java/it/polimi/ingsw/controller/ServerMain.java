@@ -98,7 +98,7 @@ public class ServerMain implements Runnable{
                     gameId++; //Has to be increased only if method returns null
                 }
             } catch(IOException e) {
-                break; // Entrerei qui se serverSocket venisse chiuso
+                break; // Would get here if serversocket was to be closed.
             }
         }
         executor.shutdown();

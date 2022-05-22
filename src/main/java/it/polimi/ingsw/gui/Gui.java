@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.Arrays;
@@ -37,6 +38,7 @@ public class Gui extends Application{
          ImageView image = new ImageView();
          image.setImage(img);
          layout.setLeft(image);
+         layout.setTop(new Text(10, 50, "Welcome to Eriantys!"));
          Scene scene = new Scene(layout, 1000, 1000);
          stage.setScene(scene);
          stage.show();
