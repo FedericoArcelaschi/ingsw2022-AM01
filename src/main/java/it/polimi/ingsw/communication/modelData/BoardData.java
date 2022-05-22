@@ -66,6 +66,9 @@ public class BoardData {
         return otherCastles;
     }
 
+    public TurnData turn(){
+        return turn;}
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
