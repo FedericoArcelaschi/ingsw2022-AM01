@@ -23,7 +23,7 @@ public class RadioButtonsPane extends VBox {
     private String selected;
 
     public RadioButtonsPane(String s, List<String> options) {
-        this.options = options;
+        this.options = options;  //List of the names of each single RadioButton
         buttons = new ArrayList<>();
         optionsView = new HBox(8);
         Label label = new Label(s+":");
