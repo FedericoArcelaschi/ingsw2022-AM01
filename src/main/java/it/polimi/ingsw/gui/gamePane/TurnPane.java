@@ -31,5 +31,6 @@ public class TurnPane extends VBox {
         getChildren().addAll(sittingOrder, actionOrder, turnPhase, currentPlayer);
     }
 
+    //TODO: add ways to update the TurnPane. (Takes in new TurnData...)
 
 }
