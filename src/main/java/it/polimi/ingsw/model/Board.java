@@ -17,7 +17,7 @@ public class Board {
     protected final List<Cloud> cloudList = new ArrayList<>();
     protected final List<Island> islandList = new ArrayList<>();
     protected final Map<String, Castle> castleMap = new HashMap<>();
-    protected Map<Color, Team> professorsMap;
+    protected Map<StudentColor, Team> professorsMap;
     protected final Turn turn;
     private final long seed;
     //constants
@@ -95,7 +95,7 @@ public class Board {
      */
     private void setupProfessorMap(){
         professorsMap = new HashMap<>();
-        for(Color c : Color.values()){
+        for(StudentColor c : StudentColor.values()){
             professorsMap.put(c,null);
         }
     }
@@ -105,7 +105,7 @@ public class Board {
      */
 
     private void setupIslands(){
-        List<Color> s = bag.extractForIslandSetup();
+        List<StudentColor> s = bag.extractForIslandSetup();
         for(int i = 0, c = 0; i < numberOfIslands; i++){
             if( i % (numberOfIslands / 2) == 0){
                 islandList.add(new Island());
@@ -146,7 +146,7 @@ public class Board {
      */
 
     private void updateProfessorsOwners() {
-        for(Color color : Color.values()) {
+        for(StudentColor color : StudentColor.values()) {
             int max = 0;
             Team newOwner = professorsMap.get(color);
             for (Castle castle : castleMap.values())
@@ -171,7 +171,7 @@ public class Board {
      * @throws NotYourTurnException if the player in the argument is not the current player
      * @throws TooManyStudentsException if the castle dining room already contains 9 students
      */
-    public void moveStudentToDiningRoom(String PlayerID, List<Color> students)
+    public void moveStudentToDiningRoom(String PlayerID, List<StudentColor> students)
             throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
@@ -188,11 +188,11 @@ public class Board {
      * @param students a list of students you want to move
      * @return true if the students are present and added to the island.
      */
-    public boolean moveStudentToIsland(String Player, int islandNumber, List<Color> students)
+    public boolean moveStudentToIsland(String Player, int islandNumber, List<StudentColor> students)
             throws NoSuchStudentException, NotYourTurnException {
         if(!turn.getCurrentPlayer().equals(Player)) throw new NotYourTurnException();
         castleMap.get(Player).removeStudentsFromWaitingRoom(students);
-        for(Color c : students){
+        for(StudentColor c : students){
             islandList.get(islandNumber).addStudent(c);
         }
         return true;
@@ -435,7 +435,7 @@ public class Board {
         return castleMap.get(playerID);
     }
 
-    public Map<Color, Team> getProfessorsMap() {//TODO: make return only a copy
+    public Map<StudentColor, Team> getProfessorsMap() {//TODO: make return only a copy
         return professorsMap;
     }
 

@@ -15,15 +15,15 @@ public class CastleTest{
     public void testAddStudentWR() throws TooManyStudentsException, NoSuchStudentException {
         Bag b = new Bag(24);
         Castle c = new Castle(Team.BLACK, 3, b.extractForCastleSetup(3));
-        List<Color> s = new ArrayList<>();
-        List<Color> newStudents = new ArrayList<>();
+        List<StudentColor> s = new ArrayList<>();
+        List<StudentColor> newStudents = new ArrayList<>();
         s.add(c.getWaitingRoom().get(0));
         s.add(c.getWaitingRoom().get(1));
         s.add(c.getWaitingRoom().get(2));
         c.removeStudentsFromWaitingRoom(s);
-        newStudents.add(Color.BLUE);
-        newStudents.add(Color.GREEN);
-        newStudents.add(Color.RED);
+        newStudents.add(StudentColor.BLUE);
+        newStudents.add(StudentColor.GREEN);
+        newStudents.add(StudentColor.RED);
         assertTrue(c.addStudentsInWaitingRoom(newStudents));
     }
 
@@ -31,9 +31,9 @@ public class CastleTest{
     public void testNoSuchStudentException(){
         Bag b = new Bag(24);
         Castle c = new Castle(Team.BLACK, 1, b.multipleExtract(9));
-        List<Color> students = new ArrayList<>();
+        List<StudentColor> students = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            students.add(Color.YELLOW);
+            students.add(StudentColor.YELLOW);
         }
         assertThrows(NoSuchStudentException.class, () -> c.removeStudentsFromWaitingRoom(students), "");
     }
@@ -43,10 +43,10 @@ public class CastleTest{
         Bag b = new Bag(24);
         Castle c = new Castle(Team.BLACK, 2, b.multipleExtract(9));
         //test adding student in a full waiting room
-        List<Color> newStudents = new ArrayList<>();
-        newStudents.add(Color.BLUE);
-        newStudents.add(Color.GREEN);
-        newStudents.add(Color.RED);
+        List<StudentColor> newStudents = new ArrayList<>();
+        newStudents.add(StudentColor.BLUE);
+        newStudents.add(StudentColor.GREEN);
+        newStudents.add(StudentColor.RED);
         assertThrows(TooManyStudentsException.class, () -> c.addStudentsInWaitingRoom(newStudents), "");
     }
 
@@ -54,25 +54,25 @@ public class CastleTest{
     public void testAddStudentDR() throws TooManyStudentsException {
         Bag b = new Bag(24);
         Castle c = new Castle(Team.BLACK, 2, b.multipleExtract(9));
-        List<Color> s = new ArrayList<>();
-        Map<Color, Integer> oldList = c.getDiningRoom();
-        s.add(Color.BLUE);
-        s.add(Color.GREEN);
-        s.add(Color.RED);
-        oldList.replace(Color.BLUE, oldList.get(Color.BLUE) + 1);
-        oldList.replace(Color.GREEN, oldList.get(Color.GREEN) + 1);
-        oldList.replace(Color.RED, oldList.get(Color.RED) + 1);
+        List<StudentColor> s = new ArrayList<>();
+        Map<StudentColor, Integer> oldList = c.getDiningRoom();
+        s.add(StudentColor.BLUE);
+        s.add(StudentColor.GREEN);
+        s.add(StudentColor.RED);
+        oldList.replace(StudentColor.BLUE, oldList.get(StudentColor.BLUE) + 1);
+        oldList.replace(StudentColor.GREEN, oldList.get(StudentColor.GREEN) + 1);
+        oldList.replace(StudentColor.RED, oldList.get(StudentColor.RED) + 1);
         c.addStudentsInDiningRoom(s);
         assertEquals(oldList, c.getDiningRoom());
     }
     @Test
     public void testRemoveWR() throws NoSuchStudentException {
         Bag b = new Bag(24);
-        List<Color> students = b.multipleExtract(9);
+        List<StudentColor> students = b.multipleExtract(9);
         Castle c = new Castle(Team.BLACK, 2, students);
-        List<Color> rm = new ArrayList<>();
+        List<StudentColor> rm = new ArrayList<>();
 
-        Color remove = students.get(0);
+        StudentColor remove = students.get(0);
         students.remove(remove);
         rm.add(remove);
         c.removeStudentsFromWaitingRoom(rm);

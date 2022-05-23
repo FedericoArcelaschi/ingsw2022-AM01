@@ -1,11 +1,7 @@
 package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.communication.packet.message.CommandMessage;
-import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.Preferences;
-import it.polimi.ingsw.model.Color;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

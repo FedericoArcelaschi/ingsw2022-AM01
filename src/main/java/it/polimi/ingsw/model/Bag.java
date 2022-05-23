@@ -3,13 +3,13 @@ import java.util.*;
 
 public class Bag {
 
-    private final Map<Color, Integer> students;
+    private final Map<StudentColor, Integer> students;
     private final long seed;
     private final Random random;
 
     public Bag(int studentsPerColor){
         students = new HashMap<>();
-        for(Color c: Color.values()) students.put(c,studentsPerColor);
+        for(StudentColor c: StudentColor.values()) students.put(c,studentsPerColor);
         random = new Random();
         seed = random.nextLong();
         random.setSeed(seed);
@@ -18,7 +18,7 @@ public class Bag {
     public Bag(int studentsPerColor, long seed){
         this.seed = seed;
         students = new HashMap<>();
-        for(Color c: Color.values()) students.put(c,studentsPerColor);
+        for(StudentColor c: StudentColor.values()) students.put(c,studentsPerColor);
         random = new Random(seed);
     }
 
@@ -26,12 +26,12 @@ public class Bag {
      * extract a random student from the pool of students represented with the Map students
      * @return the color of the extracted student
      */
-    public Color extract(){
+    public StudentColor extract(){
         int rs = remainingStudents();
         if(rs == 0) return null;
         int r = random.nextInt(rs);
-        Set<Color> keyList = students.keySet();
-        for(Color c : keyList){
+        Set<StudentColor> keyList = students.keySet();
+        for(StudentColor c : keyList){
             if(r > students.get(c)) r-=students.get(c);
             else{
                 students.replace(c,students.get(c)-1);
@@ -46,8 +46,8 @@ public class Bag {
      * @param n number of student to extract
      * @return a list of colors of the students extracted
      */
-    public List<Color> multipleExtract(int n){
-        List<Color> l = new ArrayList<>();
+    public List<StudentColor> multipleExtract(int n){
+        List<StudentColor> l = new ArrayList<>();
         for(int i=0; i<n; i++){
             l.add(extract());
         }
@@ -58,10 +58,10 @@ public class Bag {
      * extract 2 student in a random order to put them in islands at the beginning of the game
      * @return a list of 10 students (2 per color) in a random order
      */
-    public List<Color> extractForIslandSetup(){
-        List<Color> extractedList = new ArrayList<>();
+    public List<StudentColor> extractForIslandSetup(){
+        List<StudentColor> extractedList = new ArrayList<>();
         for(int i=0; i<2; i++){
-            for(Color c : Color.values()) {
+            for(StudentColor c : StudentColor.values()) {
                 extractedList.add(c);
                 students.replace(c,students.get(c)-1);
             }
@@ -70,7 +70,7 @@ public class Bag {
         return extractedList;
     }
 
-    public List<Color> extractForCastleSetup(int nPlayers){
+    public List<StudentColor> extractForCastleSetup(int nPlayers){
         final int waitingRoomSize2Players = 7;
         final int waitingRoomSize3Players = 9;
         return switch (nPlayers) {
@@ -101,7 +101,7 @@ public class Bag {
         return seed;
     }
 
-    public int getStudents(Color c) {
+    public int getStudents(StudentColor c) {
         return students.get(c);
     }
 }

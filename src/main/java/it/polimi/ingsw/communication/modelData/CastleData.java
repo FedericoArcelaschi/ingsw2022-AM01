@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.StudentColor;
 import it.polimi.ingsw.model.Team;
 
 import java.util.List;
@@ -9,8 +9,8 @@ import java.util.Objects;
 
 public class CastleData {
     private final String username;
-    private final List<Color> waitingRoom;
-    private final Map<Color, Integer> diningRoom;
+    private final List<StudentColor> waitingRoom;
+    private final Map<StudentColor, Integer> diningRoom;
     private final List<String> deck;
     private final String lastPlayedCard;
     private final Team towerColor;
@@ -18,8 +18,8 @@ public class CastleData {
 
     public CastleData(
             String username,
-            List<Color> waitingRoom,
-            Map<Color, Integer> diningRoom,
+            List<StudentColor> waitingRoom,
+            Map<StudentColor, Integer> diningRoom,
             List<String> deck,
             String lastPlayedCard,
             Team towerColor,
@@ -37,11 +37,11 @@ public class CastleData {
         return username;
     }
 
-    public List<Color> waitingRoom() {
+    public List<StudentColor> waitingRoom() {
         return waitingRoom;
     }
 
-    public Map<Color, Integer> diningRoom() {
+    public Map<StudentColor, Integer> diningRoom() {
         return diningRoom;
     }
 
@@ -79,11 +79,11 @@ public class CastleData {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("\n\t\tStudents in waitingroom: ");
-        for (Color c : waitingRoom) {
+        for (StudentColor c : waitingRoom) {
             s.append(c.str).append(", ");
         }
         s.append("\n\t\tStudents in diningroom: ");
-        for (Color c : diningRoom.keySet()) {
+        for (StudentColor c : diningRoom.keySet()) {
             s.append(c.str).append(": ").append(diningRoom.get(c).toString()).append(", ");
         }
         if (isMyCastle){

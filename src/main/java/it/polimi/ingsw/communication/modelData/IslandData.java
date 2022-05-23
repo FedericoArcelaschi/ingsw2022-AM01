@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.StudentColor;
 import it.polimi.ingsw.model.Team;
 
 import java.util.Map;
@@ -8,12 +8,12 @@ import java.util.Objects;
 
 public class IslandData {
     private final Team ownership;
-    private final Map<Color, Integer> students;
+    private final Map<StudentColor, Integer> students;
     private final int nIslands;
 
     public IslandData(
             Team ownership,
-            Map<Color, Integer> students,
+            Map<StudentColor, Integer> students,
             int nIslands
     ) {
         this.ownership = ownership;
@@ -25,7 +25,7 @@ public class IslandData {
         return ownership;
     }
 
-    public Map<Color, Integer> students() {
+    public Map<StudentColor, Integer> students() {
         return students;
     }
 
@@ -50,7 +50,7 @@ public class IslandData {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for (Color key: students.keySet()) {
+        for (StudentColor key: students.keySet()) {
             s.append(key.str).append(" ").append(students.get(key)).append(", ");
         }
         if(ownership == null){

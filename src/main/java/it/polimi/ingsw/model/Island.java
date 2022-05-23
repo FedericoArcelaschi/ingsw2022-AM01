@@ -3,12 +3,12 @@ package it.polimi.ingsw.model;
 import java.util.*;
 
 public class Island {
-    private final Map<Color, Integer> students;
+    private final Map<StudentColor, Integer> students;
     private Team ownership;
 
-    public Island(Color student){
+    public Island(StudentColor student){
         this.students = new HashMap<>();
-        for(Color c : Color.values()){
+        for(StudentColor c : StudentColor.values()){
             if(c == student) students.put(c, 1);
             else students.put(c, 0);
         }
@@ -17,7 +17,7 @@ public class Island {
 
     public Island(){
         this.students = new HashMap<>();
-        for(Color c : Color.values())
+        for(StudentColor c : StudentColor.values())
             students.put(c, 0);
         this.ownership = null;
     }
@@ -30,7 +30,7 @@ public class Island {
         return 1;
     }
 
-    public Map<Color, Integer> getStudents() {
+    public Map<StudentColor, Integer> getStudents() {
         return new HashMap<>(students);
     }
 
@@ -43,7 +43,7 @@ public class Island {
      * @param c color of the student to add
      * @return check boolean
      */
-    public boolean addStudent(Color c){
+    public boolean addStudent(StudentColor c){
         students.put(c, students.get(c) + 1); //In the value of the color c, I'm putting the previous number of students + 1.
         return true;
     }
@@ -53,8 +53,8 @@ public class Island {
      * @param s Map that contains how many students per color to add
      * @return check boolean
      */
-    public boolean addStudent(Map<Color, Integer> s){
-        for(Color c: s.keySet()) {
+    public boolean addStudent(Map<StudentColor, Integer> s){
+        for(StudentColor c: s.keySet()) {
             students.put(c, students.get(c) + s.get(c));
         }
         return true;
@@ -75,8 +75,8 @@ public class Island {
      * @param influence map that contains the sum of influences per team
      * @param professorMap map that contains the team owners of each professor
      */
-    private void studentInfluence(Map<Team, Integer> influence, Map<Color, Team> professorMap){
-        for(Color c : Color.values()){
+    private void studentInfluence(Map<Team, Integer> influence, Map<StudentColor, Team> professorMap){
+        for(StudentColor c : StudentColor.values()){
             if(professorMap.get(c) != null) {
                 Team t = professorMap.get(c); //take team of the owner of the professor
                 influence.replace(t, influence.get(t) + students.get(c));  //add influence for the color to the owner of the professor
@@ -89,7 +89,7 @@ public class Island {
      * @param professorMap map that contains the sum of influences per team
      * @return an object containing the influence per team
      */
-    public Map<Team, Integer> calculateInfluence(Map<Color, Team> professorMap){
+    public Map<Team, Integer> calculateInfluence(Map<StudentColor, Team> professorMap){
         Map<Team, Integer> influence = new HashMap<>();
         for(Team t : Team.values())
             influence.put(t, 0);
