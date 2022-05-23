@@ -4,20 +4,26 @@ import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.DataBuilder;
 import it.polimi.ingsw.gui.gamePane.GamePane;
 import it.polimi.ingsw.gui.gamePane.castlePane.CastlePane;
+import it.polimi.ingsw.communication.modelData.TurnData;
+import it.polimi.ingsw.gui.gamePane.TurnPane;
 import it.polimi.ingsw.gui.preferencesPane.PreferencePane;
 import it.polimi.ingsw.model.Board;
 import it.polimi.ingsw.model.BoardFactory;
 import it.polimi.ingsw.model.Turn;
+import it.polimi.ingsw.model.TurnPhase;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -56,6 +62,22 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
         exitPane.getChildren().addAll(submit, exit);
         layout.setBottom(exitPane);
         Scene scene = new Scene(layout, sceneWidth, sceneHeight);
+
+        layout.setRight(new TurnPane(1, new TurnData(new ArrayList<String>(){
+            {
+                add("fede");
+                add("gio");
+                add("lore");
+            }
+        }, new ArrayList<String>(){
+            {
+                add("fede");
+                add("gio");
+                add("lore");
+            }
+        }, TurnPhase.PLANNING, "fede")));
+
+        Scene scene = new Scene(layout, 500, 500);
         stage.setScene(scene);
         stage.show();
     }
