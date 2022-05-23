@@ -43,7 +43,7 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
         exitPane.getChildren().add(exit);
         layout.setBottom(exitPane);
 
-        layout.setRight(new TurnPane(10, new TurnData(new ArrayList<String>(){
+        layout.setRight(new TurnPane(1, new TurnData(new ArrayList<String>(){
             {
                 add("fede");
                 add("gio");
@@ -56,6 +56,7 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
                 add("lore");
             }
         }, TurnPhase.PLANNING, "fede")));
+
         Scene scene = new Scene(layout, 500, 500);
         stage.setScene(scene);
         stage.show();
