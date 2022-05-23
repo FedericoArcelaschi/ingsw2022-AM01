@@ -18,6 +18,8 @@ public class InputPane extends VBox {
     public InputPane(String s){
         field = new TextField();
         label = new Label(s+":");
+
+        field.setMaxSize(200,100);
         getChildren().addAll(label, field);
     }
 
