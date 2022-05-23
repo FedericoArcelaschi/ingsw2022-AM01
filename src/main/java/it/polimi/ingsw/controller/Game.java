@@ -45,18 +45,10 @@ public class Game{
      */
     public void executeCommand(Command command){
         switch(command.getType()) {
-            case PLAY_CARD -> {
-                playCardCommand(command);
-            }
-            case MOVE_STUDENT -> {
-                moveStudentCommand(command);
-            }
-            case MOVE_MOTHER_NATURE -> {
-                moveMotherNatureCommand(command);
-            }
-            case CHOOSE_CLOUD -> {
-                chooseCloudCommand(command);
-            }
+            case PLAY_CARD -> playCardCommand(command);
+            case MOVE_STUDENT -> moveStudentCommand(command);
+            case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
+            case CHOOSE_CLOUD -> chooseCloudCommand(command);
         }
         send(createError(0, "Not valid command"), usernameSocketMap.get(command.getUsername()));
     }

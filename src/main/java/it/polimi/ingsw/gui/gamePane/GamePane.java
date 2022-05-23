@@ -11,14 +11,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 
-public class GamePane extends VBox implements EventHandler<ActionEvent> {
+public class GamePane extends BorderPane implements EventHandler<ActionEvent> {
     BorderPane game;
     BoardData bd;
 
     // SomeClass turnInfo;
 
-    public GamePane(double v){
-        super(v);
+    public GamePane(){
         ObservableList<String> observableList = FXCollections.observableArrayList(bd.turn().getSittingOrder());
         ListView<String> sittingOrder = new ListView<>(observableList);
         getChildren().add(sittingOrder);
