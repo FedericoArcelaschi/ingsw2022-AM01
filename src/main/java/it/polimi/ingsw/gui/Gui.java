@@ -77,7 +77,6 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
             }
         }, TurnPhase.PLANNING, "fede")));
 
-        Scene scene = new Scene(layout, 500, 500);
         stage.setScene(scene);
         stage.show();
     }
@@ -101,9 +100,11 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
         }
         else if(submit.equals(actionEvent.getSource())){
             //TODO: start client main
+
             Scene scene = new Scene(new GamePane(), screenWidth * 80/100, screenHeight * 80/100);
             stage.setScene(scene);
             stage.centerOnScreen();
+
         }
     }
 }

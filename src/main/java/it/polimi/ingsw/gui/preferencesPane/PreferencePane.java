@@ -22,6 +22,7 @@ public class PreferencePane extends VBox implements EventHandler<ActionEvent> {
     InputPane username = new InputPane("Username");
     ClientMain cm;
     ServerMain s = new ServerMain(1234);
+    Button submit =  new Button("submit");
 
     public PreferencePane(double v) {
         super(v);
@@ -36,21 +37,8 @@ public class PreferencePane extends VBox implements EventHandler<ActionEvent> {
         if(actionEvent.getSource().equals(submit)){
             // System.out.println(username.getText() +  ", " + playerPreference.getSelected() + ", " + modePreference.getSelected());
             boolean gamemode = !modePreference.getSelected().equals("base");
-            ExecutorService executorService = Executors.newCachedThreadPool();
             cm = new ClientMain(username.getText(), Integer.parseInt(playerPreference.getSelected()), gamemode, "127.0.0.1", 1234);
-            executorService.submit(s);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             cm.connect();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(s.getConnectedPlayers());
         }
     }
 

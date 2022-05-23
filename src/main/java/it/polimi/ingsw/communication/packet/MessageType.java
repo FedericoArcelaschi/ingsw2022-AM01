@@ -10,7 +10,8 @@ public enum MessageType {
     ERROR(ErrorMessage.class),
     PREFERENCES(Preferences.class),
     END(EndGameMessage.class),
-    COMMAND(CommandMessage.class);
+    COMMAND(CommandMessage.class),
+    LOBBY(LobbyInfoMessage.class);
 
     private Type type;
 

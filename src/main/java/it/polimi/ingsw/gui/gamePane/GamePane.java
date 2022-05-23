@@ -23,27 +23,26 @@ import java.util.Arrays;
 
 
 public class GamePane extends BorderPane implements EventHandler<ActionEvent> {
+
     BorderPane game;
     BoardData bd;
     TurnPane tp;
 
-public class GamePane extends BorderPane implements EventHandler<ActionEvent> {
-
-    public GamePane(){
+    public GamePane() {
         tp = new TurnPane(10, new TurnData(bd.turn().getSittingOrder(), bd.turn().getActionOrder(), bd.turn().getCurrentPhase(), bd.turn().getCurrentPlayer()));
         getChildren().add(tp);
-    double sceneWidth = Screen.getPrimary().getBounds().getWidth() * 80/100;
-    double sceneHeight = Screen.getPrimary().getBounds().getHeight() * 80/100;;
-
-    public GamePane(){
-        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"),new Turn(Arrays.asList("fede","gio")), 1);
+        double sceneWidth = Screen.getPrimary().getBounds().getWidth() * 80 / 100;
+        double sceneHeight = Screen.getPrimary().getBounds().getHeight() * 80 / 100;
+        Board b = BoardFactory.getBoard(Arrays.asList("fede", "gio"), new Turn(Arrays.asList("fede", "gio")), 1);
         BoardData bd = DataBuilder.newBoardData("fede", b);
         setRight(new CastlePane(sceneWidth, sceneHeight, bd.myCastle()));
+        setLeft(tp);
     }
 
-    @Override
-    public void handle(ActionEvent actionEvent){
+        @Override
+        public void handle (ActionEvent actionEvent){
 
-    }
+        }
 
 }
+

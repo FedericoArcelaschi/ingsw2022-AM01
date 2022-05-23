@@ -1,5 +1,15 @@
 package it.polimi.ingsw.controller;
 
+import com.google.gson.Gson;
+import it.polimi.ingsw.communication.packet.MessageType;
+import it.polimi.ingsw.communication.packet.Packet;
+import it.polimi.ingsw.communication.packet.message.LobbyInfoMessage;
+import it.polimi.ingsw.communication.packet.message.Message;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +21,7 @@ public class WaitingRooms {
     private Map<GameType, List<Socket>> gameSocketMap = new HashMap<>();
     private Map<GameType, List<String>> nicknameMap = new HashMap<>();
     private int oldsize2 = 0, oldsize3 = 0, oldsize4 = 0;
+    Gson parser = new Gson();
 
     public WaitingRooms(){
         for(GameType g : GameType.values()){
@@ -27,9 +38,39 @@ public class WaitingRooms {
         return nicknameMap;
     }
 
-    public void addPlayer(GameType gameType, Socket socket, String string){
+    public void addPlayer(GameType gameType, Socket socket, String string) throws IOException {
         gameSocketMap.get(gameType).add(socket);
         nicknameMap.get(gameType).add(string);
+        switch(gameType){
+            case NORMAL_2_PLAYER, EXPERT_2_PLAYER ->{
+                List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-2),nicknameMap.get(gameType).size()));
+                Message l = new LobbyInfoMessage(String.join(", ", playersIn));
+                Packet packet = new Packet(MessageType.LOBBY, l);
+                for(Socket s : gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-2),nicknameMap.get(gameType).size())){
+                    PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                    out.println(parser.toJson(packet));
+                }
+            }
+            case NORMAL_3_PLAYER, EXPERT_3_PLAYER ->{
+                List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-3),nicknameMap.get(gameType).size()));
+                Message l = new LobbyInfoMessage(String.join(", ", playersIn));
+                Packet packet = new Packet(MessageType.LOBBY, l);
+                for(Socket s : gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-3),gameSocketMap.get(gameType).size())){
+                    PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                    out.println(parser.toJson(packet));
+                }
+            }
+            case NORMAL_4_PLAYER, EXPERT_4_PLAYER ->{
+                List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-4),nicknameMap.get(gameType).size()));
+                Message l = new LobbyInfoMessage(String.join(", ", playersIn));
+                Packet packet = new Packet(MessageType.LOBBY, l);
+                for(Socket s : gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-4),gameSocketMap.get(gameType).size())){
+                    PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                    out.println(parser.toJson(packet));
+                }
+            }
+        }
+
     }
 
     public Game computeGameType(int gameId){
