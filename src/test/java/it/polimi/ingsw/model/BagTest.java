@@ -10,7 +10,7 @@ public class BagTest {
     public void testExtract() {
         Bag b = new Bag(24,1);
         int nStudentsBefore = b.remainingStudents();
-        Color c = b.extract();
+        StudentColor c = b.extract();
         assertEquals(nStudentsBefore-1,b.remainingStudents());
     }
     @Test
@@ -25,16 +25,16 @@ public class BagTest {
     @Test
     public void testExtractColor(){ //test that the extracted color is decreased
         Bag b = new Bag(24,1);
-        Color c = b.extract();
+        StudentColor c = b.extract();
         assertEquals(23, b.getStudents(c));
     }
     @Test
     public void testExtractForSetup(){
         Bag b = new Bag(24,1);
-        List<Color> colorList = b.extractForIslandSetup();
+        List<StudentColor> colorList = b.extractForIslandSetup();
         boolean a=true;
         for(int i=0; i<2; i++) {
-            for (Color c : Color.values()) {
+            for (StudentColor c : StudentColor.values()) {
                 if (!colorList.remove(c)) a = false;
             }
         }
@@ -45,7 +45,7 @@ public class BagTest {
         Bag b = new Bag(24,1);
         b.extractForIslandSetup();
         boolean a=true;
-        for (Color c : Color.values()) {
+        for (StudentColor c : StudentColor.values()) {
             if(b.getStudents(c) != 22) a=false;
         }
         assertTrue(a);
@@ -53,7 +53,7 @@ public class BagTest {
     @Test
     public void testRemainingStudents(){
         Bag b = new Bag(24,1);
-        assertEquals(24*Color.values().length,b.remainingStudents());
+        assertEquals(24* StudentColor.values().length,b.remainingStudents());
     }
     @Test
     public void testGetSeed(){

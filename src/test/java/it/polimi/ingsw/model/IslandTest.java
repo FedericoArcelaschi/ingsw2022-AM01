@@ -10,16 +10,16 @@ import java.util.Map;
 public class IslandTest{
     @Test
     public void testAddStudent() {
-        Island i = new Island(Color.YELLOW);
-        i.addStudent(Color.YELLOW);
-        int nYellow = i.getStudents().get(Color.YELLOW);
+        Island i = new Island(StudentColor.YELLOW);
+        i.addStudent(StudentColor.YELLOW);
+        int nYellow = i.getStudents().get(StudentColor.YELLOW);
         assertEquals(2,nYellow);
     }
     @Test
     public void testAddStudentMap() {
         Island i = new Island();
-        Map<Color, Integer> students= new HashMap<>();
-        for(Color c : Color.values())
+        Map<StudentColor, Integer> students= new HashMap<>();
+        for(StudentColor c : StudentColor.values())
             students.put(c, 2);
         i.addStudent(students);
         assertEquals(students,i.getStudents());
@@ -27,20 +27,20 @@ public class IslandTest{
     @Test
     public void testCalculateInfluence(){
         Island i = new Island();
-        Map<Color, Team> professors = new HashMap<>();
+        Map<StudentColor, Team> professors = new HashMap<>();
         Map<Team, Integer> influence = new HashMap<>();
-        Map<Color, Integer> students = new HashMap<>();
+        Map<StudentColor, Integer> students = new HashMap<>();
 
         Castle c1 = new Castle(Team.WHITE, 2, new ArrayList<>());
         Castle c2 = new Castle(Team.BLACK, 2, new ArrayList<>());
 
-        for(Color c : Color.values()){
+        for(StudentColor c : StudentColor.values()){
             professors.put(c,c1.getTeam());
             } //add professors to team white
 
-        professors.put(Color.BLUE,c2.getTeam()); //add professor to team black
+        professors.put(StudentColor.BLUE,c2.getTeam()); //add professor to team black
 
-        for(Color c : Color.values()){
+        for(StudentColor c : StudentColor.values()){
             students.put(c,2);  //add 2 student per color
         }
         i.addStudent(students); //put the students on the island

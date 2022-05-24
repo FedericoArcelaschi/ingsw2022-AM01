@@ -3,7 +3,6 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.CommandAttribute;
-import it.polimi.ingsw.communication.CommandType;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.DataBuilder;
 import it.polimi.ingsw.communication.packet.MessageType;
@@ -45,18 +44,10 @@ public class Game{
      */
     public void executeCommand(Command command){
         switch(command.getType()) {
-            case PLAY_CARD -> {
-                playCardCommand(command);
-            }
-            case MOVE_STUDENT -> {
-                moveStudentCommand(command);
-            }
-            case MOVE_MOTHER_NATURE -> {
-                moveMotherNatureCommand(command);
-            }
-            case CHOOSE_CLOUD -> {
-                chooseCloudCommand(command);
-            }
+            case PLAY_CARD -> playCardCommand(command);
+            case MOVE_STUDENT -> moveStudentCommand(command);
+            case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
+            case CHOOSE_CLOUD -> chooseCloudCommand(command);
         }
         send(createError(0, "Not valid command"), usernameSocketMap.get(command.getUsername()));
     }
@@ -132,16 +123,16 @@ public class Game{
         //Needs to be changed accordingly if the convention changes.
         List<String> studentList;
         studentList = Arrays.asList(command.getAttributesMap().get(CommandAttribute.ID).split("\\s*,\\s*"));
-        List<Color> students = new ArrayList<>();
+        List<StudentColor> students = new ArrayList<>();
         String s = "";
         for (String stud : studentList) {
-            Color c = Color.valueOf(stud);
+            StudentColor c = StudentColor.valueOf(stud);
             switch (c) {
-                case YELLOW -> students.add(Color.YELLOW);
-                case BLUE -> students.add(Color.BLUE);
-                case GREEN -> students.add(Color.GREEN);
-                case RED -> students.add(Color.RED);
-                case PINK -> students.add(Color.PINK);
+                case YELLOW -> students.add(StudentColor.YELLOW);
+                case BLUE -> students.add(StudentColor.BLUE);
+                case GREEN -> students.add(StudentColor.GREEN);
+                case RED -> students.add(StudentColor.RED);
+                case PINK -> students.add(StudentColor.PINK);
             }
         }
         switch (command.getAttributesMap().get(CommandAttribute.WHERE)){

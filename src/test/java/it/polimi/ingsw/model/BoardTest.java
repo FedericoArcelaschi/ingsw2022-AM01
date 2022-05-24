@@ -92,7 +92,7 @@ public class BoardTest{
 
     @Test
     public void testChooseCloud() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
-        List<Color> cl = new ArrayList<>();
+        List<StudentColor> cl = new ArrayList<>();
         //move 4 element to DR to free space for new students coming from cloud
         for(int i=0; i<4;i++){
             cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(i));
@@ -103,15 +103,15 @@ public class BoardTest{
     }
     @Test
     public void testMoveStudentToIsland() throws NoSuchStudentException, NotYourTurnException {
-        List<Color> colorList =  new ArrayList<>();
+        List<StudentColor> colorList =  new ArrayList<>();
 
         colorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
         colorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(1));
-        Map<Color, Integer> students = new HashMap<>();
-        for(Color c : Color.values()){
+        Map<StudentColor, Integer> students = new HashMap<>();
+        for(StudentColor c : StudentColor.values()){
             students.put(c,0);
         }
-        for(Color c : colorList){
+        for(StudentColor c : colorList){
             students.replace(c, students.get(c) + 1);
         }
         //test if the method returns correctly
@@ -122,7 +122,7 @@ public class BoardTest{
                 colorList.size() + " students should have been removed from the waiting room, but " +
                         (7 - b.getCastle(player1).getWaitingRoom().size()) + "students were removed");
         //test if the student get added to the island
-        Map<Color, Integer> studentsOnIsland = b.getIslandList().get(0).getStudents();
+        Map<StudentColor, Integer> studentsOnIsland = b.getIslandList().get(0).getStudents();
         assertEquals(students, studentsOnIsland);
     }
     @Test
@@ -141,12 +141,12 @@ public class BoardTest{
     }
     @Test
     public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
-        List<Color> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
+        List<StudentColor> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
         b.moveStudentToDiningRoom(player1, students);
 
         //test professor get assigned
-        Map<Color,Team> pm1 = b.getProfessorsMap();
-        for(Color c : Color.values()){
+        Map<StudentColor,Team> pm1 = b.getProfessorsMap();
+        for(StudentColor c : StudentColor.values()){
             if(students.contains(c)){
                 assertNotNull(pm1.get(c));
             }
@@ -183,12 +183,12 @@ public class BoardTest{
                 "the island list should decrease by 2");
         assertEquals(3, b.islandList.get(1).getIslandNumber(),
                 "the second island is the union of three");
-        Map<Color, Integer> EmptyStudentsMap = b.islandList.get(0).getStudents(); //first island is empty
-        Map<Color, Integer> expectedStudentsMap
+        Map<StudentColor, Integer> EmptyStudentsMap = b.islandList.get(0).getStudents(); //first island is empty
+        Map<StudentColor, Integer> expectedStudentsMap
                 = new HashMap<>(EmptyStudentsMap);
 
         for (int i = 1; i < 4; i++) {
-            for (Color student: Color.values()) {
+            for (StudentColor student: StudentColor.values()) {
                 if(oldList.get(i).getStudents().get(student) > 0){
                     if(expectedStudentsMap.get(student) != null){
                         int previousStudents = expectedStudentsMap.get(student);

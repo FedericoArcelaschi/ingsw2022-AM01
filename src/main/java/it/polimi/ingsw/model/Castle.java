@@ -6,8 +6,8 @@ import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import java.util.*;
 
 public class Castle {
-    private final List<Color> waitingRoom;
-    protected final Map<Color, Integer> diningRoom;
+    private final List<StudentColor> waitingRoom;
+    protected final Map<StudentColor, Integer> diningRoom;
     private final List<Card> deck;
     private Card lastPlayedCard;
     private final Team towerColor;
@@ -18,12 +18,12 @@ public class Castle {
     private static final int waitingRoomSize3Players = 9;
     private static final int numberOfCards = 10;
 
-    public Castle(Team team, int nPlayer, List<Color> students) {
+    public Castle(Team team, int nPlayer, List<StudentColor> students) {
         if(nPlayer == 3) this.waitingRoomSize = waitingRoomSize3Players;
         else this.waitingRoomSize = waitingRoomSize2Players;
         this.waitingRoom = new ArrayList<>(students);
         this.diningRoom = new HashMap<>();
-        for(Color c : Color.values()){
+        for(StudentColor c : StudentColor.values()){
             diningRoom.put(c, 0);
         }
         this.deck = new ArrayList<>();
@@ -37,7 +37,7 @@ public class Castle {
      * @param students The list of students to add to the waiting room.
      * @return boolean that checks whether the operation was successful or not.
      */
-    public boolean addStudentsInWaitingRoom(List<Color> students) throws TooManyStudentsException {
+    public boolean addStudentsInWaitingRoom(List<StudentColor> students) throws TooManyStudentsException {
         if(students.size() + waitingRoom.size() > waitingRoomSize) {
             throw new TooManyStudentsException();
         }
@@ -49,7 +49,7 @@ public class Castle {
      * Adds a single student to the dining room
      * @param student color
      */
-    public void addStudentInDiningRoom(Color student) throws TooManyStudentsException {
+    public void addStudentInDiningRoom(StudentColor student) throws TooManyStudentsException {
         if (diningRoom.get(student) == diningRoomSize) {
             throw new TooManyStudentsException();
         }
@@ -60,8 +60,8 @@ public class Castle {
      * Adds a list of students to the dining room
      * @param students – The list of students to add to the dining room.
      */
-    public void addStudentsInDiningRoom(List<Color> students)throws TooManyStudentsException {
-        for (Color c : students) {
+    public void addStudentsInDiningRoom(List<StudentColor> students)throws TooManyStudentsException {
+        for (StudentColor c : students) {
             addStudentInDiningRoom(c);
         }
     }
@@ -71,19 +71,19 @@ public class Castle {
      * @param students – The list of students to remove.
      * @throws NoSuchStudentException Exception thrown if the waiting room doesn't contain all the students in c.
      */
-    public void removeStudentsFromWaitingRoom(List<Color> students) throws NoSuchStudentException {
+    public void removeStudentsFromWaitingRoom(List<StudentColor> students) throws NoSuchStudentException {
         if(!new HashSet<>(waitingRoom).containsAll(students) || students.size() > waitingRoomSize){
             throw new NoSuchStudentException();
         }
         else{
-            List<Color> temp = getWaitingRoom();
-            for(Color s : students){
+            List<StudentColor> temp = getWaitingRoom();
+            for(StudentColor s : students){
                 if(!temp.remove(s)){
                     throw new NoSuchStudentException();
                 }
             }
         }
-        for (Color col : students) {
+        for (StudentColor col : students) {
             waitingRoom.remove(col);
         }
     }
@@ -109,11 +109,11 @@ public class Castle {
                 && this.towerColor == c.towerColor;
     }
 
-    public List<Color> getWaitingRoom(){
+    public List<StudentColor> getWaitingRoom(){
         return new ArrayList<>(waitingRoom);
     }
 
-    public Map<Color, Integer> getDiningRoom() {
+    public Map<StudentColor, Integer> getDiningRoom() {
         return new HashMap<>(diningRoom);
     }
 

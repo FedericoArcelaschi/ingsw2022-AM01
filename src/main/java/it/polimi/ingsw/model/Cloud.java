@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Cloud {
     private final Bag bag;
-    private final List<Color> studentList;
+    private final List<StudentColor> studentList;
     private final int size;
     private boolean available;
 
@@ -24,9 +24,9 @@ public class Cloud {
         return true;
     }
 
-    public List<Color> choose() {
+    public List<StudentColor> choose() {
         if(!available) return null;
-        List<Color> students = new ArrayList<>(studentList);
+        List<StudentColor> students = new ArrayList<>(studentList);
         available = false;
         return students;
     }
@@ -39,7 +39,7 @@ public class Cloud {
         return available;
     }
 
-    public List<Color> getStudentList() {
+    public List<StudentColor> getStudentList() {
         return new ArrayList<>(studentList);
     }
 

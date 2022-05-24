@@ -5,7 +5,7 @@ import it.polimi.ingsw.communication.HeartBeatServer;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.communication.ServerReceiver;
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.StudentColor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -91,7 +91,7 @@ public class ServerMain implements Runnable{
                 Game game = waitingRooms.computeGameType(gameId);
                 if(game != null) {
                     gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType())+1);
-                    System.out.println(Color.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
+                    System.out.println(StudentColor.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
                     for (Socket player : game.getGameSocketList()) {
                         executor.submit(new ServerReceiver(player, heartBeatServer, game));
                     }

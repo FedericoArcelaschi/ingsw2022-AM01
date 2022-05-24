@@ -1,23 +1,23 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.StudentColor;
 
 import java.util.List;
 import java.util.Objects;
 
 public class CloudData {
-    private final List<Color> studentList;
+    private final List<StudentColor> studentList;
     private final boolean available;
 
     public CloudData(
-            List<Color> studentList,
+            List<StudentColor> studentList,
             boolean available
     ) {
         this.studentList = studentList;
         this.available = available;
     }
 
-    public List<Color> studentList() {
+    public List<StudentColor> studentList() {
         return studentList;
     }
 
@@ -37,7 +37,7 @@ public class CloudData {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for (Color student: studentList) {
+        for (StudentColor student: studentList) {
             s.append(student.str).append(", ");
         }
 
