@@ -35,6 +35,7 @@ public class Game{
         }
         turn = new Turn(usernameList);
         board = BoardFactory.getBoard(usernameList, turn);
+        sendAllUpdate();
     }
 
     /**
