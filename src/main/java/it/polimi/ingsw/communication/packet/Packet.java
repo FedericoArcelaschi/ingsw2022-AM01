@@ -8,7 +8,7 @@ import java.lang.reflect.Type;
 /**
  * class used to send data regarding both connection's and game's updates/commands/errors between server and client
  */
-public final class Packet {
+public class Packet {
     private final MessageType type;
     private final String messageJson;
 

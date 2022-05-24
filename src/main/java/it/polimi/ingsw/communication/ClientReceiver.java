@@ -27,8 +27,11 @@ public class ClientReceiver extends Receiver{
         switch (type){
             case PING -> {
                 Ping ping = (Ping) message;
+                System.out.println("ping received");
                 Packet heartbeatToServer = new Packet(MessageType.PING, ping);
                 out.println(parser.toJson(heartbeatToServer));
+                System.out.println(parser.toJson(heartbeatToServer));
+                System.out.println("ping sent back: ");
             }
             case UPDATE -> {
                 System.out.println("board received");
