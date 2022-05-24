@@ -6,6 +6,7 @@ import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.communication.ServerReceiver;
 import it.polimi.ingsw.model.StudentColor;
+import org.apache.maven.plugin.logging.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.*;
 
 public class ServerMain implements Runnable{
 
@@ -25,6 +27,21 @@ public class ServerMain implements Runnable{
     private HeartBeatServer heartBeatServer;
     private final WaitingRooms waitingRooms;
     private final Map<GameType, Integer> gamesNumber;
+    private static final Logger logger = Logger.getLogger("ServerMain");
+
+    public static void init(){
+        FileHandler fh;
+        try{
+            fh = new FileHandler("C:\\Users\\loren\\Desktop\\Università\\3° anno\\Progetto di ingegneria del software\\ingsw2022-AM01\\src\\main\\java\\it\\polimi\\ingsw\\controller");
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+            logger.setLevel(Level.FINE);
+            logger.info("Logger has been initialized.");
+        }catch (Exception e){
+            logger.log(Level.WARNING, "Exception: ", e);
+        }
+    }
 
     public ServerMain(int port) {
         this.port = port;
