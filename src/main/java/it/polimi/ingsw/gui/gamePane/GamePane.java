@@ -28,6 +28,7 @@ public class GamePane extends BorderPane implements EventHandler<ActionEvent> {
     BoardData bd;
     TurnPane tp;
 
+    //TODO: DELETE BOARDDATA AS CLASS ATTRIBUTE
     public GamePane() {
         Board b = BoardFactory.getBoard(Arrays.asList("fede", "gio"), new Turn(Arrays.asList("fede", "gio")), 1);
         BoardData bd = DataBuilder.newBoardData("fede", b);

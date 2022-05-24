@@ -43,30 +43,36 @@ public class WaitingRooms {
         nicknameMap.get(gameType).add(string);
         switch(gameType){
             case NORMAL_2_PLAYER, EXPERT_2_PLAYER ->{
-                List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-2),nicknameMap.get(gameType).size()));
-                Message l = new LobbyInfoMessage(String.join(", ", playersIn));
-                Packet packet = new Packet(MessageType.LOBBY, l);
-                for(Socket s : gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-2),nicknameMap.get(gameType).size())){
-                    PrintWriter out = new PrintWriter(s.getOutputStream(), true);
-                    out.println(parser.toJson(packet));
+                if(nicknameMap.get(gameType).size() >= 1 && nicknameMap.get(gameType).size()%2 != 0){
+                    List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-nicknameMap.get(gameType).size()%2), nicknameMap.get(gameType).size()));
+                    Message l = new LobbyInfoMessage(String.join(", ", playersIn));
+                    Packet packet = new Packet(MessageType.LOBBY, l);
+                    for(Socket s : gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-nicknameMap.get(gameType).size()%2),nicknameMap.get(gameType).size())){
+                        PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                        out.println(parser.toJson(packet));
+                    }
                 }
             }
             case NORMAL_3_PLAYER, EXPERT_3_PLAYER ->{
-                List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-3),nicknameMap.get(gameType).size()));
-                Message l = new LobbyInfoMessage(String.join(", ", playersIn));
-                Packet packet = new Packet(MessageType.LOBBY, l);
-                for(Socket s : gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-3),gameSocketMap.get(gameType).size())){
-                    PrintWriter out = new PrintWriter(s.getOutputStream(), true);
-                    out.println(parser.toJson(packet));
+                if(nicknameMap.get(gameType).size() >= 1 & nicknameMap.get(gameType).size()%3 != 0){
+                    List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-nicknameMap.get(gameType).size()%3), nicknameMap.get(gameType).size()));
+                    Message l = new LobbyInfoMessage(String.join(", ", playersIn));
+                    Packet packet = new Packet(MessageType.LOBBY, l);
+                    for(Socket s : gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-nicknameMap.get(gameType).size()%3),gameSocketMap.get(gameType).size())){
+                        PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                        out.println(parser.toJson(packet));
+                    }
                 }
             }
             case NORMAL_4_PLAYER, EXPERT_4_PLAYER ->{
-                List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-4),nicknameMap.get(gameType).size()));
-                Message l = new LobbyInfoMessage(String.join(", ", playersIn));
-                Packet packet = new Packet(MessageType.LOBBY, l);
-                for(Socket s : gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-4),gameSocketMap.get(gameType).size())){
-                    PrintWriter out = new PrintWriter(s.getOutputStream(), true);
-                    out.println(parser.toJson(packet));
+                if(nicknameMap.get(gameType).size() >= 1 & nicknameMap.get(gameType).size()%4 != 0){
+                    List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-nicknameMap.get(gameType).size()%4), nicknameMap.get(gameType).size()));
+                    Message l = new LobbyInfoMessage(String.join(", ", playersIn));
+                    Packet packet = new Packet(MessageType.LOBBY, l);
+                    for(Socket s : gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-nicknameMap.get(gameType).size()%4),gameSocketMap.get(gameType).size())){
+                        PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+                        out.println(parser.toJson(packet));
+                    }
                 }
             }
         }

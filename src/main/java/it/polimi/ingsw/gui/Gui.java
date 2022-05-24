@@ -105,7 +105,6 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
             }
         }
         else if(submit.equals(actionEvent.getSource())){
-            //TODO: start client main
             ClientMain clientMain = new ClientMain(preferencePane.getUsername(),
                     preferencePane.getNPlayer(),
                     preferencePane.getMode(),
