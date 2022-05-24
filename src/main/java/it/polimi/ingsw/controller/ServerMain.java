@@ -126,6 +126,7 @@ public class ServerMain implements Runnable{
         executor.shutdown();
     }
 
+
     public Map<String, ServerReceiver> getConnectedPlayers() {
         return new HashMap<>(connectedPlayers);
     }

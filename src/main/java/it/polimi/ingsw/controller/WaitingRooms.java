@@ -43,14 +43,14 @@ public class WaitingRooms {
 
     /**
      * Adds a player to the requested lobby. Informs players of the same lobby that the state of the lobby changed.
-     * @param gameType
-     * @param serverReceiver
-     * @param string
+     * @param gameType the provided gametype.
+     * @param serverReceiver the serverReceiver of the new player.
+     * @param nickname the player name.
      * @throws IOException
      */
-    public void addPlayer(GameType gameType, ServerReceiver serverReceiver, String string) throws IOException {
+    public void addPlayer(GameType gameType, ServerReceiver serverReceiver, String nickname) throws IOException {
         gameSocketMap.get(gameType).add(serverReceiver);
-        nicknameMap.get(gameType).add(string);
+        nicknameMap.get(gameType).add(nickname);
         switch(gameType){
             case NORMAL_2_PLAYER, EXPERT_2_PLAYER -> informPlayers(gameType, 2);
             case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> informPlayers(gameType, 3);
@@ -59,8 +59,13 @@ public class WaitingRooms {
 
     }
 
-
-    public void informPlayers(GameType gameType, int numberOfPlayers) throws IOException{
+    /**
+     * Method used to send to the rest of the players who else joined the lobby.
+     * @param gameType the provided gametype.
+     * @param numberOfPlayers the amount of players expected by the game type.
+     * @throws IOException
+     */
+    private void informPlayers(GameType gameType, int numberOfPlayers) throws IOException{
         if(nicknameMap.get(gameType).size() >= 1 & nicknameMap.get(gameType).size()%numberOfPlayers != 0){
             List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-nicknameMap.get(gameType).size()%numberOfPlayers), nicknameMap.get(gameType).size()));
             Message l = new LobbyInfoMessage(String.join(", ", playersIn));
@@ -74,6 +79,12 @@ public class WaitingRooms {
     }
 
 
+    /**
+     * Computes the game type according to the player's preferences, if there are enough players.
+     * Returns null otherwise.
+     * @param gameId
+     * @return the correct game.
+     */
     public Game computeGameType(int gameId){
         for(GameType g : nicknameMap.keySet()){
             switch (g){
@@ -91,7 +102,7 @@ public class WaitingRooms {
         return null;
     }
 
-    public Game submitGame(GameType g, int gameId, int numberOfPlayers){
+    private Game submitGame(GameType g, int gameId, int numberOfPlayers){
         if(nicknameMap.get(g).size()%numberOfPlayers==0 && nicknameMap.get(g).size()>1 && nicknameMap.get(g).size()!=gameTypeSize.get(g)) {
             List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-numberOfPlayers), nicknameMap.get(g).size());
             List<ServerReceiver> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-numberOfPlayers), gameSocketMap.get(g).size());
@@ -101,7 +112,11 @@ public class WaitingRooms {
         return null;
     }
 
-
+    /**
+     * Removes a player from the queue.
+     * @param player the player to remove.
+     * @param g the lobby from which the player should be removed.
+     */
     public void removeFromQueue(String player, GameType g){
         switch (g){
             case NORMAL_2_PLAYER, EXPERT_2_PLAYER ->{
@@ -118,6 +133,5 @@ public class WaitingRooms {
                     nicknameMap.get(g).remove(player);
             }
         }
-        //nicknameMap.get(g).remove(player);
     }
 }
