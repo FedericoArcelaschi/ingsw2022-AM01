@@ -42,4 +42,16 @@ public class PreferencePane extends VBox implements EventHandler<ActionEvent> {
         }
     }
 
+    public String getUsername(){
+        return username.getText();
+    }
+
+    public int getNPlayer(){
+        return Integer.parseInt(playerPreference.getSelected());
+    }
+
+    public boolean getMode(){
+        return !"base".equals(modePreference.getSelected());
+    }
+
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.gui;
 
+import it.polimi.ingsw.client.ClientMain;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.DataBuilder;
 import it.polimi.ingsw.gui.gamePane.GamePane;
@@ -17,6 +18,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
@@ -34,6 +36,7 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
     BorderPane layout;
     Button exit, submit;
     Stage stage;
+    PreferencePane preferencePane;
 
     public void view(){
         launch();
@@ -57,7 +60,8 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
         exit.setOnAction(this);
         submit.setOnAction(this);
 
-        layout.setCenter(new PreferencePane(10));
+        preferencePane = new PreferencePane(10);
+        layout.setCenter(preferencePane);
         HBox exitPane = new HBox(10);
         exitPane.getChildren().addAll(submit, exit);
         layout.setBottom(exitPane);
@@ -78,6 +82,8 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
         }, TurnPhase.PLANNING, "fede")));
 
         stage.setScene(scene);
+        //FIXME: icon not working
+        stage.getIcons().add(new Image(ResourcesPath.ISLANDS.path + "island1.png"));
         stage.show();
     }
 
@@ -100,11 +106,16 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
         }
         else if(submit.equals(actionEvent.getSource())){
             //TODO: start client main
+            ClientMain clientMain = new ClientMain(preferencePane.getUsername(),
+                    preferencePane.getNPlayer(),
+                    preferencePane.getMode(),
+                    "127.0.0.1",
+                    1234);
+            clientMain.connect();
 
             Scene scene = new Scene(new GamePane(), screenWidth * 80/100, screenHeight * 80/100);
             stage.setScene(scene);
             stage.centerOnScreen();
-
         }
     }
 }
