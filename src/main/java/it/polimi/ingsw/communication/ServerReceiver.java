@@ -14,7 +14,7 @@ import java.net.Socket;
 public class ServerReceiver extends Receiver{
 
     private final HeartBeatServer hbs;
-    private final Game game;
+    private Game game;
 
     public ServerReceiver(Socket socket, HeartBeatServer hbs, Game game) {
         super(null, socket);
@@ -22,9 +22,14 @@ public class ServerReceiver extends Receiver{
         this.game = game;
     }
 
+    public void setGame(Game game){
+        this.game = game;
+    }
+
     void messageSwitch(MessageType type, Message message){
         switch (type){
             case PING -> {
+                System.out.println("client pinged back");
                 hbs.validateResponse(message);
             }
             case COMMAND -> {
@@ -41,5 +46,9 @@ public class ServerReceiver extends Receiver{
                 //TODO: the client received the error message from the server and sent back an acknowledgment.
             }
         }
+    }
+
+    public Socket getSocket() {
+        return socket;
     }
 }

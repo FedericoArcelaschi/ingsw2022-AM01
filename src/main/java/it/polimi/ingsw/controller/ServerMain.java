@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.communication.ClientReceiver;
 import it.polimi.ingsw.communication.HeartBeatServer;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Preferences;
@@ -21,7 +22,7 @@ public class ServerMain implements Runnable{
     private final int port;
     private ExecutorService executor;
     private ServerSocket serverSocket;
-    private final Map<String,Socket> connectedPlayers;
+    private final Map<String, ServerReceiver> connectedPlayers;
     private HeartBeatServer heartBeatServer;
     private final WaitingRooms waitingRooms;
     private final Map<GameType, Integer> gamesNumber;
@@ -82,18 +83,20 @@ public class ServerMain implements Runnable{
                 String nickname
                         = preferences.username();
                 System.out.println(nickname + " joined in");
-                connectedPlayers.put(nickname, socket);
                 GameType playerGameType
                         = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
-                waitingRooms.addPlayer(playerGameType, socket, nickname);
                 heartBeatServer.addClient(socket); //the heartbeat ping start before the game is started
+                ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, null);
+                waitingRooms.addPlayer(playerGameType, sr, nickname);
+                executor.submit(sr);
+                connectedPlayers.put(nickname, sr);
                 //FIXME: if the client before game starting he must be removed from queue;
                 Game game = waitingRooms.computeGameType(gameId);
                 if(game != null) {
                     gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType())+1);
                     System.out.println(StudentColor.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
-                    for (Socket player : game.getGameSocketList()) {
-                        executor.submit(new ServerReceiver(player, heartBeatServer, game));
+                    for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
+                        serverReceiver.setGame(game);
                     }
                     gameId++; //Has to be increased only if method returns null
                 }
@@ -104,12 +107,8 @@ public class ServerMain implements Runnable{
         executor.shutdown();
     }
 
-    public Map<String, Socket> getConnectedPlayers() {
-        Map<String,Socket> newConnectedPlayers;
-        synchronized (connectedPlayers){
-            newConnectedPlayers = new HashMap<>(connectedPlayers);
-            return newConnectedPlayers;
-        }
+    public Map<String, ServerReceiver> getConnectedPlayers() {
+        return new HashMap<>(connectedPlayers);
     }
 
     public int getGamesNumber(GameType type){

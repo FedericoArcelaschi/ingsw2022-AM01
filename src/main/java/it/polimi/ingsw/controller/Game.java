@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.CommandAttribute;
+import it.polimi.ingsw.communication.ServerReceiver;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.DataBuilder;
 import it.polimi.ingsw.communication.packet.MessageType;
@@ -25,13 +26,16 @@ public class Game{
     private final Board board;
     private final Turn turn;
     private final Map<String, Socket> usernameSocketMap;
+    private final Map<String, ServerReceiver> usernameServerReceiverMap;
 
-    public Game(GameType gameType, int gameId, List<String> usernameList, List<Socket> gameSocketList) {
+    public Game(GameType gameType, int gameId, List<String> usernameList, List<ServerReceiver> gameSocketList) {
         this.gameType = gameType;
         this.gameId = gameId;
+        this.usernameServerReceiverMap = new HashMap<>();
         this.usernameSocketMap = new HashMap<>();
         for (int i = 0; i < usernameList.size(); i++) {
-            usernameSocketMap.put(usernameList.get(i), gameSocketList.get(i));
+            usernameServerReceiverMap.put(usernameList.get(i), gameSocketList.get(i));
+            usernameSocketMap.put(usernameList.get(i), gameSocketList.get(i).getSocket());
         }
         turn = new Turn(usernameList);
         board = BoardFactory.getBoard(usernameList, turn);
@@ -200,5 +204,9 @@ public class Game{
 
     public List<Socket> getGameSocketList() {
         return new ArrayList<>(usernameSocketMap.values());
+    }
+
+    public List<ServerReceiver> getGameServerReceiverList() {
+        return new ArrayList<>(usernameServerReceiverMap.values());
     }
 }

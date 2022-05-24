@@ -37,7 +37,7 @@ public abstract class Receiver implements Runnable{
 
     @Override
     public void run() {
-        while(!socket.isClosed()){
+        while(true){
             Packet packet;
             Message message;
             try {

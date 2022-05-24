@@ -51,7 +51,7 @@ public class HeartBeatServer implements Callable {
 
     public void run() throws ClientNotRespondingException {
         Gson parser = new Gson();
-        while(heartBeats.isEmpty()){
+        while(true){
             for (Socket client: sockets) {
                 PrintWriter out;
                 try {
@@ -70,16 +70,13 @@ public class HeartBeatServer implements Callable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            if(!heartBeats.isEmpty())
+                System.out.println("client didn't ping back in time");
         }
-        //String plural = heartBeats.size() == 1? "" : "s";
-        //StringBuilder errorMessage = new StringBuilder("Client"+ plural +" disconnected: ");
-        for (Socket s: heartBeats.keySet()) {
-            System.out.println("client didn't ping back in time");
-            removeClient(s);
-            //TODO: waitingRooms.removePlayer(s);
-            //TODO: game.end(s);
-            //errorMessage.append(s).append(", ");
-        }
+        //removeClient(s);
+        //TODO: waitingRooms.removePlayer(s);
+        //TODO: game.end(s);
+        //errorMessage.append(s).append(", ");
         //throw new ClientNotRespondingException(errorMessage.toString());
     }
 
