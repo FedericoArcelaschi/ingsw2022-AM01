@@ -28,12 +28,12 @@ public class ServerMain implements Runnable{
     private HeartBeatServer heartBeatServer;
     private final WaitingRooms waitingRooms;
     private final Map<GameType, Integer> gamesNumber;
-    private static final Logger logger = Logger.getLogger("ServerMain");
+    private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
 
     public static void init(){
         FileHandler fh;
         try{
-            fh = new FileHandler("C:\\Users\\loren\\Desktop\\Università\\3° anno\\Progetto di ingegneria del software\\ingsw2022-AM01\\src\\main\\java\\it\\polimi\\ingsw\\controller");
+            fh = new FileHandler("C:\\Users\\loren\\Desktop\\Università\\3° anno\\Progetto di ingegneria del software\\ingsw2022-AM01\\src\\main\\java\\it\\polimi\\ingsw\\controller\\LogFIle.log");
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
@@ -67,7 +67,7 @@ public class ServerMain implements Runnable{
         executor = Executors.newCachedThreadPool();
 
         //creating serverSocket
-        System.out.println("Server: Starting server...");
+        logger.info("Starting server...");
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
@@ -102,12 +102,14 @@ public class ServerMain implements Runnable{
                 System.out.println(nickname + " joined in");
                 GameType playerGameType
                         = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
-                heartBeatServer.addClient(socket); //the heartbeat ping start before the game is started
+                heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
                 ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, null);
                 waitingRooms.addPlayer(playerGameType, sr, nickname);
                 executor.submit(sr);
                 connectedPlayers.put(nickname, sr);
+
                 //FIXME: if the client before game starting he must be removed from queue;
+
                 Game game = waitingRooms.computeGameType(gameId);
                 if(game != null) {
                     gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType())+1);

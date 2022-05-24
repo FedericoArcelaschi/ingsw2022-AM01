@@ -132,13 +132,7 @@ public class Game{
         String s = "";
         for (String stud : studentList) {
             StudentColor c = StudentColor.valueOf(stud);
-            switch (c) {
-                case YELLOW -> students.add(StudentColor.YELLOW);
-                case BLUE -> students.add(StudentColor.BLUE);
-                case GREEN -> students.add(StudentColor.GREEN);
-                case RED -> students.add(StudentColor.RED);
-                case PINK -> students.add(StudentColor.PINK);
-            }
+            students.add(c);
         }
         switch (command.getAttributesMap().get(CommandAttribute.WHERE)){
             case "dining room" -> {
