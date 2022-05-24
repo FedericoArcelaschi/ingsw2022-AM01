@@ -41,13 +41,13 @@ class ClientMainTest {
         int i;
         int n2 = 100, n3 = 90, n4=100;
         for (i = 1; i <= n2; i++) {
-            new ClientMain("Lore2-"+i,2,false, "127.0.0.1", 1234).connect();
+            //new ClientMain("Lore2-"+i,2,false, "127.0.0.1", 1234).connect();
         }
         for (i = 1; i <= n3; i++) {
-            new ClientMain("Lore3-"+i,3,false, "127.0.0.1", 1234).connect();
+            //new ClientMain("Lore3-"+i,3,false, "127.0.0.1", 1234).connect();
         }
         for (i = 1; i <= n4; i++) {
-            new ClientMain("Lore4-"+i,4,false, "127.0.0.1", 1234).connect();
+            //new ClientMain("Lore4-"+i,4,false, "127.0.0.1", 1234).connect();
         }
         Thread.sleep(1000);
         assertEquals(n2+n3+n4, s.getConnectedPlayers().size(), "n players should be connected");
@@ -61,8 +61,8 @@ class ClientMainTest {
 
     @Test
     void testExecuteCommand() throws InterruptedException {
-        c1.connect();
-        c2.connect();
+        //c1.connect();
+        //c2.connect();
 
         Thread.sleep(100);
         c1.runCommand("playcard 1");

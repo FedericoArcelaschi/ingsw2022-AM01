@@ -1,6 +1,7 @@
 package it.polimi.ingsw.gui;
 
 import it.polimi.ingsw.client.ClientMain;
+import it.polimi.ingsw.client.Drawable;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.DataBuilder;
 import it.polimi.ingsw.gui.gamePane.GamePane;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class Gui extends Application implements EventHandler<ActionEvent> {
+public class Gui extends Application implements EventHandler<ActionEvent>, Drawable{
 
     double screenHeight, screenWidth;
     double sceneHeight, sceneWidth;
@@ -109,12 +110,15 @@ public class Gui extends Application implements EventHandler<ActionEvent> {
                     preferencePane.getNPlayer(),
                     preferencePane.getMode(),
                     "127.0.0.1",
-                    1234);
-            clientMain.connect();
-
-            Scene scene = new Scene(new GamePane(), screenWidth * 80/100, screenHeight * 80/100);
-            stage.setScene(scene);
-            stage.centerOnScreen();
+                    1234
+            );
+            clientMain.connect(this);
         }
+    }
+
+    public void draw(BoardData boardData){
+        Scene scene = new Scene(new GamePane(boardData), screenWidth * 80/100, screenHeight * 80/100);
+        stage.setScene(scene);
+        stage.centerOnScreen();
     }
 }

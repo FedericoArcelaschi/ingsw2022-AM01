@@ -1,7 +1,9 @@
 package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.client.ClientMain;
+import it.polimi.ingsw.client.Drawable;
 import it.polimi.ingsw.communication.exception.ClientNotRespondingException;
+import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.controller.ServerMain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,8 +30,8 @@ class HeartBeatServerTest {
         es = Executors.newCachedThreadPool();
         es.submit(sm);
         Thread.sleep(50);
-        c1.connect();
-        c2.connect();
+        //c1.connect();
+        //c2.connect();
         Thread.sleep(5000);
     }
 }

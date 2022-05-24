@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.packet.message.CommandMessage;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Preferences;
+import it.polimi.ingsw.gui.Gui;
 import it.polimi.ingsw.model.Board;
 
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class ClientMain {
         this.state = ClientState.NOT_CONNECTED;
     }
 
-    public void connect(){
+    public void connect(Drawable drawable){
         System.out.println(username + ":  attempting connection");
         try {
             ExecutorService executor = Executors.newCachedThreadPool();
@@ -42,7 +43,7 @@ public class ClientMain {
             System.out.println(username + ":  connected");
 
             cs = new ClientSender(socket);
-            cr = new ClientReceiver(this,socket);
+            cr = new ClientReceiver(this, socket, drawable);
             //send player preferences to the server;
             Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
             Packet packet = new Packet(MessageType.PREFERENCES, preferences);

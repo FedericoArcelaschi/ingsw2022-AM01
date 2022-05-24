@@ -38,7 +38,7 @@ public class PreferencePane extends VBox implements EventHandler<ActionEvent> {
             // System.out.println(username.getText() +  ", " + playerPreference.getSelected() + ", " + modePreference.getSelected());
             boolean gamemode = !modePreference.getSelected().equals("base");
             cm = new ClientMain(username.getText(), Integer.parseInt(playerPreference.getSelected()), gamemode, "127.0.0.1", 1234);
-            cm.connect();
+            //cm.connect();
         }
     }
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.startUp;
 
+import it.polimi.ingsw.cli.Cli;
 import it.polimi.ingsw.client.ClientMain;
 import it.polimi.ingsw.controller.ServerMain;
 import it.polimi.ingsw.gui.Gui;
@@ -17,25 +18,11 @@ public class Main {
                 serverMain.run();
             }
             case CLI -> {
-                ClientMain clientMain = new ClientMain("PIPPO",
-                        2,
-                        false,
-                        "127.0.0.1",
-                        1234);
-                clientMain.connect();
-                while(true) {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                    try {
-                        String input = br.readLine();
-                        clientMain.runCommand(input);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                Cli cli = new Cli();
+
             }
 
             case GUI -> {
-                System.out.println("sono una gui");
                 Gui gui = new Gui();
                 gui.view();
             }
