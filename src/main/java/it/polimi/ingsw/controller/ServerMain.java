@@ -29,6 +29,7 @@ public class ServerMain implements Runnable{
     private final WaitingRooms waitingRooms;
     private final Map<GameType, Integer> gamesNumber;
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
+    private int gameId = 0;
 
     Gson parser;
 
@@ -87,7 +88,7 @@ public class ServerMain implements Runnable{
      * wait for players to connect and generate a game when there are 2 players connected
      */
     public void acceptPlayers(){
-        int gameId = 0;
+
         while (true) {
             try{
                 System.out.println("Server: waiting for player to connect");
@@ -97,21 +98,28 @@ public class ServerMain implements Runnable{
 
                 //FIXME: if a client disconnect before game starting he must be removed from queue;
 
-                Game game = waitingRooms.computeGameType(gameId);
-                if(game != null) {
-                    gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType())+1);
-                    System.out.println(StudentColor.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
-                    for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
-                        serverReceiver.setGame(game);
-                    }
-                    gameId++; //Has to be increased only if method returns null
-                }
+                handleGame();
+
             } catch(IOException e) {
                 break; // Would get here if serversocket was to be closed.
             }
         }
         executor.shutdown();
     }
+
+
+    private void handleGame(){
+        Game game = waitingRooms.computeGameType(gameId);
+        if(game != null) {
+            gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType())+1);
+            System.out.println(StudentColor.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
+            for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
+                serverReceiver.setGame(game);
+            }
+            gameId++; //Has to be increased only if method does not return null
+        }
+    }
+
 
     private void handleNewClient(Socket socket){
         //listen for preferences

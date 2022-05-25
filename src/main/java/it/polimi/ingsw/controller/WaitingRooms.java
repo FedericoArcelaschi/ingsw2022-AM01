@@ -51,6 +51,7 @@ public class WaitingRooms {
     public void addPlayer(GameType gameType, ServerReceiver serverReceiver, String nickname) {
         gameSocketMap.get(gameType).add(serverReceiver);
         nicknameMap.get(gameType).add(nickname);
+        System.out.println(nicknameMap.get(gameType));
         switch(gameType){
             case NORMAL_2_PLAYER, EXPERT_2_PLAYER -> informPlayers(gameType, 2);
             case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> informPlayers(gameType, 3);
@@ -89,24 +90,20 @@ public class WaitingRooms {
      * @return the correct game.
      */
     public Game computeGameType(int gameId){
+        Game game = null;
         for(GameType g : nicknameMap.keySet()){
-            switch (g){
-                case NORMAL_2_PLAYER, EXPERT_2_PLAYER -> {  //TODO: REDO SUBMITGAME FUNCTION TO HANDLE EXPERTMODE
-                    return submitGame(g, gameId, 2);
-                }
-                case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> {
-                    return submitGame(g, gameId, 3);
-                }
-                case NORMAL_4_PLAYER, EXPERT_4_PLAYER -> {
-                    return submitGame(g, gameId, 4);
-                }
+            switch (g){  //TODO: REDO SUBMITGAME FUNCTION TO HANDLE EXPERTMODE
+                case NORMAL_2_PLAYER, EXPERT_2_PLAYER -> game =  submitGame(g, gameId, 2);
+                case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> game =  submitGame(g, gameId, 3);
+                case NORMAL_4_PLAYER, EXPERT_4_PLAYER -> game =  submitGame(g, gameId, 4);
             }
         }
-        return null;
+        return game;
     }
 
     private Game submitGame(GameType g, int gameId, int numberOfPlayers){
         if(nicknameMap.get(g).size()%numberOfPlayers==0 && nicknameMap.get(g).size()>1 && nicknameMap.get(g).size()!=gameTypeSize.get(g)) {
+            System.out.println("Gets here");
             List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-numberOfPlayers), nicknameMap.get(g).size());
             List<ServerReceiver> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-numberOfPlayers), gameSocketMap.get(g).size());
             gameTypeSize.replace(g, nicknameMap.get(g).size());
