@@ -188,8 +188,11 @@ public class Game{
     }
 
     private void moveMotherNatureCommand(Command command){
-        System.out.println("Moving mother nature...");
         board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
+        Team t = board.isWinningPosition();
+        if(t != null){
+            sendWinUpdate(t);  //TODO: something else needs to happen: the game cannot resume as normal!
+        }
         turn.changePhase();
         sendAllUpdate();
         //return  createUpdate(DataBuilder.newBoardData(command.getUsername(), board));
@@ -198,6 +201,10 @@ public class Game{
     private void chooseCloudCommand(Command command){
         try {
             board.chooseCloud(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
+            Team t = board.isWonByResources();
+            if(t != null){
+                sendWinUpdate(t);  //TODO: something else needs to happen: the game cannot resume as normal!
+            }
             turn.changePhase();
         } catch (NotYourTurnException e) {
             send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
@@ -205,6 +212,16 @@ public class Game{
             send(createError(0, "The waiting room is full!"), usernameSocketMap.get(command.getUsername()));
         }
         sendAllUpdate();
+    }
+
+    private void sendWinUpdate(Team t){
+        Gson parser = new Gson();
+        for (String username: usernameSocketMap.keySet()) {
+            PrintWriter out = null;
+            Message winner = new WinUpdate(DataBuilder.newBoardData(username, board), t.name());
+            Packet packet  = new Packet(MessageType.UPDATE, winner);
+            send(packet, usernameSocketMap.get(username));
+        }
     }
 
     public Board getBoard() {

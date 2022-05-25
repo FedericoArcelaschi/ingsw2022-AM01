@@ -59,6 +59,7 @@ public class WaitingRooms {
         }
     }
 
+    //TODO: DOES NOT WORK, DOES NOT SEND ANYTHING
     /**
      * Method used to send to the rest of the players who else joined the lobby.
      * @param gameType the provided gametype.
