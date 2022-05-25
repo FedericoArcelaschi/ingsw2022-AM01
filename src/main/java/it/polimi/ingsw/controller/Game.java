@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.CommandAttribute;
+import it.polimi.ingsw.communication.CommandType;
 import it.polimi.ingsw.communication.ServerReceiver;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.DataBuilder;
@@ -48,13 +49,14 @@ public class Game{
      * @return response to the command
      */
     public void executeCommand(Command command){
+        System.out.println("Executing command of type: " + command.getType().name());
         switch(command.getType()) {
             case PLAY_CARD -> playCardCommand(command);
             case MOVE_STUDENT -> moveStudentCommand(command);
             case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
             case CHOOSE_CLOUD -> chooseCloudCommand(command);
         }
-        send(createError(0, "Not valid command"), usernameSocketMap.get(command.getUsername()));
+        //send(createError(0, "Not valid command"), usernameSocketMap.get(command.getUsername()));
     }
 
     public void playerDisconnected(Socket s){
@@ -112,8 +114,10 @@ public class Game{
     }
 
     private void playCardCommand(Command command){
+        System.out.println("Playcard command is being executed...");
         try {
             board.playCard(command.getUsername() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
+            turn.changePhase();
         } catch (NotYourTurnException e) {
             send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
         } catch (IllegalArgumentException e) {
@@ -138,6 +142,7 @@ public class Game{
             case "dining room" -> {
                 try {
                     board.moveStudentToDiningRoom(command.getUsername(), students);
+                    turn.changePhase();
                 } catch (NoSuchStudentException e) {
                     send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
                 } catch (NotYourTurnException e) {
@@ -152,6 +157,7 @@ public class Game{
                 //to the island of which the id was chosen.
                 try {
                     board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)), students);
+                    turn.changePhase();
                 } catch (NoSuchStudentException e) {
                     send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
                 } catch (NotYourTurnException e) {
@@ -165,12 +171,14 @@ public class Game{
 
     private Packet moveMotherNatureCommand(Command command){
         board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
+        turn.changePhase();
         return  createUpdate(DataBuilder.newBoardData(command.getUsername(), board));
     }
 
     private void chooseCloudCommand(Command command){
         try {
             board.chooseCloud(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
+            turn.changePhase();
         } catch (NotYourTurnException e) {
             send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
         } catch (TooManyStudentsException e) {

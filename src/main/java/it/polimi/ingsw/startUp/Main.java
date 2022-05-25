@@ -19,9 +19,7 @@ public class Main {
             }
             case CLI -> {
                 Cli cli = new Cli();
-
             }
-
             case GUI -> {
                 Gui gui = new Gui();
                 gui.view();

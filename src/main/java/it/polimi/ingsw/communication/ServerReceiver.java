@@ -37,7 +37,6 @@ public class ServerReceiver extends Receiver{
                  Command command = Command.createCommand(commandMessage.getUsername(), commandMessage.getCommand());
                  //the game already handle message back to clients
                  game.executeCommand(command);
-
             }
             case END -> {
                 //TODO: the client received the end message from the server and sent back an acknowledgment.
@@ -50,5 +49,9 @@ public class ServerReceiver extends Receiver{
 
     public Socket getSocket() {
         return socket;
+    }
+
+    public Game getGame(){
+        return game;
     }
 }

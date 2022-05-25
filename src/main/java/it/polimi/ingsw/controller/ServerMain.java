@@ -94,11 +94,11 @@ public class ServerMain implements Runnable{
                 System.out.println("Server: waiting for player to connect");
                 Socket socket = serverSocket.accept();
 
-                handleNewClient(socket);
+                GameType playerGameType = handleNewClient(socket);
 
-                //FIXME: if a client disconnect before game starting he must be removed from queue;
+                //FIXME: if a client disconnects before game starting he must be removed from queue;
 
-                handleGame();
+                handleGame(playerGameType);
 
             } catch(IOException e) {
                 break; // Would get here if serversocket was to be closed.
@@ -108,8 +108,9 @@ public class ServerMain implements Runnable{
     }
 
 
-    private void handleGame(){
-        Game game = waitingRooms.computeGameType(gameId);
+    private void handleGame(GameType gameType){
+        Game game = waitingRooms.computeGameType(gameId, gameType);
+        System.out.println(game);
         if(game != null) {
             gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType())+1);
             System.out.println(StudentColor.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
@@ -121,7 +122,7 @@ public class ServerMain implements Runnable{
     }
 
 
-    private void handleNewClient(Socket socket){
+    private GameType handleNewClient(Socket socket){
         //listen for preferences
         String input;
         try{
@@ -146,6 +147,8 @@ public class ServerMain implements Runnable{
         executor.submit(sr);
         //add player to list of connected players
         connectedPlayers.put(nickname, sr);
+
+        return playerGameType;
     }
 
 
