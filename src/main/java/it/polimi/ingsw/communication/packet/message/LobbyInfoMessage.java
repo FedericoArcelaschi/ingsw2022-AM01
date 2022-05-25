@@ -1,13 +1,24 @@
 package it.polimi.ingsw.communication.packet.message;
 
-public class LobbyInfoMessage extends Message{
-    private String message;
+import it.polimi.ingsw.controller.GameType;
 
-    public LobbyInfoMessage(String message){
-        this.message = message;
+import java.util.ArrayList;
+import java.util.List;
+
+public class LobbyInfoMessage extends Message{
+    private List<String> players;
+    private GameType g;
+
+    public LobbyInfoMessage(List<String> players, GameType g){
+        this.players = new ArrayList<>(players);
+        this.g = g;
     }
 
-    public String getMessage(){
-        return message;
+    public List<String> getPlayers(){
+        return players;
+    }
+
+    public GameType getGameType(){
+        return g;
     }
 }

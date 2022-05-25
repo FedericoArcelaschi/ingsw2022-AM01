@@ -68,7 +68,7 @@ public class WaitingRooms {
     private void informPlayers(GameType gameType, int numberOfPlayers) {
         if(nicknameMap.get(gameType).size() >= 1 & nicknameMap.get(gameType).size()%numberOfPlayers != 0){
             List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-nicknameMap.get(gameType).size()%numberOfPlayers), nicknameMap.get(gameType).size()));
-            Message l = new LobbyInfoMessage(String.join(", ", playersIn));
+            Message l = new LobbyInfoMessage(nicknameMap.get(gameType), gameType);
             Packet packet = new Packet(MessageType.LOBBY, l);
             List<ServerReceiver> playersInLobby = new ArrayList<>(gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-nicknameMap.get(gameType).size()%numberOfPlayers),nicknameMap.get(gameType).size()));
             for(ServerReceiver sr : playersInLobby){
