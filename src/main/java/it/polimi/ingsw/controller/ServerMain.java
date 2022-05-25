@@ -30,6 +30,8 @@ public class ServerMain implements Runnable{
     private final Map<GameType, Integer> gamesNumber;
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
 
+    Gson parser;
+
     public static void init(){
         FileHandler fh;
         try{
@@ -52,6 +54,7 @@ public class ServerMain implements Runnable{
         for (GameType gt: GameType.values()) {
             gamesNumber.put(gt,0);
         }
+        parser = new Gson();
     }
 
     public void run(){
@@ -85,30 +88,14 @@ public class ServerMain implements Runnable{
      */
     public void acceptPlayers(){
         int gameId = 0;
-        Gson parser = new Gson();
         while (true) {
             try{
                 System.out.println("Server: waiting for player to connect");
                 Socket socket = serverSocket.accept();
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String input
-                        = in.readLine();
-                Packet preferencesPacket
-                        = parser.fromJson(input, Packet.class);
-                Preferences preferences
-                        = parser.fromJson(preferencesPacket.getMessageJson(), Preferences.class);
-                String nickname
-                        = preferences.username();
-                System.out.println(nickname + " joined in");
-                GameType playerGameType
-                        = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
-                heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
-                ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, null);
-                waitingRooms.addPlayer(playerGameType, sr, nickname);
-                executor.submit(sr);
-                connectedPlayers.put(nickname, sr);
 
-                //FIXME: if the client before game starting he must be removed from queue;
+                handleNewClient(socket);
+
+                //FIXME: if a client disconnect before game starting he must be removed from queue;
 
                 Game game = waitingRooms.computeGameType(gameId);
                 if(game != null) {
@@ -124,6 +111,33 @@ public class ServerMain implements Runnable{
             }
         }
         executor.shutdown();
+    }
+
+    private void handleNewClient(Socket socket){
+        //listen for preferences
+        String input;
+        try{
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            input = in.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //decode preferences
+        Packet preferencesPacket = parser.fromJson(input, Packet.class);
+        Preferences preferences = parser.fromJson(preferencesPacket.getMessageJson(), Preferences.class);
+        String nickname = preferences.username();
+        System.out.println(nickname + " joined in");
+        GameType playerGameType = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
+        //add the new client
+        heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
+        //start the receiver
+        ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, null);
+        //add player to waiting room
+        waitingRooms.addPlayer(playerGameType, sr, nickname);
+
+        executor.submit(sr);
+        //add player to list of connected players
+        connectedPlayers.put(nickname, sr);
     }
 
 

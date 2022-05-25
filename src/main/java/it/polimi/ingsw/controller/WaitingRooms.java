@@ -48,7 +48,7 @@ public class WaitingRooms {
      * @param nickname the player name.
      * @throws IOException
      */
-    public void addPlayer(GameType gameType, ServerReceiver serverReceiver, String nickname) throws IOException {
+    public void addPlayer(GameType gameType, ServerReceiver serverReceiver, String nickname) {
         gameSocketMap.get(gameType).add(serverReceiver);
         nicknameMap.get(gameType).add(nickname);
         switch(gameType){
@@ -56,7 +56,6 @@ public class WaitingRooms {
             case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> informPlayers(gameType, 3);
             case NORMAL_4_PLAYER, EXPERT_4_PLAYER -> informPlayers(gameType, 4);
         }
-
     }
 
     /**
@@ -65,14 +64,18 @@ public class WaitingRooms {
      * @param numberOfPlayers the amount of players expected by the game type.
      * @throws IOException
      */
-    private void informPlayers(GameType gameType, int numberOfPlayers) throws IOException{
+    private void informPlayers(GameType gameType, int numberOfPlayers) {
         if(nicknameMap.get(gameType).size() >= 1 & nicknameMap.get(gameType).size()%numberOfPlayers != 0){
             List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-nicknameMap.get(gameType).size()%numberOfPlayers), nicknameMap.get(gameType).size()));
             Message l = new LobbyInfoMessage(String.join(", ", playersIn));
             Packet packet = new Packet(MessageType.LOBBY, l);
             List<ServerReceiver> playersInLobby = new ArrayList<>(gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-nicknameMap.get(gameType).size()%numberOfPlayers),nicknameMap.get(gameType).size()));
             for(ServerReceiver sr : playersInLobby){
-                PrintWriter out = new PrintWriter(sr.getSocket().getOutputStream(), true);
+                try {
+                    PrintWriter out = new PrintWriter(sr.getSocket().getOutputStream(), true);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 //out.println(parser.toJson(packet));
             }
         }
