@@ -1,7 +1,7 @@
-package it.polimi.ingsw.gui.gamePane.castlePane;
+package it.polimi.ingsw.userInterface.gui.gamePane.castlePane;
 
 import it.polimi.ingsw.communication.modelData.CastleData;
-import it.polimi.ingsw.gui.ResourcesPath;
+import it.polimi.ingsw.userInterface.gui.ResourcesPath;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 

@@ -41,4 +41,12 @@ public enum GameType {
     public boolean isExpertMode() {
         return expertMode;
     }
+
+    @Override
+    public String toString() {
+        return "[" +
+                "nPlayer=" + nPlayer +
+                ", expertMode=" + expertMode +
+                ']';
+    }
 }

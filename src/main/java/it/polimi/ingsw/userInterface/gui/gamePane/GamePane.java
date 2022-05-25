@@ -1,25 +1,12 @@
-package it.polimi.ingsw.gui.gamePane;
+package it.polimi.ingsw.userInterface.gui.gamePane;
 
 import it.polimi.ingsw.communication.modelData.BoardData;
-import it.polimi.ingsw.communication.modelData.DataBuilder;
-import it.polimi.ingsw.gui.gamePane.castlePane.CastlePane;
-import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.BoardFactory;
-import it.polimi.ingsw.model.Turn;
+import it.polimi.ingsw.userInterface.gui.gamePane.castlePane.CastlePane;
 import it.polimi.ingsw.communication.modelData.TurnData;
-import it.polimi.ingsw.model.TurnPhase;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class GamePane extends BorderPane implements EventHandler<ActionEvent> {

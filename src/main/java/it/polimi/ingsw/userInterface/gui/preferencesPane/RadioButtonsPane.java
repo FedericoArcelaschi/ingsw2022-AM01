@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gui.preferencesPane;
+package it.polimi.ingsw.userInterface.gui.preferencesPane;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

@@ -1,6 +1,6 @@
-package it.polimi.ingsw.gui.gamePane.castlePane;
+package it.polimi.ingsw.userInterface.gui.gamePane.castlePane;
 
-import it.polimi.ingsw.gui.gamePane.StudentImageView;
+import it.polimi.ingsw.userInterface.gui.gamePane.StudentImageView;
 import it.polimi.ingsw.model.StudentColor;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;

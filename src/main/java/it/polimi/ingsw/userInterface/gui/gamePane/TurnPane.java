@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gui.gamePane;
+package it.polimi.ingsw.userInterface.gui.gamePane;
 
 import it.polimi.ingsw.communication.modelData.TurnData;
 import it.polimi.ingsw.model.Turn;

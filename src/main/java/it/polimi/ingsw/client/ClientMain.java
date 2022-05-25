@@ -5,13 +5,11 @@ import it.polimi.ingsw.communication.packet.message.CommandMessage;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Preferences;
-import it.polimi.ingsw.gui.Gui;
-import it.polimi.ingsw.model.Board;
+import it.polimi.ingsw.userInterface.UserInterface;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,7 +33,7 @@ public class ClientMain {
         this.state = ClientState.NOT_CONNECTED;
     }
 
-    public void connect(Drawable drawable){
+    public void connect(UserInterface userInterface){
         System.out.println(username + ":  attempting connection");
         try {
             ExecutorService executor = Executors.newCachedThreadPool();
@@ -43,7 +41,7 @@ public class ClientMain {
             System.out.println(username + ":  connected");
 
             cs = new ClientSender(socket);
-            cr = new ClientReceiver(this, socket, drawable);
+            cr = new ClientReceiver(this, socket, userInterface);
             //send player preferences to the server;
             Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
             Packet packet = new Packet(MessageType.PREFERENCES, preferences);

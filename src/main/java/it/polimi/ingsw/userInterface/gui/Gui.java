@@ -1,17 +1,13 @@
-package it.polimi.ingsw.gui;
+package it.polimi.ingsw.userInterface.gui;
 
 import it.polimi.ingsw.client.ClientMain;
-import it.polimi.ingsw.client.Drawable;
+import it.polimi.ingsw.controller.GameType;
+import it.polimi.ingsw.userInterface.UserInterface;
 import it.polimi.ingsw.communication.modelData.BoardData;
-import it.polimi.ingsw.communication.modelData.DataBuilder;
-import it.polimi.ingsw.gui.gamePane.GamePane;
-import it.polimi.ingsw.gui.gamePane.castlePane.CastlePane;
+import it.polimi.ingsw.userInterface.gui.gamePane.GamePane;
 import it.polimi.ingsw.communication.modelData.TurnData;
-import it.polimi.ingsw.gui.gamePane.TurnPane;
-import it.polimi.ingsw.gui.preferencesPane.PreferencePane;
-import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.BoardFactory;
-import it.polimi.ingsw.model.Turn;
+import it.polimi.ingsw.userInterface.gui.gamePane.TurnPane;
+import it.polimi.ingsw.userInterface.gui.preferencesPane.PreferencePane;
 import it.polimi.ingsw.model.TurnPhase;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -27,10 +23,9 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 import java.util.Optional;
 
-public class Gui extends Application implements EventHandler<ActionEvent>, Drawable{
+public class Gui extends Application implements EventHandler<ActionEvent>, UserInterface {
 
     double screenHeight, screenWidth;
     double sceneHeight, sceneWidth;
@@ -120,5 +115,10 @@ public class Gui extends Application implements EventHandler<ActionEvent>, Drawa
         Scene scene = new Scene(new GamePane(boardData), screenWidth * 80/100, screenHeight * 80/100);
         stage.setScene(scene);
         stage.centerOnScreen();
+    }
+
+    @Override
+    public void roomOutput(List<String> connectedUser, GameType gameType) {
+
     }
 }

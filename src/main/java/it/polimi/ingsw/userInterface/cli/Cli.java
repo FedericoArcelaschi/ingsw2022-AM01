@@ -1,14 +1,16 @@
-package it.polimi.ingsw.cli;
+package it.polimi.ingsw.userInterface.cli;
 
 import it.polimi.ingsw.client.ClientMain;
-import it.polimi.ingsw.client.Drawable;
+import it.polimi.ingsw.controller.GameType;
+import it.polimi.ingsw.userInterface.UserInterface;
 import it.polimi.ingsw.communication.modelData.BoardData;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
-public class Cli implements Drawable {
+public class Cli implements UserInterface {
     String username;
     int nPlayer;
     boolean mode;
@@ -45,5 +47,15 @@ public class Cli implements Drawable {
     @Override
     public void draw(BoardData boardData) {
         System.out.println(boardData.toString());
+    }
+
+    @Override
+    public void roomOutput(List<String> connectedUser, GameType gameType) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Player in queue:\n");
+        for (String user : connectedUser) {
+            sb.append("\t").append(user).append("\n");
+        }
+        sb.append("Game type: ").append(gameType).append("\n");
     }
 }

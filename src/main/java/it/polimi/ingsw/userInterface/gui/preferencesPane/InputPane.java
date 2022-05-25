@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gui.preferencesPane;
+package it.polimi.ingsw.userInterface.gui.preferencesPane;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;

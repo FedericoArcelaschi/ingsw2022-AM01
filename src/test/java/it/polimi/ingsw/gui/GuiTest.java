@@ -1,7 +1,8 @@
 package it.polimi.ingsw.gui;
 
 import it.polimi.ingsw.controller.ServerMain;
-import it.polimi.ingsw.gui.preferencesPane.PreferencePane;
+import it.polimi.ingsw.userInterface.gui.Gui;
+import it.polimi.ingsw.userInterface.gui.preferencesPane.PreferencePane;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutorService;

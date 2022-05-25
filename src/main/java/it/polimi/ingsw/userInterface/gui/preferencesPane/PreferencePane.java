@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gui.preferencesPane;
+package it.polimi.ingsw.userInterface.gui.preferencesPane;
 
 import it.polimi.ingsw.client.ClientMain;
 import it.polimi.ingsw.controller.ServerMain;
@@ -7,10 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
-import java.net.Socket;
 import java.util.Arrays;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * VBox with elements to insert username and preferences for the game.

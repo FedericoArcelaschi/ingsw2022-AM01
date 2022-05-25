@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gui.gamePane.castlePane;
+package it.polimi.ingsw.userInterface.gui.gamePane.castlePane;
 
 import javafx.scene.layout.HBox;
 

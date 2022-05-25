@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.gui.ResourcesPath;
+import it.polimi.ingsw.userInterface.gui.ResourcesPath;
 
 public enum StudentColor {
     YELLOW("\u001B[33myellow\u001B[0m", "\u001B[33m", ResourcesPath.STUDENTS.path + "students/student_yellow.png"),
