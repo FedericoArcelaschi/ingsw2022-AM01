@@ -203,7 +203,6 @@ public class Board {
      * @param card the number of the card the player want to use
      * @return if the move is legal and played, false otherwise
      */
-    //TODO: ADDS THE CARD TO A DATA STRUCTURE IN TURN TO DETERMINE NEW TURN ORDERS.
     public boolean playCard(String PlayerID, @Range(from = 0, to=10) int card) throws NotYourTurnException {
         if(!turn.getCurrentPlayer().equals(PlayerID)) throw new NotYourTurnException();
         Castle castle = castleMap.get(PlayerID);
@@ -362,7 +361,7 @@ public class Board {
      * @param move number of steps forward of mother nature
      */
     public void moveMotherNature(int move) {
-        if (motherNaturePosition + move / islandList.size() >= 1) motherNaturePosition += move - islandList.size();
+        if (((motherNaturePosition + move)/(islandList.size())) >= 1) motherNaturePosition += move - islandList.size();
         else motherNaturePosition += move;
         conquerIsland(islandList.get(motherNaturePosition));
     }

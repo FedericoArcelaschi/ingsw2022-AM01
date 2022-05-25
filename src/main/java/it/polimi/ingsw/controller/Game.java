@@ -28,12 +28,16 @@ public class Game{
     private final Turn turn;
     private final Map<String, Socket> usernameSocketMap;
     private final Map<String, ServerReceiver> usernameServerReceiverMap;
+    //TODO: there could be a better way of doing this. The parameter is used to ensure that the player can move students
+    //TODO: more times per turn.
+    private int movedStudents;
 
     public Game(GameType gameType, int gameId, List<String> usernameList, List<ServerReceiver> gameSocketList) {
         this.gameType = gameType;
         this.gameId = gameId;
         this.usernameServerReceiverMap = new HashMap<>();
         this.usernameSocketMap = new HashMap<>();
+        this.movedStudents = 0;
         for (int i = 0; i < usernameList.size(); i++) {
             usernameServerReceiverMap.put(usernameList.get(i), gameSocketList.get(i));
             usernameSocketMap.put(usernameList.get(i), gameSocketList.get(i).getSocket());
@@ -52,7 +56,8 @@ public class Game{
         System.out.println("Executing command of type: " + command.getType().name());
         switch(command.getType()) {
             case PLAY_CARD -> playCardCommand(command);
-            case MOVE_STUDENT -> moveStudentCommand(command);
+            case MOVE_STUDENT_TO_DININGROOM -> moveStudentToDiningRoomCommand(command);
+            case MOVE_STUDENT_TO_ISLAND -> moveStudentToIslandCommand(command);
             case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
             case CHOOSE_CLOUD -> chooseCloudCommand(command);
         }
@@ -126,53 +131,68 @@ public class Game{
         sendAllUpdate();
     }
 
-    private void moveStudentCommand(@NotNull Command command){
+    private void moveStudentToDiningRoomCommand(@NotNull Command command){
         //Here for now I assume that the list of students in input is
         //given as a single string of Color separated by commas.
         //Needs to be changed accordingly if the convention changes.
-        List<String> studentList;
-        studentList = Arrays.asList(command.getAttributesMap().get(CommandAttribute.ID).split("\\s*,\\s*"));
+
+        //List of students in the command
+        List<String> studentList =  new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
+        //List of students that will get the respective Color value
         List<StudentColor> students = new ArrayList<>();
-        String s = "";
-        for (String stud : studentList) {
-            StudentColor c = StudentColor.valueOf(stud);
+        for (String s : studentList) {
+            StudentColor c = StudentColor.getColor(s);
             students.add(c);
         }
-        switch (command.getAttributesMap().get(CommandAttribute.WHERE)){
-            case "dining room" -> {
-                try {
-                    board.moveStudentToDiningRoom(command.getUsername(), students);
-                    turn.changePhase();
-                } catch (NoSuchStudentException e) {
-                    send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
-                } catch (NotYourTurnException e) {
-                    send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
-                } catch (TooManyStudentsException e) {
-                    send(createError(0, "The dining room is full!"), usernameSocketMap.get(command.getUsername()));
-                }
-                sendAllUpdate();
+        movedStudents += students.size();
+
+        try {
+            board.moveStudentToDiningRoom(command.getUsername(), students);
+            if(movedStudents == 3) {
+                movedStudents = 0;
+                turn.changePhase();
             }
-            case "island" -> {
-                //the current player moves the list of students in the third parameter
-                //to the island of which the id was chosen.
-                try {
-                    board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)), students);
-                    turn.changePhase();
-                } catch (NoSuchStudentException e) {
-                    send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
-                } catch (NotYourTurnException e) {
-                    send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
-                }
-                sendAllUpdate();
-            }
+        } catch (NoSuchStudentException e) {
+            send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
+        } catch (NotYourTurnException e) {
+            send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
+        } catch (TooManyStudentsException e) {
+            send(createError(0, "The dining room is full!"), usernameSocketMap.get(command.getUsername()));
         }
-        send(createError(0, "Not valid destination for students"), usernameSocketMap.get(command.getUsername()));
+        sendAllUpdate();
     }
 
-    private Packet moveMotherNatureCommand(Command command){
+    private void moveStudentToIslandCommand(@NotNull Command command){
+        List<String> studentList = new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
+        List<StudentColor> students = new ArrayList<>();
+        for (String stud : studentList) {
+            StudentColor c = StudentColor.getColor(stud);
+            students.add(c);
+        }
+        movedStudents += students.size();
+
+        try {
+            //The -1 is needed because islands are indexed starting from 0; if the player inputs 1 the chosen island
+            //becomes the first one, which is island number 0.
+            board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE))-1, students);
+            if(movedStudents == 3) {
+                movedStudents = 0;
+                turn.changePhase();
+            }
+        } catch (NoSuchStudentException e) {
+            send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
+        } catch (NotYourTurnException e) {
+            send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
+        }
+        sendAllUpdate();
+    }
+
+    private void moveMotherNatureCommand(Command command){
+        System.out.println("Moving mother nature...");
         board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
         turn.changePhase();
-        return  createUpdate(DataBuilder.newBoardData(command.getUsername(), board));
+        sendAllUpdate();
+        //return  createUpdate(DataBuilder.newBoardData(command.getUsername(), board));
     }
 
     private void chooseCloudCommand(Command command){
