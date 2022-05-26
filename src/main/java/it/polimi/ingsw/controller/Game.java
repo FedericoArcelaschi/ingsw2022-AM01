@@ -53,15 +53,20 @@ public class Game{
      * @return response to the command
      */
     public void executeCommand(Command command){
-        System.out.println("Executing command of type: " + command.getType().name());
-        switch(command.getType()) {
-            case PLAY_CARD -> playCardCommand(command);
-            case MOVE_STUDENT_TO_DININGROOM -> moveStudentToDiningRoomCommand(command);
-            case MOVE_STUDENT_TO_ISLAND -> moveStudentToIslandCommand(command);
-            case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
-            case CHOOSE_CLOUD -> chooseCloudCommand(command);
+        System.out.println("Executing command...");
+        if(command==null){
+            //Would want to do this, but command.getUsername() is null, obviously...
+            //send(createError(0, "Not valid command"), usernameSocketMap.get(command.getUsername()));
+            sendAllUpdate();
+        }else {
+            switch (command.getType()) {
+                case PLAY_CARD -> playCardCommand(command);
+                case MOVE_STUDENT_TO_DININGROOM -> moveStudentToDiningRoomCommand(command);
+                case MOVE_STUDENT_TO_ISLAND -> moveStudentToIslandCommand(command);
+                case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
+                case CHOOSE_CLOUD -> chooseCloudCommand(command);
+            }
         }
-        //send(createError(0, "Not valid command"), usernameSocketMap.get(command.getUsername()));
     }
 
     public void playerDisconnected(Socket s){

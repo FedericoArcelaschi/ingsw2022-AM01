@@ -42,6 +42,7 @@ public class Command {
             if(splitCommand[0].toLowerCase().equals(ct.getCommandString()))
                 return new Command(username, ct, Arrays.copyOfRange(splitCommand, 1, splitCommand.length));
         }
+        //Returns null if it doesn't find the specified command.
         return null;
     }
 
