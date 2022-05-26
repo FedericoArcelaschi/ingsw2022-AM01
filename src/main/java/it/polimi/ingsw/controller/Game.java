@@ -54,9 +54,8 @@ public class Game{
      */
     public void executeCommand(Command command){
         System.out.println("Executing command...");
-        if(command==null){
-            //Would want to do this, but command.getUsername() is null, obviously...
-            //send(createError(0, "Not valid command"), usernameSocketMap.get(command.getUsername()));
+        if(command.getType()==null){
+            send(createError(0, "Command not valid; please, try again."), usernameSocketMap.get(command.getUsername()));
             sendAllUpdate();
         }else {
             switch (command.getType()) {

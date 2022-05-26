@@ -16,23 +16,25 @@ public class Command {
         this.type = type;
         this.attributesMap = new HashMap<>();
         this.username = username;
-        switch (type){
-            case PLAY_CARD -> attributesMap.put(CommandAttribute.ID, attributes[0]);
-            //e.g.: playcard 1
-            case MOVE_STUDENT_TO_DININGROOM -> {
-                attributesMap.put(CommandAttribute.WHAT, String.join("", attributes)); //What **has** to be a list of students
-                System.out.println(attributesMap.get(CommandAttribute.WHAT));
+        if(type!=null) {
+            switch (type) {
+                case PLAY_CARD -> attributesMap.put(CommandAttribute.ID, attributes[0]);
+                //e.g.: playcard 1
+                case MOVE_STUDENT_TO_DININGROOM -> {
+                    attributesMap.put(CommandAttribute.WHAT, String.join("", attributes)); //What **has** to be a list of students
+                    System.out.println(attributesMap.get(CommandAttribute.WHAT));
+                }
+                //e.g.: movestudentdiningroom green, blue, pink
+                case MOVE_STUDENT_TO_ISLAND -> {
+                    attributesMap.put(CommandAttribute.WHERE, attributes[0]);  //Number of the island
+                    attributesMap.put(CommandAttribute.WHAT, String.join("", Arrays.copyOfRange(attributes, 1, attributes.length)));  //List of students
+                }
+                //e.g.: movestudentisland 4, green, blue, pink
+                case MOVE_MOTHER_NATURE -> attributesMap.put(CommandAttribute.DISTANCE, attributes[0]);  //How far mother nature will move
+                //e.g.: movemothernature 1
+                case CHOOSE_CLOUD -> attributesMap.put(CommandAttribute.ID, attributes[0]);
+                //e.g.: cloud 1
             }
-            //e.g.: movestudentdiningroom green, blue, pink
-            case MOVE_STUDENT_TO_ISLAND -> {
-                attributesMap.put(CommandAttribute.WHERE, attributes[0]);  //Number of the island
-                attributesMap.put(CommandAttribute.WHAT, String.join("", Arrays.copyOfRange(attributes, 1, attributes.length)));  //List of students
-            }
-            //e.g.: movestudentisland 4, green, blue, pink
-            case MOVE_MOTHER_NATURE -> attributesMap.put(CommandAttribute.DISTANCE, attributes[0]);  //How far mother nature will move
-            //e.g.: movemothernature 1
-            case CHOOSE_CLOUD ->  attributesMap.put(CommandAttribute.ID, attributes[0]);
-            //e.g.: cloud 1
         }
     }
 
@@ -43,7 +45,7 @@ public class Command {
                 return new Command(username, ct, Arrays.copyOfRange(splitCommand, 1, splitCommand.length));
         }
         //Returns null if it doesn't find the specified command.
-        return null;
+        return new Command(username, null, Arrays.copyOfRange(splitCommand, 1, splitCommand.length));
     }
 
     public CommandType getType() {
