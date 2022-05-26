@@ -59,16 +59,17 @@ public class ClientMain {
         this.state = ClientState.WAITING_ROOM;
     }
 
-    public boolean runCommand(String stringCommand){
+    public void runCommand(String stringCommand){
         if (socket == null || socket.isClosed()) {
-            return false;
+            return;
         }
-        //compose command and send
-        CommandMessage commandMessage = new CommandMessage(username, stringCommand);
-        Packet packet = new Packet(MessageType.COMMAND, commandMessage);
-        cs.sendPacket(packet);
-        System.out.println("command sent");
-        return true;
+        //compose command and send, only if the player is in a game.
+        if(state==ClientState.GAME){
+            CommandMessage commandMessage = new CommandMessage(username, stringCommand);
+            Packet packet = new Packet(MessageType.COMMAND, commandMessage);
+            cs.sendPacket(packet);
+            System.out.println("command sent");
+        }
     }
 
     public String getUsername() {

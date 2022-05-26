@@ -195,11 +195,10 @@ public class Game{
         board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
         Team t = board.isWinningPosition();
         if(t != null){
-            sendWinUpdate(t);  //TODO: something else needs to happen: the game cannot resume as normal!
+            sendWinUpdate(t);  //Also changes the state of the client to GAME_ENDED now.
         }
         turn.changePhase();
         sendAllUpdate();
-        //return  createUpdate(DataBuilder.newBoardData(command.getUsername(), board));
     }
 
     private void chooseCloudCommand(Command command){
@@ -207,7 +206,7 @@ public class Game{
             board.chooseCloud(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
             Team t = board.isWonByResources();
             if(t != null){
-                sendWinUpdate(t);  //TODO: something else needs to happen: the game cannot resume as normal!
+                sendWinUpdate(t);  //Also changes the state of the client to GAME_ENDED now.
             }
             turn.changePhase();
         } catch (NotYourTurnException e) {
@@ -224,6 +223,9 @@ public class Game{
             PrintWriter out = null;
             Message winner = new WinUpdate(DataBuilder.newBoardData(username, board), t.name());
             Packet packet  = new Packet(MessageType.UPDATE, winner);
+            send(packet, usernameSocketMap.get(username));
+            Message gameOver = new EndGameMessage("Game over. Changing state...");
+            Packet packet1 = new Packet(MessageType.END, gameOver);
             send(packet, usernameSocketMap.get(username));
         }
     }
