@@ -21,7 +21,6 @@ public class Main {
             }
             case GUI -> {
                 Gui gui = new Gui();
-                gui.view();
             }
         }
 
