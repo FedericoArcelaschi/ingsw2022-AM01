@@ -12,6 +12,9 @@ public class BoardFactory {
     public static Board getBoard(List<String> playerList, Turn turn, long seed){
         return createBoard(playerList, turn, seed);
     }
+    public static Board getBoard(List<String> playerList){
+        return createBoard(playerList, new Turn(playerList), 1);
+    }
 
     @NotNull
     private static Board createBoard(List<String> playerList, Turn turn, long seed) {

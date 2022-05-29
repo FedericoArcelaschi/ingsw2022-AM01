@@ -1,0 +1,41 @@
+#castlePane{
+    -fx-background-image: url("/castle/castle.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 290, 675;
+    -fx-opacity: 1;
+    -fx-background-position: center center;
+}
+
+.student{
+    -fx-background-size: 25, 25;
+    -fx-opacity: 1;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-radius: 3em;
+    -fx-background-color: transparent;
+}
+
+.studentBackgroundBlue{
+    -fx-background-image: url("/students/student_blue.png");
+}
+
+.studentBackgroundRed{
+    -fx-background-image: url("/students/student_red.png");
+}
+
+.studentBackgroundYellow{
+    -fx-background-image: url("/students/student_yellow.png");
+}
+
+.studentBackgroundPink{
+    -fx-background-image: url("/students/student_pink.png");
+}
+
+.studentBackgroundGreen{
+    -fx-background-image: url("/students/student_green.png");
+}
+
+.student:selected{
+    -fx-border-color: black;
+    -fx-border-width: 1;
+}

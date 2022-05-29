@@ -7,9 +7,6 @@ import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class BoardDataTest {
 
@@ -18,7 +15,7 @@ class BoardDataTest {
     void toStringTest() throws NotYourTurnException, NoSuchStudentException, TooManyStudentsException {
         BoardData bd;
         Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"),new Turn(Arrays.asList("fede","gio")), 1);
-        bd = DataBuilder.newBoardData("fede", b);
+        bd = ModelDataBuilder.newBoardData("fede", b);
         System.out.println(bd);
     }
 
