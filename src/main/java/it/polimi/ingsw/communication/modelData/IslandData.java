@@ -1,7 +1,7 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.StudentColor;
-import it.polimi.ingsw.model.Team;
+import it.polimi.ingsw.model.baseLogic.StudentColor;
+import it.polimi.ingsw.model.baseLogic.Team;
 
 import java.util.Map;
 import java.util.Objects;
@@ -51,7 +51,7 @@ public class IslandData {
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (StudentColor key: students.keySet()) {
-            s.append(key.str).append(" ").append(students.get(key)).append(", ");
+            s.append(key).append(" ").append(students.get(key)).append(", ");
         }
         if(ownership == null){
             s.append("0 towers");

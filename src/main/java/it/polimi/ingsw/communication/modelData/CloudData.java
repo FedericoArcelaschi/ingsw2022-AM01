@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.StudentColor;
+import it.polimi.ingsw.model.baseLogic.StudentColor;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +38,7 @@ public class CloudData {
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (StudentColor student: studentList) {
-            s.append(student.str).append(", ");
+            s.append(student).append(", ");
         }
 
         s.append(available? "available": "already taken");

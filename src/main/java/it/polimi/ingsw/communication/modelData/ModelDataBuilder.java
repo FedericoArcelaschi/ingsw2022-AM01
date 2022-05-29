@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.baseLogic.*;
 
 import java.util.Objects;
 

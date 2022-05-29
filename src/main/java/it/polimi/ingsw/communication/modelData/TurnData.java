@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.TurnPhase;
+import it.polimi.ingsw.model.baseLogic.TurnPhase;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.StudentColor;
-import it.polimi.ingsw.model.Team;
+import it.polimi.ingsw.model.baseLogic.StudentColor;
+import it.polimi.ingsw.model.baseLogic.Team;
 
 import java.util.List;
 import java.util.Map;
@@ -80,11 +80,11 @@ public class CastleData {
         StringBuilder s = new StringBuilder();
         s.append("\n\t\tStudents in waitingroom: ");
         for (StudentColor c : waitingRoom) {
-            s.append(c.str).append(", ");
+            s.append(c).append(", ");
         }
         s.append("\n\t\tStudents in diningroom: ");
         for (StudentColor c : diningRoom.keySet()) {
-            s.append(c.str).append(": ").append(diningRoom.get(c).toString()).append(", ");
+            s.append(c).append(": ").append(diningRoom.get(c).toString()).append(", ");
         }
         if (isMyCastle){
             s.append("\n\t\tAvailable Cards: ");

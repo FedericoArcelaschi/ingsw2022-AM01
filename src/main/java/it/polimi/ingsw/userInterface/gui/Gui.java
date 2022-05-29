@@ -3,9 +3,10 @@ package it.polimi.ingsw.userInterface.gui;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.controller.GameType;
-import it.polimi.ingsw.model.Board;
-import it.polimi.ingsw.model.BoardFactory;
-import it.polimi.ingsw.model.StudentColor;
+import it.polimi.ingsw.model.baseLogic.Board;
+import it.polimi.ingsw.model.baseLogic.BoardFactory;
+import it.polimi.ingsw.model.baseLogic.StudentColor;
+import it.polimi.ingsw.model.baseLogic.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
@@ -13,13 +14,10 @@ import it.polimi.ingsw.userInterface.UserInterface;
 import it.polimi.ingsw.userInterface.gui.controller.GamePaneController;
 import it.polimi.ingsw.userInterface.gui.controller.LoginPaneController;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -59,13 +57,13 @@ public class Gui extends Application implements UserInterface {
     }
 
     private BoardData createBoardData() {
-        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"));
+        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"), new Turn(Arrays.asList("fede", "gio")));
         try{
             b.playCard("fede", 1);
             b.changePhase();
             b.playCard("gio", 10);
             b.changePhase();
-            b.moveStudentToDiningRoom("fede", List.of(StudentColor.YELLOW));
+            b.moveStudentsToDiningRoom("fede", List.of(StudentColor.YELLOW));
         } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException e) {
             throw new RuntimeException(e);
         }

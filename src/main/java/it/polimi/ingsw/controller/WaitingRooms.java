@@ -19,13 +19,13 @@ import java.util.Map;
 
 public class WaitingRooms {
 
-    private Map<GameType, List<ServerReceiver>> gameSocketMap = new HashMap<>();
-    private Map<GameType, List<String>> nicknameMap = new HashMap<>();
-    private Map<GameType, Integer> gameTypeSize = new HashMap<>();
+    private final Map<GameType, List<ServerReceiver>> gameSocketMap = new HashMap<>();
+    private final Map<GameType, List<String>> nicknameMap = new HashMap<>();
+    private final Map<GameType, Integer> gameTypeSize = new HashMap<>();
     Gson parser = new Gson();
 
-    public WaitingRooms(){
-        for(GameType g : GameType.values()){
+    public WaitingRooms() {
+        for(GameType g : GameType.values()) {
             gameSocketMap.computeIfAbsent(g, k -> new ArrayList<>());
             nicknameMap.computeIfAbsent(g, k -> new ArrayList<>());
             gameTypeSize.putIfAbsent(g, 0);
@@ -67,7 +67,8 @@ public class WaitingRooms {
      * @throws IOException
      */
     private void informPlayers(GameType gameType, int numberOfPlayers) {
-        if(nicknameMap.get(gameType).size() >= 1 & nicknameMap.get(gameType).size()%numberOfPlayers != 0){
+        if(nicknameMap.get(gameType).size() >= 1 &&
+                nicknameMap.get(gameType).size() % numberOfPlayers != 0){
             List<String> playersIn = new ArrayList<>(nicknameMap.get(gameType).subList((nicknameMap.get(gameType).size()-nicknameMap.get(gameType).size()%numberOfPlayers), nicknameMap.get(gameType).size()));
             Message l = new LobbyInfoMessage(nicknameMap.get(gameType), gameType);
             Packet packet = new Packet(MessageType.LOBBY, l);
@@ -90,22 +91,30 @@ public class WaitingRooms {
      * @param gameId
      * @return the correct game.
      */
-    public Game computeGameType(int gameId, GameType gameType){
-        Game game = null;
-        switch (gameType){  //TODO: REDO SUBMITGAME FUNCTION TO HANDLE EXPERTMODE
-            case NORMAL_2_PLAYER, EXPERT_2_PLAYER -> game =  submitGame(gameType, gameId, 2);
-            case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> game =  submitGame(gameType, gameId, 3);
-            case NORMAL_4_PLAYER, EXPERT_4_PLAYER -> game =  submitGame(gameType, gameId, 4);
-        }
-        return game;
+    public Game computeGameType(int gameId, GameType gameType) {
+        return switch (gameType) {  //TODO: REDO SUBMITGAME FUNCTION TO HANDLE EXPERTMODE
+            case NORMAL_2_PLAYER, EXPERT_2_PLAYER -> submitGame(gameType, gameId, 2);
+            case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> submitGame(gameType, gameId, 3);
+            case NORMAL_4_PLAYER, EXPERT_4_PLAYER -> submitGame(gameType, gameId, 4);
+            default -> null;
+        };
     }
 
-    private Game submitGame(GameType g, int gameId, int numberOfPlayers){
-        if(nicknameMap.get(g).size()%numberOfPlayers==0 && nicknameMap.get(g).size()>1 && nicknameMap.get(g).size()!=gameTypeSize.get(g)) {
-            List<String> nickMap = nicknameMap.get(g).subList((nicknameMap.get(g).size()-numberOfPlayers), nicknameMap.get(g).size());
-            List<ServerReceiver> socketMap = gameSocketMap.get(g).subList((gameSocketMap.get(g).size()-numberOfPlayers), gameSocketMap.get(g).size());
-            gameTypeSize.replace(g, nicknameMap.get(g).size());
-            return new Game(g, gameId, nickMap, socketMap);
+    private Game submitGame(GameType type, int gameId, int numberOfPlayers) {
+        if((nicknameMap.get(type).size() % numberOfPlayers) == 0 &&
+                    nicknameMap.get(type).size() > 1 &&
+                    nicknameMap.get(type).size() != gameTypeSize.get(type)) {
+            List<String> playersList
+                    = nicknameMap.get(type).subList(
+                            (nicknameMap.get(type).size() - numberOfPlayers),
+                            nicknameMap.get(type).size());
+            List<ServerReceiver> socketMap
+                    = gameSocketMap.get(type).subList(
+                            (gameSocketMap.get(type).size()-numberOfPlayers),
+                             gameSocketMap.get(type).size());
+            gameTypeSize.replace(type,
+                    nicknameMap.get(type).size());
+            return new Game(type, gameId, playersList, socketMap);
         }
         return null;
     }
@@ -115,7 +124,7 @@ public class WaitingRooms {
      * @param player the player to remove.
      * @param g the lobby from which the player should be removed.
      */
-    public void removeFromQueue(String player, GameType g){
+    public void removeFromQueue(String player, GameType g) {
         switch (g){
             case NORMAL_2_PLAYER, EXPERT_2_PLAYER ->{
                 if(nicknameMap.get(g).size()%2 != 0 && nicknameMap.get(g).get(nicknameMap.get(g).size()).equals(player)) nicknameMap.get(g).remove(player);

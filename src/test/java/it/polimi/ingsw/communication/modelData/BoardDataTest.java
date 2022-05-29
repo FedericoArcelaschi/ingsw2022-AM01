@@ -1,6 +1,8 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.baseLogic.Board;
+import it.polimi.ingsw.model.baseLogic.BoardFactory;
+import it.polimi.ingsw.model.baseLogic.Turn;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
@@ -14,7 +16,7 @@ class BoardDataTest {
     @Test
     void toStringTest() throws NotYourTurnException, NoSuchStudentException, TooManyStudentsException {
         BoardData bd;
-        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"),new Turn(Arrays.asList("fede","gio")), 1);
+        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"), new Turn(Arrays.asList("fede","gio")));
         bd = ModelDataBuilder.newBoardData("fede", b);
         System.out.println(bd);
     }

@@ -2,7 +2,7 @@ package it.polimi.ingsw.userInterface.gui.controller;
 
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.CastleData;
-import it.polimi.ingsw.model.StudentColor;
+import it.polimi.ingsw.model.baseLogic.StudentColor;
 import javafx.fxml.FXML;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;

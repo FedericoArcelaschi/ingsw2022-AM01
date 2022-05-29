@@ -1,13 +1,11 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.communication.ClientReceiver;
 import it.polimi.ingsw.communication.HeartBeatServer;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.communication.ServerReceiver;
-import it.polimi.ingsw.model.StudentColor;
-import org.apache.maven.plugin.logging.Log;
+import it.polimi.ingsw.model.baseLogic.StudentColor;
 
 import java.io.BufferedReader;
 import java.io.IOException;

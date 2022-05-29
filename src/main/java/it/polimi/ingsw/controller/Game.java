@@ -9,7 +9,7 @@ import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.*;
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.baseLogic.*;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
@@ -20,7 +20,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
 
-public class Game{
+public class Game {
     private final GameType gameType;
     private final int gameId;
     private final Board board;
@@ -122,14 +122,11 @@ public class Game{
     }
 
     private void playCardCommand(Command command){
-        System.out.println("Playcard command is being executed...");
         try {
             board.playCard(command.getUsername() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
             turn.changePhase();
-        } catch (NotYourTurnException e) {
-            send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
-        } catch (IllegalArgumentException e) {
-            send(createError(0, "Card specified doesn't exists or is already played"), usernameSocketMap.get(command.getUsername()));
+        } catch (NotYourTurnException | IllegalArgumentException e) {
+            send(createError(0, e.getMessage()), usernameSocketMap.get(command.getUsername()));
         }
         sendAllUpdate();
     }
@@ -140,7 +137,12 @@ public class Game{
         //Needs to be changed accordingly if the convention changes.
 
         //List of students in the command
-        List<String> studentList =  new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
+        List<String> studentList =  new ArrayList<>(
+                Arrays.asList(
+                        command
+                        .getAttributesMap()
+                        .get(CommandAttribute.WHAT)
+                        .split(",")));
         //List of students that will get the respective Color value
         List<StudentColor> students = new ArrayList<>();
         for (String s : studentList) {
@@ -150,17 +152,13 @@ public class Game{
         movedStudents += students.size();
 
         try {
-            board.moveStudentToDiningRoom(command.getUsername(), students);
+            board.moveStudentsToDiningRoom(command.getUsername(), students);
             if(movedStudents == 3) {
                 movedStudents = 0;
                 turn.changePhase();
             }
-        } catch (NoSuchStudentException e) {
-            send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
-        } catch (NotYourTurnException e) {
-            send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
-        } catch (TooManyStudentsException e) {
-            send(createError(0, "The dining room is full!"), usernameSocketMap.get(command.getUsername()));
+        } catch (NoSuchStudentException  | TooManyStudentsException | NotYourTurnException e) {
+            send(createError(0, e.getMessage()), usernameSocketMap.get(command.getUsername()));
         }
         sendAllUpdate();
     }
@@ -182,10 +180,12 @@ public class Game{
                 movedStudents = 0;
                 turn.changePhase();
             }
-        } catch (NoSuchStudentException e) {
+        } catch (NoSuchStudentException e) { //fixme e.getmessage()
             send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
         } catch (NotYourTurnException e) {
             send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
+        } catch (TooManyStudentsException e) {
+            throw new RuntimeException(e);
         }
         sendAllUpdate();
     }
