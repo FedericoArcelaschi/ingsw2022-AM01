@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
 public class LoginPaneController {
-    @FXML TextField usernameTextField;
+    @FXML TextField usernameTextField, ipTextField, portTextField;
     @FXML RadioButton player2RadioButton, player3RadioButton, player4RadioButton, baseModeRadioButton, expertModeRadioButton;
     ToggleGroup nPlayer, mode;
     UserInterface ui;
@@ -34,10 +34,10 @@ public class LoginPaneController {
 
         ClientMain clientMain = new ClientMain(
                 usernameTextField.getText(),
-                Integer.parseInt(selectedNPlayer.getText()),
-                selectedMode.getText() == "Expert Mode",
-                "127.0.0.1",
-                1234
+                Integer.parseInt(selectedNPlayer.getText().substring(0,1)),
+                selectedMode.getText().equals("Expert Mode"),
+                ipTextField.getText().equals("") ? ipTextField.getPromptText() : ipTextField.getText(),
+                Integer.parseInt(portTextField.getText().equals("") ? portTextField.getPromptText() : portTextField.getText())
         );
         clientMain.connect(ui);
     }

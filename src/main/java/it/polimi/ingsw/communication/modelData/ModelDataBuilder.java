@@ -4,14 +4,14 @@ import it.polimi.ingsw.model.*;
 
 import java.util.Objects;
 
-public abstract class DataBuilder {
+public abstract class ModelDataBuilder {
     public static BoardData newBoardData(String username, Board board){
         return new BoardData(
                 username,
                 board.getNPlayer(),
                 board.getMotherNaturePosition(),
-                board.getCloudList().stream().map(DataBuilder::newCloudData).toList(),
-                board.getIslandList().stream().map(DataBuilder::newIslandData).toList(),
+                board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
+                board.getIslandList().stream().map(ModelDataBuilder::newIslandData).toList(),
                 newCastleData(username, board.getCastle(username), true),
                 board.getCastleMap().keySet().stream()
                         .filter(key -> !Objects.equals(key, username))

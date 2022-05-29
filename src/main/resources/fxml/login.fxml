@@ -8,25 +8,29 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.userInterface.gui.controller.LoginPaneController">
+<Pane fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.userInterface.gui.controller.LoginPaneController">
    <children>
-      <Button fx:id="submitButton" layoutX="532.0" layoutY="360.0" mnemonicParsing="false" onAction="#submitPreferences" text="Submit" />
-      <Pane fx:id="preferencesPane" layoutX="61.0" layoutY="140.0">
+      <Button fx:id="submitButton" layoutX="530.0" layoutY="460.0" mnemonicParsing="false" onAction="#submitPreferences" text="Submit" />
+      <Pane fx:id="preferencesPane" layoutX="61.0" layoutY="140.0" prefHeight="310.0" prefWidth="383.0">
          <children>
-            <Label fx:id="playerLabel" layoutY="99.0" text="Player:" />
-            <RadioButton fx:id="baseModeRadioButton" layoutX="90.0" layoutY="149.0" mnemonicParsing="false" text="Base Mode" />
-            <RadioButton fx:id="expertModeRadioButton" layoutX="200.0" layoutY="149.0" mnemonicParsing="false" text="Expert Mode" />
-            <TextField fx:id="usernameTextField" layoutX="90.0" layoutY="44.0" />
-            <Label fx:id="usernameLabel" layoutY="49.0" text="Username:" />
-            <Label fx:id="modeLabel" layoutY="149.0" text="Mode:" />
-            <RadioButton fx:id="player3RadioButton" layoutX="200.0" layoutY="99.0" mnemonicParsing="false" text="3 Players" />
-            <RadioButton fx:id="player2RadioButton" layoutX="90.0" layoutY="99.0" mnemonicParsing="false" text="2 Players" />
-            <RadioButton fx:id="player4RadioButton" layoutX="310.0" layoutY="99.0" mnemonicParsing="false" text="4 Players" />
+            <Label fx:id="playerLabel" layoutY="100.0" text="Player:" />
+            <RadioButton fx:id="baseModeRadioButton" layoutX="90.0" layoutY="150.0" mnemonicParsing="false" text="Base Mode" />
+            <RadioButton fx:id="expertModeRadioButton" layoutX="200.0" layoutY="150.0" mnemonicParsing="false" text="Expert Mode" />
+            <TextField fx:id="usernameTextField" layoutX="90.0" layoutY="45.0" />
+            <Label fx:id="usernameLabel" layoutY="50.0" text="Username:" />
+            <Label fx:id="modeLabel" layoutY="150.0" text="Mode:" />
+            <RadioButton fx:id="player3RadioButton" layoutX="200.0" layoutY="100.0" mnemonicParsing="false" text="3 Players" />
+            <RadioButton fx:id="player2RadioButton" layoutX="90.0" layoutY="100.0" mnemonicParsing="false" text="2 Players" />
+            <RadioButton fx:id="player4RadioButton" layoutX="310.0" layoutY="100.0" mnemonicParsing="false" text="4 Players" />
             <Text fx:id="preferencesLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Preferences">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
+            <TextField fx:id="ipTextField" layoutX="90.0" layoutY="195.0" promptText="127.0.0.1" />
+            <Label fx:id="ipLabel" layoutY="200.0" text="IP:" />
+            <TextField fx:id="portTextField" layoutX="90.0" layoutY="245.0" promptText="1234" />
+            <Label fx:id="portLabel" layoutY="250.0" text="Port:" />
          </children>
       </Pane>
       <Label fx:id="eriantysLabel" layoutX="257.0" layoutY="52.0" text="Eriantys">
