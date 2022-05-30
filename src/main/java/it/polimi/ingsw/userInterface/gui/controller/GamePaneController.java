@@ -139,20 +139,17 @@ public class GamePaneController {
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom) {
-        for (int i = 0; i < waitingRoom.size(); i++) {
+        for (int i = 0; i < waitingRoom.size(); i++)
             setStudentButtonColor((ToggleButton) waitingRoomToggleGroup.getToggles().get(i), waitingRoom.get(i));
-        }
     }
 
     private void drawDiningRoom(Map<StudentColor, Integer> studentColorIntegerMap) {
-        for (StudentColor color: StudentColor.values()) {
-            for (int i = 0; i < studentColorIntegerMap.get(color); i++) {
+        for (StudentColor color: StudentColor.values())
+            for (int i = 0; i < studentColorIntegerMap.get(color); i++)
                 setStudentButtonColor((ToggleButton) waitingRoomMap.get(color).getToggles().get(i), color);
-            }
-        }
     }
 
     private void setStudentButtonColor(ToggleButton button, StudentColor studentColor) {
-        button.getStyleClass().add(studentColor.cssClass);
+        button.getStyleClass().add(studentColor.getCSS());
     }
 }
