@@ -15,10 +15,12 @@ public class Turn {
      * For the first round the PlanningPhase is the Sitting Order
      * @param sittingOrder players in the ordered they joined the server
      */
-    public Turn(List<String> sittingOrder){
+    public Turn(List<String> sittingOrder) {
         this.sittingOrder = new ArrayList<>(sittingOrder);
-        actionOrder = new ArrayList<>();
-        playedCards = new HashMap<>();
+        actionOrder
+                = new ArrayList<>();
+        playedCards
+                = new HashMap<>();
         currentPlayerTurn = sittingOrder.get(0);
         currentPhase = TurnPhase.PLANNING;
     }

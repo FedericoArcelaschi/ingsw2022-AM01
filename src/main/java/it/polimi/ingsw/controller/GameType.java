@@ -17,29 +17,11 @@ public enum GameType {
     }
 
     public static GameType getGameType(int nPlayer, boolean expertMode){
-        switch (nPlayer) {
-            case 2 -> {
-                if (expertMode) return EXPERT_2_PLAYER;
-                return NORMAL_2_PLAYER;
-            }
-            case 3 -> {
-                if (expertMode) return EXPERT_3_PLAYER;
-                return NORMAL_3_PLAYER;
-            }
-            case 4 -> {
-                if (expertMode) return EXPERT_4_PLAYER;
-                return NORMAL_4_PLAYER;
-            }
+        for (GameType gameType : GameType.values()) {
+            if((nPlayer == gameType.nPlayer) && (expertMode == gameType.expertMode))
+                return gameType;
         }
         return null;
-    }
-
-    public int getNPlayer() {
-        return nPlayer;
-    }
-
-    public boolean isExpertMode() {
-        return expertMode;
     }
 
     @Override

@@ -27,10 +27,6 @@ public enum CharacterUtility { //TODO: complete characters' explaination
         this.id = this.ordinal() + 1;
     }
 
-    public static CharacterUtility getChar(int charId) {
-        return CharacterUtility.values()[charId - 1];
-    }
-
     @Contract(pure = true)
     public String getExplanation() {
         return CharacterExplanation.getInstance(id).getDescription();
@@ -48,13 +44,19 @@ public enum CharacterUtility { //TODO: complete characters' explaination
     }
 
     @Contract(pure = true)
-    public int getId() {
-        return id;
-    }
-
-    @Contract(pure = true)
     public ApplyEffect getFunction() {
         return CharacterFunction.getCharFunction(id);
+    }
+
+    public static CharacterUtility getChar(int charId) {
+        return CharacterUtility.values()[charId - 1];
+    }
+    public static CharacterUtility getChar(String charName) {
+        for (CharacterUtility expertCharacter : CharacterUtility.values()) {
+            if(charName.equals(expertCharacter.name()))
+                return expertCharacter;
+        }
+        throw new IllegalArgumentException(charName + " is not a character name");
     }
 
 }
