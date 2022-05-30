@@ -32,12 +32,13 @@ public class ServerMain implements Runnable{
     Gson parser;
 
     public static void init(){
-        FileHandler fh;
+        FileHandler fileHandler;
         try{
-            fh = new FileHandler("C:\\Users\\loren\\Desktop\\Università\\3° anno\\Progetto di ingegneria del software\\ingsw2022-AM01\\src\\main\\java\\it\\polimi\\ingsw\\controller\\LogFIle.log");
-            logger.addHandler(fh);
+            fileHandler = new FileHandler(//FIXME: don't hard code path
+                    "C:\\Users\\loren\\Desktop\\Università\\3° anno\\Progetto di ingegneria del software\\ingsw2022-AM01\\src\\main\\java\\it\\polimi\\ingsw\\controller\\LogFIle.log");
+            logger.addHandler(fileHandler);
             SimpleFormatter formatter = new SimpleFormatter();
-            fh.setFormatter(formatter);
+            fileHandler.setFormatter(formatter);
             logger.setLevel(Level.FINE);
             logger.info("Logger has been initialized.");
         }catch (Exception e){
@@ -68,7 +69,7 @@ public class ServerMain implements Runnable{
     public void startServer() {
         executor = Executors.newCachedThreadPool();
 
-        //creating serverSocket
+        //creating server socket
         logger.info("Starting server...");
         try {
             serverSocket = new ServerSocket(port);
@@ -99,7 +100,7 @@ public class ServerMain implements Runnable{
                 handleGame(playerGameType);
 
             } catch(IOException e) {
-                break; // Would get here if serversocket was to be closed.
+                break; // Would get here if server socket was to be closed.
             }
         }
         executor.shutdown();
@@ -109,8 +110,9 @@ public class ServerMain implements Runnable{
     private void handleGame(GameType gameType){
         Game game = waitingRooms.computeGameType(gameId, gameType);
         if(game != null) {
-            gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType())+1);
-            System.out.println(StudentColor.YELLOW.colorCode + "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
+            gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType()) + 1);
+            System.out.println( StudentColor.YELLOW.colorCode +
+                    "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
             for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
                 serverReceiver.setGame(game);
             }
