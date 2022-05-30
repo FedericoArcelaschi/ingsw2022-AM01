@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.userInterface.gui.controller.GamePaneController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.userInterface.gui.controller.GamePaneController">
    <right>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -130,46 +130,54 @@
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <center>
-            <Pane fx:id="islandsPane" prefHeight="640.0" prefWidth="910.0" BorderPane.alignment="CENTER">
+            <Pane fx:id="islandsPane" prefHeight="640.0" prefWidth="1110.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox prefHeight="640.0" prefWidth="910.0">
+                  <VBox prefHeight="600.0" prefWidth="910.0">
                      <children>
-                        <HBox fx:id="islandRow1" prefHeight="213.0" prefWidth="200.0">
+                        <HBox fx:id="islandRow1" minWidth="-Infinity" prefHeight="200.0" prefWidth="1110.0">
                            <children>
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
                            </children></HBox>
-                        <HBox fx:id="cloudRow" prefHeight="214.0" prefWidth="200.0" />
-                        <HBox fx:id="islandRow2" prefHeight="213.0" prefWidth="200.0">
+                        <HBox fx:id="cloudRow" minWidth="-Infinity" prefHeight="200.0" prefWidth="1110.0">
                            <children>
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
-                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" />
+                           </children></HBox>
+                        <HBox fx:id="islandRow2" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="200.0" prefWidth="1110.0">
+                           <children>
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
+                              <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island" />
                            </children></HBox>
                      </children>
                   </VBox>
                </children></Pane>
          </center>
          <bottom>
-            <HBox fx:id="cardsHBox" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <HBox fx:id="cardsHBox" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
-                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
-                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
-                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
-                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
-                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
-                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
-                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
-                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
-                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="111.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="111.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="111.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="111.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="111.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="111.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="111.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="111.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="111.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="111.0" styleClass="assistant" />
                </children></HBox>
          </bottom>
       </BorderPane>
