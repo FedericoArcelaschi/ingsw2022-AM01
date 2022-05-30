@@ -5,7 +5,7 @@ import it.polimi.ingsw.controller.GameType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LobbyInfoMessage extends Message{
+public class LobbyInfoMessage implements Message{
     private List<String> players;
     private GameType g;
 

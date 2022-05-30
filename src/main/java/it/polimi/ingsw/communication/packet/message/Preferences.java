@@ -2,7 +2,7 @@ package it.polimi.ingsw.communication.packet.message;
 
 import java.util.Objects;
 
-public class Preferences extends Message {
+public class Preferences implements Message {
     private final String username;
     private final int nPlayer;
     private final boolean expertMode;

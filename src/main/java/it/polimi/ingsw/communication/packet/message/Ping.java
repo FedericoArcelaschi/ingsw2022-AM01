@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Ping extends Message {
+public class Ping implements Message {
     private final UUID id;
     private final Timestamp time;
 

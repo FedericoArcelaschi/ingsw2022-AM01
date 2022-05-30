@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.packet.message;
 
-public class CommandMessage extends Message{
+public class CommandMessage implements Message{
     private final String username;
     private final String command;  //TODO: MAYBE THIS SHOULD BE A CommandType?
 

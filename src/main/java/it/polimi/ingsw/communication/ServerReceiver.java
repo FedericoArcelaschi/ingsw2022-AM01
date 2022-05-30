@@ -26,7 +26,7 @@ public class ServerReceiver extends Receiver{
         this.game = game;
     }
 
-    void messageSwitch(MessageType type, Message message){
+    void messageSwitch(MessageType type, Message message) {
         switch (type){
             case PING -> {
                 System.out.println("client pinged back");
