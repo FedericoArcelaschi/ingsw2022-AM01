@@ -12,16 +12,9 @@ public class Main {
     public static void main(String[] args) {
         System.out.println(Outputs.START.out);
         switch (getUserType(args)) {
-            case SERVER -> {
-                ServerMain serverMain = new ServerMain(1234);
-                serverMain.run();
-            }
-            case CLI -> {
-                Cli cli = new Cli();
-            }
-            case GUI -> {
-                Gui gui = new Gui();
-            }
+            case SERVER -> new ServerMain(1234).run();
+            case CLI -> new Cli();
+            case GUI -> new Gui();
         }
 
     }

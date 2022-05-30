@@ -20,6 +20,7 @@ public class ClientMain {
     private final boolean preferenceExpertMode;
     private final String IP;
     private final int port;
+
     public Socket socket = null;
     private ClientSender cs;
     private ClientReceiver cr;

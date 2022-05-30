@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LobbyInfoMessage implements Message{
-    private List<String> players;
-    private GameType g;
+    private final List<String> players;
+    private final GameType g;
 
     public LobbyInfoMessage(List<String> players, GameType g){
         this.players = new ArrayList<>(players);

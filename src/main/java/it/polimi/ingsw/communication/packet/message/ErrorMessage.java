@@ -1,8 +1,8 @@
 package it.polimi.ingsw.communication.packet.message;
 
 public class ErrorMessage implements Message {
-    private int errorCode; //TODO: UPDATE ERROR CODES
-    private String message;
+    private final int errorCode; //TODO: UPDATE ERROR CODES
+    private final String message;
 
     public ErrorMessage(int errorCode, String message) {
         this.errorCode = errorCode;

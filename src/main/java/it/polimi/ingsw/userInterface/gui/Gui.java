@@ -35,7 +35,7 @@ public class Gui extends Application implements UserInterface {
         this.stage = stage;
         inGame = false;
         FXMLLoader loginLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/login.fxml")));
-        Parent loginFXML = null;
+        Parent loginFXML;
         try {
             loginFXML = loginLoader.load();
         } catch (IOException e) {
@@ -49,14 +49,17 @@ public class Gui extends Application implements UserInterface {
             @Override
             public void handle(WindowEvent windowEvent) {
                 windowEvent.consume();
+                //TODO: prompt to exit safely
             }
         });*/
         stage.show();
         loginPaneController.initialize(this);
+        //for testing.
         draw(createBoardData());
     }
 
     private BoardData createBoardData() {
+        // for testing.
         Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"), new Turn(Arrays.asList("fede", "gio")));
         return ModelDataBuilder.newBoardData("fede", b);
     }
@@ -65,7 +68,7 @@ public class Gui extends Application implements UserInterface {
     public void draw(BoardData boardData) {
         FXMLLoader gameLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/game.fxml")));
         inGame = true;
-        Parent loginFXML = null;
+        Parent loginFXML;
         try {
             loginFXML = gameLoader.load();
         } catch (IOException e) {

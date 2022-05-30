@@ -24,20 +24,20 @@ import java.util.concurrent.Callable;
 public class HeartBeatServer implements Callable {
 
     private final int timeout = 5000;
-    private final List<Socket> sockets;
+    private final List<Socket> clients;
     private final Map<Socket, Message> heartBeats;
 
     public HeartBeatServer(){
-        sockets = new ArrayList<>();
+        clients = new ArrayList<>();
         heartBeats = new HashMap<>();
     }
 
     public void addClient(Socket newClient){
-        sockets.add(newClient);
+        clients.add(newClient);
     }
 
     public void removeClient(Socket client){
-        sockets.remove(client);
+        clients.remove(client);
     }
 
     public void validateResponse(Message response){
@@ -51,8 +51,7 @@ public class HeartBeatServer implements Callable {
 
     public void run() throws ClientNotRespondingException {
         Gson parser = new Gson();
-        while(true){
-            for (Socket client: sockets) {
+            for (Socket client : clients) {
                 PrintWriter out;
                 try {
                     out = new PrintWriter(client.getOutputStream(), true);
@@ -72,8 +71,8 @@ public class HeartBeatServer implements Callable {
             }
             if(!heartBeats.isEmpty())
                 System.out.println("client didn't ping back in time");
-        }
-        //removeClient(s);
+            run(); //personalmente mi sembra più elegante
+        //TODO: removeClient(s);
         //TODO: waitingRooms.removePlayer(s);
         //TODO: game.end(s);
         //errorMessage.append(s).append(", ");

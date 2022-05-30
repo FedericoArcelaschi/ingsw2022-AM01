@@ -30,21 +30,16 @@ public class Preferences implements Message {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Preferences) obj;
-        return Objects.equals(this.username, that.username) &&
+        return this.username.equals(that.username) &&
                 this.nPlayer == that.nPlayer &&
                 this.expertMode == that.expertMode;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(username, nPlayer, expertMode);
-    }
-
-    @Override
     public String toString() {
-        return "Preferences[" +
-                "username=" + username + ", " +
-                "nPlayer=" + nPlayer + ", " +
-                "expertMode=" + expertMode + ']';
+        return "Preferences: " +
+                "username = " + username + ", " +
+                "number of players = " + nPlayer + ", " +
+                (expertMode ? "expert mode" : "base mode");
     }
 }

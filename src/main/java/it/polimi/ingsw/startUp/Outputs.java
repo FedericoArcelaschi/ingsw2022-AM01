@@ -10,10 +10,14 @@ public enum Outputs {
     "g-client"  -> you start an Erintys graphical client. You'll be able to join a game and play it on the graphical interface.
     input: \s"""
     ),
+
     USER_TYPE_INVALID("""
     Not a valid application inputs.\s
     """),
-    START("Welcome to Eriantys")
+
+    START("Welcome to Eriantys"),
+
+
     ;
 
     public final String out;
