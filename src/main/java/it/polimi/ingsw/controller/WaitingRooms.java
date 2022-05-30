@@ -90,7 +90,7 @@ public class WaitingRooms {
      * @return the correct game.
      */
     public Game computeGameType(int gameId, GameType gameType) {
-        return switch (gameType) {  //TODO: REDO SUBMITGAME FUNCTION TO HANDLE EXPERTMODE
+        return switch (gameType) {  //TODO: REDO SUBMIT GAME FUNCTION TO HANDLE EXPERT MODE
             case NORMAL_2_PLAYER, EXPERT_2_PLAYER -> submitGame(gameType, gameId, 2);
             case NORMAL_3_PLAYER, EXPERT_3_PLAYER -> submitGame(gameType, gameId, 3);
             case NORMAL_4_PLAYER, EXPERT_4_PLAYER -> submitGame(gameType, gameId, 4);

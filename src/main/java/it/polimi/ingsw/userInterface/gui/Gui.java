@@ -51,22 +51,29 @@ public class Gui extends Application implements UserInterface {
                 windowEvent.consume();
                 //TODO: prompt to exit safely
             }
-        });*/
+        });
+        */
         stage.show();
         loginPaneController.initialize(this);
-        //for testing.
+        //FIXME: for testing.
         draw(createBoardData());
     }
 
     private BoardData createBoardData() {
-        // for testing.
+        //FIXME: for testing.
         Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"), new Turn(Arrays.asList("fede", "gio")));
         return ModelDataBuilder.newBoardData("fede", b);
     }
 
+    /**
+     * draws the board data on update.
+     * Loads the UX from the <code>/game.fxml</code> file.
+     * @param boardData
+     */
     @Override
     public void draw(BoardData boardData) {
         FXMLLoader gameLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/game.fxml")));
+        //draws the game panel for testing.
         inGame = true;
         Parent loginFXML;
         try {
