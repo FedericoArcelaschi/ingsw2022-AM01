@@ -84,7 +84,7 @@ public class GamePaneController {
     }
 
     private void setStudentButtonColor(ToggleButton button, StudentColor studentColor) {
-        button.getStyleClass().add(studentColor.cssClass);
+        button.getStyleClass().add(studentColor.getCSS());
     }
 
     public void moveStudentToDiningRoom(MouseEvent mouseEvent) {
