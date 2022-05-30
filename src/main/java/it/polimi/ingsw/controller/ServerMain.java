@@ -136,9 +136,7 @@ public class ServerMain implements Runnable{
         String nickname = preferences.username();
         System.out.println(nickname + " joined in");
         GameType playerGameType = GameType.getGameType(preferences.nPlayer(), preferences.expertMode());
-        //add the new client
         heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
-        //start the receiver
         ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, null);
         //add player to waiting room
         waitingRooms.addPlayer(playerGameType, sr, nickname);

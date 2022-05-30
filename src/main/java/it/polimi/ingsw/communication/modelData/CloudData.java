@@ -9,15 +9,12 @@ public class CloudData {
     private final List<StudentColor> studentList;
     private final boolean available;
 
-    public CloudData(
-            List<StudentColor> studentList,
-            boolean available
-    ) {
+    public CloudData(List<StudentColor> studentList, boolean available) {
         this.studentList = studentList;
         this.available = available;
     }
 
-    public List<StudentColor> studentList() {
+    public List<StudentColor> getStudentList() {
         return studentList;
     }
 
@@ -30,18 +27,13 @@ public class CloudData {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(studentList);
-    }
-
-    @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (StudentColor student: studentList) {
             s.append(student).append(", ");
         }
 
-        s.append(available? "available": "already taken");
+        s.append(available ? "available" : "already taken");
         return s.toString();
     }
 

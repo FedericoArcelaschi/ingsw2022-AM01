@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 public class WaitingRooms {
-
     private final Map<GameType, List<ServerReceiver>> gameSocketMap = new HashMap<>();
     private final Map<GameType, List<String>> nicknameMap = new HashMap<>();
     private final Map<GameType, Integer> gameTypeSize = new HashMap<>();
@@ -64,7 +63,6 @@ public class WaitingRooms {
      * Method used to send to the rest of the players who else joined the lobby.
      * @param gameType the provided gametype.
      * @param numberOfPlayers the amount of players expected by the game type.
-     * @throws IOException
      */
     private void informPlayers(GameType gameType, int numberOfPlayers) {
         if(nicknameMap.get(gameType).size() >= 1 &&

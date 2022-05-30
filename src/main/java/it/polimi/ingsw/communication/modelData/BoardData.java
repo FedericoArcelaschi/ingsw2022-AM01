@@ -18,16 +18,7 @@ public class BoardData {
 
     /**
      */
-    public BoardData(
-            String username,
-            int nPlayer,
-            int motherNaturePosition,
-            List<CloudData> cloudList,
-            List<IslandData> islandList,
-            CastleData myCastle,
-            List<CastleData> otherCastles,
-            TurnData turn
-    ) {
+    public BoardData(String username, int nPlayer, int motherNaturePosition, List<CloudData> cloudList, List<IslandData> islandList, CastleData myCastle, List<CastleData> otherCastles, TurnData turn) {
         this.username = username;
         this.nPlayer = nPlayer;
         this.motherNaturePosition = motherNaturePosition;
@@ -38,36 +29,37 @@ public class BoardData {
         this.turn = turn;
     }
 
-    public String username() {
+    public String getUsername() {
         return username;
     }
 
-    public int nPlayer() {
+    public int getNPlayer() {
         return nPlayer;
     }
 
-    public int motherNaturePosition() {
+    public int getMotherNaturePosition() {
         return motherNaturePosition;
     }
 
-    public List<CloudData> cloudList() {
+    public List<CloudData> getCloudList() {
         return cloudList;
     }
 
-    public List<IslandData> islandList() {
+    public List<IslandData> getIslandList() {
         return islandList;
     }
 
-    public CastleData myCastle() {
+    public CastleData getMyCastle() {
         return myCastle;
     }
 
-    public List<CastleData> otherCastles() {
+    public List<CastleData> getOtherCastles() {
         return otherCastles;
     }
 
-    public TurnData turn(){
-        return turn;}
+    public TurnData getTurn() {
+        return turn;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -84,31 +76,33 @@ public class BoardData {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(username, nPlayer, motherNaturePosition, cloudList, islandList, myCastle, otherCastles);
-    }
-
-    @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("Islands:");
+        //print island
+        s.append("Islands: ");
         for (int i = 0; i < islandList.size(); i++) {
-            s.append("\n\tIsland ").append(String.format("%2d",i+1)).append(": ").append(islandList.get(i).toString());
-            if(i == motherNaturePosition) s.append(", Mother Nature is Here!");
+            s.append("\n\tIsland ")
+                    .append(i+1)
+                    .append(": ")
+                    .append(islandList.get(i));
+            if(i == motherNaturePosition) s.append(", mother nature is Here!");
         }
-        //Print Cloud
+        //Print cloud
         s.append("\nClouds:");
-        for (int i = 0; i < cloudList.size(); i++) {
-            s.append("\n\tCloud ").append(i+1).append(": ").append(cloudList.get(i));
-        }
-        //Print Other Castle
+        for (int i = 0; i < cloudList.size(); i++)
+            s       .append("\n\tCloud ")
+                    .append(i + 1)
+                    .append(" contains")
+                    .append(": ")
+                    .append(cloudList.get(i));
+        //Print other castles
         s.append("\nOther Player Castle:");
         for (CastleData otherCastle : otherCastles) {
-            s.append("\n\tCastle ").append(otherCastle.username()).append(": ").append(otherCastle);
+            s.append("\n\tCastle ").append(otherCastle.getUsername()).append(": ").append(otherCastle);
         }
-        //Print Turn
+        //Print turn
         s.append("\nTurn: ").append(turn);
-        //Print my Castle with Hand
+        //Print my castle with the hand of cards
         s.append("\nMy Castle:");
         s.append("\n\tCastle ").append(username).append(": ").append(myCastle);
         return s.toString();

@@ -16,14 +16,7 @@ public class CastleData {
     private final Team towerColor;
     private final boolean isMyCastle;
 
-    public CastleData(
-            String username,
-            List<StudentColor> waitingRoom,
-            Map<StudentColor, Integer> diningRoom,
-            List<String> deck,
-            String lastPlayedCard,
-            Team towerColor,
-            boolean isMyCastle) {
+    public CastleData(String username, List<StudentColor> waitingRoom, Map<StudentColor, Integer> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, boolean isMyCastle) {
         this.username = username;
         this.waitingRoom = waitingRoom;
         this.diningRoom = diningRoom;
@@ -33,27 +26,27 @@ public class CastleData {
         this.isMyCastle = isMyCastle;
     }
 
-    public String username() {
+    public String getUsername() {
         return username;
     }
 
-    public List<StudentColor> waitingRoom() {
+    public List<StudentColor> getWaitingRoom() {
         return waitingRoom;
     }
 
-    public Map<StudentColor, Integer> diningRoom() {
+    public Map<StudentColor, Integer> getDiningRoom() {
         return diningRoom;
     }
 
-    public List<String> deck() {
+    public List<String> getDeck() {
         return deck;
     }
 
-    public String lastPlayedCard() {
+    public String getLastPlayedCard() {
         return lastPlayedCard;
     }
 
-    public Team towerColor() {
+    public Team getTowerColor() {
         return towerColor;
     }
 
@@ -71,32 +64,24 @@ public class CastleData {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(username, waitingRoom, diningRoom, deck, lastPlayedCard, towerColor);
-    }
-
-    @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("\n\t\tStudents in waitingroom: ");
+        s.append("\n\t\tStudents in waiting room: ");
         for (StudentColor c : waitingRoom) {
             s.append(c).append(", ");
         }
-        s.append("\n\t\tStudents in diningroom: ");
-        for (StudentColor c : diningRoom.keySet()) {
+        s.append("\n\t\tStudents in dining room: ");
+        for (StudentColor c : diningRoom.keySet())
             s.append(c).append(": ").append(diningRoom.get(c).toString()).append(", ");
-        }
-        if (isMyCastle){
+        if (isMyCastle) {
             s.append("\n\t\tAvailable Cards: ");
-            for (String c : deck) {
+            for (String c : deck)
                 s.append(c).append(", ");
-            }
         }
-        if(lastPlayedCard != null) {
+        if(lastPlayedCard != null)
             s.append("\n\t\tThe last played card is: ").append(lastPlayedCard);
-        }else{
+        else
             s.append("\n\t\tThe player has not played any cards yet.");
-        }
         s.append("\n\t\tTeam: ").append(towerColor.toString());
         return s.toString();
     }

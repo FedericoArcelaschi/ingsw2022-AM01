@@ -12,7 +12,7 @@ public class Packet {
     private final MessageType type;
     private final String messageJson;
 
-    public Packet(MessageType type, Message message){
+    public Packet(MessageType type, Message message) {
         this.type = type;
         Gson parser = new Gson();
         this.messageJson = parser.toJson(message);
@@ -22,7 +22,7 @@ public class Packet {
         return type;
     }
 
-    public Type getTypeClass(){
+    public Type getTypeClass() {
         return type.getTypeClass();
     }
 

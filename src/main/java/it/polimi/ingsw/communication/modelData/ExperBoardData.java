@@ -15,8 +15,6 @@ public class ExperBoardData extends BoardData{
      * @param otherCastles
      * @param turn
      */
-
-
     public ExperBoardData(String username, int nPlayer, int motherNaturePosition, List<CloudData> cloudList, List<IslandData> islandList, CastleData myCastle, List<CastleData> otherCastles, TurnData turn) {
         super(username, nPlayer, motherNaturePosition, cloudList, islandList, myCastle, otherCastles, turn);
     }

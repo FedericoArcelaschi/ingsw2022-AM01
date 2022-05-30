@@ -9,28 +9,24 @@ import java.util.Objects;
 public class IslandData {
     private final Team ownership;
     private final Map<StudentColor, Integer> students;
-    private final int nIslands;
+    private final int islandSize;
 
-    public IslandData(
-            Team ownership,
-            Map<StudentColor, Integer> students,
-            int nIslands
-    ) {
+    public IslandData(Team ownership, Map<StudentColor, Integer> students, int nIslands) {
         this.ownership = ownership;
         this.students = students;
-        this.nIslands = nIslands;
+        this.islandSize = nIslands;
     }
 
-    public Team ownership() {
+    public Team getOwnership() {
         return ownership;
     }
 
-    public Map<StudentColor, Integer> students() {
+    public Map<StudentColor, Integer> getStudents() {
         return students;
     }
 
-    public int nIslands() {
-        return nIslands;
+    public int getIslandSize() {
+        return islandSize;
     }
 
     @Override
@@ -40,11 +36,6 @@ public class IslandData {
         var that = (IslandData) obj;
         return Objects.equals(this.ownership, that.ownership) &&
                 Objects.equals(this.students, that.students);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(ownership, students);
     }
 
     @Override
@@ -58,7 +49,10 @@ public class IslandData {
         }
         else{
             //TODO: change placeholder
-            s.append(nIslands).append(" ").append(ownership).append(nIslands>1?" towers":" tower");
+            s       .append(islandSize)
+                    .append(" ")
+                    .append(ownership)
+                    .append((islandSize > 1) ? " towers":" tower");
         }
         return s.toString();
     }

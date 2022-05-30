@@ -12,7 +12,7 @@ import java.net.Socket;
 /**
  * Allow the client to receive packets from the server socket and handle them.
  */
-public class ClientReceiver extends Receiver{
+public class ClientReceiver extends Receiver {
     UserInterface userInterface;
 
     public ClientReceiver(ClientMain cm, Socket socket, UserInterface userInterface) {
@@ -20,8 +20,8 @@ public class ClientReceiver extends Receiver{
         this.userInterface = userInterface;
     }
 
-    void messageSwitch(MessageType type, Message message){
-        switch (type){
+    void messageSwitch(MessageType type, Message message) {
+        switch (type) {
             case PING -> {
                 Ping ping = (Ping) message;
                 Packet heartbeatToServer = new Packet(MessageType.PING, ping);
@@ -37,15 +37,11 @@ public class ClientReceiver extends Receiver{
                 LobbyInfoMessage lobbyInfoMessage = (LobbyInfoMessage) message;
                 userInterface.roomOutput(lobbyInfoMessage.getPlayers(), lobbyInfoMessage.getGameType());
             }
-            case END -> {
-                cm.setState(ClientState.GAME_ENDED);
-            }
-            case ERROR -> {
-                ErrorMessage errorMessage = (ErrorMessage) message;
-                System.out.println("new error received: " + errorMessage.getMessage());
+            case END -> cm.setState(ClientState.GAME_ENDED);
+
+            case ERROR -> System.out.println("new error received: " + ((ErrorMessage) message).getMessage());
                 //print data without saving it anywhere
                 //ViewDraw.drawCli(message.data());
-            }
         }
     }
 }
