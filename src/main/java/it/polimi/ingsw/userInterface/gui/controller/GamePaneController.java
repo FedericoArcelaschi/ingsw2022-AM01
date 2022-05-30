@@ -61,12 +61,12 @@ public class GamePaneController {
     }
 
     public void draw(BoardData boardData) {
-        drawCastle(boardData.myCastle());
+        drawCastle(boardData.getMyCastle());
     }
     
     private void drawCastle(CastleData castleData) {
-        drawWaitingRoom(castleData.waitingRoom());
-        drawDiningRoom(castleData.diningRoom());
+        drawWaitingRoom(castleData.getWaitingRoom());
+        drawDiningRoom(castleData.getDiningRoom());
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom) {
