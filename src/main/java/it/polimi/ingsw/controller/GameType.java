@@ -16,12 +16,11 @@ public enum GameType {
         this.expertMode = expertMode;
     }
 
-    public static GameType getGameType(int nPlayer, boolean expertMode){
-        for (GameType gameType : GameType.values()) {
+    public static GameType getGameType(int nPlayer, boolean expertMode) throws IllegalAccessException {
+        for (GameType gameType : GameType.values())
             if((nPlayer == gameType.nPlayer) && (expertMode == gameType.expertMode))
                 return gameType;
-        }
-        return null;
+        throw new IllegalArgumentException("not a valid game type");
     }
 
     @Override

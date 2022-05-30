@@ -136,7 +136,11 @@ public class ServerMain implements Runnable{
         String nickname = preferences.username();
         System.out.println(nickname + " joined in");
         GameType playerGameType = null;
+        try {
             playerGameType = getGameType(preferences.nPlayer(), preferences.expertMode());
+        } catch (IllegalAccessException e) {
+            //TODO: handle error (a meno che non sia controllato nella creazione del Message - Preferences
+        }
         //adds the new client
         heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
         //starts the receiver
