@@ -110,7 +110,7 @@ public class WaitingRooms {
                             nicknameMap.get(type).size());
             List<ServerReceiver> socketMap
                     = gameSocketMap.get(type).subList(
-                            (gameSocketMap.get(type).size()-numberOfPlayers),
+                            (gameSocketMap.get(type).size() - numberOfPlayers),
                              gameSocketMap.get(type).size());
             gameTypeSize.replace(type,
                     nicknameMap.get(type).size());
