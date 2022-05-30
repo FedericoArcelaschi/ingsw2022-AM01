@@ -38,17 +38,12 @@ public class Game {
         this.usernameServerReceiverMap = new HashMap<>();
         this.usernameSocketMap = new HashMap<>();
         this.movedStudents = 0;
-        for (int i = 0; i < usernameList.size(); i++) {
+        for (int i = 0; i < gameType.nPlayer; i++) {
             usernameServerReceiverMap.put(usernameList.get(i), gameSocketList.get(i));
             usernameSocketMap.put(usernameList.get(i), gameSocketList.get(i).getSocket());
         }
         turn = new Turn(usernameList);
-        if(gameType.equals(GameType.EXPERT_2_PLAYER) ||
-                gameType.equals(GameType.EXPERT_3_PLAYER) ||
-                gameType.equals(GameType.EXPERT_4_PLAYER))
-            this.board = BoardFactory.getBoard(usernameList, true, turn);
-        else
-            this.board = (ExpertBoard) BoardFactory.getBoard(usernameList, false, turn);
+        this.board = BoardFactory.getBoard(usernameList, gameType.expertMode, turn);
         sendAllUpdate();
     }
 

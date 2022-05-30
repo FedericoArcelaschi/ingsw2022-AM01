@@ -17,6 +17,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.*;
 
+import static it.polimi.ingsw.controller.GameType.getGameType;
+
 public class ServerMain implements Runnable{
 
     private final int port;

@@ -8,8 +8,8 @@ public enum GameType {
     EXPERT_3_PLAYER(3, true),
     EXPERT_4_PLAYER(4, true);
 
-    private final int nPlayer;
-    private final boolean expertMode;
+    public final int nPlayer;
+    public final boolean expertMode;
 
     GameType(int nPlayer, boolean expertMode){
         this.nPlayer = nPlayer;
