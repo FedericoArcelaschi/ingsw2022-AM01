@@ -58,15 +58,6 @@ public class Gui extends Application implements UserInterface {
 
     private BoardData createBoardData() {
         Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"), new Turn(Arrays.asList("fede", "gio")));
-        try{
-            b.playCard("fede", 1);
-            b.changePhase();
-            b.playCard("gio", 10);
-            b.changePhase();
-            b.moveStudentsToDiningRoom("fede", List.of(StudentColor.YELLOW));
-        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException e) {
-            throw new RuntimeException(e);
-        }
         return ModelDataBuilder.newBoardData("fede", b);
     }
 
@@ -81,7 +72,7 @@ public class Gui extends Application implements UserInterface {
             throw new RuntimeException(e);
         }
         gamePaneController = gameLoader.getController();
-        gamePaneController.initialize();
+
         gamePaneController.draw(boardData);
         stage.setScene(new Scene(loginFXML));
         stage.centerOnScreen();

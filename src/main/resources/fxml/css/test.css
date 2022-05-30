@@ -6,6 +6,14 @@
     -fx-background-position: center center;
 }
 
+#islandsPane{
+    -fx-background-color: lightblue;
+}
+
+#cardsHBox{
+    -fx-background-color: lightblue;
+}
+
 .student{
     -fx-background-size: 25, 25;
     -fx-opacity: 1;
@@ -33,6 +41,53 @@
 
 .studentBackgroundGreen{
     -fx-background-image: url("/students/student_green.png");
+}
+
+.assistant{
+    -fx-background-size: 91, 200;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: transparent;
+}
+
+.cardAssistant1{
+    -fx-background-image: url("/cards/Assistente1.png");
+}
+
+.cardAssistant2{
+    -fx-background-image: url("/cards/Assistente2.png");
+}
+
+.cardAssistant3{
+    -fx-background-image: url("/cards/Assistente3.png");
+}
+
+.cardAssistant4{
+    -fx-background-image: url("/cards/Assistente4.png");
+}
+
+.cardAssistant5{
+    -fx-background-image: url("/cards/Assistente5.png");
+}
+
+.cardAssistant6{
+    -fx-background-image: url("/cards/Assistente6.png");
+}
+
+.cardAssistant7{
+    -fx-background-image: url("/cards/Assistente7.png");
+}
+
+.cardAssistant8{
+    -fx-background-image: url("/cards/Assistente8.png");
+}
+
+.cardAssistant9{
+    -fx-background-image: url("/cards/Assistente9.png");
+}
+
+.cardAssistant10{
+    -fx-background-image: url("/cards/Assistente10.png");
 }
 
 .student:selected{

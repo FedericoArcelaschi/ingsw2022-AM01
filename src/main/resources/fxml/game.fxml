@@ -29,14 +29,14 @@
                   <Pane fx:id="waitingRoomPane" prefHeight="108.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
                         <ToggleButton fx:id="student1ToggleButton" layoutX="37.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                        <ToggleButton fx:id="student4ToggleButton" layoutX="132.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                         <ToggleButton fx:id="student2ToggleButton" layoutX="84.5" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                        <ToggleButton fx:id="student9ToggleButton" layoutX="227.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                        <ToggleButton fx:id="student8ToggleButton" layoutX="227.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                        <ToggleButton fx:id="student7ToggleButton" layoutX="179.5" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                        <ToggleButton fx:id="student6ToggleButton" layoutX="179.5" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                        <ToggleButton fx:id="student5ToggleButton" layoutX="132.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                         <ToggleButton fx:id="student3ToggleButton" layoutX="84.5" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                        <ToggleButton fx:id="student4ToggleButton" layoutX="132.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                        <ToggleButton fx:id="student5ToggleButton" layoutX="132.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                        <ToggleButton fx:id="student6ToggleButton" layoutX="179.5" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                        <ToggleButton fx:id="student7ToggleButton" layoutX="179.5" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                        <ToggleButton fx:id="student8ToggleButton" layoutX="227.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                        <ToggleButton fx:id="student9ToggleButton" layoutX="227.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                      </children>
                   </Pane>
                </bottom>
@@ -44,76 +44,76 @@
                   <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                      <children>
                         <Pane fx:id="professorTablePane" minHeight="-Infinity" prefHeight="70.0" prefWidth="200.0" />
-                        <Pane fx:id="diningRoomPane" prefHeight="400.0" prefWidth="200.0">
+                        <Pane fx:id="diningRoomPane" onMouseClicked="#moveStudentToDiningRoom" prefHeight="400.0" prefWidth="200.0">
                            <children>
                               <Pane fx:id="greenDRPane" layoutX="37.0" layoutY="13.0">
                                  <children>
-                                    <ToggleButton fx:id="greenStudent1DRPane" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="greenStudent2DRPane" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="greenStudent3DRPane" layoutY="223.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="greenStudent4DRPane" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="greenStudent5DRPane" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="greenStudent6DRPane" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="greenStudent7DRPane" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="greenStudent8DRPane" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="greenStudent9DRPane" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="greenStudent10DRPane" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="greenStudent1DRPane" disable="true" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="greenStudent2DRPane" disable="true" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="greenStudent3DRPane" disable="true" layoutY="223.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="greenStudent4DRPane" disable="true" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="greenStudent5DRPane" disable="true" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="greenStudent6DRPane" disable="true" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="greenStudent7DRPane" disable="true" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="greenStudent8DRPane" disable="true" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="greenStudent9DRPane" disable="true" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="greenStudent10DRPane" disable="true" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                  </children>
                               </Pane>
                               <Pane fx:id="redDRPane" layoutX="84.5" layoutY="13.0">
                                  <children>
-                                    <ToggleButton fx:id="redStudent1DRPane" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="redStudent2DRPane" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="redStudent3DRPane" layoutY="223.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="redStudent4DRPane" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="redStudent5DRPane" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="redStudent6DRPane" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="redStudent7DRPane" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="redStudent8DRPane" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="redStudent9DRPane" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="redStudent10DRPane" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="redStudent1DRPane" disable="true" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="redStudent2DRPane" disable="true" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="redStudent3DRPane" disable="true" layoutY="223.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="redStudent4DRPane" disable="true" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="redStudent5DRPane" disable="true" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="redStudent6DRPane" disable="true" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="redStudent7DRPane" disable="true" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="redStudent8DRPane" disable="true" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="redStudent9DRPane" disable="true" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="redStudent10DRPane" disable="true" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                  </children>
                               </Pane>
                               <Pane fx:id="blueDRPane" layoutX="227.0" layoutY="13.0">
                                  <children>
-                                    <ToggleButton fx:id="blueStudent1DRPane" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="blueStudent2DRPane" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="blueStudent3DRPane" layoutY="223.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="blueStudent4DRPane" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="blueStudent5DRPane" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="blueStudent6DRPane" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="blueStudent7DRPane" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="blueStudent8DRPane" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="blueStudent9DRPane" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="blueStudent10DRPane" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="blueStudent1DRPane" disable="true" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="blueStudent2DRPane" disable="true" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="blueStudent3DRPane" disable="true" layoutY="223.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="blueStudent4DRPane" disable="true" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="blueStudent5DRPane" disable="true" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="blueStudent6DRPane" disable="true" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="blueStudent7DRPane" disable="true" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="blueStudent8DRPane" disable="true" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="blueStudent9DRPane" disable="true" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="blueStudent10DRPane" disable="true" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                  </children>
                               </Pane>
                               <Pane fx:id="pinkDRPane" layoutX="179.5" layoutY="13.0">
                                  <children>
-                                    <ToggleButton fx:id="pinkStudent1DRPane" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="pinkStudent2DRPane" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="pinkStudent3DRPane" layoutY="223.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="pinkStudent4DRPane" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="pinkStudent5DRPane" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="pinkStudent6DRPane" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="pinkStudent7DRPane" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="pinkStudent8DRPane" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="pinkStudent9DRPane" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="pinkStudent10DRPane" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="pinkStudent1DRPane" disable="true" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="pinkStudent2DRPane" disable="true" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="pinkStudent3DRPane" disable="true" layoutY="223.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="pinkStudent4DRPane" disable="true" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="pinkStudent5DRPane" disable="true" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="pinkStudent6DRPane" disable="true" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="pinkStudent7DRPane" disable="true" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="pinkStudent8DRPane" disable="true" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="pinkStudent9DRPane" disable="true" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="pinkStudent10DRPane" disable="true" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                  </children>
                               </Pane>
                               <Pane fx:id="yellowDRPane" layoutX="132.0" layoutY="13.0">
                                  <children>
-                                    <ToggleButton fx:id="yellowStudent1DRPane" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="yellowStudent2DRPane" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="yellowStudent3DRPane" layoutY="223.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="yellowStudent4DRPane" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="yellowStudent5DRPane" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="yellowStudent6DRPane" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="yellowStudent7DRPane" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="yellowStudent8DRPane" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="yellowStudent9DRPane" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton fx:id="yellowStudent10DRPane" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="yellowStudent1DRPane" disable="true" layoutY="287.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="yellowStudent2DRPane" disable="true" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="yellowStudent3DRPane" disable="true" layoutY="223.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="yellowStudent4DRPane" disable="true" layoutY="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="yellowStudent5DRPane" disable="true" layoutY="159.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="yellowStudent6DRPane" disable="true" layoutY="128.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="yellowStudent7DRPane" disable="true" layoutY="96.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="yellowStudent8DRPane" disable="true" layoutY="64.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="yellowStudent9DRPane" disable="true" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton fx:id="yellowStudent10DRPane" disable="true" layoutY="1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                  </children>
                               </Pane>
                            </children>
@@ -130,10 +130,47 @@
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <center>
-            <Pane fx:id="islandsPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <Pane fx:id="islandsPane" prefHeight="640.0" prefWidth="910.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="640.0" prefWidth="910.0">
+                     <children>
+                        <HBox fx:id="islandRow1" prefHeight="213.0" prefWidth="200.0">
+                           <children>
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                           </children></HBox>
+                        <HBox fx:id="cloudRow" prefHeight="214.0" prefWidth="200.0" />
+                        <HBox fx:id="islandRow2" prefHeight="213.0" prefWidth="200.0">
+                           <children>
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                              <Pane prefHeight="200.0" prefWidth="151.0" />
+                           </children></HBox>
+                     </children>
+                  </VBox>
+               </children></Pane>
          </center>
          <bottom>
-            <HBox fx:id="cardsPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <HBox fx:id="cardsHBox" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+                  <Pane prefHeight="200.0" prefWidth="91.0" styleClass="assistant" />
+               </children></HBox>
          </bottom>
       </BorderPane>
    </center>
