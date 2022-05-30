@@ -5,19 +5,17 @@ import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.controller.GameType;
 import it.polimi.ingsw.model.baseLogic.Board;
 import it.polimi.ingsw.model.baseLogic.BoardFactory;
-import it.polimi.ingsw.model.baseLogic.StudentColor;
 import it.polimi.ingsw.model.baseLogic.Turn;
-import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.NotYourTurnException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.userInterface.UserInterface;
 import it.polimi.ingsw.userInterface.gui.controller.GamePaneController;
 import it.polimi.ingsw.userInterface.gui.controller.LoginPaneController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -33,6 +31,7 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void start(Stage stage) {
         this.stage = stage;
+        double screenHeight = stage.getMaxHeight();
         inGame = false;
         FXMLLoader loginLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/login.fxml")));
         Parent loginFXML;
@@ -72,8 +71,9 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void draw(BoardData boardData) {
-        FXMLLoader gameLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/game.fxml")));
         //draws the game panel for testing.
+        FXMLLoader gameLoader
+                = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/game.fxml")));
         inGame = true;
         Parent loginFXML;
         try {
