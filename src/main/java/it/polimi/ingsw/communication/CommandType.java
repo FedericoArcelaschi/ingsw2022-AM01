@@ -6,7 +6,8 @@ public enum CommandType {
     MOVE_STUDENT_TO_DININGROOM("movestudentdiningroom"),
     MOVE_STUDENT_TO_ISLAND("movestudentisland"),
     MOVE_STUDENT("movestudent"),
-    MOVE_MOTHER_NATURE("movemothernature");
+    MOVE_MOTHER_NATURE("movemothernature"),
+    PAY_CHARACTER("paychar");
 
     private final String commandString;
 

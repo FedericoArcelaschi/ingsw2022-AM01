@@ -11,13 +11,19 @@ public class BoardFactory {
         return getBoard(playerList, false, turn, RandomGenerator.getDefault().nextLong());
     }
 
+    public static Board getBoard(List<String> playerList, boolean expert, Turn turn){
+        if(expert)
+            return createExpertBoard(playerList, turn, RandomGenerator.getDefault().nextLong());
+        return createBoard(playerList, turn, RandomGenerator.getDefault().nextLong());
+    }
+
     public static Board getBoard(List<String> playerList, boolean expert, Turn turn, long seed){
         if(expert)
             return createExpertBoard(playerList, turn, seed);
-            return createBoard(playerList, turn, seed);
+        return createBoard(playerList, turn, seed);
     }
 
-    private static Board createExpertBoard(List<String> playerList, Turn turn, long seed) {
+    private static ExpertBoard createExpertBoard(List<String> playerList, Turn turn, long seed) {
         return
             switch (playerList.size()){
                 case 2 -> new ExpertBoard(playerList.get(0), playerList.get(1), turn, seed);

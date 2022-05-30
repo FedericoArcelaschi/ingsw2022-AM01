@@ -34,6 +34,10 @@ public class Command {
                 //e.g.: movemothernature 1
                 case CHOOSE_CLOUD -> attributesMap.put(CommandAttribute.ID, attributes[0]);
                 //e.g.: cloud 1
+                case PAY_CHARACTER -> {
+                    attributesMap.put(CommandAttribute.WHO, attributes[0]);
+                    attributesMap.put(CommandAttribute.WHAT, String.join("", Arrays.copyOfRange(attributes, 1, attributes.length)));
+                }
             }
         }
     }

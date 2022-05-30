@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.baseLogic.*;
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.model.expertLogic.ExpertBoard;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -42,7 +43,12 @@ public class Game {
             usernameSocketMap.put(usernameList.get(i), gameSocketList.get(i).getSocket());
         }
         turn = new Turn(usernameList);
-        board = BoardFactory.getBoard(usernameList, turn);
+        if(gameType.equals(GameType.EXPERT_2_PLAYER) ||
+                gameType.equals(GameType.EXPERT_3_PLAYER) ||
+                gameType.equals(GameType.EXPERT_4_PLAYER))
+            this.board = BoardFactory.getBoard(usernameList, true, turn);
+        else
+            this.board = (ExpertBoard) BoardFactory.getBoard(usernameList, false, turn);
         sendAllUpdate();
     }
 
@@ -63,6 +69,7 @@ public class Game {
                 case MOVE_STUDENT_TO_ISLAND -> moveStudentToIslandCommand(command);
                 case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
                 case CHOOSE_CLOUD -> chooseCloudCommand(command);
+                case PAY_CHARACTER -> payCharCommand(command);
             }
         }
     }
@@ -214,6 +221,13 @@ public class Game {
             send(createError(0, "The waiting room is full!"), usernameSocketMap.get(command.getUsername()));
         }
         sendAllUpdate();
+    }
+
+    private void payCharCommand(Command command){
+        //TODO: enter if condition so that you can't use this command if you're not in expert mode
+        //assert board instanceof ExpertBoard;
+        //((ExpertBoard) board).playExpertCard();
+        //board.playExpertCard()
     }
 
     private void sendWinUpdate(Team t){
