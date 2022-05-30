@@ -29,7 +29,7 @@
             <RadioButton fx:id="player2RadioButton" layoutX="90" layoutY="100" mnemonicParsing="false" text="2 Players" />
             <RadioButton fx:id="player3RadioButton" layoutX="200" layoutY="100" mnemonicParsing="false" text="3 Players" />
             <RadioButton fx:id="player4RadioButton" layoutX="310" layoutY="100" mnemonicParsing="false" text="4 Players" />
-            <CheckBox layoutX="90" layoutY="135" mnemonicParsing="false" text="Expert" />
+            <CheckBox fx:id="expertModeButton" layoutX="90" layoutY="135" mnemonicParsing="false" text="Expert" />
             <Label fx:id="networkLabel" layoutY = "180" text="Network:"/>
             <Label fx:id="ipLabel" layoutX="90" layoutY="180" text="IP:" />
             <TextField fx:id="ipTextField" layoutX="90" layoutY="195" promptText="127.0.0.1" />
