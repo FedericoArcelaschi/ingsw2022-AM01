@@ -1,6 +1,7 @@
 package it.polimi.ingsw.communication.serverSide;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.controller.WaitingRooms;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.controller.Game;
@@ -20,7 +21,8 @@ public class ServerMain implements Runnable {
     private final int port;
     private final Map<Socket, ServerReceiver> connectedPlayers = new HashMap<>();
     private final HeartBeatServer heartBeatServer = new HeartBeatServer(connectedPlayers.keySet());
-    private final WaitingRooms waitingRooms = new WaitingRooms();
+    private final Map<Integer, Game> games = new HashMap<>();
+    private final WaitingRooms waitingRooms = new WaitingRooms(games);
 
     //private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
     private ServerSocket serverSocket;
@@ -66,7 +68,6 @@ public class ServerMain implements Runnable {
         try{
             Socket socket= serverSocket.accept();
             GameType playerGameType = handleNewClient(socket);
-            checkGame(playerGameType);
         } catch(IOException e) {
             System.out.println(e.getMessage());
             try {

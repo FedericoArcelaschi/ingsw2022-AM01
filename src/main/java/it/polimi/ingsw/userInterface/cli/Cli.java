@@ -22,7 +22,6 @@ public class Cli extends Application implements UserInterface {
     final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public Cli() {
-        //TODO: ask user preferences.
         getValidInput();
         ClientMain clientMain = new ClientMain(username,
                 nPlayer,
