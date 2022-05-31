@@ -15,6 +15,10 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import static it.polimi.ingsw.controller.GameType.getGameType;
 
@@ -34,8 +38,7 @@ public class ServerMain implements Runnable {
     public static void init(){
         FileHandler fileHandler;
         try{
-            fileHandler = new FileHandler(//FIXME: don't hard code path
-                    "C:\\Users\\loren\\Desktop\\Università\\3° anno\\Progetto di ingegneria del software\\ingsw2022-AM01\\src\\main\\java\\it\\polimi\\ingsw\\controller\\LogFIle.log");
+            fileHandler = new FileHandler(System.getProperty("user.dir"));
             logger.addHandler(fileHandler);
             SimpleFormatter formatter = new SimpleFormatter();
             fileHandler.setFormatter(formatter);
