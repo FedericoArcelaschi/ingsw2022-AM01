@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.communication.clientSide;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.communication.packet.Packet;

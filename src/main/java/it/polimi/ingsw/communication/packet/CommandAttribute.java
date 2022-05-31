@@ -1,4 +1,4 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.communication.packet;
 
 public enum CommandAttribute {
     ID, //Numeric attribute
