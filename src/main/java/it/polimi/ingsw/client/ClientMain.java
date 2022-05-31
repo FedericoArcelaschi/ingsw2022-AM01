@@ -67,6 +67,8 @@ public class ClientMain {
     }
 
     public void runCommand(String stringCommand) {
+        if(stringCommand.equalsIgnoreCase("help"))
+            System.out.println(Outputs.HELP.out);
         if (socket == null || socket.isClosed()) {
             return;
         }

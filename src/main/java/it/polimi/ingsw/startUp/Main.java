@@ -7,10 +7,11 @@ import it.polimi.ingsw.userInterface.gui.Gui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Properties;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(Outputs.START.out);
+        Outputs.getTitle();
         switch (getUserType(args)) {
             case SERVER ->  new ServerMain(1234).run();
             case CLI ->     new Cli();
