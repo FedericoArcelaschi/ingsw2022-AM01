@@ -12,4 +12,8 @@ public class Update implements Message {
     public BoardData getBoardData() {
         return boardData;
     }
+    @Override
+    public String toString() {
+        return "updated board data:\n" + boardData;
+    }
 }

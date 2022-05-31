@@ -7,11 +7,11 @@ import java.util.List;
 
 public class LobbyInfoMessage implements Message{
     private final List<String> players;
-    private final GameType g;
+    private final GameType gameType;
 
     public LobbyInfoMessage(List<String> players, GameType g){
         this.players = new ArrayList<>(players);
-        this.g = g;
+        this.gameType = g;
     }
 
     public List<String> getPlayers(){
@@ -19,6 +19,12 @@ public class LobbyInfoMessage implements Message{
     }
 
     public GameType getGameType(){
-        return g;
+        return gameType;
+    }
+
+    @Override
+    public String toString() {
+        return "players in queue: " + players +
+                "game type: " + gameType;
     }
 }

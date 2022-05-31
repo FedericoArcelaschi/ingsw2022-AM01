@@ -21,12 +21,15 @@ public class Packet {
     public MessageType getType() {
         return type;
     }
-
-    public Type getTypeClass() {
-        return type.getTypeClass();
-    }
-
     public String getMessageJson() {
         return messageJson;
+    }
+
+    @Override
+    public String toString() {
+        return "Packet {" +
+                "type = " + type +
+                ", messageJson='" + new Gson().fromJson(messageJson, type.getTypeClass().getClass()) + '\'' +
+                '}';
     }
 }

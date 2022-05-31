@@ -16,4 +16,10 @@ public class CommandMessage implements Message{
     public String getCommand() {
         return command;
     }
+
+    @Override
+    public String toString() {
+        return  "player: " + username +
+                "command: " + command;
+    }
 }
