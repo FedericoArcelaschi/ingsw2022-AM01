@@ -60,7 +60,7 @@ public class Game {
         }else {
             switch (command.getType()) {
                 case PLAY_CARD -> playCardCommand(command);
-                case MOVE_STUDENT_TO_DININGROOM -> moveStudentToDiningRoomCommand(command);
+                case MOVE_STUDENT_TO_CASTLE -> moveStudentToDiningRoomCommand(command);
                 case MOVE_STUDENT_TO_ISLAND -> moveStudentToIslandCommand(command);
                 case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
                 case CHOOSE_CLOUD -> chooseCloudCommand(command);
@@ -147,9 +147,16 @@ public class Game {
                         .split(",")));
         //List of students that will get the respective Color value
         List<StudentColor> students = new ArrayList<>();
+        StudentColor color = null;
         for (String s : studentList) {
-            StudentColor c = StudentColor.getColor(s);
-            students.add(c);
+            try {
+               color = StudentColor.getColor(s);
+            } catch (IllegalArgumentException e) {
+                send(   new Packet(MessageType.ERROR,
+                        new ErrorMessage(1, e.getMessage())),
+                        usernameSocketMap.get(getBoard().getCurrentPlayer()));
+            }
+            students.add(color);
         }
         movedStudents += students.size();
 

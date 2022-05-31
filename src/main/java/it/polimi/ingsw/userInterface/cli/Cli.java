@@ -50,9 +50,10 @@ public class Cli implements UserInterface {
     }
 
     @Override
-    public void roomOutput(List<String> connectedUser, GameType gameType) {
+    public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
         StringBuilder sb = new StringBuilder();
         sb.append("Player in queue: \n");
+        sb.append("Game type: ").append(gameType).append("\n");
         for (String user : connectedUser) {
             sb.append("\t").append(user).append("\n");
         }
