@@ -23,7 +23,7 @@ public abstract class Receiver implements Runnable{
     protected final ClientMain cm;
     protected Gson parser;
 
-    public Receiver(ClientMain cm, Socket socket){
+    public Receiver(ClientMain cm, Socket socket) {
         this.socket = socket;
         this.cm = cm;
         this.parser = new GsonBuilder().create();

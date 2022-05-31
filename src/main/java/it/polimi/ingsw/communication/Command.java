@@ -1,5 +1,7 @@
 package it.polimi.ingsw.communication;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +14,7 @@ public class Command {
     private String username;
     private Map<CommandAttribute, String> attributesMap;
 
-    public Command(String username, CommandType type, String[] attributes) {
+    public Command(String username, @NotNull CommandType type, String[] attributes) {
         this.type = type;
         this.attributesMap = new HashMap<>();
         this.username = username;
@@ -42,7 +44,7 @@ public class Command {
         }
     }
 
-    public static Command createCommand(String username, String command){
+    public static Command createCommand(String username, String command) {
         String[] splitCommand = command.split(" ");
         for (CommandType ct : CommandType.values()) {
             if(splitCommand[0].toLowerCase().equals(ct.getCommandString()))
@@ -52,12 +54,13 @@ public class Command {
         return new Command(username, null, Arrays.copyOfRange(splitCommand, 1, splitCommand.length));
     }
 
-    public CommandType getType() {
-        return type;
-    }
 
     public String getUsername() {
         return username;
+    }
+
+    public CommandType getType() {
+        return type;
     }
 
     public Map<CommandAttribute, String> getAttributesMap() {
@@ -67,6 +70,7 @@ public class Command {
     public String toString(){
         StringBuilder attribute = new StringBuilder();
         for(String a : attributesMap.values()) attribute.append(" ").append(a);
-        return type.getCommandString() + attribute;
+        //FIXME: don't think was required return type.getCommandString() + attribute;
+        return attribute.toString();
     }
 }

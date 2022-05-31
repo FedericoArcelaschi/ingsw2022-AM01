@@ -44,8 +44,7 @@ public class WaitingRooms {
      * Adds a player to the requested lobby. Informs players of the same lobby that the state of the lobby changed.
      * @param gameType the provided gametype.
      * @param serverReceiver the serverReceiver of the new player.
-     * @param nickname the player name.
-     * @throws IOException
+     * @param nickname the player name. it's a key.
      */
     public void addPlayer(GameType gameType, ServerReceiver serverReceiver, String nickname) {
         gameSocketMap.get(gameType).add(serverReceiver);
@@ -58,11 +57,9 @@ public class WaitingRooms {
         }
     }
 
-    //TODO: DOES NOT WORK, DOES NOT SEND ANYTHING
+    //TODO: DOES NOT WORK, DOESN'T SEND ANYTHING
     /**
-     * Method used to send to the rest of the players who else joined the lobby.
-     * @param gameType the provided gametype.
-     * @param numberOfPlayers the amount of players expected by the game type.
+     * Method used to send to the other players in the lobby an update on who's in.
      */
     private void informPlayers(GameType gameType, int numberOfPlayers) {
         if(nicknameMap.get(gameType).size() >= 1 &&
@@ -86,7 +83,6 @@ public class WaitingRooms {
     /**
      * Computes the game type according to the player's preferences, if there are enough players.
      * Returns null otherwise.
-     * @param gameId
      * @return the correct game.
      */
     public Game computeGameType(int gameId, GameType gameType) {

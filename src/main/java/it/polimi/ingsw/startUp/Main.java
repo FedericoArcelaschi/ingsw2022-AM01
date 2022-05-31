@@ -12,13 +12,15 @@ public class Main {
     public static void main(String[] args) {
         System.out.println(Outputs.START.out);
         switch (getUserType(args)) {
-            case SERVER -> new ServerMain(1234).run();
-            case CLI -> new Cli();
-            case GUI -> new Gui();
+            case SERVER ->  new ServerMain(1234).run();
+            case CLI ->     new Cli();
+            case GUI ->     new Gui();
         }
-
     }
 
+    /**
+     * The app is stuck here until the client insert the right input.
+     */
     private static UserType getUserType(String[] args) {
         if (args.length == 0 || args[0] == null)
             return getUserType();
@@ -46,4 +48,5 @@ public class Main {
         }
         return userType;
     }
+    
 }

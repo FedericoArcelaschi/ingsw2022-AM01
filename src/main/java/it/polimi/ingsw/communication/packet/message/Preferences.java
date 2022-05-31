@@ -38,8 +38,8 @@ public class Preferences implements Message {
     @Override
     public String toString() {
         return "Preferences: " +
-                "username = " + username + ", " +
-                "number of players = " + nPlayer + ", " +
+                "username: " + username + ", " +
+                "number of players: " + nPlayer + ", " +
                 (expertMode ? "expert mode" : "base mode");
     }
 }

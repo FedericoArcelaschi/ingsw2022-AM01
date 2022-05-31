@@ -49,7 +49,7 @@ public class Game {
     }
 
     /**
-     * execute the command requested
+     * Controller: executes the command requested
      * @param command description of the command requested
      * @return response to the command
      */
@@ -169,8 +169,8 @@ public class Game {
     private void moveStudentToIslandCommand(@NotNull Command command){
         List<String> studentList = new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
         List<StudentColor> students = new ArrayList<>();
-        for (String stud : studentList) {
-            StudentColor c = StudentColor.getColor(stud);
+        for (String student : studentList) {
+            StudentColor c = StudentColor.getColor(student);
             students.add(c);
         }
         movedStudents += students.size();

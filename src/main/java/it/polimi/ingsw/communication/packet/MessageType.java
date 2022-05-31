@@ -13,14 +13,14 @@ public enum MessageType {
     COMMAND(CommandMessage.class),
     LOBBY(LobbyInfoMessage.class);
 
-    private Type type;
+    private final Type type;
 
     MessageType(Type type) {
         this.type = type;
     }
 
     public Type getTypeClass() {
-        return type;
+        return type.getClass();
     }
 
     @Override

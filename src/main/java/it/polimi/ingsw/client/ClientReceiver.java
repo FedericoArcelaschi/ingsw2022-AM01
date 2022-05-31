@@ -1,7 +1,6 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.ClientMain;
-import it.polimi.ingsw.client.ClientState;
+import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.userInterface.UserInterface;
 import it.polimi.ingsw.communication.packet.MessageType;
@@ -20,12 +19,13 @@ public class ClientReceiver extends Receiver {
         this.userInterface = userInterface;
     }
 
-    void messageSwitch(MessageType type, Message message) {
+    protected void messageSwitch(MessageType type, Message message) {
         switch (type) {
             case PING -> {
                 Ping ping = (Ping) message;
                 Packet heartbeatToServer = new Packet(MessageType.PING, ping);
                 out.println(parser.toJson(heartbeatToServer));
+                //todo: kill in case of disconnection.
             }
             case UPDATE -> {
                 Update update = (Update) message;
@@ -35,13 +35,13 @@ public class ClientReceiver extends Receiver {
             }
             case LOBBY -> {
                 LobbyInfoMessage lobbyInfoMessage = (LobbyInfoMessage) message;
-                userInterface.roomOutput(lobbyInfoMessage.getPlayers(), lobbyInfoMessage.getGameType());
+                userInterface.printWaitingRoom(lobbyInfoMessage.getPlayers(), lobbyInfoMessage.getGameType());
+                cm.setState(ClientState.WAITING_ROOM);
             }
             case END -> cm.setState(ClientState.GAME_ENDED);
 
             case ERROR -> System.out.println("new error received: " + ((ErrorMessage) message).getMessage());
-                //print data without saving it anywhere
-                //ViewDraw.drawCli(message.data());
+                //prints data without saving it anywhere
         }
     }
 }

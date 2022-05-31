@@ -1,5 +1,8 @@
 package it.polimi.ingsw.startUp;
 
+/**
+ * Used in the Main to get the right user type.
+ */
 public enum UserType {
     SERVER,
     CLI,

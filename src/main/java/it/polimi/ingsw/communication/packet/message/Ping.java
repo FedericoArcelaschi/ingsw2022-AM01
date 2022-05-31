@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Ping implements Message {
+
     private final UUID id;
     private final Timestamp time;
 
@@ -42,4 +43,5 @@ public class Ping implements Message {
         var that = (Ping) obj;
         return Objects.equals(this.id, that.id());
     }
+
 }

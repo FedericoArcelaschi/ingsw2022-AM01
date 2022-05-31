@@ -19,8 +19,7 @@ import java.util.logging.*;
 
 import static it.polimi.ingsw.controller.GameType.getGameType;
 
-public class ServerMain implements Runnable{
-
+public class ServerMain implements Runnable {
     private final int port;
     private ExecutorService executor;
     private ServerSocket serverSocket;
@@ -66,7 +65,8 @@ public class ServerMain implements Runnable{
 
 
     /**
-     * start the server
+     * starts the server on the given port.
+     * initiates the heartbeat server on a new thread. (empty)
      */
     public void startServer() {
         executor = Executors.newCachedThreadPool();
@@ -86,7 +86,9 @@ public class ServerMain implements Runnable{
     }
 
     /**
-     * wait for players to connect and generate a game when there are 2 players connected
+     * Server main method.
+     * Waits for players to connect and gets the player preferences.
+     * checkGame generates a game when there are enough player connected and moves the players to the relative rooms.
      */
     public void acceptPlayers(){
 
@@ -119,11 +121,25 @@ public class ServerMain implements Runnable{
                 serverReceiver.setGame(game);
             }
             gameId++; //Has to be increased only if method does not return null
+    /**
+     * Check if a game (with the preferences of the player that just logged-in).
+     * can be initiated.
+     */
         }
     }
 
 
-    private GameType handleNewClient(Socket socket){
+    /**
+     * Gets the preference packet and
+     * initiate the server receiver relative the new client,
+     * puts it in the client list -> connected players,
+     * puts it in the heart beat server,
+     * put the client in the right lobby looking at the preferences,
+     * puts the client receiver on a separate thread
+     * //TODO: è giusto un nuovo thread?
+     * @return
+     */
+    private GameType handleNewClient(Socket socket) {
         //listen for preferences
         String input;
         try{
@@ -132,7 +148,7 @@ public class ServerMain implements Runnable{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //decode preferences
+        // decode preferences
         Packet preferencesPacket = parser.fromJson(input, Packet.class);
         Preferences preferences = parser.fromJson(preferencesPacket.getMessageJson(), Preferences.class);
         String nickname = preferences.username();
