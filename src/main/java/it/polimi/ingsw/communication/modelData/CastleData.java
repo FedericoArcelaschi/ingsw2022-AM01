@@ -10,13 +10,13 @@ import java.util.Objects;
 public class CastleData {
     private final String username;
     private final List<StudentColor> waitingRoom;
-    private final Map<StudentColor, Integer> diningRoom;
+    private final List<StudentColor> diningRoom;
     private final List<String> deck;
     private final String lastPlayedCard;
     private final Team towerColor;
     private final boolean isMyCastle;
 
-    public CastleData(String username, List<StudentColor> waitingRoom, Map<StudentColor, Integer> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, boolean isMyCastle) {
+    public CastleData(String username, List<StudentColor> waitingRoom, List<StudentColor> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, boolean isMyCastle) {
         this.username = username;
         this.waitingRoom = waitingRoom;
         this.diningRoom = diningRoom;
@@ -34,7 +34,7 @@ public class CastleData {
         return waitingRoom;
     }
 
-    public Map<StudentColor, Integer> getDiningRoom() {
+    public List<StudentColor> getDiningRoom() {
         return diningRoom;
     }
 
@@ -71,8 +71,8 @@ public class CastleData {
             s.append(c).append(", ");
         }
         s.append("\n\t\tStudents in dining room: ");
-        for (StudentColor c : diningRoom.keySet())
-            s.append(c).append(": ").append(diningRoom.get(c).toString()).append(", ");
+        for (StudentColor c : diningRoom)
+            s.append(c).append(": ").append(diningRoom.toString()).append(", ");
         if (isMyCastle) {
             s.append("\n\t\tAvailable Cards: ");
             for (String c : deck)

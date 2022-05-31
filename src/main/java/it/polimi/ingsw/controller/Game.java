@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.communication.Command;
 import it.polimi.ingsw.communication.CommandAttribute;
 import it.polimi.ingsw.communication.ServerReceiver;
@@ -103,7 +104,7 @@ public class Game {
     }
 
     private void send(Packet packet, Socket socket){
-        Gson parser = new Gson();
+        Gson parser = new GsonBuilder().create();
         PrintWriter out = null;
         try {
             out = new PrintWriter(socket.getOutputStream(), true);

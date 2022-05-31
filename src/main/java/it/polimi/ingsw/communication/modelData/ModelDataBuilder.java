@@ -2,6 +2,9 @@ package it.polimi.ingsw.communication.modelData;
 
 import it.polimi.ingsw.model.baseLogic.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class ModelDataBuilder {
@@ -28,14 +31,26 @@ public abstract class ModelDataBuilder {
     }
 
     private static IslandData newIslandData(Island island) {
-        return new IslandData(island.getOwnership(), island.getStudents(), island.getIslandNumber());
+        List<StudentColor> students = new ArrayList<>();
+        for (StudentColor studentColor: island.getStudents().keySet()) {
+            for (int i = 0; i < island.getStudents().get(studentColor); i++) {
+                students.add(studentColor);
+            }
+        }
+        return new IslandData(island.getOwnership(), students, island.getIslandNumber());
     }
 
     private static CastleData newCastleData(String username, Castle castle, boolean isMyCastle) {
+        List<StudentColor> diningRoom = new ArrayList<>();
+        for (StudentColor studentColor: castle.getDiningRoom().keySet()) {
+            for (int i = 0; i < castle.getDiningRoom().get(studentColor); i++) {
+                diningRoom.add(studentColor);
+            }
+        }
         return new CastleData(
                 username,
                 castle.getWaitingRoom(),
-                castle.getDiningRoom(),
+                diningRoom,
                 isMyCastle ? castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList() : null,
                 castle.getLastCardPlayed() != null ?castle.getLastCardPlayed().toString() : null,
                 castle.getTeam(),

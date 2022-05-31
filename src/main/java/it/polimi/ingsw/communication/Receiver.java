@@ -46,6 +46,7 @@ public abstract class Receiver implements Runnable{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            //System.out.println(packet.getMessageJson());
             message = parser.fromJson(packet.getMessageJson(), packet.getTypeClass());
             messageSwitch(packet.getType(), message);
         }
