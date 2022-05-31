@@ -49,5 +49,5 @@ public class Main {
         }
         return userType;
     }
-    
+
 }

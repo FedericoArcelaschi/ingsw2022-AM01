@@ -24,7 +24,6 @@ import java.util.*;
 
 public class Game {
     private final GameType gameType;
-    private final int gameId;
     private final Board board;
     private final Turn turn;
     private final Map<String, Socket> usernameSocketMap;
@@ -33,9 +32,8 @@ public class Game {
     //TODO: more times per turn.
     private int movedStudents;
 
-    public Game(GameType gameType, int gameId, List<String> usernameList, List<ServerReceiver> gameSocketList) {
+    public Game(GameType gameType, List<String> usernameList, List<ServerReceiver> gameSocketList) {
         this.gameType = gameType;
-        this.gameId = gameId;
         this.usernameServerReceiverMap = new HashMap<>();
         this.usernameSocketMap = new HashMap<>();
         this.movedStudents = 0;
@@ -44,7 +42,8 @@ public class Game {
             usernameSocketMap.put(usernameList.get(i), gameSocketList.get(i).getSocket());
         }
         turn = new Turn(usernameList);
-        this.board = BoardFactory.getBoard(usernameList, gameType.expertMode, turn);
+        this.board = BoardFactory.getBoard(usernameList, gameType.expertMode, turn, 1);
+        //FIXME: seed for testing / debugging.
         sendAllUpdate();
     }
 
@@ -55,7 +54,7 @@ public class Game {
      */
     public void executeCommand(Command command){
         System.out.println("Executing command...");
-        if(command.getType()==null){
+        if(command.getType() == null){
             send(createError(0, "Command not valid; please, try again."), usernameSocketMap.get(command.getUsername()));
             sendAllUpdate();
         }else {

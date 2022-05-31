@@ -23,7 +23,7 @@ public class BoardFactory {
         return createBoard(playerList, turn, seed);
     }
 
-    private static ExpertBoard createExpertBoard(List<String> playerList, Turn turn, long seed) {
+    private static Board createExpertBoard(List<String> playerList, Turn turn, long seed) {
         return
             switch (playerList.size()) {
                 case 2 -> new ExpertBoard(playerList.get(0), playerList.get(1), turn, seed);

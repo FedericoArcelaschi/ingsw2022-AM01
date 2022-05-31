@@ -12,7 +12,6 @@ import java.net.Socket;
  * Allow the server to receive packets from a client's socket and handle them.
  */
 public class ServerReceiver extends Receiver{
-
     private final HeartBeatServer hbs;
     private Game game;
 
@@ -26,7 +25,7 @@ public class ServerReceiver extends Receiver{
         this.game = game;
     }
 
-    void messageSwitch(MessageType type, Message message) {
+    protected void messageSwitch(MessageType type, Message message) {
         switch (type){
             case PING -> {
                 System.out.println("client pinged back");

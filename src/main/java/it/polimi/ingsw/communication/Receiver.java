@@ -52,5 +52,5 @@ public abstract class Receiver implements Runnable{
         }
     }
 
-    void messageSwitch(MessageType type, Message message){}
+    protected abstract void messageSwitch(MessageType type, Message message);
 }

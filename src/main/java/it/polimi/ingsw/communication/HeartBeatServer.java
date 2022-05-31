@@ -69,14 +69,9 @@ public class HeartBeatServer implements Callable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            if(!heartBeats.isEmpty())
-                System.out.println("client didn't ping back in time");
-            run(); //personalmente mi sembra più elegante
-        //TODO: removeClient(s);
-        //TODO: waitingRooms.removePlayer(s);
-        //TODO: game.end(s);
-        //errorMessage.append(s).append(", ");
-        //throw new ClientNotRespondingException(errorMessage.toString());
+            for (Socket clientSocket : heartBeats)
+                clients.remove(clientSocket);
+        }
     }
 
     @Override

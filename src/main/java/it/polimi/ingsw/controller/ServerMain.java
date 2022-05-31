@@ -15,16 +15,15 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.*;
 
 import static it.polimi.ingsw.controller.GameType.getGameType;
 
 public class ServerMain implements Runnable {
     private final int port;
     private ExecutorService executor;
+    private final Map<Socket, ServerReceiver> connectedPlayers = new HashMap<>();
+    private final HeartBeatServer heartBeatServer = new HeartBeatServer(connectedPlayers.keySet());
     private ServerSocket serverSocket;
-    private final Map<String, ServerReceiver> connectedPlayers;
-    private HeartBeatServer heartBeatServer;
     private final WaitingRooms waitingRooms;
     private final Map<GameType, Integer> gamesNumber;
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
@@ -69,20 +68,16 @@ public class ServerMain implements Runnable {
      * initiates the heartbeat server on a new thread. (empty)
      */
     public void startServer() {
-        executor = Executors.newCachedThreadPool();
-
-        //creating server socket
-        logger.info("Starting server...");
+        //creating server
+        //logger.info("Starting server...");
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             System.err.println(e.getMessage()); // Porta non disponibile
             return;
         }
-
         System.out.println("Server: Server ready on IP: " + serverSocket.getInetAddress() + " port: " + serverSocket.getLocalPort());
-        heartBeatServer = new HeartBeatServer();
-        executor.submit(heartBeatServer);
+        Executors.newCachedThreadPool().submit(heartBeatServer);
     }
 
     /**
