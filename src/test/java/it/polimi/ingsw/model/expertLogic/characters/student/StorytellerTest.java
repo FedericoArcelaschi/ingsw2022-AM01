@@ -40,7 +40,7 @@ public class StorytellerTest {// 10° character
 
         try {
             expertBoard.moveStudentsToDiningRoom("Piro", studentsToMove);
-        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException e) {
+        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
 
@@ -58,7 +58,7 @@ public class StorytellerTest {// 10° character
         //actual playExpertCard
         try {
             expertBoard.playExpertCard(10, 0, new ArrayList<>(studentsForCharacter));
-        } catch (StudentException | CoinException e) {
+        } catch (StudentException | CoinException | PhaseNotRightException e) {
             fail(e.getCause());
         }
 
@@ -87,7 +87,7 @@ public class StorytellerTest {// 10° character
 
         try {
             expertBoard.moveStudentsToDiningRoom("Piro", studentsToMove); //all students are in the diningroom.
-        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException e) {
+        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
 

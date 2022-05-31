@@ -70,7 +70,9 @@ public class ExpertBoard extends Board {
      * @throws CoinException if the player doesn't have the needed coins to pay
      */
     @Override
-    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException {
+    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, PhaseNotRightException {
+        if(turn.getCurrentPhase() == TurnPhase.PLANNING)
+            throw new PhaseNotRightException("You can't use this command in this stage of the game.");
         StandardCharacter ec = checkLegalExpertCard(idChar);
         ParametersForCharacter par = getParameters(ec.getCharacterType(), studentsList, islandIndex);
         int actualCost = ec.getCost();

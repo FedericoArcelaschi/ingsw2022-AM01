@@ -28,7 +28,7 @@ public class WitchTest { //5° character
 
         try {
             expertBoard.playCard(player1, 5);
-        } catch (NotYourTurnException e) { fail(e.getCause()); }
+        } catch (NotYourTurnException | PhaseNotRightException e) { fail(e.getCause()); }
 
         try {
             expertBoard.moveStudentsToDiningRoom(player1, expertBoard.getCastle(player1).getWaitingRoom());
@@ -40,6 +40,9 @@ public class WitchTest { //5° character
             fail(e.getCause());
         } catch (CoinException e) {
             playExpertCardTest();
+            return;
+        } catch (PhaseNotRightException e) {
+            fail(e.getCause());
             return;
         }
         ExpertIsland blockedIsland = (ExpertIsland) expertBoard.getIslandList().get(islandIndex);

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.baseLogic;
 
 import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ BoardTest {
     }
 
     @Test
-    public void testGetAvailableCard() throws NotYourTurnException {
+    public void testGetAvailableCard() throws NotYourTurnException, PhaseNotRightException {
         assertEquals(10, b.getCastle(player1).getDeck().stream().filter(card -> card.isAvailable()).count());
         b.playCard(player1, 1);
         b.playCard(player1, 2);
@@ -92,7 +93,7 @@ BoardTest {
     }
 
     @Test
-    public void testChooseCloud() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
+    public void testChooseCloud() throws PhaseNotRightException, NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         List<StudentColor> cl = new ArrayList<>();
         //move 4 element to DR to free space for new students coming from cloud
         for(int i=0; i<4;i++){
@@ -103,7 +104,7 @@ BoardTest {
         assertTrue(b.chooseCloud(player1, 0));
     }
     @Test
-    public void testMoveStudentToIsland() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
+    public void testMoveStudentToIsland() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
         List<StudentColor> studentColorList =  new ArrayList<>();
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(1));
@@ -126,7 +127,7 @@ BoardTest {
         assertEquals(students, studentsOnIsland);
     }
     @Test
-    public void testPlayCard() throws NotYourTurnException {
+    public void testPlayCard() throws NotYourTurnException, PhaseNotRightException {
         //check if the card is not used at the beginning
         assertTrue(b.getCastleMap().get(player1).getDeck().get(0).isAvailable());
         //check if the card is played correctly
@@ -140,7 +141,7 @@ BoardTest {
         assertThrowsExactly(IllegalArgumentException.class,() -> b.playCard(player1,1));
     }
     @Test
-    public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
+    public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
         List<StudentColor> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
         b.moveStudentsToDiningRoom(player1, students);
         //test professor get assigned
@@ -161,7 +162,7 @@ BoardTest {
     }
 
     @Test
-    public void testMoveMotherNature() throws NotYourTurnException {
+    public void testMoveMotherNature() throws NotYourTurnException, PhaseNotRightException {
         b.playCard(player1, 3);
         b.moveMotherNature(1);
     }

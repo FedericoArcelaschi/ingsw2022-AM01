@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.baseLogic;
 
 import it.polimi.ingsw.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.model.exceptions.PhaseNotRightException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -54,7 +55,7 @@ public class TurnTest{
             t.changePhase();
             List<String> newOrder = Arrays.asList("lore", "fede", "gio");
             assertEquals(newOrder, t.getActionOrder());
-        } catch (NotYourTurnException e) {
+        } catch (NotYourTurnException | PhaseNotRightException e) {
             e.printStackTrace();
         }
     }

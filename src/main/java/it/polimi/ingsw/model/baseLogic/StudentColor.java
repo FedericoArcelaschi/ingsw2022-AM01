@@ -39,7 +39,7 @@ public enum StudentColor implements PossibleParameters {
         return this.name().toLowerCase();
     }
 
-    static StudentColor parseColor(String color) {
+    public static StudentColor parseColor(String color) {
         for (StudentColor student : StudentColor.values()) {
             if(student.name().equalsIgnoreCase(color))
                 return student;

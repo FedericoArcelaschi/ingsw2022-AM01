@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.random.RandomGenerator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class QueenTest { //11° character
     private CharacterExplanation characterExplanation = CharacterExplanation.QUEEN;
@@ -30,7 +29,7 @@ public class QueenTest { //11° character
 
         try {
             expertBoard.moveStudentsToDiningRoom(player2, currentPlayerCastle.getWaitingRoom());
-        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException e) {
+        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
         Map<StudentColor, Integer> diningRoom = new HashMap<>(currentPlayerCastle.getDiningRoom());
@@ -45,6 +44,9 @@ public class QueenTest { //11° character
             return;
         } catch (StudentException e) {
             throw new RuntimeException(e);
+        } catch (PhaseNotRightException e){
+            e.printStackTrace();
+            return;
         }
         diningRoom.put(studentToMove, diningRoom.get(studentToMove)+1);
         assertEquals(diningRoom, currentPlayerCastle.getDiningRoom());
@@ -58,7 +60,7 @@ public class QueenTest { //11° character
 
         try {
             expertBoard.moveStudentsToDiningRoom(player2, currentPlayerCastle.getWaitingRoom());
-        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException e) {
+        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
         Map<StudentColor, Integer> diningRoom = new HashMap<>(currentPlayerCastle.getDiningRoom());
@@ -79,6 +81,9 @@ public class QueenTest { //11° character
             throw new NoSuchStudentException(e.getMessage());
         } catch (StudentException e) {
             throw new StudentException(e);
+        } catch (PhaseNotRightException e) {
+            fail(e.getCause());
+            return;
         }
         diningRoom.put(studentToMove, diningRoom.get(studentToMove)+1);
         assertEquals(diningRoom, currentPlayerCastle.getDiningRoom());

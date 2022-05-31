@@ -26,8 +26,6 @@ public class Game {
     private final Turn turn;
     private final Map<String, Socket> usernameSocketMap;
     private final Map<String, ServerReceiver> usernameServerReceiverMap;
-    //TODO: there could be a better way of doing this. The parameter is used to ensure that the player can move students
-    //TODO: more times per turn.
     private int movedStudents;
     //TODO: Controls should be done in the right phase: this check is missing. Also, need a better way to check
     //TODO: that I have moved the right amount of students.
@@ -43,7 +41,6 @@ public class Game {
         }
         turn = new Turn(usernameList);
         this.board = BoardFactory.getBoard(usernameList, gameType.expertMode, turn, 1);
-        //FIXME: seed for testing / debugging.
         sendAllUpdate();
     }
 
@@ -127,7 +124,7 @@ public class Game {
         try {
             board.playCard(command.getUsername() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
             turn.changePhase();
-        } catch (NotYourTurnException | IllegalArgumentException e) {
+        } catch (NotYourTurnException | IllegalArgumentException | PhaseNotRightException e) {
             send(createError(0, e.getMessage()), usernameSocketMap.get(command.getUsername()));
         }
         sendAllUpdate();
@@ -139,74 +136,66 @@ public class Game {
         //Needs to be changed accordingly if the convention changes.
 
         //List of students in the command
-        List<String> studentList =  new ArrayList<>(
-                Arrays.asList(
-                        command
-                        .getAttributesMap()
-                        .get(CommandAttribute.WHAT)
-                        .split(",")));
-        //List of students that will get the respective Color value
-        List<StudentColor> students = new ArrayList<>();
-        StudentColor color = null;
-        for (String s : studentList) {
-            try {
-               color = StudentColor.getColor(s);
-            } catch (IllegalArgumentException e) {
-                send(   new Packet(MessageType.ERROR,
-                        new ErrorMessage(1, e.getMessage())),
-                        usernameSocketMap.get(getBoard().getCurrentPlayer()));
-            }
-            students.add(color);
-        }
+        List<StudentColor> students = getStudentsFromCommand(command.getAttributesMap().get(CommandAttribute.WHAT));
         movedStudents += students.size();
-
-        try {
-            board.moveStudentsToDiningRoom(command.getUsername(), students);
-            if(movedStudents == 3) {
-                movedStudents = 0;
-                turn.changePhase();
+        if(movedStudents > 3){
+            send(createError(0, "Too many students selected, try again."), usernameSocketMap.get(command.getUsername()));
+        }else {
+            try {
+                board.moveStudentsToDiningRoom(command.getUsername(), students);
+                if (movedStudents == 3) {
+                    movedStudents = 0;
+                    turn.changePhase();
+                }
+            } catch (NoSuchStudentException | TooManyStudentsException | NotYourTurnException | PhaseNotRightException e) {
+                send(createError(0, e.getMessage()), usernameSocketMap.get(command.getUsername()));
             }
-        } catch (NoSuchStudentException  | TooManyStudentsException | NotYourTurnException e) {
-            send(createError(0, e.getMessage()), usernameSocketMap.get(command.getUsername()));
+            sendAllUpdate();
         }
-        sendAllUpdate();
     }
 
     private void moveStudentToIslandCommand(@NotNull Command command){
-        List<String> studentList = new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
-        List<StudentColor> students = new ArrayList<>();
-        for (String student : studentList) {
-            StudentColor c = StudentColor.getColor(student);
-            students.add(c);
-        }
+        List<StudentColor> students = getStudentsFromCommand(command.getAttributesMap().get(CommandAttribute.WHAT));
         movedStudents += students.size();
-
-        try {
-            //The -1 is needed because islands are indexed starting from 0; if the player inputs 1 the chosen island
-            //becomes the first one, which is island number 0.
-            board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE))-1, students);
-            if(movedStudents == 3) {
-                movedStudents = 0;
-                turn.changePhase();
-            }
-        } catch (NoSuchStudentException e) { //fixme e.getmessage()
-            send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
-        } catch (NotYourTurnException e) {
-            send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
-        } catch (TooManyStudentsException e) {
-            throw new RuntimeException(e);
+        if(movedStudents > 3){
+            send(createError(0, "Too many students selected, try again."), usernameSocketMap.get(command.getUsername()));
         }
-        sendAllUpdate();
+        else {
+            try {
+                //The -1 is needed because islands are indexed starting from 0; if the player inputs 1 the chosen island
+                //becomes the first one, which is island number 0.
+                board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE)) - 1, students);
+                if (movedStudents == 3) {
+                    movedStudents = 0;
+                    turn.changePhase();
+                }
+            } catch (NoSuchStudentException e) { //fixme e.getmessage()
+                send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
+            } catch (NotYourTurnException e) {
+                send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
+            } catch (PhaseNotRightException e) {
+                send(createError(0, "You can't use this command in this phase of the game."), usernameSocketMap.get(command.getUsername()));
+            }
+            sendAllUpdate();
+        }
     }
 
     private void moveMotherNatureCommand(Command command){
-        board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
-        Team t = board.isWinningPosition();
-        if(t != null){
-            sendWinUpdate(t);  //Also changes the state of the client to GAME_ENDED now.
+        if(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)) > board.getPossibleMovingSteps())
+            send(createError(0, "Too many steps; please try again."), usernameSocketMap.get(command.getUsername()));
+        else {
+            try{
+                board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
+            }catch(PhaseNotRightException e){
+                send(createError(0, "You can't use this command in this stage of the game."), usernameSocketMap.get(command.getUsername()));
+            }
+            Team t = board.isWinningPosition();
+            if (t != null) {
+                sendWinUpdate(t);  //Also changes the state of the client to GAME_ENDED now.
+            }
+            turn.changePhase();
+            sendAllUpdate();
         }
-        turn.changePhase();
-        sendAllUpdate();
     }
 
     private void chooseCloudCommand(Command command){
@@ -221,12 +210,13 @@ public class Game {
             send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
         } catch (TooManyStudentsException e) {
             send(createError(0, "The waiting room is full!"), usernameSocketMap.get(command.getUsername()));
+        } catch (PhaseNotRightException e) {
+            send(createError(0, "You can't use this command in this stage of the game."), usernameSocketMap.get(command.getUsername()));
         }
         sendAllUpdate();
     }
 
     private void payCharCommand(Command command){
-        //TODO: enter if condition so that you can't use this command if you're not in expert mode
         try {
             //TODO: must throw exception if characterId does not exist
             int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
@@ -237,7 +227,7 @@ public class Game {
                 students.add(c);
             }
             board.playExpertCard(idChar, Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE)), students );
-        }catch (NotTheRightGamemodeException | CoinException | StudentException e){
+        }catch (NotTheRightGamemodeException | CoinException | StudentException | PhaseNotRightException e){
             e.printStackTrace();
         }
     }
@@ -253,6 +243,17 @@ public class Game {
             Packet packet1 = new Packet(MessageType.END, gameOver);
             send(packet, usernameSocketMap.get(username));
         }
+    }
+
+    private List<StudentColor> getStudentsFromCommand(String string){
+        List<String> studentList =  new ArrayList<>(Arrays.asList(string.split(",")));
+        List<StudentColor> students = new ArrayList<>();
+        StudentColor color = null;
+        for (String s : studentList) {
+            color = StudentColor.parseColor(s);
+            students.add(color);
+        }
+        return students;
     }
 
     public Board getBoard() {
