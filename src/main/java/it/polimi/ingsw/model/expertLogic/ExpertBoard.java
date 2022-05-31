@@ -69,6 +69,7 @@ public class ExpertBoard extends Board {
      * @throws IllegalArgumentException the selected character was not extracted during this turn
      * @throws CoinException if the player doesn't have the needed coins to pay
      */
+    @Override
     public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException {
         StandardCharacter ec = checkLegalExpertCard(idChar);
         ParametersForCharacter par = getParameters(ec.getCharacterType(), studentsList, islandIndex);

@@ -7,8 +7,8 @@ import java.text.ParseException;
 
 public class GsonTests {
 
-    @Test
-    void GsonParseTest() {
-        System.out.println(new Gson().toJson());
-    }
+    //@Test
+    //void GsonParseTest() {
+    //    System.out.println(new Gson().toJson());
+    //}
 }

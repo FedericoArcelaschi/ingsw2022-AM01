@@ -1,11 +1,12 @@
 package it.polimi.ingsw.model.baseLogic;
 
-import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.NotYourTurnException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.model.exceptions.*;
 import it.polimi.ingsw.model.baseLogic.interfaces.GreaterTeam;
 import it.polimi.ingsw.model.baseLogic.influence.Influence;
 import it.polimi.ingsw.model.baseLogic.influence.Professors;
+import it.polimi.ingsw.model.expertLogic.ExpertCastle;
+import it.polimi.ingsw.model.expertLogic.character.applyEffect.ParametersForCharacter;
+import it.polimi.ingsw.model.expertLogic.character.charTypes.StandardCharacter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -373,6 +374,10 @@ public class Board {
                     nTowers.replace(t, nTowers.get(t) + i.getIslandNumber());
         }
         return nTowers;
+    }
+
+    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, NotTheRightGamemodeException {
+        throw new NotTheRightGamemodeException("You can't use this command in this gamemode!");
     }
 
     public void changePhase(){

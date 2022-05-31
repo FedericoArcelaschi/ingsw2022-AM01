@@ -65,7 +65,7 @@ public class LobbyManager {
      */
     private Game submitGame(GameType gameType){
         List<String> playersInGameQueue  = new ArrayList<>(players.get(gameType));
-        if(playersInGameQueue.size() >= gameType.nPlayer) {
+        if(playersInGameQueue.size() == gameType.nPlayer) {
             List<ServerReceiver> serverReceiverList = new ArrayList<>(gameTypePlayersMap.get(gameType));
             players.get(gameType).clear();
             gameTypePlayersMap.get(gameType).clear();
