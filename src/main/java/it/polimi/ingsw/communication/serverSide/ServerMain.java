@@ -20,7 +20,8 @@ public class ServerMain implements Runnable {
     private final int port;
     private final Map<Socket, ServerReceiver> connectedPlayers = new HashMap<>();
     private final HeartBeatServer heartBeatServer = new HeartBeatServer(connectedPlayers.keySet());
-    private final WaitingRooms waitingRooms = new WaitingRooms();
+    private final Map<Integer, Game> games = new HashMap<>();
+    private final LobbyManager waitingRooms = new LobbyManager(games);
 
     //private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
     private ServerSocket serverSocket;
@@ -66,7 +67,6 @@ public class ServerMain implements Runnable {
         try{
             Socket socket= serverSocket.accept();
             GameType playerGameType = handleNewClient(socket);
-            checkGame(playerGameType);
         } catch(IOException e) {
             System.out.println(e.getMessage());
             try {

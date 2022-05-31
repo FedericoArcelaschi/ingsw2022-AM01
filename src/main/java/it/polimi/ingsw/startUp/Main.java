@@ -1,13 +1,12 @@
 package it.polimi.ingsw.startUp;
 
 import it.polimi.ingsw.userInterface.cli.Cli;
-import it.polimi.ingsw.controller.ServerMain;
+import it.polimi.ingsw.communication.serverSide.ServerMain;
 import it.polimi.ingsw.userInterface.gui.Gui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Properties;
 
 public class Main {
     public static void main(String[] args) {
