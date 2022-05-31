@@ -1,5 +1,7 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.communication.clientSide;
 
+import it.polimi.ingsw.client.ClientMain;
+import it.polimi.ingsw.client.ClientState;
 import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.userInterface.UserInterface;

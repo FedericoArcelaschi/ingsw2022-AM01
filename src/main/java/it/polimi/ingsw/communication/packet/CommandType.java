@@ -1,4 +1,4 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.communication.packet;
 
 public enum CommandType {
     PLAY_CARD("playcard"),
@@ -15,6 +15,12 @@ public enum CommandType {
         this.commandString = commandString;
     }
 
+    static CommandType getCommandType(String commandString) {
+        for (CommandType ct : CommandType.values()) {
+            if(ct.commandString.equalsIgnoreCase(commandString)) return ct;
+        }
+        return null;
+    }
     public String getCommandString(){
         return commandString;
     }

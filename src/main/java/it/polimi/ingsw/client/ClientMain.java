@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.communication.clientSide.ClientReceiver;
+import it.polimi.ingsw.communication.clientSide.ClientSender;
 import it.polimi.ingsw.communication.packet.message.CommandMessage;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
@@ -9,8 +11,6 @@ import it.polimi.ingsw.userInterface.UserInterface;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ClientMain {
@@ -43,27 +43,22 @@ public class ClientMain {
     public void connect(UserInterface userInterface) {
         System.out.println(this.username + " : attempting connection");
         try {
-            ExecutorService executor = Executors.newCachedThreadPool();
-            socket = new Socket(IP, port);
-            System.out.println(username + ":  connected");
-
-            cs = new ClientSender(socket);
-            cr = new ClientReceiver(this, socket, userInterface);
-            //send player preferences to the server;
-            Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
-            Packet packet = new Packet(MessageType.PREFERENCES, preferences);
-            cs.sendPacket(packet);
-            //run the ClientReceiver
-            executor.submit(cr);
-        } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + IP);
-            System.exit(1);
+            this.socket = new Socket(IP, port);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " +
-                    IP);
-            System.exit(1);
+            System.err.println(e.getMessage());
+            System.exit(1022); //ERROR_NO_NETWORK
         }
-        this.state = ClientState.WAITING_ROOM;
+
+        //run the ClientReceiver on another thread
+        this.cr = new ClientReceiver(this, this.socket, userInterface);
+        Executors.newCachedThreadPool().submit(cr);
+
+        //send player preferences to the server;
+        this.cs = new ClientSender(this.socket);
+        Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
+        Packet packet = new Packet(MessageType.PREFERENCES, preferences);
+        this.cs.sendPacket(packet);
+        System.out.println(this.username + " :  connected");
     }
 
     public void runCommand(String stringCommand) {

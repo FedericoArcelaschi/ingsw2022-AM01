@@ -1,9 +1,10 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.communication.serverSide;
 
+import it.polimi.ingsw.communication.packet.Command;
+import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.packet.*;
 import it.polimi.ingsw.communication.packet.message.CommandMessage;
 import it.polimi.ingsw.communication.packet.message.Message;
-import it.polimi.ingsw.communication.packet.message.Ping;
 import it.polimi.ingsw.controller.Game;
 
 import java.net.Socket;
@@ -11,7 +12,7 @@ import java.net.Socket;
 /**
  * Allow the server to receive packets from a client's socket and handle them.
  */
-public class ServerReceiver extends Receiver{
+public class ServerReceiver extends Receiver {
     private final HeartBeatServer hbs;
     private Game game;
 
@@ -29,7 +30,7 @@ public class ServerReceiver extends Receiver{
         switch (type){
             case PING -> {
                 System.out.println("client pinged back");
-                hbs.validateResponse(message);
+                hbs.validateResponse(socket);
             }
             case COMMAND -> {
                  CommandMessage commandMessage = (CommandMessage) message;
@@ -43,6 +44,7 @@ public class ServerReceiver extends Receiver{
             case ERROR -> {
                 //TODO: the client received the error message from the server and sent back an acknowledgment.
             }
+
         }
     }
 
