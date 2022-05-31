@@ -1,8 +1,6 @@
 package it.polimi.ingsw.communication.serverSide;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.communication.exception.ClientNotRespondingException;
-import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Ping;
@@ -10,8 +8,6 @@ import it.polimi.ingsw.communication.packet.message.Ping;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -41,7 +37,7 @@ public class HeartBeatServer implements Callable {
         while(true) {
             long previous = System.currentTimeMillis();
             for (Socket client: clients) {
-                Packet packet = new Packet(MessageType.PING, new Ping());
+                Packet packet = new Packet(new Ping(), MessageType.PING);
                 String jsonMessage = parser.toJson(packet, Packet.class);
                 try {
                     new PrintWriter(client.getOutputStream(), true).println(jsonMessage);

@@ -25,7 +25,7 @@ public class ClientReceiver extends Receiver {
         switch (type) {
             case PING -> {
                 Ping ping = (Ping) message;
-                Packet heartbeatToServer = new Packet(MessageType.PING, ping);
+                Packet heartbeatToServer = new Packet(ping, MessageType.PING);
                 out.println(parser.toJson(heartbeatToServer));
                 //todo: kill in case of disconnection.
             }

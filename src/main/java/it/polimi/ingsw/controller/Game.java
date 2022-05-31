@@ -41,6 +41,7 @@ public class Game {
         }
         turn = new Turn(usernameList);
         this.board = BoardFactory.getBoard(usernameList, gameType.expertMode, turn, 1);
+        //FIXME: seed for testing / debugging.
         sendAllUpdate();
     }
 
@@ -73,7 +74,7 @@ public class Game {
         }
         if(user == null) throw new IllegalArgumentException("the player isn't part of this game");
         Message message = new EndGameMessage(user + " disconnected");
-        Packet packet = new Packet(MessageType.END, message);
+        Packet packet = new Packet(message, MessageType.END);
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             send(packet, usernameSocketMap.get(username));
@@ -84,7 +85,7 @@ public class Game {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             Message message = new WinUpdate(ModelDataBuilder.newBoardData(username, board), winner);
-            Packet packet  = new Packet(MessageType.UPDATE, message);
+            Packet packet  = new Packet(message, MessageType.UPDATE);
             send(packet, usernameSocketMap.get(username));
         }
     }
@@ -94,7 +95,7 @@ public class Game {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             Message message = new Update(ModelDataBuilder.newBoardData(username, board));
-            Packet packet  = new Packet(MessageType.UPDATE, message);
+            Packet packet  = new Packet(message, MessageType.UPDATE);
             send(packet, usernameSocketMap.get(username));
         }
     }
@@ -112,12 +113,12 @@ public class Game {
 
     private Packet createUpdate(BoardData boardData){
         Message message = new Update(boardData);
-        return new Packet(MessageType.UPDATE, message);
+        return new Packet(message, MessageType.UPDATE);
     }
 
     private Packet createError(int errorCode, String errorMessage){
         Message message = new ErrorMessage(errorCode, errorMessage);
-        return new Packet(MessageType.ERROR, message);
+        return new Packet(message, MessageType.ERROR);
     }
 
     private void playCardCommand(Command command){
@@ -237,10 +238,10 @@ public class Game {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             Message winner = new WinUpdate(ModelDataBuilder.newBoardData(username, board), t.name());
-            Packet packet  = new Packet(MessageType.UPDATE, winner);
+            Packet packet  = new Packet(winner, MessageType.UPDATE);
             send(packet, usernameSocketMap.get(username));
             Message gameOver = new EndGameMessage("Game over. Changing state...");
-            Packet packet1 = new Packet(MessageType.END, gameOver);
+            Packet packet1 = new Packet(gameOver, MessageType.END);
             send(packet, usernameSocketMap.get(username));
         }
     }

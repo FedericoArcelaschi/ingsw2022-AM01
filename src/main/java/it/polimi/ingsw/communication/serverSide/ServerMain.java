@@ -101,7 +101,7 @@ public class ServerMain implements Runnable {
         }
         // decode preferences
         Packet preferencesPacket = parser.fromJson(input, Packet.class);
-        Preferences preferences = parser.fromJson(preferencesPacket.getMessageJson(), Preferences.class);
+        Preferences preferences = (Preferences) preferencesPacket.getMessage();
         // String nickname = preferences.username();
         // System.out.println(nickname + " joined in");
         GameType playerGameType = null;

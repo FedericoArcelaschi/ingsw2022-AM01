@@ -49,7 +49,7 @@ public abstract class Receiver implements Runnable{
                 break;
         }
         Packet packet = parser.fromJson(read, Packet.class);
-        Message message = parser.fromJson(packet.getMessageJson(), packet.getType().getTypeClass());
+        Message message = packet.getMessage();
         this.messageSwitch(packet.getType(), message);
         run();
     }

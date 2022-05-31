@@ -1,9 +1,8 @@
 package it.polimi.ingsw.communication.packet;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.communication.packet.message.Message;
-
-import java.lang.reflect.Type;
 
 /**
  * class used to send data regarding both connection's and game's updates/commands/errors between server and client
@@ -11,18 +10,19 @@ import java.lang.reflect.Type;
 public class Packet {
     private final MessageType type;
     private final String messageJson;
-
-    public Packet(MessageType type, Message message) {
+    private GsonBuilder parser;
+    public Packet(Message message, MessageType type) {
         this.type = type;
-        Gson parser = new Gson();
-        this.messageJson = parser.toJson(message);
+        parser = new GsonBuilder();
+        parser.setPrettyPrinting();
+        this.messageJson = parser.create().toJson(message);
     }
 
     public MessageType getType() {
         return type;
     }
-    public String getMessageJson() {
-        return messageJson;
+    public Message getMessage() {
+        return parser.create().fromJson(messageJson, type.getTypeClass());
     }
 
     @Override

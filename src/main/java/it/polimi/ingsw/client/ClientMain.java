@@ -56,7 +56,7 @@ public class ClientMain {
         //send player preferences to the server;
         this.cs = new ClientSender(this.socket);
         Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
-        Packet packet = new Packet(MessageType.PREFERENCES, preferences);
+        Packet packet = new Packet(preferences, MessageType.PREFERENCES);
         this.cs.sendPacket(packet);
         System.out.println(this.username + " :  connected");
     }
@@ -72,7 +72,7 @@ public class ClientMain {
          */
         if (state == ClientState.GAME) {
             CommandMessage commandMessage = new CommandMessage(username, stringCommand);
-            Packet packet = new Packet(MessageType.COMMAND, commandMessage);
+            Packet packet = new Packet(commandMessage, MessageType.COMMAND);
             cs.sendPacket(packet);
             System.out.println("command sent");
         }
