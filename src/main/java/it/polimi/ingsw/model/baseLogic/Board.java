@@ -157,7 +157,8 @@ public class Board {
      * @param students a list of students you want to move
      * @return true if the students are present and added to the island.
      */
-    public boolean moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students) throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
+    public boolean moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students)
+            throws NoSuchStudentException, NotYourTurnException {
         if(!turn.getCurrentPlayer().equals(playerID)) throw new
                 NotYourTurnException("It's "+getCurrentPlayer()+"'s turn. "+ playerID +" can't play.");
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
