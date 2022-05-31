@@ -1,11 +1,9 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw.communication.serverSide;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.LobbyInfoMessage;
-import it.polimi.ingsw.communication.serverSide.ServerReceiver;
 import it.polimi.ingsw.controller.Game;
 import it.polimi.ingsw.controller.GameType;
 
@@ -16,13 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WaitingRooms {
+public class LobbyManager {
     private final Map<GameType, List<ServerReceiver>> gameTypePlayersMap = new HashMap<>();
     private final Map<GameType, List<String>> players = new HashMap<>();
     private int gameId; //should use this to "catalog" game
     private final Map<Integer, Game> games;
 
-    public WaitingRooms(Map<Integer, Game> games) {
+    public LobbyManager(Map<Integer, Game> games) {
         for(GameType g : GameType.values()) {
             gameTypePlayersMap.computeIfAbsent(g, k -> new ArrayList<>());
             players.computeIfAbsent(g, k -> new ArrayList<>());
