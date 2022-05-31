@@ -39,9 +39,11 @@ public class Command {
             //e.g.: cloud 1
             case PAY_CHARACTER -> {
                 attributesMap.put(CommandAttribute.WHO, attributes[0]);
-                attributesMap.put(CommandAttribute.WHAT, String.join("", Arrays.copyOfRange(attributes, 1, attributes.length)));
+                //This list always has 2 values: the list of students and the island index.
+                attributesMap.put(CommandAttribute.WHAT, String.join("", Arrays.copyOfRange(attributes, 1, attributes.length-1)));
+                attributesMap.put(CommandAttribute.WHERE, attributes[attributes.length-1]);
             }
-            //e.g.: payChar Monk Green
+            //e.g.: payChar Monk Green 0
             case MORE -> {}
             //e.g: more Monk
         }

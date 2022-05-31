@@ -43,6 +43,11 @@ public enum CharacterUtility { //TODO: complete characters' explaination
         return id % 3;
     }
 
+    @Contract
+    public int getId(){
+        return id;
+    }
+
     @Contract(pure = true)
     public ApplyEffect getFunction() {
         return CharacterFunction.getCharFunction(id);

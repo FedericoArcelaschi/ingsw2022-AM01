@@ -11,9 +11,8 @@ import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.model.baseLogic.*;
-import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.NotYourTurnException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.model.exceptions.*;
+import it.polimi.ingsw.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -30,6 +29,8 @@ public class Game {
     //TODO: there could be a better way of doing this. The parameter is used to ensure that the player can move students
     //TODO: more times per turn.
     private int movedStudents;
+    //TODO: Controls should be done in the right phase: this check is missing. Also, need a better way to check
+    //TODO: that I have moved the right amount of students.
 
     public Game(GameType gameType, List<String> usernameList, List<ServerReceiver> gameSocketList) {
         this.gameType = gameType;
@@ -226,9 +227,19 @@ public class Game {
 
     private void payCharCommand(Command command){
         //TODO: enter if condition so that you can't use this command if you're not in expert mode
-        //assert board instanceof ExpertBoard;
-        //((ExpertBoard) board).playExpertCard();
-        //board.playExpertCard()
+        try {
+            //TODO: must throw exception if characterId does not exist
+            int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
+            List<String> studentList = new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
+            List<StudentColor> students = new ArrayList<>();
+            for (String student : studentList) {
+                StudentColor c = StudentColor.getColor(student);
+                students.add(c);
+            }
+            board.playExpertCard(idChar, Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE)), students );
+        }catch (NotTheRightGamemodeException | CoinException | StudentException e){
+            e.printStackTrace();
+        }
     }
 
     private void sendWinUpdate(Team t){
