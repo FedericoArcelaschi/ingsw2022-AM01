@@ -221,7 +221,6 @@ public class Game {
 
     private void payCharCommand(Command command){
         try {
-            //TODO: must throw exceptions if characterId does not exist
             int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
             List<String> studentList = new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
             List<StudentColor> students = new ArrayList<>();
