@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.expertLogic;
 import it.polimi.ingsw.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.model.baseLogic.Turn;
 import it.polimi.ingsw.model.exceptions.CoinException;
+import it.polimi.ingsw.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.model.exceptions.StudentException;
 import it.polimi.ingsw.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,9 +83,7 @@ public class ExpertBoardTest{
         try {
             expertBoard.extract4CharacterTesting(4);
             expertBoard.playExpertCard(4, null, null);
-        } catch (StudentException e) {
-            throw new RuntimeException(e);
-        } catch (CoinException e) {
+        } catch (StudentException | CoinException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
         for (i = 1; i < 13; i++) {
@@ -132,7 +131,7 @@ public class ExpertBoardTest{
             } catch (IllegalStateException e) {
                 assertEquals("Not possible to play " + CharacterUtility.getChar(i) + " card. During this turn MAILMAN is already active.",
                         /*actual*/e.getMessage());
-            } catch (CoinException | StudentException e) {
+            } catch (CoinException | StudentException | PhaseNotRightException e) {
                 fail();
             }
         }

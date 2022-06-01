@@ -26,6 +26,7 @@ enum CharacterFunction {
     MONK(
         (ParametersForCharacter par)
         -> {
+            //TODO: throw an exception for each wrong input!
             List<StudentColor> availableStudents = par.getAvailableStudentsList();
             List<StudentColor> requestedStudents = par.getRequestedStudentList();
             Bag bag = par.getBag();

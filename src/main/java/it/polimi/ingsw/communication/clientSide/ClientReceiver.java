@@ -31,6 +31,9 @@ public class ClientReceiver extends Receiver {
             }
             case UPDATE -> {
                 Update update = (Update) message;
+                //clears the screen.
+                System.out.println("\033[H\033[2J");
+                System.out.flush();
                 //print data without saving it anywhere
                 userInterface.draw(update.getBoardData());
                 cm.setState(ClientState.GAME);
