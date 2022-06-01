@@ -1,11 +1,10 @@
 package it.polimi.ingsw.communication;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.LobbyInfoMessage;
-import it.polimi.ingsw.controller.GameType;
+import it.polimi.ingsw.server.controller.GameType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

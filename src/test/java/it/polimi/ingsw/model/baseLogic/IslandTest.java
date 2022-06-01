@@ -1,8 +1,12 @@
 package it.polimi.ingsw.model.baseLogic;
 
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
-import it.polimi.ingsw.model.baseLogic.influence.Influence;
-import it.polimi.ingsw.model.baseLogic.influence.Professors;
+import it.polimi.ingsw.server.model.baseLogic.Castle;
+import it.polimi.ingsw.server.model.baseLogic.Island;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.Team;
+import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
+import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

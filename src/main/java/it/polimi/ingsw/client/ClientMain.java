@@ -1,13 +1,13 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.communication.clientSide.ClientReceiver;
-import it.polimi.ingsw.communication.clientSide.ClientSender;
+import it.polimi.ingsw.client.communication.ClientReceiver;
+import it.polimi.ingsw.client.communication.ClientSender;
 import it.polimi.ingsw.communication.packet.message.CommandMessage;
 import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Preferences;
-import it.polimi.ingsw.startUp.Outputs;
-import it.polimi.ingsw.userInterface.UserInterface;
+import it.polimi.ingsw.onLaunch.Outputs;
+import it.polimi.ingsw.client.userInterfaces.UserInterface;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -34,9 +34,9 @@ public class ClientMain {
     }
 
     /**
-     * On client startUp. Opens the Socket for communication
+     * On client onStartUp. Opens the Socket for communication
      * Connects the communication layer with the view:
-     * the userInterface can either be a textual or graphical.
+     * the userInterfaces can either be a textual or graphical.
      * Sends the preferences to the server.
      * puts the client receiver on a new thread
      */

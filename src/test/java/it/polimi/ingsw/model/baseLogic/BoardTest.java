@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model.baseLogic;
 
-import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.NotYourTurnException;
-import it.polimi.ingsw.model.exceptions.PhaseNotRightException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.server.model.baseLogic.*;
+import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
+import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -145,7 +146,7 @@ BoardTest {
         List<StudentColor> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
         b.moveStudentsToDiningRoom(player1, students);
         //test professor get assigned
-        Map<StudentColor,Team> pm1 = b.getProfessorsMap();
+        Map<StudentColor, Team> pm1 = b.getProfessorsMap();
         for(StudentColor c : StudentColor.values()){
             if(students.contains(c)){
                 assertNotNull(pm1.get(c));

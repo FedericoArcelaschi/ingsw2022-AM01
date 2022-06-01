@@ -1,9 +1,8 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.baseLogic.StudentColor;
-import it.polimi.ingsw.model.baseLogic.Team;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.Team;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class IslandData {

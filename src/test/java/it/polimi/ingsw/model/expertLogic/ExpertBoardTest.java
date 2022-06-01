@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model.expertLogic;
 
-import it.polimi.ingsw.model.baseLogic.BoardFactory;
-import it.polimi.ingsw.model.baseLogic.Turn;
-import it.polimi.ingsw.model.exceptions.CoinException;
-import it.polimi.ingsw.model.exceptions.PhaseNotRightException;
-import it.polimi.ingsw.model.exceptions.StudentException;
-import it.polimi.ingsw.model.expertLogic.character.costants.CharacterUtility;
+import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
+import it.polimi.ingsw.server.model.exceptions.CoinException;
+import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
+import it.polimi.ingsw.server.model.exceptions.StudentException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
+import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +50,7 @@ public class ExpertBoardTest{
             expertBoard.playExpertCard(4, null, null);
         } catch (Exception e) {
             e.printStackTrace();
-            fail(" playExpertCard() method throw exception " + e);
+            fail(" playExpertCard() method throw exceptions " + e);
         }
         assertEquals(expectedPossibleMovingSteps, expertBoard.getPossibleMovingSteps());
         assertEquals(CharacterUtility.MAILMAN.name(), expertBoard.getAvailableCharacterCards().get(4).getName());
@@ -95,10 +97,10 @@ public class ExpertBoardTest{
 
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
-                fail("only the first exception should be called.");
+                fail("only the first exceptions should be called.");
             } catch (Exception others) {
                 others.printStackTrace();
-                fail("only the first exception should be called.");
+                fail("only the first exceptions should be called.");
             }
         }
     }

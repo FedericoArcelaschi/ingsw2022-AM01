@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.expertLogic.characters;
 
-import it.polimi.ingsw.model.expertLogic.character.costants.CharacterUtility;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.Test;
 
-import static it.polimi.ingsw.model.expertLogic.character.costants.CharacterUtility.getChar;
+import static it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility.getChar;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CharactersInfoTest {

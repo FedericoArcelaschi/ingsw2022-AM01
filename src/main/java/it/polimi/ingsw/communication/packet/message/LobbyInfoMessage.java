@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.packet.message;
 
-import it.polimi.ingsw.controller.GameType;
+import it.polimi.ingsw.server.controller.GameType;
 
 import java.util.ArrayList;
 import java.util.List;

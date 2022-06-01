@@ -1,10 +1,10 @@
 package it.polimi.ingsw.model.expertLogic.influence;
 
-import it.polimi.ingsw.model.baseLogic.Bag;
-import it.polimi.ingsw.model.baseLogic.Castle;
-import it.polimi.ingsw.model.baseLogic.StudentColor;
-import it.polimi.ingsw.model.baseLogic.Team;
-import it.polimi.ingsw.model.baseLogic.influence.Professors;
+import it.polimi.ingsw.server.model.baseLogic.Bag;
+import it.polimi.ingsw.server.model.baseLogic.Castle;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.Team;
+import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

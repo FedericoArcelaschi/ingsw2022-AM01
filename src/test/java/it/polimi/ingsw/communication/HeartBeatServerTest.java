@@ -1,7 +1,7 @@
 package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.client.ClientMain;
-import it.polimi.ingsw.communication.serverSide.ServerMain;
+import it.polimi.ingsw.server.communication.ServerMain;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutorService;

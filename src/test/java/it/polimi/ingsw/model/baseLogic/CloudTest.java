@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.baseLogic;
 
+import it.polimi.ingsw.server.model.baseLogic.Bag;
+import it.polimi.ingsw.server.model.baseLogic.Cloud;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

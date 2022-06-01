@@ -1,9 +1,8 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.baseLogic.*;
+import it.polimi.ingsw.server.model.baseLogic.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
