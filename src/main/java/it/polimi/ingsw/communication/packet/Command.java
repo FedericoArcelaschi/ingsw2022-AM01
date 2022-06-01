@@ -1,7 +1,9 @@
 package it.polimi.ingsw.communication.packet;
 
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,9 +41,23 @@ public class Command {
             //e.g.: cloud 1
             case PAY_CHARACTER -> {
                 attributesMap.put(CommandAttribute.WHO, attributes[0]);
-                //This list always has 2 values: the list of students and the island index.
-                attributesMap.put(CommandAttribute.WHAT, String.join("", Arrays.copyOfRange(attributes, 1, attributes.length-1)));
-                attributesMap.put(CommandAttribute.WHERE, attributes[attributes.length-1]);
+                //For now, always students first, islandNumber later.
+                if(isInteger(attributes[1]) && attributes.length==2){  //If there is only a number as parameter and nothing else
+                    //then that number is where and the what is null.
+                    attributesMap.put(CommandAttribute.WHERE, attributes[1]);
+                    attributesMap.put(CommandAttribute.WHAT, "");
+                }else {  //If neither the first parameter is a number and the list of parameters is exactly 2
+                    //It means that there must be a list of students
+                    attributesMap.put(CommandAttribute.WHAT, String.join("", Arrays.copyOfRange(attributes, 1, attributes.length - 2)));
+                    //If the last element is numeric it must be an island index
+                    if (isInteger(attributes[attributes.length - 1]))
+                        attributesMap.put(CommandAttribute.WHERE, attributes[attributes.length - 1]);
+                    else {
+                        //If it is not then the user only wrote a list of students with no student place.
+                        attributesMap.put(CommandAttribute.WHAT, attributesMap.get(CommandAttribute.WHAT) + attributes[attributes.length - 1]);
+                        attributesMap.put(CommandAttribute.WHERE, "");
+                    }
+                }
             }
             //e.g.: payChar Monk Green 0
             case MORE -> {}
@@ -76,6 +92,16 @@ public class Command {
 
     public Map<CommandAttribute, String> getAttributesMap() {
         return attributesMap;
+    }
+
+    //There is no built-in way of doing this...
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException | NullPointerException e) {
+            return false;
+        }
+        return true;
     }
 
     public String toString(){
