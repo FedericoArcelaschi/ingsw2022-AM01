@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.model.expertLogic.character.applyEffect;
 
-import it.polimi.ingsw.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
