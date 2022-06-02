@@ -11,6 +11,7 @@ public enum MessageType {
     UPDATE(Update.class),
     PING(Ping.class),
     END(EndGameMessage.class),
+    LOBBY(LobbyInfoMessage.class),
     ERROR(ErrorMessage.class);
 
 

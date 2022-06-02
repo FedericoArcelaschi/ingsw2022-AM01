@@ -2,10 +2,10 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.communication.ClientReceiver;
 import it.polimi.ingsw.client.communication.ClientSender;
-import it.polimi.ingsw.communication.packet.message.CommandMessage;
-import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
+import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.communication.packet.message.Preferences;
+import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
 import it.polimi.ingsw.onLaunch.Outputs;
 import it.polimi.ingsw.client.userInterfaces.UserInterface;
 

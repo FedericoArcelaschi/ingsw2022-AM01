@@ -3,6 +3,7 @@ package it.polimi.ingsw.communication.packet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.communication.packet.message.Message;
+import it.polimi.ingsw.communication.packet.message.MessageType;
 
 /**
  * class used to send data regarding both connection's and game's updates/commands/errors between server and client
