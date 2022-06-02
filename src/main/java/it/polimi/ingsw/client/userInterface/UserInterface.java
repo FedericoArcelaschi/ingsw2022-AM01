@@ -11,5 +11,5 @@ public interface UserInterface {
      * updates the view with the new data received from the server.
      */
     void draw(BoardData boardData);
-    void roomOutput(List<String> connectedUser, GameType gameType);
+    void printWaitingRoom(List<String> connectedUser, GameType gameType);
 }

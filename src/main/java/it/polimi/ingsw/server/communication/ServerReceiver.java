@@ -16,20 +16,16 @@ public class ServerReceiver extends Receiver {
     private final HeartBeatServer hbs;
     private Game game;
 
-    public ServerReceiver(Socket socket, HeartBeatServer hbs, Game game) {
+    public ServerReceiver (Socket socket, HeartBeatServer hbs, Game game) {
         super(null, socket);
         this.hbs = hbs;
         this.game = game;
     }
 
-    public void setGame(Game game){
-        this.game = game;
-    }
-
-    protected void messageSwitch(Message message) {
+    protected void messageSwitch (Message message) {
         switch (message.getMessageType()){
             case PING -> {
-                System.out.println("client pinged back");
+                System.out.println("PING!");
                 hbs.validateResponse(message);
             }
             case COMMAND -> {
@@ -49,6 +45,10 @@ public class ServerReceiver extends Receiver {
 
     public Socket getSocket() {
         return socket;
+    }
+
+    public void setGame(Game game){
+        this.game = game;
     }
 
     public Game getGame(){

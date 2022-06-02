@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.server.communication.ServerMain;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,11 +16,11 @@ class ClientMainTest {
     ServerMain s;
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() throws IllegalAccessException {
         ExecutorService executorService = Executors.newCachedThreadPool();
         s = new ServerMain(1234);
-        c1 = new ClientMain("Fede",2,false, "127.0.0.1", 1234);
-        c2 = new ClientMain("Lore",2,false, "127.0.0.1", 1234);
+        c1 = new ClientMain("127.0.0.1", 1234, new Preferences("Fede",2,false));
+        c2 = new ClientMain("127.0.0.1", 1234, new Preferences("Lore",2,false));
         executorService.submit(s);
     }
 

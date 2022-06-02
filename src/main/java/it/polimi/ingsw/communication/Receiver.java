@@ -46,4 +46,5 @@ public abstract class Receiver implements Runnable{
     }
 
     protected abstract void messageSwitch(Message message);
+
 }

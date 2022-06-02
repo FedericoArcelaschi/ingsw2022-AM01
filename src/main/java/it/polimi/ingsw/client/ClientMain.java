@@ -24,15 +24,15 @@ public class ClientMain {
     private ClientSender clientSender;
     private ClientReceiver clientReceiver;
 
-    public ClientMain(String username, int preferenceNPlayer, boolean preferenceExpertMode, String IP, int port) {
-        this.username=username;
-        this.preferenceNPlayer=preferenceNPlayer;
-        this.preferenceExpertMode=preferenceExpertMode;
+    public ClientMain(String IP, int port, Preferences preferences) {
         this.IP = IP;
         this.port = port;
+        this.username = preferences.username();
+        this.preferenceNPlayer = preferences.nPlayer();
+        this.preferenceExpertMode = preferences.expertMode();
     }
 
-    public void connect(UserInterface userInterface) {
+    public void connect(UserInterface userInterface) throws IllegalAccessException {
         System.out.println(username + ":  attempting connection");
         try {
             this.socket = new Socket(IP, port);
@@ -49,7 +49,8 @@ public class ClientMain {
         System.out.println(socket.getRemoteSocketAddress());
 
         //sends player preferences to the server;
-        Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
+        Preferences preferences = null;
+        preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
         Packet packet = new Packet(preferences);
         clientSender.sendPacket(packet);
 

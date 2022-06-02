@@ -37,9 +37,9 @@ public class HeartBeatServer implements Callable {
         clients.remove(client);
     }
 
-    public void validateResponse(Message response){
-        for(Socket key : heartBeats.keySet()){
-            if (heartBeats.get(key).equals(response)){
+    public void validateResponse(Message response) {
+        for(Socket key : heartBeats.keySet()) {
+            if (heartBeats.get(key).equals(response)) {
                 heartBeats.remove(key);
                 return;
             }

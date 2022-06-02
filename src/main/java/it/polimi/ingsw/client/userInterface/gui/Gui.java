@@ -87,7 +87,7 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
-    public void roomOutput(List<String> connectedUser, GameType gameType) {
-
+    public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
+        //TODO:
     }
 }

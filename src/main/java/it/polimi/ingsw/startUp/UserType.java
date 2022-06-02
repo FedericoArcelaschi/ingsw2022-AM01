@@ -11,10 +11,10 @@ public enum UserType {
                     toLowerCase().
                     strip() //removes all whitespaces.
                     ) {
-                case "server" -> UserType.SERVER;
-                case "t-client" -> UserType.CLI;
-                case "g-client" -> UserType.GUI;
-                default -> null;
+                case "server","sv","host","srv","sr"-> UserType.SERVER;
+                case "t-client","tc","ct","cli"     -> UserType.CLI;
+                case "g-client","gc","cg","gui"     -> UserType.GUI;
+                default                             -> null;
         };
     }
 

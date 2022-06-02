@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.userInterface.cli;
 
 import it.polimi.ingsw.client.ClientMain;
 import it.polimi.ingsw.client.userInterface.UserInterface;
+import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.communication.modelData.BoardData;
 
@@ -13,27 +14,21 @@ import java.util.List;
 public class Cli implements UserInterface {
     String username;
     int nPlayer;
-    boolean mode;
+    Boolean expertMode;
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public Cli() {
-        //TODO: ask user preferences.
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            System.out.println("Enter username:");
-            username = br.readLine();
-            System.out.println("Enter nPlayer:");
-            nPlayer = Integer.parseInt(br.readLine());
-            System.out.println("Expert mode?");
-            mode = Boolean.parseBoolean(br.readLine());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        ClientMain clientMain = new ClientMain(username,
-                nPlayer,
-                mode,
+        ClientMain clientMain = new ClientMain(
                 "127.0.0.1",
-                12345);
-        clientMain.connect(this);
+                12345,
+                getValidPreferences());
+        try {
+            clientMain.connect(this);
+        } catch (IllegalAccessException e) {
+            System.err.println(e.getMessage());
+            new Cli();
+        }
+        // the Cli in the input/output to the terminal
         while(true) {
             try {
                 String input = br.readLine();
@@ -45,17 +40,71 @@ public class Cli implements UserInterface {
     }
 
     @Override
-    public void draw(BoardData boardData) {
+    public void draw (BoardData boardData) { //TODO: il problema è che forse non può fare questo se sta leggendo da input.
         System.out.println(boardData.toString());
     }
 
+    /**
+     * Method to handle the LobbyInfoMessages.
+     */
     @Override
-    public void roomOutput(List<String> connectedUser, GameType gameType) {
+    public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
         StringBuilder sb = new StringBuilder();
         sb.append("Player in queue: \n");
+        sb.append("Game type: ").append(gameType).append("\n");
         for (String user : connectedUser) {
             sb.append("\t").append(user).append("\n");
         }
-        sb.append("Game type: ").append(gameType).append("\n");
+        System.out.println(sb);
+    }
+    /**
+     * Before opening the connection with the server the client requires to insert the preferences.
+     */
+    private Preferences getValidPreferences() {
+        int nPlayer;
+        Boolean expertMode;
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            String query
+                    = "Enter username:";
+            do{
+                System.out.println(query);
+                username = br.readLine();
+                query = "Enter a valid username:";
+            } while (username == null);
+
+            query = "Enter the number of players:";
+            do {
+                System.out.println(query);
+                try {
+                    nPlayer = Integer.parseInt(br.readLine());
+                } catch (NumberFormatException ignored) {nPlayer = 0;}
+                query = "Enter a valid number of players: (between 2 and 4)";
+            } while (nPlayer < 2 || nPlayer > 4);
+
+            query = "Expert mode? (Y/n)";
+            do {
+                System.out.println(query);
+                expertMode = getBoolean(br.readLine());
+            } while (expertMode == null);
+
+        } catch (IOException e) {
+            System.err.println("input error:\n" + e.getMessage());
+            return getValidPreferences();
+        }
+        try {
+            return new Preferences(username, nPlayer, expertMode);
+        } catch (IllegalAccessException e) {
+            System.err.println(e.getMessage());
+            return getValidPreferences();
+        }
+    }
+
+    private Boolean getBoolean(String s) {
+        if(s.equalsIgnoreCase("y"))
+            return true;
+        if(s.equalsIgnoreCase("n"))
+            return false;
+        return null;
     }
 }

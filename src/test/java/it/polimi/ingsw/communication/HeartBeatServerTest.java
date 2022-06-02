@@ -1,6 +1,7 @@
 package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.client.ClientMain;
+import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.server.communication.ServerMain;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +15,10 @@ class HeartBeatServerTest {
     ExecutorService es;
 
     @Test
-    void testRun() throws InterruptedException {
+    void testRun() throws InterruptedException, IllegalAccessException {
         sm = new ServerMain(12345);
-        c1 = new ClientMain("fede", 2, false, "127.0.0.1", 12345);
-        c2 = new ClientMain("gio", 2, false, "127.0.0.1", 12345);
+        c1 = new ClientMain("127.0.0.1", 12345, new Preferences("Fede",2,false));
+        c2 = new ClientMain("127.0.0.1", 12345, new Preferences("Andrea Albergo",2,false));
         es = Executors.newCachedThreadPool();
         es.submit(sm);
         Thread.sleep(50);

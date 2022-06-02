@@ -5,7 +5,6 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 public class PacketAdapterSerDes implements JsonSerializer<Packet>, JsonDeserializer<Packet> {
-
     @Override
     public JsonElement serialize(Packet packet, Type type, JsonSerializationContext context) {
         final JsonObject wrapper = new JsonObject();
@@ -34,9 +33,6 @@ public class PacketAdapterSerDes implements JsonSerializer<Packet>, JsonDeserial
     }
 
     private JsonElement get(final JsonObject wrapper, String memberName) {
-        //for debugging:
-        System.out.println("in SerDes get:\n\t" + wrapper);
-
         final JsonElement elem = wrapper.get(memberName);
         if (elem == null)
             throw new JsonParseException("no '" + memberName + "' member found in what was expected to be an packet wrapper");
