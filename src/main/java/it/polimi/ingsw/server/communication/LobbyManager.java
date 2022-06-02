@@ -81,8 +81,8 @@ public class LobbyManager {
     private void informPlayers(GameType gameType) {
         int numberOfPlayers = gameType.nPlayer;
         if(players.get(gameType).size() < numberOfPlayers) {
-            LobbyInfoMessage lobbyMessage = new LobbyInfoMessage(players.get(gameType), gameType);
-            Packet packet = new Packet(lobbyMessage, MessageType.LOBBY);
+            LobbyInfo lobbyMessage = new LobbyInfo(players.get(gameType), gameType);
+            Packet packet = new Packet(lobbyMessage, MessageType.LOBBYINFO);
             List<ServerReceiver> playerServerReceivers = new ArrayList<>(gameTypePlayersMap.get(gameType));
             for(ServerReceiver sr : playerServerReceivers) {
                 PrintWriter out;

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import it.polimi.ingsw.communication.packet.message.Error;
 import it.polimi.ingsw.communication.packet.message.command.Command;
 import it.polimi.ingsw.communication.packet.message.command.CommandAttribute;
 import it.polimi.ingsw.server.communication.ServerReceiver;
@@ -12,7 +13,6 @@ import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,7 +75,7 @@ public class Game {
             if(usernameSocketMap.get(username).equals(s)) user = username;
         }
         if(user == null) throw new IllegalArgumentException("the player isn't part of this game");
-        Message message = new EndGameMessage(user + " disconnected");
+        Message message = new EndGame(user + " disconnected");
         Packet packet = new Packet(message, MessageType.END);
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
@@ -119,7 +119,7 @@ public class Game {
     }
 
     private Packet createError(int errorCode, String errorMessage){
-        Message message = new ErrorMessage(errorCode, errorMessage);
+        Message message = new Error(errorCode, errorMessage);
         return new Packet(message, MessageType.ERROR);
     }
 
@@ -238,7 +238,7 @@ public class Game {
         //The method does not throw exceptions as everyone can use it anytime during the game.
         int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
         try {
-            Packet characterInfo = new Packet(new CharInfoMessage(board.getCharInfo(idChar)), MessageType.INFO);
+            Packet characterInfo = new Packet(new CharInfo(board.getCharInfo(idChar)), MessageType.INFO);
             send(characterInfo, usernameSocketMap.get(command.getUsername()));
         }catch (NotTheRightGamemodeException e){
             send(createError(0, "You can't use this command in this gamemode."), usernameSocketMap.get(command.getUsername()));
@@ -252,7 +252,7 @@ public class Game {
             Message winner = new WinUpdate(ModelDataBuilder.newBoardData(username, board), t.name());
             Packet packet  = new Packet(winner, MessageType.UPDATE);
             send(packet, usernameSocketMap.get(username));
-            Message gameOver = new EndGameMessage("Game over. Changing state...");
+            Message gameOver = new EndGame("Game over. Changing state...");
             Packet packet1 = new Packet(gameOver, MessageType.END);
             send(packet, usernameSocketMap.get(username));
         }

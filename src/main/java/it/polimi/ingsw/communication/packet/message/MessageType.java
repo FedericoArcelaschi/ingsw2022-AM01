@@ -6,15 +6,13 @@ import java.lang.reflect.Type;
 
 public enum MessageType {
     PREFERENCES(Preferences.class),
-    LOBBYINFO(LobbyInfoMessage.class),
+    LOBBYINFO(LobbyInfo.class),
     COMMAND(CommandMessage.class),
     UPDATE(Update.class),
     PING(Ping.class),
-    END(EndGameMessage.class),
-    LOBBY(LobbyInfoMessage.class),
-    INFO(CharInfoMessage.class),
-    ERROR(ErrorMessage.class);
-
+    END(EndGame.class),
+    INFO(CharInfo.class),
+    ERROR(Error.class);
 
     private final Type type;
 

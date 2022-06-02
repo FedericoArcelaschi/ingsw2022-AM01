@@ -6,7 +6,7 @@ public class NoSuchStudentException extends StudentException {
         super(message);
     }
 
-    //TODO: public NoSuchStudentException(ErrorMessage message) {super(message);}
+    //TODO: public NoSuchStudentException(Error message) {super(message);}
 
 }
 

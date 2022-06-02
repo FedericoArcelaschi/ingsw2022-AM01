@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.model.expertLogic;
 
-import it.polimi.ingsw.communication.packet.message.CharInfoMessage;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;

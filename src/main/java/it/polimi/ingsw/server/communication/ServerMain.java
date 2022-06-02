@@ -1,9 +1,7 @@
 package it.polimi.ingsw.server.communication;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.ErrorMessage;
 import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;

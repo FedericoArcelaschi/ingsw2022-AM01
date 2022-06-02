@@ -1,9 +1,9 @@
 package it.polimi.ingsw.communication.packet.message;
 
-public class EndGameMessage implements Message{
+public class EndGame implements Message{
     private final String cause;
 
-    public EndGameMessage(String cause) {
+    public EndGame(String cause) {
         this.cause = cause;
     }
 

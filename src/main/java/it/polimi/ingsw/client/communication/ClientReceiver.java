@@ -5,8 +5,8 @@ import it.polimi.ingsw.client.ClientState;
 import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.client.userInterfaces.UserInterface;
-import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
+import it.polimi.ingsw.communication.packet.message.Error;
 
 import java.net.Socket;
 
@@ -38,14 +38,14 @@ public class ClientReceiver extends Receiver {
                 userInterface.draw(update.getBoardData());
                 cm.setState(ClientState.GAME);
             }
-            case LOBBY -> {
-                LobbyInfoMessage lobbyInfoMessage = (LobbyInfoMessage) message;
+            case LOBBYINFO -> {
+                LobbyInfo lobbyInfoMessage = (LobbyInfo) message;
                 userInterface.printWaitingRoom(lobbyInfoMessage.getPlayers(), lobbyInfoMessage.getGameType());
                 cm.setState(ClientState.WAITING_ROOM);
             }
             case END -> cm.setState(ClientState.GAME_ENDED);
 
-            case ERROR -> System.out.println("new error received: " + ((ErrorMessage) message).getMessage());
+            case ERROR -> System.out.println("new error received: " + ((Error) message).getMessage());
                 //prints data without saving it anywhere
         }
     }

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.communication.packet.message;
 
-public class CharInfoMessage implements Message {
+public class CharInfo implements Message {
     private final String info;
 
-    public CharInfoMessage(String cause) {
+    public CharInfo(String cause) {
         this.info = cause;
     }
 
