@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.communication.packet.message.Error;
 import it.polimi.ingsw.communication.packet.message.command.Command;
 import it.polimi.ingsw.communication.packet.message.command.CommandAttribute;
-import it.polimi.ingsw.server.ServerReceiver;
+import it.polimi.ingsw.server.communication.ServerReceiver;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.communication.packet.Packet;

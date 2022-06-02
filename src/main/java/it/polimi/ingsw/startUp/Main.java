@@ -1,7 +1,7 @@
 package it.polimi.ingsw.startUp;
 
 import it.polimi.ingsw.client.userInterface.cli.Cli;
-import it.polimi.ingsw.server.ServerMain;
+import it.polimi.ingsw.server.communication.ServerMain;
 import it.polimi.ingsw.client.userInterface.gui.Gui;
 
 import java.io.BufferedReader;
@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println(Outputs.START.out);
         switch (getUserType(args)) {
-            case SERVER -> new ServerMain(1234).run();
+            case SERVER -> new ServerMain(12345).run();
             case CLI -> new Cli();
             case GUI -> new Gui();
         }

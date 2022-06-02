@@ -6,13 +6,14 @@ import java.lang.reflect.Type;
 
 public enum MessageType {
     PREFERENCES(Preferences.class),
+    PING(Ping.class),
     LOBBYINFO(LobbyInfo.class),
     COMMAND(Command.class),
     UPDATE(Update.class),
-    PING(Ping.class),
-    END(EndGame.class),
     CHARINFO(CharInfo.class),
-    ERROR(Error.class);
+    ERROR(Error.class),
+    END(EndGame.class);
+
     private final Type type;
 
     MessageType(Type type) {
@@ -36,6 +37,7 @@ public enum MessageType {
 
     @Override
     public String toString() {
-        return type.toString();
+        return name().toLowerCase();
     }
+
 }

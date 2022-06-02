@@ -32,7 +32,7 @@ public class Cli implements UserInterface {
                 nPlayer,
                 mode,
                 "127.0.0.1",
-                1234);
+                12345);
         clientMain.connect(this);
         while(true) {
             try {

@@ -5,7 +5,8 @@ import it.polimi.ingsw.server.controller.GameType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LobbyInfo extends Message{
+public class LobbyInfo extends Message {
+
     private final List<String> players;
     private final GameType gameType;
 
@@ -28,4 +29,5 @@ public class LobbyInfo extends Message{
         return "players in queue: " + players +
                 "game type: " + gameType;
     }
+
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.communication.ClientState;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
@@ -21,8 +21,8 @@ public class ClientMain {
     private final int port;
 
     public Socket socket = null;
-    private ClientSender cs;
-    private ClientReceiver cr;
+    private ClientSender clientSender;
+    private ClientReceiver clientReceiver;
 
     public ClientMain(String username, int preferenceNPlayer, boolean preferenceExpertMode, String IP, int port) {
         this.username=username;
@@ -39,15 +39,15 @@ public class ClientMain {
             ExecutorService executor = Executors.newCachedThreadPool();
             socket = new Socket(IP, port);
             System.out.println(username + ":  connected");
-
-            cs = new ClientSender(socket);
-            cr = new ClientReceiver(this, socket, userInterface);
+            clientSender = new ClientSender(socket);
+            clientReceiver = new ClientReceiver(this, socket, userInterface);
             //send player preferences to the server;
             Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
             Packet packet = new Packet(preferences);
-            cs.sendPacket(packet);
+            clientSender.sendPacket(packet);
             //run the ClientReceiver
-            executor.submit(cr);
+            Runnable runnable = () -> executor.submit(clientReceiver);
+            runnable.run();
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + IP);
             System.exit(1);
@@ -67,7 +67,7 @@ public class ClientMain {
         if(state==ClientState.GAME){
             CommandMessage commandMessage = new CommandMessage(username, stringCommand);
             Packet packet = new Packet(commandMessage);
-            cs.sendPacket(packet);
+            clientSender.sendPacket(packet);
             System.out.println("command sent");
         }
     }

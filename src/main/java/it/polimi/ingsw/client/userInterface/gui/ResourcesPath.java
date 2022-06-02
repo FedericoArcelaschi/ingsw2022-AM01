@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.userInterface.gui;
+package it.polimi.ingsw.client.userInterfaces.gui;
 
 public enum ResourcesPath {
     STUDENTS("file:/Users/federicoarcelaschi/Documents/Dev/ingsw2022-AM01/src/main/resources/"),

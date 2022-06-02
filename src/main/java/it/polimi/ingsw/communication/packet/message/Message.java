@@ -4,7 +4,9 @@ package it.polimi.ingsw.communication.packet.message;
  * generalization of messages
  */
 public abstract class Message {
+
     protected final MessageType messageType;
+
     protected Message(MessageType messageType) {
         this.messageType = messageType;
     }
@@ -12,4 +14,5 @@ public abstract class Message {
     public MessageType getMessageType() {
         return messageType;
     }
+
 }

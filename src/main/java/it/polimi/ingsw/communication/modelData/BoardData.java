@@ -82,7 +82,7 @@ public class BoardData {
         s.append("Islands: ");
         for (int i = 0; i < islandList.size(); i++) {
             s.append("\n\tIsland ")
-                    .append(i+1)
+                    .append( i + 1 )
                     .append(": ")
                     .append(islandList.get(i));
             if(i == motherNaturePosition) s.append(", mother nature is Here!");
@@ -96,10 +96,9 @@ public class BoardData {
                     .append(": ")
                     .append(cloudList.get(i));
         //Print other castles
-        s.append("\nOther Player Castle:");
-        for (CastleData otherCastle : otherCastles) {
+        s.append("\nOther Player castles:");
+        for (CastleData otherCastle : otherCastles)
             s.append("\n\tCastle ").append(otherCastle.getUsername()).append(": ").append(otherCastle);
-        }
         //Print turn
         s.append("\nTurn: ").append(turn);
         //Print my castle with the hand of cards

@@ -17,4 +17,5 @@ public class Error extends Message {
     public String getMessage() {
         return message;
     }
+
 }

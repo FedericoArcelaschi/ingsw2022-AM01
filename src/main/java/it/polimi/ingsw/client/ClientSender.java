@@ -10,7 +10,6 @@ import java.net.Socket;
 
 public class ClientSender {
     private final PrintWriter out;
-    Gson parser = new Gson();
 
     public ClientSender(@NotNull Socket socket) {
         try {
