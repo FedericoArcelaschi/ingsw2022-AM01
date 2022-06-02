@@ -389,6 +389,10 @@ public class Board {
         throw new NotTheRightGamemodeException("You can't use this command in this game mode!");
     }
 
+    public String getCharInfo (int idChar) throws NotTheRightGamemodeException{
+        throw new NotTheRightGamemodeException("You can't use this command in this game mode!");
+    }
+
     public void changePhase(){
         turn.changePhase();
     }

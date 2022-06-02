@@ -1,9 +1,11 @@
 package it.polimi.ingsw.server.model.expertLogic;
 
+import it.polimi.ingsw.communication.packet.message.CharInfoMessage;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterParametersType;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
@@ -61,6 +63,11 @@ public class ExpertBoard extends Board {
     private void drawExpertCharacters() {
         tavern = new Tavern(bag);
         expertCharactersCards = tavern.extract();
+    }
+
+    @Override
+    public String getCharInfo(int idChar){
+        return CharacterExplanation.getInstance(idChar).getDescription();
     }
 
     /**

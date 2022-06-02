@@ -58,8 +58,8 @@ public class Command {
                 }
             }
             //e.g.: payChar Monk Green 0
-            case MORE -> {}
-            //e.g: more Monk
+            case CHARACTER_INFO -> attributesMap.put(CommandAttribute.WHO, attributes[0]);
+            //e.g: charinfo Monk
         }
     }
 

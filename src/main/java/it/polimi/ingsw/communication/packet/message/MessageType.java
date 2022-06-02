@@ -12,6 +12,7 @@ public enum MessageType {
     PING(Ping.class),
     END(EndGameMessage.class),
     LOBBY(LobbyInfoMessage.class),
+    INFO(CharInfoMessage.class),
     ERROR(ErrorMessage.class);
 
 

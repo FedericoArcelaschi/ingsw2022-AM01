@@ -12,6 +12,7 @@ import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,6 +64,7 @@ public class Game {
                 case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
                 case CHOOSE_CLOUD -> chooseCloudCommand(command);
                 case PAY_CHARACTER -> payCharCommand(command);
+                case CHARACTER_INFO -> getCharInfo(command);
             }
         }
     }
@@ -229,6 +231,17 @@ public class Game {
             board.playExpertCard(idChar, Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE)), students );
         }catch (NotTheRightGamemodeException | CoinException | StudentException | PhaseNotRightException e){
             e.printStackTrace();
+        }
+    }
+
+    private void getCharInfo(Command command){
+        //The method does not throw exceptions as everyone can use it anytime during the game.
+        int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
+        try {
+            Packet characterInfo = new Packet(new CharInfoMessage(board.getCharInfo(idChar)), MessageType.INFO);
+            send(characterInfo, usernameSocketMap.get(command.getUsername()));
+        }catch (NotTheRightGamemodeException e){
+            send(createError(0, "You can't use this command in this gamemode."), usernameSocketMap.get(command.getUsername()));
         }
     }
 
