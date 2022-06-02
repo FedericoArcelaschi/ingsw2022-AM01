@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.communication;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.LobbyInfoMessage;
+import it.polimi.ingsw.communication.packet.message.LobbyInfo;
 import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
@@ -92,7 +91,7 @@ public class LobbyManager {
                     throw new RuntimeException(e);
                 }
 
-                out.println(new Gson().toJson(packet));
+                out.println(packet.toJson());
             }
         }
     }

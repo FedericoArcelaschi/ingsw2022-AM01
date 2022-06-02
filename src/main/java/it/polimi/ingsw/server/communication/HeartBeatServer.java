@@ -38,7 +38,7 @@ public class HeartBeatServer implements Callable {
             long previous = System.currentTimeMillis();
             for (Socket client: clients) {
                 Packet packet = new Packet(new Ping(), MessageType.PING);
-                String jsonMessage = parser.toJson(packet, Packet.class);
+                String jsonMessage = packet.toJson();
                 try {
                     new PrintWriter(client.getOutputStream(), true).println(jsonMessage);
                 } catch (IOException e) {

@@ -24,6 +24,17 @@ public enum MessageType {
         return type;
     }
 
+    public String getTypeSerializable() {
+        return type.getTypeName();
+    }
+
+    public static MessageType get(Type messageType) {
+        for (MessageType mt : MessageType.values())
+            if (mt.type.equals(messageType))
+                return mt;
+        return null;
+    }
+
     @Override
     public String toString() {
         return type.toString();

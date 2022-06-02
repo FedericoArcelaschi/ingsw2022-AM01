@@ -1,7 +1,9 @@
 package it.polimi.ingsw.server.communication;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.communication.packet.Packet;
+import it.polimi.ingsw.communication.packet.PacketParser;
 import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
@@ -26,7 +28,7 @@ public class ServerMain implements Runnable {
     //private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
     private ServerSocket serverSocket;
 
-    Gson parser = new Gson();
+    Gson parser = PacketParser.gson;
 
     public ServerMain(int port) {
         this.port = port;
@@ -102,6 +104,7 @@ public class ServerMain implements Runnable {
         // decode preferences
         Packet preferencesPacket = parser.fromJson(input, Packet.class);
         Preferences preferences = (Preferences) preferencesPacket.getMessage();
+        System.out.println(preferences);
         // String nickname = preferences.username();
         // System.out.println(nickname + " joined in");
         GameType playerGameType = null;
