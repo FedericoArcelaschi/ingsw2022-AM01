@@ -22,5 +22,6 @@ public class ClientSender {
 
     public void sendPacket(Packet packet){
         out.print(packet.toJson());
+        System.out.println(packet.toJson());
     }
 }

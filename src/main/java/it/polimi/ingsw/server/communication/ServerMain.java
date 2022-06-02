@@ -106,7 +106,7 @@ public class ServerMain implements Runnable{
     }
 
 
-    private void handleGame(GameType gameType){
+    private void handleGame(GameType gameType) {
         Game game = waitingRooms.computeGameType(gameId, gameType);
         if(game != null) {
             gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType()) + 1);
@@ -121,6 +121,7 @@ public class ServerMain implements Runnable{
 
 
     private GameType handleNewClient(Socket socket){
+        System.out.println("socket " + socket);
         //listen for preferences
         String input;
         try{
@@ -129,6 +130,7 @@ public class ServerMain implements Runnable{
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        System.out.println(input);
         //decode preferences
         var preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
         var preferences = (Preferences) preferencesPacket.getMessage();
