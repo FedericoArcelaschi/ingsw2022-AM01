@@ -8,10 +8,9 @@ import it.polimi.ingsw.communication.packet.message.Ping;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.*;
 import java.util.concurrent.Callable;
 
 /**
@@ -48,30 +47,33 @@ public class HeartBeatServer implements Callable {
     }
 
     public void run() {
-            for (Socket client : clients) {
-                PrintWriter out;
-                try {
-                    out = new PrintWriter(client.getOutputStream(), true);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                Message message = new Ping();
-                Packet packet = new Packet(message);
-                heartBeats.put(client, message);
-                String jsonMessage = PacketParser.gson.toJson(packet, Packet.class);
-                out.println(jsonMessage);
-            }
+        var previousTime = new Date().getTime();
+        for (Socket client : clients) {
+            PrintWriter out;
             try {
-                Thread.sleep(timeout);
-            } catch (InterruptedException e) {
+                out = new PrintWriter(client.getOutputStream(), true);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if(!heartBeats.isEmpty())
-                System.out.println("client didn't ping back in time");
-            run(); // personalmente mi sembra più elegante
+            var message = new Ping();
+            var packet = new Packet(message);
+            heartBeats.put(client, message);
+            var jsonMessage = PacketParser.gson.toJson(packet, Packet.class);
+            out.println(jsonMessage);
+        }
+        try {
+            Thread.sleep(timeout - previousTime + new Date().getTime());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        if(!heartBeats.isEmpty())
+            for (Socket client : heartBeats.keySet())
+                System.out.println(client + " didn't ping back in time");
+        run();
         //TODO: removeClient(s);
         //TODO: waitingRooms.removePlayer(s);
         //TODO: game.end(s);
+        //TODO: handle exceptions
         //errorMessage.append(s).append(", ");
         //throw new ClientNotRespondingException(errorMessage.toString());
     }

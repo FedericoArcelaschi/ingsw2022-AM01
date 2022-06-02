@@ -130,9 +130,9 @@ public class ServerMain implements Runnable{
             throw new RuntimeException(e);
         }
         //decode preferences
-        Packet preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
-        Preferences preferences = (Preferences) preferencesPacket.getMessage();
-        String username = preferences.username();
+        var preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
+        var preferences = (Preferences) preferencesPacket.getMessage();
+        var username = preferences.username();
         System.out.println(username + " joined in");
         GameType playerGameType = null;
         try {
@@ -143,7 +143,7 @@ public class ServerMain implements Runnable{
         //adds the new client
         heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
         //starts the receiver
-        ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, null);
+        var sr = new ServerReceiver(socket, heartBeatServer, null);
         //adds player to waiting room
         waitingRooms.addPlayer(playerGameType, sr, username);
 
