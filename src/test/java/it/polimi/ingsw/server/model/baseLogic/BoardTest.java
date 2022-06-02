@@ -100,10 +100,8 @@ BoardTest {
         for(int i=0; i<4;i++){
             cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(i));
         }
-        b.setCurrentPhase(TurnPhase.STUDENTS);
         b.moveStudentsToDiningRoom(player1, cl);
         //move the students from cloud to WR
-        b.setCurrentPhase(TurnPhase.CLOUD);
         assertTrue(b.chooseCloud(player1, 0));
     }
     @Test
@@ -119,7 +117,6 @@ BoardTest {
             students.replace(c, students.get(c) + 1);
         }
         //test if the method returns correctly
-        b.setCurrentPhase(TurnPhase.STUDENTS);
         assertTrue(b.moveStudentToIsland(player1, 0, studentColorList));
         //test if the student get removed from castle waiting room
         assertEquals(7 - studentColorList.size(),

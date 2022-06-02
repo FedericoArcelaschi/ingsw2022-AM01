@@ -2,19 +2,17 @@ package it.polimi.ingsw.server.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import it.polimi.ingsw.communication.packet.Command;
-import it.polimi.ingsw.communication.packet.CommandAttribute;
+import it.polimi.ingsw.communication.packet.message.command.Command;
+import it.polimi.ingsw.communication.packet.message.command.CommandAttribute;
 import it.polimi.ingsw.server.communication.ServerReceiver;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
-import it.polimi.ingsw.communication.packet.MessageType;
+import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
-import it.polimi.ingsw.server.model.exceptions.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

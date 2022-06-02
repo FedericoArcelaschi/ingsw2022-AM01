@@ -1,10 +1,10 @@
 package it.polimi.ingsw.server.communication;
 
-import it.polimi.ingsw.communication.packet.Command;
+import it.polimi.ingsw.communication.packet.message.command.Command;
 import it.polimi.ingsw.communication.Receiver;
-import it.polimi.ingsw.communication.packet.*;
-import it.polimi.ingsw.communication.packet.message.CommandMessage;
+import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
 import it.polimi.ingsw.communication.packet.message.Message;
+import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.server.controller.Game;
 
 import java.net.Socket;

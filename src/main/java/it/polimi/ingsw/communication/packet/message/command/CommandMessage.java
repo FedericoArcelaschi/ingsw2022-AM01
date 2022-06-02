@@ -1,6 +1,8 @@
-package it.polimi.ingsw.communication.packet.message;
+package it.polimi.ingsw.communication.packet.message.command;
 
-public class CommandMessage implements Message{
+import it.polimi.ingsw.communication.packet.message.Message;
+
+public class CommandMessage implements Message {
     private final String username;
     private final String command;  //TODO: MAYBE THIS SHOULD BE A CommandType?
 

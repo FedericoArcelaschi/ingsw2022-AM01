@@ -1,14 +1,12 @@
-package it.polimi.ingsw.communication.packet;
+package it.polimi.ingsw.communication.packet.message.command;
 
-import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static it.polimi.ingsw.communication.packet.CommandType.getCommandType;
+import static it.polimi.ingsw.communication.packet.message.command.CommandType.getCommandType;
 
 /**
  * a representation of the command the player can compose and ask to be executed

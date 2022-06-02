@@ -115,5 +115,5 @@ public class Turn {
             return list.get(0);
         else return list.get(index +1);
     }
-    
+
 }

@@ -1,7 +1,11 @@
 package it.polimi.ingsw.server.model.exceptions;
 
 public class PhaseNotRightException extends Exception{
-    public PhaseNotRightException(String s) {
-
+    public PhaseNotRightException(String message) {
+        super(message);
     }
+    public PhaseNotRightException() {
+        super();
+    }
+
 }

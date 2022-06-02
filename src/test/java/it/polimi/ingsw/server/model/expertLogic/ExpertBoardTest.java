@@ -42,7 +42,6 @@ public class ExpertBoardTest{
     @Test
     public void testPlayExpertCard() {
         if (expertBoard.getAvailableCharacterCards().get(4) == null) {
-            expertBoard.setCurrentPhase(TurnPhase.STUDENTS);
             assertThrows(IllegalArgumentException.class, () -> expertBoard.playExpertCard(4, null, null),
                     "Mailman not in extracted");
             expertBoard.extract4CharacterTesting(4);

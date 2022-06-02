@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.communication;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.communication.packet.MessageType;
+import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Ping;
 
