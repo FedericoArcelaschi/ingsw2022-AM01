@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientSender {
+
     private final PrintWriter out;
 
     public ClientSender(@NotNull Socket socket) {
@@ -20,6 +21,6 @@ public class ClientSender {
     }
 
     public void sendPacket(Packet packet){
-        out.println(packet.toJson());
+        out.print(packet.toJson());
     }
 }

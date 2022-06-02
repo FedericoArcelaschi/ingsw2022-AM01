@@ -37,16 +37,15 @@ public abstract class Receiver implements Runnable{
     @Override
     public void run() {
         String read;
-        while(true) { //keeps reading the input
-            try {
-                read = in.readLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            var packet = PacketParser.gson.fromJson(read, Packet.class);
-            messageSwitch(packet.getMessageType(), packet.getMessage());
-            //System.out.println(packet.getMessageJson());
+        try {
+            read = in.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        var packet = PacketParser.gson.fromJson(read, Packet.class);
+        messageSwitch(packet.getMessageType(), packet.getMessage());
+        //System.out.println(packet.getMessageJson());
+        run();         //keeps reading the input
     }
 
     void messageSwitch(MessageType type, Message message){}

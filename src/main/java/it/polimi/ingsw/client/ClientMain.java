@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 
 public class ClientMain {
     private final String username;
-    private ClientState state;
+    private ClientState state = ClientState.NOT_CONNECTED;
     private final int preferenceNPlayer;
     private final boolean preferenceExpertMode;
     private final String IP;
@@ -30,33 +30,32 @@ public class ClientMain {
         this.preferenceExpertMode=preferenceExpertMode;
         this.IP = IP;
         this.port = port;
-        this.state = ClientState.NOT_CONNECTED;
     }
 
-    public void connect(UserInterface userInterface){
+    public void connect(UserInterface userInterface) {
         System.out.println(username + ":  attempting connection");
         try {
-            ExecutorService executor = Executors.newCachedThreadPool();
-            socket = new Socket(IP, port);
-            System.out.println(username + ":  connected");
-            clientSender = new ClientSender(socket);
-            clientReceiver = new ClientReceiver(this, socket, userInterface);
-            //send player preferences to the server;
-            Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
-            Packet packet = new Packet(preferences);
-            clientSender.sendPacket(packet);
-            //run the ClientReceiver
-            Runnable runnable = () -> executor.submit(clientReceiver);
-            runnable.run();
-        } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + IP);
-            System.exit(1);
+            this.socket = new Socket(IP, port);
         } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " +
-                    IP);
+            e.printStackTrace();
             System.exit(1);
+            //TODO: implement better exception handling
         }
-        this.state = ClientState.WAITING_ROOM;
+        System.out.println(username + ":  connected");
+
+        clientSender = new ClientSender(socket);
+
+        //sends player preferences to the server;
+        Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
+        Packet packet = new Packet(preferences);
+        clientSender.sendPacket(packet);
+
+        //runs the ClientReceiver
+        clientReceiver = new ClientReceiver(this, socket, userInterface);
+        Runnable runnable = () -> Executors.newCachedThreadPool().submit(clientReceiver);
+        runnable.run();
+
+        state = ClientState.WAITING_ROOM;
     }
 
     public void runCommand(String stringCommand){
@@ -64,9 +63,9 @@ public class ClientMain {
             return;
         }
         //compose command and send, only if the player is in a game.
-        if(state==ClientState.GAME){
-            CommandMessage commandMessage = new CommandMessage(username, stringCommand);
-            Packet packet = new Packet(commandMessage);
+        if (state == ClientState.GAME) {
+            var commandMessage = new CommandMessage(username, stringCommand);
+            var packet = new Packet(commandMessage);
             clientSender.sendPacket(packet);
             System.out.println("command sent");
         }
