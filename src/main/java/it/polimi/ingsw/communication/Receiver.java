@@ -1,12 +1,9 @@
 package it.polimi.ingsw.communication;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.client.ClientMain;
 import it.polimi.ingsw.communication.packet.PacketParser;
 import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.MessageType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,6 +33,7 @@ public abstract class Receiver implements Runnable{
 
     @Override
     public void run() {
+        //keeps reading the input
         String read;
         try {
             read = in.readLine();
@@ -43,10 +41,9 @@ public abstract class Receiver implements Runnable{
             throw new RuntimeException(e);
         }
         var packet = PacketParser.gson.fromJson(read, Packet.class);
-        messageSwitch(packet.getMessageType(), packet.getMessage());
-        //System.out.println(packet.getMessageJson());
-        run();         //keeps reading the input
+        messageSwitch(packet.getMessage());
+        run();
     }
 
-    void messageSwitch(MessageType type, Message message){}
+    protected abstract void messageSwitch(Message message);
 }

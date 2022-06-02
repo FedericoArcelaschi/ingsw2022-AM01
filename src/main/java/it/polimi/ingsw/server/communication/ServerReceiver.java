@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.communication;
 
 import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.packet.message.Message;
-import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.communication.packet.message.command.Command;
 import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
 import it.polimi.ingsw.server.controller.Game;
@@ -27,8 +26,8 @@ public class ServerReceiver extends Receiver {
         this.game = game;
     }
 
-    void messageSwitch(MessageType type, Message message) {
-        switch (type){
+    protected void messageSwitch(Message message) {
+        switch (message.getMessageType()){
             case PING -> {
                 System.out.println("client pinged back");
                 hbs.validateResponse(message);

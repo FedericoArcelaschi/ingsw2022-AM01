@@ -20,8 +20,8 @@ public class ClientReceiver extends Receiver {
         this.userInterface = userInterface;
     }
 
-    void messageSwitch(MessageType type, Message message) {
-        switch (type) {
+    protected void messageSwitch(Message message) {
+        switch (message.getMessageType()) {
             case PING -> {
                 Ping ping = (Ping) message;
                 Packet heartbeatToServer = new Packet(ping);
