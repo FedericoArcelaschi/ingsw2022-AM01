@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.userInterfaces.cli;
 
-import it.polimi.ingsw.client.ClientMain;
+import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.client.userInterfaces.UserInterface;
 import it.polimi.ingsw.communication.modelData.BoardData;
@@ -25,7 +25,7 @@ public class Cli extends Application implements UserInterface {
                 nPlayer,
                 expertMode,
                 "127.0.0.1",
-                1234);
+                12345);
         Executors.newCachedThreadPool().submit(
                 () -> clientMain.connect(this));
         //

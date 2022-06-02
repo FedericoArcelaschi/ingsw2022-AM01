@@ -11,9 +11,8 @@ public enum MessageType {
     UPDATE(Update.class),
     PING(Ping.class),
     END(EndGame.class),
-    INFO(CharInfo.class),
+    CHARINFO(CharInfo.class),
     ERROR(Error.class);
-
     private final Type type;
 
     MessageType(Type type) {

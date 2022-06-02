@@ -8,7 +8,6 @@ import it.polimi.ingsw.communication.packet.message.command.CommandAttribute;
 import it.polimi.ingsw.server.communication.ServerReceiver;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
-import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
@@ -76,7 +75,7 @@ public class Game {
         }
         if(user == null) throw new IllegalArgumentException("the player isn't part of this game");
         Message message = new EndGame(user + " disconnected");
-        Packet packet = new Packet(message, MessageType.END);
+        Packet packet = new Packet(message);
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             send(packet, usernameSocketMap.get(username));
@@ -87,7 +86,7 @@ public class Game {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             Message message = new WinUpdate(ModelDataBuilder.newBoardData(username, board), winner);
-            Packet packet  = new Packet(message, MessageType.UPDATE);
+            Packet packet  = new Packet(message);
             send(packet, usernameSocketMap.get(username));
         }
     }
@@ -97,7 +96,7 @@ public class Game {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             Message message = new Update(ModelDataBuilder.newBoardData(username, board));
-            Packet packet  = new Packet(message, MessageType.UPDATE);
+            Packet packet  = new Packet(message);
             send(packet, usernameSocketMap.get(username));
         }
     }
@@ -115,12 +114,12 @@ public class Game {
 
     private Packet createUpdate(BoardData boardData){
         Message message = new Update(boardData);
-        return new Packet(message, MessageType.UPDATE);
+        return new Packet(message);
     }
 
     private Packet createError(int errorCode, String errorMessage){
         Message message = new Error(errorCode, errorMessage);
-        return new Packet(message, MessageType.ERROR);
+        return new Packet(message);
     }
 
     private void playCardCommand(Command command){
@@ -238,7 +237,7 @@ public class Game {
         //The method does not throw exceptions as everyone can use it anytime during the game.
         int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
         try {
-            Packet characterInfo = new Packet(new CharInfo(board.getCharInfo(idChar)), MessageType.INFO);
+            Packet characterInfo = new Packet(new CharInfo(board.getCharInfo(idChar)));
             send(characterInfo, usernameSocketMap.get(command.getUsername()));
         }catch (NotTheRightGamemodeException e){
             send(createError(0, "You can't use this command in this gamemode."), usernameSocketMap.get(command.getUsername()));
@@ -250,10 +249,10 @@ public class Game {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             Message winner = new WinUpdate(ModelDataBuilder.newBoardData(username, board), t.name());
-            Packet packet  = new Packet(winner, MessageType.UPDATE);
+            Packet packet  = new Packet(winner);
             send(packet, usernameSocketMap.get(username));
             Message gameOver = new EndGame("Game over. Changing state...");
-            Packet packet1 = new Packet(gameOver, MessageType.END);
+            Packet packet1 = new Packet(gameOver);
             send(packet, usernameSocketMap.get(username));
         }
     }

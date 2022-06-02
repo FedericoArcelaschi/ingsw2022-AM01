@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.communication;
 
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.LobbyInfo;
-import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
 
@@ -81,7 +80,7 @@ public class LobbyManager {
         int numberOfPlayers = gameType.nPlayer;
         if(players.get(gameType).size() < numberOfPlayers) {
             LobbyInfo lobbyMessage = new LobbyInfo(players.get(gameType), gameType);
-            Packet packet = new Packet(lobbyMessage, MessageType.LOBBYINFO);
+            Packet packet = new Packet(lobbyMessage);
             List<ServerReceiver> playerServerReceivers = new ArrayList<>(gameTypePlayersMap.get(gameType));
             for(ServerReceiver sr : playerServerReceivers) {
                 PrintWriter out;

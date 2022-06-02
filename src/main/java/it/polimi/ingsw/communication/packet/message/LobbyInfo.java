@@ -5,11 +5,12 @@ import it.polimi.ingsw.server.controller.GameType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LobbyInfo implements Message{
+public class LobbyInfo extends Message{
     private final List<String> players;
     private final GameType gameType;
 
     public LobbyInfo(List<String> players, GameType g){
+        super(MessageType.LOBBYINFO);
         this.players = new ArrayList<>(players);
         this.gameType = g;
     }

@@ -1,9 +1,10 @@
 package it.polimi.ingsw.communication.packet.message;
 
-public class EndGame implements Message{
+public class EndGame extends Message{
     private final String cause;
 
     public EndGame(String cause) {
+        super(MessageType.END);
         this.cause = cause;
     }
 

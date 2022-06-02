@@ -1,10 +1,11 @@
 package it.polimi.ingsw.communication.packet.message;
 
-public class Error implements Message {
+public class Error extends Message {
     private final int errorCode; //TODO: UPDATE ERROR CODES
     private final String message;
 
     public Error(int errorCode, String message) {
+        super(MessageType.ERROR);
         this.errorCode = errorCode;
         this.message = message;
     }

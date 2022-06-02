@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.userInterfaces.gui.controller;
 
-import it.polimi.ingsw.client.ClientMain;
+import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.client.userInterfaces.UserInterface;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

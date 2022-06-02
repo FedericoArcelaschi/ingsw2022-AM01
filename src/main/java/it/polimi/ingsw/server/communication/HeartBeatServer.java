@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.communication;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Ping;
 
@@ -37,7 +36,7 @@ public class HeartBeatServer implements Callable {
         while(true) {
             long previous = System.currentTimeMillis();
             for (Socket client: clients) {
-                Packet packet = new Packet(new Ping(), MessageType.PING);
+                Packet packet = new Packet(new Ping());
                 String jsonMessage = packet.toJson();
                 try {
                     new PrintWriter(client.getOutputStream(), true).println(jsonMessage);

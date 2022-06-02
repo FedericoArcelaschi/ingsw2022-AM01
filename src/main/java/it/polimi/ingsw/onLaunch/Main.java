@@ -10,9 +10,9 @@ import java.io.InputStreamReader;
 
 public class Main {
     public static void main(String[] args) {
-        Outputs.getTitle();
+        //TODO:Outputs.getTitle();
         switch (getUserType(args)) {
-            case SERVER ->  new ServerMain(1234).run();
+            case SERVER ->  new ServerMain(12345).run();
             case CLI ->     new Cli();
             case GUI ->     new Gui();
         }

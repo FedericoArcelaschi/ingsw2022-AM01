@@ -1,8 +1,6 @@
 package it.polimi.ingsw.communication.packet;
 
 import com.google.gson.*;
-import it.polimi.ingsw.communication.packet.message.Message;
-import it.polimi.ingsw.communication.packet.message.MessageType;
 
 import java.lang.reflect.Type;
 
@@ -23,8 +21,8 @@ public class PacketAdapterSerDes implements JsonSerializer<Packet>, JsonDeserial
         final JsonElement message = get(wrapper, "message");
         final Type actualMessageType = typeForName(messageType);
         return new Packet(
-                context.deserialize(message, actualMessageType),
-                MessageType.get(actualMessageType));
+                context.deserialize(message, actualMessageType)
+        );
     }
 
     private Type typeForName(final JsonElement typeElem) {

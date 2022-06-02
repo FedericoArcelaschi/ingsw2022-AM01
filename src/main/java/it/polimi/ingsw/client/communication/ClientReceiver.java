@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client.communication;
 
-import it.polimi.ingsw.client.ClientMain;
-import it.polimi.ingsw.client.ClientState;
 import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.client.userInterfaces.UserInterface;
@@ -25,7 +23,7 @@ public class ClientReceiver extends Receiver {
         switch (type) {
             case PING -> {
                 Ping ping = (Ping) message;
-                Packet heartbeatToServer = new Packet(ping, MessageType.PING);
+                Packet heartbeatToServer = new Packet(ping);
                 out.println(parser.toJson(heartbeatToServer));
                 //todo: kill in case of disconnection.
             }

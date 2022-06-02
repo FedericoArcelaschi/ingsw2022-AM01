@@ -11,8 +11,8 @@ public class Packet {
     private final MessageType type;
     private final Message message;
 
-    public Packet(Message message, MessageType type) {
-        this.type = type;
+    public Packet(Message message) {
+        this.type = message.getMessageType();
         this.message = message;
     }
 
