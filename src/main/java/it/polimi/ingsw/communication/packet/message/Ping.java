@@ -6,11 +6,13 @@ import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Ping implements Message {
+public class Ping extends Message {
+
     private final UUID id;
     private final Timestamp time;
 
     public Ping(UUID id, Timestamp time) {
+        super(MessageType.PING);
         this.time = time;
         this.id = id;
     }
@@ -36,10 +38,16 @@ public class Ping implements Message {
     }
 
     @Override
+    public String toString() {
+        return "time: " + time;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Ping) obj;
         return Objects.equals(this.id, that.id());
     }
+
 }

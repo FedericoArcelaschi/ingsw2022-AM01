@@ -1,12 +1,14 @@
 package it.polimi.ingsw.model.expertLogic;
 
-import it.polimi.ingsw.model.baseLogic.Bag;
-import it.polimi.ingsw.model.baseLogic.Board;
-import it.polimi.ingsw.model.baseLogic.BoardFactory;
-import it.polimi.ingsw.model.baseLogic.Turn;
-import it.polimi.ingsw.model.expertLogic.character.charTypes.StandardCharacter;
-import it.polimi.ingsw.model.expertLogic.character.charTypes.*;
-import it.polimi.ingsw.model.expertLogic.character.costants.CharacterUtility;
+import it.polimi.ingsw.server.model.baseLogic.Bag;
+import it.polimi.ingsw.server.model.baseLogic.Board;
+import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StudentCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.Tavern;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.startUp;
 
-import it.polimi.ingsw.userInterface.cli.Cli;
-import it.polimi.ingsw.controller.ServerMain;
-import it.polimi.ingsw.userInterface.gui.Gui;
+import it.polimi.ingsw.client.userInterface.cli.Cli;
+import it.polimi.ingsw.server.ServerMain;
+import it.polimi.ingsw.client.userInterface.gui.Gui;
 
 import java.io.BufferedReader;
 import java.io.IOException;

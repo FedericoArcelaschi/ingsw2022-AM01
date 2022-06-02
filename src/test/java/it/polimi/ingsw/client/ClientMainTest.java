@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.controller.GameType;
-import it.polimi.ingsw.controller.ServerMain;
+import it.polimi.ingsw.server.controller.GameType;
+import it.polimi.ingsw.server.ServerMain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

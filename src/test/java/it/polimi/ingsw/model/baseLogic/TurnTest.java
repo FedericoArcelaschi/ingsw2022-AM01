@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.baseLogic;
 
-import it.polimi.ingsw.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.server.model.baseLogic.Board;
+import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
+import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
+import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

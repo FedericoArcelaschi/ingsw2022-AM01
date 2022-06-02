@@ -1,8 +1,9 @@
 package it.polimi.ingsw.model.baseLogic;
 
-import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.StudentException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.server.model.baseLogic.*;
+import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.server.model.exceptions.StudentException;
+import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,8 +45,8 @@ public class CastleTest {
                 "10 yellow students can't be present in the waitingroom. (size=9)");
         // FIXME: org.opentest4j.AssertionFailedError: 10 yellow students can't be present in the waitingroom.
         // (size=9) ==> Unexpected exception charTypes thrown ==>
-        // expected: <it.polimi.ingsw.model.exceptions.NoSuchStudentException>
-        // but was: <it.polimi.ingsw.model.exceptions.TooManyStudentsException>
+        // expected: <NoSuchStudentException>
+        // but was: <TooManyStudentsException>
     }
 
     @Test

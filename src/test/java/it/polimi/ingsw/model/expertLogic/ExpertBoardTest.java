@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.expertLogic;
 
-import it.polimi.ingsw.model.baseLogic.BoardFactory;
-import it.polimi.ingsw.model.baseLogic.Turn;
-import it.polimi.ingsw.model.exceptions.CoinException;
-import it.polimi.ingsw.model.exceptions.StudentException;
-import it.polimi.ingsw.model.expertLogic.character.costants.CharacterUtility;
+import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
+import it.polimi.ingsw.server.model.exceptions.CoinException;
+import it.polimi.ingsw.server.model.exceptions.StudentException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
+import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

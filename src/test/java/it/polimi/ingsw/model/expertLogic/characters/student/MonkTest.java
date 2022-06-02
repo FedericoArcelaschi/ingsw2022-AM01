@@ -1,14 +1,14 @@
 package it.polimi.ingsw.model.expertLogic.characters.student;
 
-import it.polimi.ingsw.model.baseLogic.Island;
-import it.polimi.ingsw.model.baseLogic.StudentColor;
-import it.polimi.ingsw.model.baseLogic.Turn;
-import it.polimi.ingsw.model.exceptions.CoinException;
-import it.polimi.ingsw.model.exceptions.StudentException;
-import it.polimi.ingsw.model.expertLogic.ExpertBoard;
-import it.polimi.ingsw.model.expertLogic.ExpertIsland;
-import it.polimi.ingsw.model.expertLogic.character.charTypes.StudentCharacter;
-import it.polimi.ingsw.model.expertLogic.character.costants.CharacterExplanation;
+import it.polimi.ingsw.server.model.baseLogic.Island;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
+import it.polimi.ingsw.server.model.exceptions.CoinException;
+import it.polimi.ingsw.server.model.exceptions.StudentException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
+import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StudentCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

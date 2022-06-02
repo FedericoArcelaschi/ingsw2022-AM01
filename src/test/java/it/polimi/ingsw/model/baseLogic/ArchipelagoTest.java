@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.baseLogic;
 
+import it.polimi.ingsw.server.model.baseLogic.Archipelago;
+import it.polimi.ingsw.server.model.baseLogic.Island;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

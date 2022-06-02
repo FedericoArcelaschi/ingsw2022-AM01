@@ -1,17 +1,17 @@
 package it.polimi.ingsw.model.expertLogic.characters.influence;
 
-import it.polimi.ingsw.model.baseLogic.Bag;
-import it.polimi.ingsw.model.baseLogic.Castle;
-import it.polimi.ingsw.model.baseLogic.Island;
-import it.polimi.ingsw.model.baseLogic.Team;
-import it.polimi.ingsw.model.exceptions.StudentException;
-import it.polimi.ingsw.model.expertLogic.ExpertCastle;
-import it.polimi.ingsw.model.expertLogic.ExpertIsland;
-import it.polimi.ingsw.model.expertLogic.character.applyEffect.ParametersForCharacter;
-import it.polimi.ingsw.model.expertLogic.character.charTypes.StandardCharacter;
-import it.polimi.ingsw.model.expertLogic.character.costants.CharacterExplanation;
-import it.polimi.ingsw.model.expertLogic.influence.ExpertInfluence;
-import it.polimi.ingsw.model.expertLogic.influence.professor.ExpertProfessors;
+import it.polimi.ingsw.server.model.baseLogic.Bag;
+import it.polimi.ingsw.server.model.baseLogic.Castle;
+import it.polimi.ingsw.server.model.baseLogic.Island;
+import it.polimi.ingsw.server.model.baseLogic.Team;
+import it.polimi.ingsw.server.model.exceptions.StudentException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
+import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
+import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
+import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
+import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

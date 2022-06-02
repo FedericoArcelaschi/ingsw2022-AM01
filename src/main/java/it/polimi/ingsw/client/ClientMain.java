@@ -1,11 +1,10 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.communication.*;
-import it.polimi.ingsw.communication.packet.message.CommandMessage;
-import it.polimi.ingsw.communication.packet.MessageType;
 import it.polimi.ingsw.communication.packet.Packet;
+import it.polimi.ingsw.communication.packet.message.MessageType;
 import it.polimi.ingsw.communication.packet.message.Preferences;
-import it.polimi.ingsw.userInterface.UserInterface;
+import it.polimi.ingsw.client.userInterface.UserInterface;
+import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -45,7 +44,7 @@ public class ClientMain {
             cr = new ClientReceiver(this, socket, userInterface);
             //send player preferences to the server;
             Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
-            Packet packet = new Packet(MessageType.PREFERENCES, preferences);
+            Packet packet = new Packet(preferences);
             cs.sendPacket(packet);
             //run the ClientReceiver
             executor.submit(cr);
@@ -67,7 +66,7 @@ public class ClientMain {
         //compose command and send, only if the player is in a game.
         if(state==ClientState.GAME){
             CommandMessage commandMessage = new CommandMessage(username, stringCommand);
-            Packet packet = new Packet(MessageType.COMMAND, commandMessage);
+            Packet packet = new Packet(commandMessage);
             cs.sendPacket(packet);
             System.out.println("command sent");
         }

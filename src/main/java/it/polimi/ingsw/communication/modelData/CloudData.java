@@ -1,6 +1,6 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 
 import java.util.List;
 import java.util.Objects;

@@ -1,11 +1,11 @@
 package it.polimi.ingsw.communication.modelData;
 
-import it.polimi.ingsw.model.baseLogic.Board;
-import it.polimi.ingsw.model.baseLogic.BoardFactory;
-import it.polimi.ingsw.model.baseLogic.Turn;
-import it.polimi.ingsw.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.model.exceptions.NotYourTurnException;
-import it.polimi.ingsw.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.server.model.baseLogic.Board;
+import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
+import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

@@ -1,14 +1,15 @@
 package it.polimi.ingsw.model.expertLogic;
 
-import it.polimi.ingsw.model.baseLogic.StudentColor;
-import it.polimi.ingsw.model.baseLogic.interfaces.InterfaceAdapter;
-import it.polimi.ingsw.model.expertLogic.influence.InfluenceComputingExpert;
-import it.polimi.ingsw.model.baseLogic.influence.Influence;
-import it.polimi.ingsw.model.baseLogic.influence.Professors;
-import it.polimi.ingsw.model.expertLogic.influence.InfluenceComputingFunction;
-import it.polimi.ingsw.model.baseLogic.Island;
-import it.polimi.ingsw.model.baseLogic.Team;
-import it.polimi.ingsw.model.baseLogic.influence.functionalInterfaces.InfluenceComputing;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.interfaces.InterfaceAdapter;
+import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
+import it.polimi.ingsw.server.model.expertLogic.influence.InfluenceComputingExpert;
+import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
+import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
+import it.polimi.ingsw.server.model.expertLogic.influence.InfluenceComputingFunction;
+import it.polimi.ingsw.server.model.baseLogic.Island;
+import it.polimi.ingsw.server.model.baseLogic.Team;
+import it.polimi.ingsw.server.model.baseLogic.influence.functionalInterfaces.InfluenceComputing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

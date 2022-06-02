@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="loginPane" prefHeight="500" prefWidth="600" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.userInterface.gui.controller.LoginPaneController">
+<Pane fx:id="loginPane" prefHeight="500" prefWidth="600" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController">
    <children>
       <Label fx:id="eriantysLabel" layoutX="257" layoutY="52" text="Eriantys">
          <font>

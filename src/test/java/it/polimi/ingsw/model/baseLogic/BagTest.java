@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.baseLogic;
 
+import it.polimi.ingsw.server.model.baseLogic.Bag;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.*;
