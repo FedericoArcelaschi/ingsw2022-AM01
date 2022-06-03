@@ -44,7 +44,7 @@ public class Gui extends Application implements UserInterface {
         stage.show();
         loginPaneController.initialize(this);
         //FIXME: for testing.
-        draw(createBoardData());
+        //draw(createBoardData());
     }
 
     private BoardData createBoardData() {

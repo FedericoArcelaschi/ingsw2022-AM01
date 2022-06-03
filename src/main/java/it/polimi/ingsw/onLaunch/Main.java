@@ -3,6 +3,7 @@ package it.polimi.ingsw.onLaunch;
 import it.polimi.ingsw.client.userInterface.cli.Cli;
 import it.polimi.ingsw.server.communication.ServerMain;
 import it.polimi.ingsw.client.userInterface.gui.Gui;
+import javafx.application.Application;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class Main {
         switch (getUserType(args)) {
             case SERVER -> new ServerMain(12345).run();
             case CLI -> new Cli();
-            case GUI -> new Gui();
+            case GUI -> Application.launch(Gui.class);
         }
 
     }
