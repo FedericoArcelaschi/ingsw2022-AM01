@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.userInterfaces.gui.controller;
+package it.polimi.ingsw.client.userInterface.gui.controller;
 
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.CastleData;

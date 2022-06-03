@@ -1,18 +1,19 @@
 package it.polimi.ingsw.communication.packet.message;
 
-import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
+import it.polimi.ingsw.communication.packet.message.command.Command;
 
 import java.lang.reflect.Type;
 
 public enum MessageType {
     PREFERENCES(Preferences.class),
-    LOBBYINFO(LobbyInfo.class),
-    COMMAND(CommandMessage.class),
-    UPDATE(Update.class),
     PING(Ping.class),
-    END(EndGame.class),
+    LOBBYINFO(LobbyInfo.class),
+    COMMAND(Command.class),
+    UPDATE(Update.class),
     CHARINFO(CharInfo.class),
-    ERROR(Error.class);
+    ERROR(Error.class),
+    END(EndGame.class);
+
     private final Type type;
 
     MessageType(Type type) {
@@ -36,6 +37,7 @@ public enum MessageType {
 
     @Override
     public String toString() {
-        return type.toString();
+        return name().toLowerCase();
     }
+
 }

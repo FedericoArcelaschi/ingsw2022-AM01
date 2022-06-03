@@ -2,9 +2,7 @@ package it.polimi.ingsw.server.model.expertLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
-import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import it.polimi.ingsw.server.model.exceptions.CoinException;
-import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
@@ -51,7 +49,7 @@ public class ExpertBoardTest{
             expertBoard.playExpertCard(4, null, null);
         } catch (Exception e) {
             e.printStackTrace();
-            fail(" playExpertCard() method throw exceptions " + e);
+            fail(" playExpertCard() method throw exception " + e);
         }
         assertEquals(expectedPossibleMovingSteps, expertBoard.getPossibleMovingSteps());
         assertEquals(CharacterUtility.MAILMAN.name(), expertBoard.getAvailableCharacterCards().get(4).getName());
@@ -86,7 +84,9 @@ public class ExpertBoardTest{
         try {
             expertBoard.extract4CharacterTesting(4);
             expertBoard.playExpertCard(4, null, null);
-        } catch (StudentException | CoinException | PhaseNotRightException e) {
+        } catch (StudentException e) {
+            throw new RuntimeException(e);
+        } catch (CoinException e) {
             throw new RuntimeException(e);
         }
         for (i = 1; i < 13; i++) {
@@ -98,10 +98,10 @@ public class ExpertBoardTest{
 
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
-                fail("only the first exceptions should be called.");
+                fail("only the first exception should be called.");
             } catch (Exception others) {
                 others.printStackTrace();
-                fail("only the first exceptions should be called.");
+                fail("only the first exception should be called.");
             }
         }
     }
@@ -134,7 +134,7 @@ public class ExpertBoardTest{
             } catch (IllegalStateException e) {
                 assertEquals("Not possible to play " + CharacterUtility.getChar(i) + " card. During this turn MAILMAN is already active.",
                         /*actual*/e.getMessage());
-            } catch (CoinException | StudentException | PhaseNotRightException e) {
+            } catch (CoinException | StudentException e) {
                 fail();
             }
         }

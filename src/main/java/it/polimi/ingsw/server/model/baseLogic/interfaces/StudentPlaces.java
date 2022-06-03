@@ -5,7 +5,6 @@ import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 
 public interface StudentPlaces {
-
     /**
      * Function that can be called from an expertLogic character on the island or on the castle.
      * @param student student to be added in the "place"

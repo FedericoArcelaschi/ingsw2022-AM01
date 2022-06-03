@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.model.baseLogic.Island;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.CoinException;
-import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
@@ -51,7 +50,7 @@ public class MonkTest { //1° character
         //actual playExpertCard
         try {
             expertBoard.playExpertCard(1, islandIndex, List.of(firstAvailableStudent));
-        } catch (StudentException | CoinException | PhaseNotRightException e) {
+        } catch (StudentException | CoinException e) {
             fail(e.getCause());
         }
 

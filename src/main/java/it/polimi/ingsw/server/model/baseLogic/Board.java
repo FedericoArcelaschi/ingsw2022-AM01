@@ -1,9 +1,11 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
+import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.GreaterTeam;
 import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
 import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
-import it.polimi.ingsw.server.model.exceptions.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -115,12 +117,9 @@ public class Board {
      * @param card the number of the card the player want to use
      * @return if the move is legal and played, false otherwise
      */
-    public boolean playCard(String playerID, int card) throws NotYourTurnException, PhaseNotRightException {
+    public boolean playCard(String playerID, int card) throws NotYourTurnException {
         if(!turn.getCurrentPlayer().equals(playerID))
             throw new NotYourTurnException("You can't play, It's " + getCurrentPlayer() + "'s turn.");
-        if(turn.getCurrentPhase()!=TurnPhase.PLANNING){
-            throw new PhaseNotRightException("You can't use this command in this phase of the game.");
-        }
         Castle castle = castleMap.get(playerID);
         possibleMovingSteps.setInt((card + 1 )/2);
         if(castle.playCard(card))
@@ -140,11 +139,9 @@ public class Board {
      * @throws TooManyStudentsException if the castle dining room already contains 9 students
      */
     public void moveStudentsToDiningRoom(String playerID, List<StudentColor> students)
-            throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
+            throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         if(!turn.getCurrentPlayer().equals(playerID))
             throw new NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. "+ playerID +" can't play.");
-        if(turn.getCurrentPhase()!=TurnPhase.STUDENTS)
-            throw new PhaseNotRightException("You can't use this command in this phase of the game.");
         Castle castle = castleMap.get(playerID);
         castle.removeStudentsFromWaitingRoom(students);
         castle.addStudentsInDiningRoom(students);
@@ -159,12 +156,9 @@ public class Board {
      * @param students a list of students you want to move
      * @return true if the students are present and added to the island.
      */
-    public boolean moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students)
-            throws NoSuchStudentException, NotYourTurnException, PhaseNotRightException {
+    public boolean moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students) throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
         if(!turn.getCurrentPlayer().equals(playerID)) throw new
                 NotYourTurnException("It's "+getCurrentPlayer()+"'s turn. "+ playerID +" can't play.");
-        if(turn.getCurrentPhase()!=TurnPhase.STUDENTS)
-            throw new PhaseNotRightException("You can't use this command in this phase of the game.");
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
         for(StudentColor c : students){
             islandList.get(islandNumber).addStudent(c);
@@ -180,9 +174,7 @@ public class Board {
      * Checks if someone won the game after an island is conquered
      * @param steps number of steps forward of mother nature
      */
-    public void moveMotherNature(int steps) throws PhaseNotRightException {
-        if(turn.getCurrentPhase()!=TurnPhase.MOTHERNATURE)
-            throw new PhaseNotRightException("You can't use this command in this stage of the game.");
+    public void moveMotherNature(int steps) {
         if (steps >
                 possibleMovingSteps.getInt())
             throw new IllegalArgumentException("too many steps");
@@ -272,9 +264,7 @@ public class Board {
      * @param cloudID the cloud that is chosen
      * @return if the move is legal and played or not
      */
-    public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
-        if(turn.getCurrentPhase()!=TurnPhase.CLOUD)
-            throw new PhaseNotRightException("You can't use this command in this stage of the game.");
+    public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException {
         if(!turn.getCurrentPlayer().equals(PlayerID))
             throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. " + PlayerID + " can't choose a cloud.");
         Castle castle = castleMap.get(PlayerID);
@@ -383,14 +373,6 @@ public class Board {
                     nTowers.replace(t, nTowers.get(t) + i.getIslandNumber());
         }
         return nTowers;
-    }
-
-    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, NotTheRightGamemodeException, PhaseNotRightException {
-        throw new NotTheRightGamemodeException("You can't use this command in this game mode!");
-    }
-
-    public String getCharInfo (int idChar) throws NotTheRightGamemodeException{
-        throw new NotTheRightGamemodeException("You can't use this command in this game mode!");
     }
 
     public void changePhase(){

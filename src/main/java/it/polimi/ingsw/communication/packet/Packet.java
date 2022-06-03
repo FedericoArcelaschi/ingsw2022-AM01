@@ -3,6 +3,8 @@ package it.polimi.ingsw.communication.packet;
 import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.communication.packet.message.MessageType;
 
+import java.lang.reflect.Type;
+
 /**
  * class used to send data regarding both connection's and game's updates/commands/errors between server and client
  */
@@ -16,13 +18,16 @@ public class Packet {
         this.message = message;
     }
 
-    public MessageType getType() {
+    public MessageType getMessageType() {
         return type;
     }
     public String getTypeSerializable() {
         return type.getTypeSerializable();
     }
-        public Message getMessage() {
+    public Type getType() {
+        return type.getType();
+    }
+    public Message getMessage() {
         return message;
     }
 

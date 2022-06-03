@@ -24,7 +24,7 @@ public abstract class InterfaceAdapter {
 //For Professor:
     public static ProfessorsComputingExpert<PossibleParameters> adaptProfessorsExpert(ProfessorComputing biFunction){
         ProfessorsComputingExpert<PossibleParameters> functionTri
-                = (Map<String, Castle > castle, Map<StudentColor, Team> professorsMap, PossibleParameters var) ->
+                = (Map<String, Castle> castle, Map<StudentColor, Team> professorsMap, PossibleParameters var) ->
                 biFunction.computeProfessorsMap(castle, professorsMap);
         return functionTri;
     }

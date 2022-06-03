@@ -1,17 +1,17 @@
 package it.polimi.ingsw.communication.packet.message;
 
+import it.polimi.ingsw.server.controller.GameType;
+
 import java.util.Objects;
 
 public class Preferences extends Message {
     private final String username;
-    private final int nPlayer;
-    private final boolean expertMode;
+    private final GameType gameType;
 
-    public Preferences(String username, int nPlayer, boolean expertMode) {
+    public Preferences(String username, int nPlayer, boolean expertMode) throws IllegalAccessException {
         super(MessageType.PREFERENCES);
         this.username = username;
-        this.nPlayer = nPlayer;
-        this.expertMode = expertMode;
+        this.gameType = GameType.getGameType(nPlayer, expertMode);
     }
 
     public String username() {
@@ -19,11 +19,11 @@ public class Preferences extends Message {
     }
 
     public int nPlayer() {
-        return nPlayer;
+        return gameType.nPlayer;
     }
 
     public boolean expertMode() {
-        return expertMode;
+        return gameType.expertMode;
     }
 
     @Override
@@ -32,15 +32,14 @@ public class Preferences extends Message {
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Preferences) obj;
         return this.username.equals(that.username) &&
-                this.nPlayer == that.nPlayer &&
-                this.expertMode == that.expertMode;
+                this.gameType == that.gameType;
     }
 
     @Override
     public String toString() {
         return "Preferences: " +
                 "username: " + username + ", " +
-                "number of players: " + nPlayer + ", " +
-                (expertMode ? "expert mode" : "base mode");
+                "number of players: " + gameType.nPlayer + ", " +
+                (expertMode() ? "expert mode" : "base mode");
     }
 }

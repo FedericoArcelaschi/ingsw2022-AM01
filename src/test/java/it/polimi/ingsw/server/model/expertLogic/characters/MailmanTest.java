@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.model.expertLogic.characters;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.CoinException;
 import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
-import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
@@ -28,13 +27,13 @@ public class MailmanTest { //4° character
         expertBoard.extract4CharacterTesting(4);
         try {
             expertBoard.playCard(player1, 5);
-        } catch (NotYourTurnException | PhaseNotRightException e) {
+        } catch (NotYourTurnException e) {
             fail(e.getCause());
         }
 
         try {
             expertBoard.playExpertCard(4, null, List.of());
-        } catch (StudentException | CoinException | PhaseNotRightException e) {
+        } catch (StudentException | CoinException e) {
             fail(e.getCause());
         }
 

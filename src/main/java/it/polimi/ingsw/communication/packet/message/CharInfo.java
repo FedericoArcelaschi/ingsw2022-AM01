@@ -11,4 +11,5 @@ public class CharInfo extends Message {
     public String getInfo() {
         return info;
     }
+
 }

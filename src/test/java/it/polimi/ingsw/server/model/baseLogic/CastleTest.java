@@ -44,7 +44,7 @@ public class CastleTest {
         assertThrows(NoSuchStudentException.class, () -> c.removeStudentsFromWaitingRoom(students),
                 "10 yellow students can't be present in the waitingroom. (size=9)");
         // FIXME: org.opentest4j.AssertionFailedError: 10 yellow students can't be present in the waitingroom.
-        // (size=9) ==> Unexpected exceptions charTypes thrown ==>
+        // (size=9) ==> Unexpected exception charTypes thrown ==>
         // expected: <NoSuchStudentException>
         // but was: <TooManyStudentsException>
     }

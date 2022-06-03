@@ -1,14 +1,14 @@
-package it.polimi.ingsw.client.userInterfaces.gui;
+package it.polimi.ingsw.client.userInterface.gui;
 
-import it.polimi.ingsw.client.userInterfaces.gui.controller.LoginPaneController;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
-import it.polimi.ingsw.client.userInterfaces.UserInterface;
-import it.polimi.ingsw.client.userInterfaces.gui.controller.GamePaneController;
+import it.polimi.ingsw.client.userInterface.UserInterface;
+import it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController;
+import it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -88,6 +88,6 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
-
+        //TODO:
     }
 }

@@ -1,11 +1,9 @@
 package it.polimi.ingsw.communication;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.client.communication.ClientMain;
+import it.polimi.ingsw.communication.packet.PacketParser;
 import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.MessageType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,17 +14,15 @@ import java.net.Socket;
 /**
  * abstract class that is able to receive packets from a socket.
  */
-public abstract class Receiver implements Runnable{
+public abstract class Receiver implements Runnable {
     protected final Socket socket;
     protected final BufferedReader in;
     protected final PrintWriter out;
     protected final ClientMain cm;
-    protected Gson parser;
 
-    public Receiver(ClientMain cm, Socket socket) {
+    protected Receiver(ClientMain cm, Socket socket) {
         this.socket = socket;
         this.cm = cm;
-        this.parser = new GsonBuilder().create();
         try {
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.out = new PrintWriter(socket.getOutputStream(), true);
@@ -37,22 +33,18 @@ public abstract class Receiver implements Runnable{
 
     @Override
     public void run() {
+        //keeps reading the input
         String read;
-        while(true) {
-            try {
-                read = in.readLine();
-                System.out.println(read);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            if(read != null)
-                break;
+        try {
+            read = in.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        Packet packet = parser.fromJson(read, Packet.class);
-        Message message = packet.getMessage();
-        this.messageSwitch(packet.getType(), message);
+        var packet = PacketParser.gson.fromJson(read, Packet.class);
+        messageSwitch(packet.getMessage());
         run();
     }
 
-    protected abstract void messageSwitch(MessageType type, Message message);
+    protected abstract void messageSwitch(Message message);
+
 }

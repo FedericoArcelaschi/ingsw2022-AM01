@@ -64,7 +64,7 @@ class FarmerTest { //2° character
 
         try {
             expertBoard.moveStudentsToDiningRoom(player1, expertBoard.getCastle(player1).getWaitingRoom());
-        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
+        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException e) {
             throw new RuntimeException(e);
         }
         try {
@@ -73,9 +73,6 @@ class FarmerTest { //2° character
             throw new RuntimeException(e);
         } catch (CoinException ignored) {
             playExpertCharacterTest();
-            return;
-        } catch (PhaseNotRightException e) {
-            e.printStackTrace();
             return;
         }
 

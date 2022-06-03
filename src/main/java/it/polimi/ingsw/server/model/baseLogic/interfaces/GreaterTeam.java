@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.baseLogic.interfaces;
 
 import it.polimi.ingsw.server.model.baseLogic.Team;
+
 import java.util.Map;
 import java.util.function.Function;
 

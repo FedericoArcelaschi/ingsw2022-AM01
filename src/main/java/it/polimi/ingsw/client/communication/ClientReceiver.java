@@ -1,8 +1,8 @@
 package it.polimi.ingsw.client.communication;
 
-import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.packet.message.*;
-import it.polimi.ingsw.client.userInterfaces.UserInterface;
+import it.polimi.ingsw.communication.Receiver;
+import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Error;
 
@@ -19,19 +19,17 @@ public class ClientReceiver extends Receiver {
         this.userInterface = userInterface;
     }
 
-    protected void messageSwitch(MessageType type, Message message) {
-        switch (type) {
+    protected void messageSwitch(Message message) {
+        switch (message.getMessageType()) {
             case PING -> {
                 Ping ping = (Ping) message;
+                System.out.println("PONG!");
                 Packet heartbeatToServer = new Packet(ping);
-                out.println(parser.toJson(heartbeatToServer));
-                //todo: kill in case of disconnection.
+                out.println(heartbeatToServer.toJson());
+                //TODO: add a timer on a new thread that makes the heart beat two way.
             }
             case UPDATE -> {
                 Update update = (Update) message;
-                //clears the screen.
-                System.out.println("\033[H\033[2J");
-                System.out.flush();
                 //print data without saving it anywhere
                 userInterface.draw(update.getBoardData());
                 cm.setState(ClientState.GAME);
@@ -39,12 +37,12 @@ public class ClientReceiver extends Receiver {
             case LOBBYINFO -> {
                 LobbyInfo lobbyInfoMessage = (LobbyInfo) message;
                 userInterface.printWaitingRoom(lobbyInfoMessage.getPlayers(), lobbyInfoMessage.getGameType());
-                cm.setState(ClientState.WAITING_ROOM);
             }
             case END -> cm.setState(ClientState.GAME_ENDED);
 
             case ERROR -> System.out.println("new error received: " + ((Error) message).getMessage());
-                //prints data without saving it anywhere
+                //print data without saving it anywhere
+                //ViewDraw.drawCli(message.data());
         }
     }
 }

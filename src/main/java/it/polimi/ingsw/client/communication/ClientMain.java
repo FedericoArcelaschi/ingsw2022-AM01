@@ -2,9 +2,8 @@ package it.polimi.ingsw.client.communication;
 
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Preferences;
+import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
-import it.polimi.ingsw.onLaunch.Outputs;
-import it.polimi.ingsw.client.userInterfaces.UserInterface;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -12,66 +11,63 @@ import java.util.concurrent.Executors;
 
 public class ClientMain {
     private final String username;
+    private ClientState state = ClientState.NOT_CONNECTED;
     private final int preferenceNPlayer;
     private final boolean preferenceExpertMode;
     private final String IP;
     private final int port;
-    private ClientState state = ClientState.NOT_CONNECTED;
-    public Socket socket = null;
-    private ClientSender cs;
-    private ClientReceiver cr;
 
-    public ClientMain(String username, int preferenceNPlayer, boolean preferenceExpertMode, String IP, int port) {
-        this.username = username;
-        this.preferenceNPlayer = preferenceNPlayer;
-        this.preferenceExpertMode = preferenceExpertMode;
+    public Socket socket = null;
+    private ClientSender clientSender;
+    private ClientReceiver clientReceiver;
+
+    public ClientMain(String IP, int port, Preferences preferences) {
         this.IP = IP;
         this.port = port;
-
+        this.username = preferences.username();
+        this.preferenceNPlayer = preferences.nPlayer();
+        this.preferenceExpertMode = preferences.expertMode();
     }
 
-    /**
-     * On client onStartUp. Opens the Socket for communication
-     * Connects the communication layer with the view:
-     * the userInterfaces can either be a textual or graphical.
-     * Sends the preferences to the server.
-     * puts the client receiver on a new thread
-     */
-    public void connect(UserInterface userInterface) {
-        System.out.println(this.username + " : attempting connection");
+    public void connect(UserInterface userInterface) throws IllegalAccessException {
+        System.out.println(username + ":  attempting connection");
         try {
             this.socket = new Socket(IP, port);
         } catch (IOException e) {
-            System.err.println(e.getMessage());
-            System.exit(404); //SERVERNOTFOUND
-            //-> todo: could ask to insert manually IP and port.
+            e.printStackTrace();
+            System.exit(1);
+            //TODO: implement better exception handling
         }
+        System.out.println(username + ":  connected");
 
-        //run the ClientReceiver on another thread
-        this.cr = new ClientReceiver(this, this.socket, userInterface);
-        Executors.newCachedThreadPool().submit(cr);
+        clientSender = new ClientSender(socket);
+        System.out.println("socket client: " + socket.getChannel()); // => null
+        System.out.println(socket.getPort());
+        System.out.println(socket.getRemoteSocketAddress());
 
-        //send player preferences to the server;
-        this.cs = new ClientSender(this.socket);
-        Preferences preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
+        //sends player preferences to the server;
+        Preferences preferences = null;
+        preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
         Packet packet = new Packet(preferences);
-        this.cs.sendPacket(packet);
-        System.out.println(this.username + " :  connected");
+        clientSender.sendPacket(packet);
+
+        //runs the ClientReceiver
+        clientReceiver = new ClientReceiver(this, socket, userInterface);
+        Runnable runnable = () -> Executors.newCachedThreadPool().submit(clientReceiver);
+        runnable.run();
+
+        state = ClientState.WAITING_ROOM;
     }
 
-    public void runCommand(String stringCommand) {
-        if(stringCommand.equalsIgnoreCase("help"))
-            System.out.println(Outputs.HELP.out);
+    public void runCommand(String stringCommand){
         if (socket == null || socket.isClosed()) {
             return;
         }
-        /**
-         * The client only composes a message and sends it to the server if is connected.
-         */
+        //compose command and send, only if the player is in a game.
         if (state == ClientState.GAME) {
-            CommandMessage commandMessage = new CommandMessage(username, stringCommand);
-            Packet packet = new Packet(commandMessage);
-            cs.sendPacket(packet);
+            var commandMessage = new CommandMessage(username, stringCommand);
+            var packet = new Packet(commandMessage);
+            clientSender.sendPacket(packet);
             System.out.println("command sent");
         }
     }

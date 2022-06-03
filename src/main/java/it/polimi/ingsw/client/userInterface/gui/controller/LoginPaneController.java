@@ -1,0 +1,60 @@
+package it.polimi.ingsw.client.userInterface.gui.controller;
+
+import it.polimi.ingsw.client.communication.ClientMain;
+import it.polimi.ingsw.client.userInterface.UserInterface;
+import it.polimi.ingsw.communication.packet.message.Preferences;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+
+public class LoginPaneController {
+    @FXML TextField usernameTextField, ipTextField, portTextField;
+    @FXML RadioButton player2RadioButton, player3RadioButton, player4RadioButton;
+    @FXML CheckBox expertModeButton;
+    ToggleGroup nPlayer;
+    UserInterface userInterface;
+
+    public void initialize(UserInterface userInterface){
+        nPlayer = new ToggleGroup();
+        player2RadioButton.setToggleGroup(nPlayer);
+        player3RadioButton.setToggleGroup(nPlayer);
+        player4RadioButton.setToggleGroup(nPlayer);
+        player2RadioButton.setSelected(true);
+        expertModeButton.setSelected(false);
+        this.userInterface = userInterface;
+    }
+
+    public void submitPreferences(ActionEvent actionEvent) {
+        ClientMain clientMain
+                = new ClientMain(
+                    ipTextField.getText().equals("") ? ipTextField.getPromptText() : ipTextField.getText(),
+                    Integer.parseInt(portTextField.getText().equals("") ? portTextField.getPromptText() : portTextField.getText()),
+                    getPreferences());
+        try {
+            clientMain.connect(userInterface);
+        } catch (IllegalAccessException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public void test(){
+        System.out.println("test");
+    }
+
+    private Preferences getPreferences() {
+        var username = usernameTextField.getText();
+        var selectedNPlayer = (RadioButton) nPlayer.getSelectedToggle();
+        var nPlayers = Integer.parseInt(selectedNPlayer.getText().substring(0, 1));
+        var expertMode = expertModeButton.selectedProperty().get();
+        try {
+            return new Preferences(username, nPlayers, expertMode);
+        } catch (IllegalAccessException e) {
+            System.err.println(e.getMessage());
+            getPreferences();
+        }
+        return null;
+    }
+}

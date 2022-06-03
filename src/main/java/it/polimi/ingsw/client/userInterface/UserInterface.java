@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.userInterfaces;
+package it.polimi.ingsw.client.userInterface;
 
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.server.controller.GameType;

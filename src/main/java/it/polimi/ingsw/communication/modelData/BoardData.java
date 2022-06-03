@@ -85,15 +85,14 @@ public class BoardData {
                     .append( i + 1 )
                     .append(": ")
                     .append(islandList.get(i));
-            if(i == motherNaturePosition) s.append(", mother nature is Here!");
+            if (i == motherNaturePosition) s.append(", mother nature is Here!");
         }
         //Print cloud
-        s.append("\nClouds:");
+        s.append("\nClouds: ");
         for (int i = 0; i < cloudList.size(); i++)
             s       .append("\n\tCloud ")
                     .append(i + 1)
-                    .append(" contains")
-                    .append(": ")
+                    .append(" contains: ")
                     .append(cloudList.get(i));
         //Print other castles
         s.append("\nOther Player castles:");

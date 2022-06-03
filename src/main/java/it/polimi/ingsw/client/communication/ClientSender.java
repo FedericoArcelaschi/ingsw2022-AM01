@@ -9,8 +9,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientSender {
+
     private final PrintWriter out;
-    Gson parser = new Gson();
 
     public ClientSender(@NotNull Socket socket) {
         try {
@@ -22,5 +22,6 @@ public class ClientSender {
 
     public void sendPacket(Packet packet){
         out.println(packet.toJson());
+        System.out.println(packet.toJson());
     }
 }
