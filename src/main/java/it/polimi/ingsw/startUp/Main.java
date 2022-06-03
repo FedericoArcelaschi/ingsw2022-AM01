@@ -10,7 +10,11 @@ import java.io.InputStreamReader;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(Outputs.START.out);
+        System.out.println(Outputs.START);
+        //TODO: if(screenSize > 200 characters)
+        //          Outputs.getTitle();
+        //      else
+        //          Outputs.getSmallTitle();
         switch (getUserType(args)) {
             case SERVER -> new ServerMain(12345).run();
             case CLI -> new Cli();
@@ -27,13 +31,13 @@ public class Main {
                 return UserType.getUserType(argIn);
             }
         }
-        System.out.println(Outputs.USER_TYPE_INVALID.out);
+        System.out.println(Outputs.USER_TYPE_INVALID);
         return getUserType();
     }
 
     private static UserType getUserType() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println(Outputs.USER_TYPE_REQUEST.out);
+        System.out.println(Outputs.USER_TYPE_REQUEST);
         UserType userType;
         try {
             userType = UserType.getUserType(br.readLine());
@@ -41,7 +45,7 @@ public class Main {
             throw new RuntimeException(e);
         }
         if(userType == null) {
-            System.out.println(Outputs.USER_TYPE_INVALID.out);
+            System.out.println(Outputs.USER_TYPE_INVALID);
             userType = getUserType();
         }
         return userType;
