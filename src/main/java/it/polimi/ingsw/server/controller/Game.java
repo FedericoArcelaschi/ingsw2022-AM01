@@ -35,6 +35,7 @@ public class Game {
         this.usernameServerReceiverMap = new HashMap<>();
         this.usernameSocketMap = new HashMap<>();
         this.movedStudents = 0;
+        System.out.println(gameType.nPlayer);
         for (int i = 0; i < gameType.nPlayer; i++) {
             usernameServerReceiverMap.put(gameSocketList.get(i).getUsername(), gameSocketList.get(i));
             usernameSocketMap.put(gameSocketList.get(i).getUsername(), gameSocketList.get(i).getSocket());

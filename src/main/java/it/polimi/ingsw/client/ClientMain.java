@@ -66,8 +66,8 @@ public class ClientMain {
         }
         //compose command and send, only if the player is in a game.
         if (state == ClientState.GAME) {
-            var commandMessage = new CommandMessage(username, stringCommand);
-            var packet = new Packet(commandMessage);
+            CommandMessage commandMessage = new CommandMessage(username, stringCommand);
+            Packet packet = new Packet(commandMessage);
             clientSender.sendPacket(packet);
             System.out.println("command sent");
         }

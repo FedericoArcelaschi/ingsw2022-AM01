@@ -74,9 +74,9 @@ public class WaitingRooms {
      */
     public Game submitGame(int gameId, GameType type) {
         if(gameSocketMap.get(type).size() == type.nPlayer) {
-            List<ServerReceiver> socketList = gameSocketMap.get(type);
+            Game g = new Game(type, gameId, gameSocketMap.get(type));
             gameSocketMap.get(type).clear();
-            return new Game(type, gameId, socketList);
+            return g;
         }
         return null;
     }
