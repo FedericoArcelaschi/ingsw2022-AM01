@@ -12,6 +12,7 @@ import it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
@@ -40,15 +41,6 @@ public class Gui extends Application implements UserInterface {
         loginPaneController = loginLoader.getController();
         stage.setTitle("Eriantys");
         stage.setScene(new Scene(loginFXML));
-        /*
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                windowEvent.consume();
-                //TODO: prompt to exit safely
-            }
-        });
-        */
         stage.show();
         loginPaneController.initialize(this);
         //FIXME: for testing.

@@ -115,6 +115,7 @@ public class GamePaneController {
                 ToggleButton toggleButton = new ToggleButton();
                 toggleButton.getStyleClass().add("student");
                 toggleButton.setDisable(true);
+                toggleButton.setPrefSize(25,25);
                 setStudentButtonColor(toggleButton, student);
                 FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
                 flowPane.getChildren().add(toggleButton);
