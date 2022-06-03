@@ -1,6 +1,7 @@
 package it.polimi.ingsw.communication.packet.message;
 
 import it.polimi.ingsw.communication.packet.message.command.Command;
+import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
 
 import java.lang.reflect.Type;
 
@@ -8,7 +9,7 @@ public enum MessageType {
     PREFERENCES(Preferences.class),
     PING(Ping.class),
     LOBBYINFO(LobbyInfo.class),
-    COMMAND(Command.class),
+    COMMAND(CommandMessage.class),
     UPDATE(Update.class),
     CHARINFO(CharInfo.class),
     ERROR(Error.class),
