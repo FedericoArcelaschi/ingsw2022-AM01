@@ -4,26 +4,24 @@ import it.polimi.ingsw.communication.packet.message.Message;
 import it.polimi.ingsw.communication.packet.message.MessageType;
 
 public class CommandMessage extends Message {
-    private final String username;
-    private final String command;  //TODO: MAYBE THIS SHOULD BE A CommandType?
+    private final Command command;
 
     public CommandMessage(String username, String command) {
         super(MessageType.COMMAND);
-        this.username = username;
-        this.command = command;
+        this.command = Command.createCommand(username, command);
     }
 
     public String getUsername() {
-        return username;
+        return command.getUsername();
     }
 
-    public String getCommand() {
+    public Command getCommand() {
         return command;
     }
 
     @Override
     public String toString() {
-        return  "player: " + username +
+        return  "player: " + command.getUsername() +
                 "command: " + command;
     }
 }

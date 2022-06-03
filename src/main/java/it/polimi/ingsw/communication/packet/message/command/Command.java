@@ -16,7 +16,7 @@ public class Command {
     private String username;
     private Map<CommandAttribute, String> attributesMap;
 
-    public Command(String username, @NotNull CommandType type, String[] attributes) {
+    public Command(String username, CommandType type, String[] attributes) {
         this.type = type;
         this.attributesMap = new HashMap<>();
         this.username = username;
@@ -63,19 +63,17 @@ public class Command {
         }
     }
 
-    public static Command createCommand(String username, String command) {
+    public static Command createCommand(String username, String command) throws IllegalArgumentException {
         String[] splitCommand = command.split(" ");
         //TODO: ct = getCommandString(splitCommand[0])
         CommandType commandType = getCommandType(splitCommand[0]);
-        if(commandType != null)
-            return new Command(username, commandType, Arrays.copyOfRange(splitCommand, 1, splitCommand.length));
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(splitCommand[0]).append(" is not a valid command type, available commands are:");
-        for (CommandType ct : CommandType.values()) {
-            stringBuilder.append(ct.getCommandString()).append("\n");
-        }
-        System.out.println(stringBuilder);
-        return null;
+        return new Command(username, commandType, Arrays.copyOfRange(splitCommand, 1, splitCommand.length));
+        //StringBuilder stringBuilder = new StringBuilder();
+        //stringBuilder.append(splitCommand[0]).append(" is not a valid command type, available commands are:\n");
+        //for (CommandType ct : CommandType.values()) {
+        //    stringBuilder.append(ct.getCommandString()).append("\n");
+        //}
+        //System.out.println(stringBuilder);
         //Returns null if it doesn't find the specified command.
     }
 

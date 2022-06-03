@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.communication.ClientState;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.Preferences;
 import it.polimi.ingsw.client.userInterface.UserInterface;
+import it.polimi.ingsw.communication.packet.message.command.Command;
 import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
 
 import java.io.IOException;
@@ -66,7 +67,13 @@ public class ClientMain {
         }
         //compose command and send, only if the player is in a game.
         if (state == ClientState.GAME) {
-            CommandMessage commandMessage = new CommandMessage(username, stringCommand);
+            CommandMessage commandMessage;
+            try {
+                commandMessage = new CommandMessage(username, stringCommand);
+            }catch (IllegalArgumentException e){
+                System.err.println(e.getMessage());
+                return;
+            }
             Packet packet = new Packet(commandMessage);
             clientSender.sendPacket(packet);
             System.out.println("command sent");

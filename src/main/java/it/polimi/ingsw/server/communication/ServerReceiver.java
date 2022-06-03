@@ -31,7 +31,8 @@ public class ServerReceiver extends Receiver {
             }
             case COMMAND -> {
                  CommandMessage commandMessage = (CommandMessage) message;
-                 Command command = Command.createCommand(commandMessage.getUsername(), commandMessage.getCommand());
+                 Command command = commandMessage.getCommand();
+
                  //the game already handle message back to clients
                  game.executeCommand(command);
             }

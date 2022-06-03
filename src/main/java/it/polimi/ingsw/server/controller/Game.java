@@ -54,7 +54,6 @@ public class Game {
         System.out.println("Executing command...");
         if(command.getType() == null){
             send(createError(0, "Command not valid; please, try again."), usernameSocketMap.get(command.getUsername()));
-            sendAllUpdate();
         }else {
             switch (command.getType()) {
                 case PLAY_CARD -> playCardCommand(command);
