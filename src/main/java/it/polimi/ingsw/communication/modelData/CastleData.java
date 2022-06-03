@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class CastleData {
