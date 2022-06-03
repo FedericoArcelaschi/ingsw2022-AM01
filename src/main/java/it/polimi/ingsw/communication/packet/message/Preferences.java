@@ -26,6 +26,10 @@ public class Preferences extends Message {
         return gameType.expertMode;
     }
 
+    public GameType getGameType() {
+        return gameType;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

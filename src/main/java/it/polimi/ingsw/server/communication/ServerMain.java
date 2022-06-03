@@ -87,19 +87,17 @@ public class ServerMain implements Runnable{
     public void acceptPlayers(){
 
         while (true) {
+            Socket socket;
             try{
                 System.out.println("Server: waiting for player to connect");
-                Socket socket = serverSocket.accept();
-
-                GameType playerGameType = handleNewClient(socket);
-
+                socket = serverSocket.accept();
                 //FIXME: if a client disconnects before game starting he must be removed from queue;
-
-                handleGame(playerGameType);
-
             } catch(IOException e) {
+                System.err.println(e.getMessage());
                 break; // Would get here if server socket was to be closed.
             }
+            GameType playerGameType = handleNewClient(socket);
+            handleGame(playerGameType);
         }
         executor.shutdown();
     }
@@ -109,7 +107,7 @@ public class ServerMain implements Runnable{
         Game game = waitingRooms.submitGame(gameId, gameType);
         if(game != null) {
             gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType()) + 1);
-            System.out.println( StudentColor.YELLOW.getColorCode() +
+            logger.info( StudentColor.YELLOW.getColorCode() +
                     "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
             for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
                 serverReceiver.setGame(game);
@@ -131,28 +129,20 @@ public class ServerMain implements Runnable{
         }
         System.out.println(input);
         //decode preferences
-        var preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
-        var preferences = (Preferences) preferencesPacket.getMessage();
-        var username = preferences.username();
+        Packet preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
+        Preferences preferences = (Preferences) preferencesPacket.getMessage();
+        String username = preferences.username();
         System.out.println(username + " joined in");
-        GameType playerGameType = null;
-        try {
-            playerGameType = getGameType(preferences.nPlayer(), preferences.expertMode());
-        } catch (IllegalAccessException e) {
-            //TODO: handle error (a meno che non sia controllato nella creazione del Message - Preferences
-        }
         //adds the new client
         heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
         //starts the receiver
-        var sr = new ServerReceiver(socket, heartBeatServer, username);
+        ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, username);
         //adds player to waiting room
-        waitingRooms.addPlayer(playerGameType, sr, username);
-
+        waitingRooms.addPlayer(preferences.getGameType(), sr);
         executor.submit(sr);
         //add player to list of connected players
         connectedPlayers.put(username, sr);
-
-        return playerGameType;
+        return preferences.getGameType();
     }
 
 

@@ -33,23 +33,20 @@ public class WaitingRooms {
      * Adds a player to the requested lobby. Informs players of the same lobby that the state of the lobby changed.
      * @param gameType the provided gametype.
      * @param serverReceiver the serverReceiver of the new player.
-     * @param nickname the player name.
      * @throws IOException
      */
-    public void addPlayer(GameType gameType, ServerReceiver serverReceiver, String nickname) {
+    public void addPlayer(GameType gameType, ServerReceiver serverReceiver) {
         gameSocketMap.get(gameType).add(serverReceiver);
         informPlayers(gameType, gameType.nPlayer);
     }
 
-    //TODO: DOES NOT WORK, DOES NOT SEND ANYTHING
     /**
      * Method used to send to the rest of the players who else joined the lobby.
      * @param gameType the provided gametype.
      * @param numberOfPlayers the amount of players expected by the game type.
      */
     private void informPlayers(GameType gameType, int numberOfPlayers) {
-        if(gameSocketMap.get(gameType).size() >= 1 &&
-                gameSocketMap.get(gameType).size() % numberOfPlayers != 0){
+        if(gameSocketMap.get(gameType).size() < numberOfPlayers){
             List<String> playersIn = new ArrayList<>(gameSocketMap.get(gameType).stream().map(ServerReceiver::getUsername).toList());
             Message lobbyInfo = new LobbyInfo(playersIn, gameType);
             Packet packet = new Packet(lobbyInfo);
@@ -59,7 +56,8 @@ public class WaitingRooms {
                 try {
                     out = new PrintWriter(sr.getSocket().getOutputStream(), true);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
+                    return;
                 }
                 out.println(packet.toJson());
             }
