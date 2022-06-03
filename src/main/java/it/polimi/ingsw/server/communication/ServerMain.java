@@ -34,8 +34,7 @@ public class ServerMain implements Runnable{
     public static void init(){
         FileHandler fileHandler;
         try{
-            fileHandler = new FileHandler(//FIXME: don't hard code path
-                    "C:\\Users\\loren\\Desktop\\Università\\3° anno\\Progetto di ingegneria del software\\ingsw2022-AM01\\src\\main\\java\\it\\polimi\\ingsw\\controller\\LogFIle.log");
+            fileHandler = new FileHandler(System.getProperty("user.dir"));
             logger.addHandler(fileHandler);
             SimpleFormatter formatter = new SimpleFormatter();
             fileHandler.setFormatter(formatter);
@@ -107,7 +106,7 @@ public class ServerMain implements Runnable{
 
 
     private void handleGame(GameType gameType) {
-        Game game = waitingRooms.computeGameType(gameId, gameType);
+        Game game = waitingRooms.submitGame(gameId, gameType);
         if(game != null) {
             gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType()) + 1);
             System.out.println( StudentColor.YELLOW.getColorCode() +
@@ -145,7 +144,7 @@ public class ServerMain implements Runnable{
         //adds the new client
         heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
         //starts the receiver
-        var sr = new ServerReceiver(socket, heartBeatServer, null);
+        var sr = new ServerReceiver(socket, heartBeatServer, username);
         //adds player to waiting room
         waitingRooms.addPlayer(playerGameType, sr, username);
 

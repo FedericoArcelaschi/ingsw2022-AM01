@@ -30,17 +30,17 @@ public class Game {
     //TODO: more times per turn.
     private int movedStudents;
 
-    public Game(GameType gameType, int gameId, List<String> usernameList, List<ServerReceiver> gameSocketList) {
+    public Game(GameType gameType, int gameId, List<ServerReceiver> gameSocketList) {
         this.gameType = gameType;
         this.usernameServerReceiverMap = new HashMap<>();
         this.usernameSocketMap = new HashMap<>();
         this.movedStudents = 0;
         for (int i = 0; i < gameType.nPlayer; i++) {
-            usernameServerReceiverMap.put(usernameList.get(i), gameSocketList.get(i));
-            usernameSocketMap.put(usernameList.get(i), gameSocketList.get(i).getSocket());
+            usernameServerReceiverMap.put(gameSocketList.get(i).getUsername(), gameSocketList.get(i));
+            usernameSocketMap.put(gameSocketList.get(i).getUsername(), gameSocketList.get(i).getSocket());
         }
-        turn = new Turn(usernameList);
-        this.board = BoardFactory.getBoard(usernameList, gameType.expertMode, turn);
+        turn = new Turn(usernameSocketMap.keySet().stream().toList());
+        this.board = BoardFactory.getBoard(usernameSocketMap.keySet().stream().toList(), gameType.expertMode, turn);
         sendAllUpdate();
     }
 
