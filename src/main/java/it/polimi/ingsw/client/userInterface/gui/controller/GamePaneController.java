@@ -3,9 +3,9 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.CastleData;
 import it.polimi.ingsw.communication.modelData.CloudData;
+import it.polimi.ingsw.communication.modelData.IslandData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
@@ -16,9 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GamePaneController {
     @FXML private Pane turnPane;
@@ -67,6 +65,7 @@ public class GamePaneController {
     public void draw(BoardData boardData) {
         drawCastle(boardData.getMyCastle());
         drawClouds(boardData.getCloudList());
+        drawIslands(boardData.getIslandList());
     }
     
     private void drawCastle(CastleData castleData) {
@@ -96,6 +95,29 @@ public class GamePaneController {
             Pane pane = (Pane) cloudFlowPane.getChildren().get(i);
             for (int j = 0; j < cloud.getStudentList().size(); j++)  {
                 setStudentButtonColor((ToggleButton)pane.getChildren().get(j) , cloud.getStudentList().get(j));
+            }
+        }
+    }
+
+    private void drawIslands(List<IslandData> islandList){
+        List<Pane> paneList = new ArrayList<>();
+        for (Node n: islandRow1.getChildren()) {
+            paneList.add((Pane) n);
+        }
+        for (Node n: islandRow2.getChildren()) {
+            paneList.add((Pane) n);
+        }
+
+        for (int i = 0; i < islandList.size(); i++) {
+            IslandData islandData = islandList.get(i);
+            Pane pane = paneList.get(i);
+            for (StudentColor student: islandData.getStudents()) {
+                ToggleButton toggleButton = new ToggleButton();
+                toggleButton.getStyleClass().add("student");
+                toggleButton.setDisable(true);
+                setStudentButtonColor(toggleButton, student);
+                FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
+                flowPane.getChildren().add(toggleButton);
             }
         }
     }
