@@ -1,5 +1,8 @@
 package it.polimi.ingsw.onLaunch;
 
+/**
+ * Used in the Main to get the right user type.
+ */
 public enum UserType {
     SERVER,
     CLI,
@@ -11,10 +14,10 @@ public enum UserType {
                     toLowerCase().
                     strip() //removes all whitespaces.
                     ) {
-                case "server","sv","host","srv","sr"-> UserType.SERVER;
-                case "t-client","tc","ct","cli"     -> UserType.CLI;
-                case "g-client","gc","cg","gui"     -> UserType.GUI;
-                default                             -> null;
+                case "server", "sv", "sr" -> UserType.SERVER;
+                case "t-client", "tc", "ct" -> UserType.CLI;
+                case "g-client", "gc", "cg" -> UserType.GUI;
+                default -> null;
         };
     }
 

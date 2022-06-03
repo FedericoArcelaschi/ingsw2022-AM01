@@ -11,9 +11,8 @@ import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
-import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
-import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.server.model.exceptions.*;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -23,7 +22,6 @@ import java.util.*;
 
 public class Game {
     private final GameType gameType;
-    private final int gameId;
     private final Board board;
     private final Turn turn;
     private final Map<String, Socket> usernameSocketMap;
@@ -32,18 +30,18 @@ public class Game {
     //TODO: more times per turn.
     private int movedStudents;
 
-    public Game(GameType gameType, int gameId, List<String> usernameList, List<ServerReceiver> gameSocketList) {
+    public Game(GameType gameType, int gameId, List<ServerReceiver> gameSocketList) {
         this.gameType = gameType;
-        this.gameId = gameId;
         this.usernameServerReceiverMap = new HashMap<>();
         this.usernameSocketMap = new HashMap<>();
         this.movedStudents = 0;
+        System.out.println(gameType.nPlayer);
         for (int i = 0; i < gameType.nPlayer; i++) {
-            usernameServerReceiverMap.put(usernameList.get(i), gameSocketList.get(i));
-            usernameSocketMap.put(usernameList.get(i), gameSocketList.get(i).getSocket());
+            usernameServerReceiverMap.put(gameSocketList.get(i).getUsername(), gameSocketList.get(i));
+            usernameSocketMap.put(gameSocketList.get(i).getUsername(), gameSocketList.get(i).getSocket());
         }
-        turn = new Turn(usernameList);
-        this.board = BoardFactory.getBoard(usernameList, gameType.expertMode, turn);
+        turn = new Turn(usernameSocketMap.keySet().stream().toList());
+        this.board = BoardFactory.getBoard(usernameSocketMap.keySet().stream().toList(), gameType.expertMode, turn);
         sendAllUpdate();
     }
 
@@ -54,9 +52,8 @@ public class Game {
      */
     public void executeCommand(Command command){
         System.out.println("Executing command...");
-        if(command.getType()==null){
+        if(command.getType() == null){
             send(createError(0, "Command not valid; please, try again."), usernameSocketMap.get(command.getUsername()));
-            sendAllUpdate();
         }else {
             switch (command.getType()) {
                 case PLAY_CARD -> playCardCommand(command);
@@ -65,6 +62,7 @@ public class Game {
                 case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
                 case CHOOSE_CLOUD -> chooseCloudCommand(command);
                 case PAY_CHARACTER -> payCharCommand(command);
+                case CHARACTER_INFO -> getCharInfo(command);
             }
         }
     }
@@ -92,8 +90,7 @@ public class Game {
         }
     }
 
-    private void sendAllUpdate(){
-        Gson parser = new Gson();
+    private void sendAllUpdate() {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             Message message = new Update(ModelDataBuilder.newBoardData(username, board));
@@ -102,15 +99,14 @@ public class Game {
         }
     }
 
-    private void send(Packet packet, Socket socket){
-        Gson parser = new GsonBuilder().create();
+    private void send(Packet packet, Socket socket) {
         PrintWriter out = null;
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        out.println(parser.toJson(packet));
+        out.println(packet.toJson());
     }
 
     private Packet createUpdate(BoardData boardData){
@@ -127,7 +123,7 @@ public class Game {
         try {
             board.playCard(command.getUsername() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
             turn.changePhase();
-        } catch (NotYourTurnException | IllegalArgumentException e) {
+        } catch (NotYourTurnException | IllegalArgumentException | PhaseNotRightException e) {
             send(createError(0, e.getMessage()), usernameSocketMap.get(command.getUsername()));
         }
         sendAllUpdate();
@@ -139,18 +135,7 @@ public class Game {
         //Needs to be changed accordingly if the convention changes.
 
         //List of students in the command
-        List<String> studentList =  new ArrayList<>(
-                Arrays.asList(
-                        command
-                        .getAttributesMap()
-                        .get(CommandAttribute.WHAT)
-                        .split(",")));
-        //List of students that will get the respective Color value
-        List<StudentColor> students = new ArrayList<>();
-        for (String s : studentList) {
-            StudentColor c = StudentColor.getColor(s);
-            students.add(c);
-        }
+        List<StudentColor> students = getStudentsFromCommand(command.getAttributesMap().get(CommandAttribute.WHAT));
         movedStudents += students.size();
 
         try {
@@ -159,47 +144,54 @@ public class Game {
                 movedStudents = 0;
                 turn.changePhase();
             }
-        } catch (NoSuchStudentException  | TooManyStudentsException | NotYourTurnException e) {
+        } catch (NoSuchStudentException | TooManyStudentsException | NotYourTurnException | PhaseNotRightException e) {
             send(createError(0, e.getMessage()), usernameSocketMap.get(command.getUsername()));
         }
         sendAllUpdate();
     }
 
     private void moveStudentToIslandCommand(@NotNull Command command){
-        List<String> studentList = new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
-        List<StudentColor> students = new ArrayList<>();
-        for (String stud : studentList) {
-            StudentColor c = StudentColor.getColor(stud);
-            students.add(c);
-        }
+        List<StudentColor> students = getStudentsFromCommand(command.getAttributesMap().get(CommandAttribute.WHAT));
         movedStudents += students.size();
-
-        try {
-            //The -1 is needed because islands are indexed starting from 0; if the player inputs 1 the chosen island
-            //becomes the first one, which is island number 0.
-            board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE))-1, students);
-            if(movedStudents == 3) {
-                movedStudents = 0;
-                turn.changePhase();
-            }
-        } catch (NoSuchStudentException e) { //fixme e.getmessage()
-            send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
-        } catch (NotYourTurnException e) {
-            send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
-        } catch (TooManyStudentsException e) {
-            throw new RuntimeException(e);
+        if(movedStudents > 3){
+            send(createError(0, "Too many students selected, try again."), usernameSocketMap.get(command.getUsername()));
         }
-        sendAllUpdate();
+        else {
+            try {
+                //The -1 is needed because islands are indexed starting from 0; if the player inputs 1 the chosen island
+                //becomes the first one, which is island number 0.
+                board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE)) - 1, students);
+                if (movedStudents == 3) {
+                    movedStudents = 0;
+                    turn.changePhase();
+                }
+            } catch (NoSuchStudentException e) { //fixme e.getmessage()
+                send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
+            } catch (NotYourTurnException e) {
+                send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
+            } catch (PhaseNotRightException e) {
+                send(createError(0, "You can't use this command in this phase of the game."), usernameSocketMap.get(command.getUsername()));
+            }
+            sendAllUpdate();
+        }
     }
 
     private void moveMotherNatureCommand(Command command){
-        board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
-        Team t = board.isWinningPosition();
-        if(t != null){
-            sendWinUpdate(t);  //Also changes the state of the client to GAME_ENDED now.
+        if(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)) > board.getPossibleMovingSteps())
+            send(createError(0, "Too many steps; please try again."), usernameSocketMap.get(command.getUsername()));
+        else {
+            try{
+                board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
+            }catch(PhaseNotRightException e){
+                send(createError(0, "You can't use this command in this stage of the game."), usernameSocketMap.get(command.getUsername()));
+            }
+            Team t = board.isWinningPosition();
+            if (t != null) {
+                sendWinUpdate(t);  //Also changes the state of the client to GAME_ENDED now.
+            }
+            turn.changePhase();
+            sendAllUpdate();
         }
-        turn.changePhase();
-        sendAllUpdate();
     }
 
     private void chooseCloudCommand(Command command){
@@ -214,15 +206,36 @@ public class Game {
             send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
         } catch (TooManyStudentsException e) {
             send(createError(0, "The waiting room is full!"), usernameSocketMap.get(command.getUsername()));
+        } catch (PhaseNotRightException e) {
+            send(createError(0, "You can't use this command in this stage of the game."), usernameSocketMap.get(command.getUsername()));
         }
         sendAllUpdate();
     }
 
     private void payCharCommand(Command command){
-        //TODO: enter if condition so that you can't use this command if you're not in expert mode
-        //assert board instanceof ExpertBoard;
-        //((ExpertBoard) board).playExpertCard();
-        //board.playExpertCard()
+        try {
+            int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
+            List<String> studentList = new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
+            List<StudentColor> students = new ArrayList<>();
+            for (String student : studentList) {
+                StudentColor c = StudentColor.getColor(student);
+                students.add(c);
+            }
+            board.playExpertCard(idChar, Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE)), students );
+        }catch (NotTheRightGamemodeException | CoinException | StudentException | PhaseNotRightException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void getCharInfo(Command command){
+        //The method does not throw exceptions as everyone can use it anytime during the game.
+        int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
+        try {
+            Packet characterInfo = new Packet(new CharInfo(board.getCharInfo(idChar)));
+            send(characterInfo, usernameSocketMap.get(command.getUsername()));
+        }catch (NotTheRightGamemodeException e){
+            send(createError(0, "You can't use this command in this gamemode."), usernameSocketMap.get(command.getUsername()));
+        }
     }
 
     private void sendWinUpdate(Team t){
@@ -236,6 +249,17 @@ public class Game {
             Packet packet1 = new Packet(gameOver);
             send(packet, usernameSocketMap.get(username));
         }
+    }
+
+    private List<StudentColor> getStudentsFromCommand(String string){
+        List<String> studentList =  new ArrayList<>(Arrays.asList(string.split(",")));
+        List<StudentColor> students = new ArrayList<>();
+        StudentColor color = null;
+        for (String s : studentList) {
+            color = StudentColor.parseColor(s);
+            students.add(color);
+        }
+        return students;
     }
 
     public Board getBoard() {

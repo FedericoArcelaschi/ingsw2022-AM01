@@ -34,8 +34,7 @@ public class ServerMain implements Runnable{
     public static void init(){
         FileHandler fileHandler;
         try{
-            fileHandler = new FileHandler(//FIXME: don't hard code path
-                    "C:\\Users\\loren\\Desktop\\Università\\3° anno\\Progetto di ingegneria del software\\ingsw2022-AM01\\src\\main\\java\\it\\polimi\\ingsw\\controller\\LogFIle.log");
+            fileHandler = new FileHandler(System.getProperty("user.dir"));
             logger.addHandler(fileHandler);
             SimpleFormatter formatter = new SimpleFormatter();
             fileHandler.setFormatter(formatter);
@@ -88,29 +87,27 @@ public class ServerMain implements Runnable{
     public void acceptPlayers(){
 
         while (true) {
+            Socket socket;
             try{
                 System.out.println("Server: waiting for player to connect");
-                Socket socket = serverSocket.accept();
-
-                GameType playerGameType = handleNewClient(socket);
-
+                socket = serverSocket.accept();
                 //FIXME: if a client disconnects before game starting he must be removed from queue;
-
-                handleGame(playerGameType);
-
             } catch(IOException e) {
+                System.err.println(e.getMessage());
                 break; // Would get here if server socket was to be closed.
             }
+            GameType playerGameType = handleNewClient(socket);
+            handleGame(playerGameType);
         }
         executor.shutdown();
     }
 
 
     private void handleGame(GameType gameType) {
-        Game game = waitingRooms.computeGameType(gameId, gameType);
+        Game game = waitingRooms.submitGame(gameId, gameType);
         if(game != null) {
             gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType()) + 1);
-            System.out.println( StudentColor.YELLOW.getColorCode() +
+            logger.info( StudentColor.YELLOW.getColorCode() +
                     "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
             for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
                 serverReceiver.setGame(game);
@@ -132,28 +129,20 @@ public class ServerMain implements Runnable{
         }
         System.out.println(input);
         //decode preferences
-        var preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
-        var preferences = (Preferences) preferencesPacket.getMessage();
-        var username = preferences.username();
+        Packet preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
+        Preferences preferences = (Preferences) preferencesPacket.getMessage();
+        String username = preferences.username();
         System.out.println(username + " joined in");
-        GameType playerGameType = null;
-        try {
-            playerGameType = getGameType(preferences.nPlayer(), preferences.expertMode());
-        } catch (IllegalAccessException e) {
-            //TODO: handle error (a meno che non sia controllato nella creazione del Message - Preferences
-        }
         //adds the new client
         heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
         //starts the receiver
-        var serverReceiver = new ServerReceiver(socket, heartBeatServer, null);
+        ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, username);
         //adds player to waiting room
-        waitingRooms.addPlayer(playerGameType, serverReceiver, username);
-
-        executor.submit(serverReceiver);
+        waitingRooms.addPlayer(preferences.getGameType(), sr);
+        executor.submit(sr);
         //add player to list of connected players
-        connectedPlayers.put(username, serverReceiver);
-
-        return playerGameType;
+        connectedPlayers.put(username, sr);
+        return preferences.getGameType();
     }
 
 

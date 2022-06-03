@@ -15,11 +15,12 @@ public class ServerReceiver extends Receiver {
 
     private final HeartBeatServer hbs;
     private Game game;
+    private final String username;
 
-    public ServerReceiver (Socket socket, HeartBeatServer hbs, Game game) {
+    public ServerReceiver (Socket socket, HeartBeatServer hbs, String username) {
         super(null, socket);
         this.hbs = hbs;
-        this.game = game;
+        this.username = username;
     }
 
     protected void messageSwitch (Message message) {
@@ -30,7 +31,8 @@ public class ServerReceiver extends Receiver {
             }
             case COMMAND -> {
                  CommandMessage commandMessage = (CommandMessage) message;
-                 Command command = Command.createCommand(commandMessage.getUsername(), commandMessage.getCommand());
+                 Command command = commandMessage.getCommand();
+
                  //the game already handle message back to clients
                  game.executeCommand(command);
             }
@@ -53,5 +55,9 @@ public class ServerReceiver extends Receiver {
 
     public Game getGame(){
         return game;
+    }
+
+    public String getUsername(){
+        return username;
     }
 }

@@ -17,10 +17,13 @@ public enum CommandType {
 
     static CommandType getCommandType(String commandString) {
         for (CommandType ct : CommandType.values()) {
-            if(ct.commandString.equalsIgnoreCase(commandString)) return ct;
+            if (ct.commandString.equalsIgnoreCase(commandString)) {
+                return ct;
+            }
         }
-        return null;
+        throw new IllegalArgumentException("Command not valid. Please use 'help' to get a list of valid commands.");
     }
+
     public String getCommandString(){
         return commandString;
     }

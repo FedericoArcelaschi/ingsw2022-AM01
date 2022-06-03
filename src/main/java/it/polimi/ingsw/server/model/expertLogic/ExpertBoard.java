@@ -4,13 +4,13 @@ import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.Tavern;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterParametersType;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
-import it.polimi.ingsw.server.model.exceptions.CoinException;
-import it.polimi.ingsw.server.model.exceptions.StudentException;
+import it.polimi.ingsw.server.model.exceptions.*;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.Tavern;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -62,6 +62,11 @@ public class ExpertBoard extends Board {
         expertCharactersCards = tavern.extract();
     }
 
+    @Override
+    public String getCharInfo(int idChar){
+        return CharacterExplanation.getInstance(idChar).getDescription();
+    }
+
     /**
      * Pays for the card and then calls applyEffect with the right parameters
      * @param idChar      character id corresponding to CharacterList's position
@@ -70,7 +75,10 @@ public class ExpertBoard extends Board {
      * @throws IllegalArgumentException the selected character was not extracted during this turn
      * @throws CoinException if the player doesn't have the needed coins to pay
      */
-    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException {
+    @Override
+    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, PhaseNotRightException {
+        if(turn.getCurrentPhase() == TurnPhase.PLANNING)
+            throw new PhaseNotRightException("You can't use this command in this stage of the game.");
         StandardCharacter ec = checkLegalExpertCard(idChar);
         ParametersForCharacter par = getParameters(ec.getCharacterType(), studentsList, islandIndex);
         int actualCost = ec.getCost();

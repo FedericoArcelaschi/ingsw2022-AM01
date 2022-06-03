@@ -23,7 +23,7 @@ public class ClientReceiver extends Receiver {
         switch (message.getMessageType()) {
             case PING -> {
                 Ping ping = (Ping) message;
-                System.out.println("PONG!");
+                //System.out.println("PONG!");
                 Packet heartbeatToServer = new Packet(ping);
                 out.println(heartbeatToServer.toJson());
                 //TODO: add a timer on a new thread that makes the heart beat two way.
