@@ -8,8 +8,6 @@ import it.polimi.ingsw.communication.packet.message.Ping;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.Callable;
 

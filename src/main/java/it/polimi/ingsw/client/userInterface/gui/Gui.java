@@ -29,7 +29,6 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void start(Stage stage) {
         this.stage = stage;
-        double screenHeight = stage.getMaxHeight();
         inGame = false;
         FXMLLoader loginLoader = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/login.fxml")));
         Parent loginFXML;
@@ -58,7 +57,7 @@ public class Gui extends Application implements UserInterface {
 
     private BoardData createBoardData() {
         //FIXME: for testing.
-        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"), new Turn(Arrays.asList("fede", "gio")));
+        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio", "lore"), new Turn(Arrays.asList("fede", "gio", "lore")));
         return ModelDataBuilder.newBoardData("fede", b);
     }
 

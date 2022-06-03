@@ -2,15 +2,19 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.CastleData;
+import it.polimi.ingsw.communication.modelData.CloudData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +23,8 @@ import java.util.Map;
 public class GamePaneController {
     @FXML private Pane turnPane;
     @FXML private Pane greenDRPane, redDRPane, blueDRPane, yellowDRPane, pinkDRPane, waitingRoomPane;
-    @FXML private HBox cardsHBox, islandRow1, islandRow2, cloudRow;
+    @FXML private HBox cardsHBox, islandRow1, islandRow2;
+    @FXML private StackPane cloudStackPane;
     private ToggleGroup waitingRoomToggleGroup;
     private Map<StudentColor ,ToggleGroup> waitingRoomMap;
     public void initialize() {
@@ -61,6 +66,7 @@ public class GamePaneController {
 
     public void draw(BoardData boardData) {
         drawCastle(boardData.getMyCastle());
+        drawClouds(boardData.getCloudList());
     }
     
     private void drawCastle(CastleData castleData) {
@@ -78,6 +84,18 @@ public class GamePaneController {
         for (StudentColor color: StudentColor.values()) {
             for (int i = 0; i < 5; i++) {
                 setStudentButtonColor((ToggleButton) waitingRoomMap.get(color).getToggles().get(i), color);
+            }
+        }
+    }
+
+    private void drawClouds(List<CloudData> cloudList){
+        FlowPane cloudFlowPane = (FlowPane) cloudStackPane.getChildren().get(cloudList.size()-2);
+        cloudFlowPane.setVisible(true);
+        for (int i=0; i<cloudList.size(); ++i) {
+            CloudData cloud = cloudList.get(i);
+            Pane pane = (Pane) cloudFlowPane.getChildren().get(i);
+            for (int j = 0; j < cloud.getStudentList().size(); j++)  {
+                setStudentButtonColor((ToggleButton)pane.getChildren().get(j) , cloud.getStudentList().get(j));
             }
         }
     }
