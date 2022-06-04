@@ -10,6 +10,7 @@ import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController;
 import it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -59,7 +60,12 @@ public class Gui extends Application implements UserInterface {
      * @param boardData
      */
     @Override
-    public void draw(BoardData boardData) {
+    public void draw(BoardData boardData){
+        Platform.runLater(()->refresh(boardData));
+    }
+
+
+    public void refresh(BoardData boardData) {
         //draws the game panel for testing.
         FXMLLoader gameLoader
                 = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/game.fxml")));
