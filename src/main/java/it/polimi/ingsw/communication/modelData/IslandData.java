@@ -33,9 +33,7 @@ public class IslandData {
         StringBuilder s = new StringBuilder();
         for (StudentColor student: students) {
             s.append(" ");
-            s.append(student.getColorCode());
             s.append(student);
-            s.append(student.getColorCode());
             s.append(", ");
         }
         if(ownership == null){

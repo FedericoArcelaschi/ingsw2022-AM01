@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class CastleData {
@@ -68,14 +67,17 @@ public class CastleData {
         StringBuilder s = new StringBuilder();
         s.append("\n\t\tStudents in waiting room: ");
         for (StudentColor color : waitingRoom) {
-            s.append(color.getColorCode());
             s.append(color);
-            s.append(color.getColorCode());
             s.append(", ");
         }
+        s.replace(s.length() - 2, s.length(),"");
         s.append("\n\t\tStudents in dining room: ");
-        for (StudentColor color : diningRoom)
-            s.append(color.getColorCode()).append(color).append(color.getColorCode()).append(": ").append(diningRoom).append(", ");
+        for (StudentColor color : diningRoom) {
+            s.append(color);
+            s.append(": ");
+            s.append(diningRoom);
+            s.append(", ");
+        }
         if (isMyCastle) {
             s.append("\n\t\tAvailable Cards: ");
             for (String card : deck)
@@ -85,7 +87,8 @@ public class CastleData {
             s.append("\n\t\tThe last played card is: ").append(lastPlayedCard);
         else
             s.append("\n\t\tThe player has not played any cards yet.");
-        s.append("\n\t\tTeam: ").append(towerColor.toString());
+        s.append("\n\t\tTeam: ");
+        s.append(towerColor);
         return s.toString();
     }
 

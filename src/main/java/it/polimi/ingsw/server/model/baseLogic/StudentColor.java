@@ -5,25 +5,17 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 
 
 public enum StudentColor implements PossibleParameters {
-    YELLOW("\u001B[33m"),
-    GREEN("\u001B[32m"),
-    PINK("\u001B[35m"),
-    BLUE("\u001B[34m"),
-    RED("\u001B[31m");
+    YELLOW("38;2;252;233;79"),
+    GREEN("32"),
+    PINK("35"),
+    BLUE("34"),
+    RED("31");
 
-    private final String color;
-    StudentColor(String color) {
-        this.color = color;
-    }
+    private final String colorCode;
+    private static final String ESCAPE_CODE = "\u001b[";
 
-    public static StudentColor getColor(String s){
-        for(StudentColor c : StudentColor.values())
-            if(s.equalsIgnoreCase(c.name())) return c;
-        throw new IllegalArgumentException(s + " is not a valid color name.");
-    };
-
-    public String getColorCode(){
-        return color;
+    StudentColor(String colorCode) {
+        this.colorCode = colorCode;
     }
 
     public String getPath() {
@@ -34,17 +26,15 @@ public enum StudentColor implements PossibleParameters {
         return "studentBackground" + name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
     }
 
-    @Override
-    public String toString() {
-        return this.name().toLowerCase();
+    public static StudentColor getColor(String s) {
+        for(StudentColor c : StudentColor.values())
+            if(s.equalsIgnoreCase(c.name())) return c;
+        throw new IllegalArgumentException(s + " is not a valid colorCode name.");
     }
 
-    public static StudentColor parseColor(String color) {
-        for (StudentColor student : StudentColor.values()) {
-            if(student.name().equalsIgnoreCase(color))
-                return student;
-        }
-        return null;
+    @Override
+    public String toString() {
+        return ESCAPE_CODE + colorCode + "m" + this.name().toLowerCase() + ESCAPE_CODE + "0m";
     }
 
 }
