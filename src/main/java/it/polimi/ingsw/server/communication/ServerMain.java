@@ -96,8 +96,10 @@ public class ServerMain implements Runnable {
                 System.err.println(e.getMessage());
                 break; // Would get here if server socket was to be closed.
             }
+
             GameType playerGameType = handleNewClient(socket);
             handleGame(playerGameType);
+
         }
         executor.shutdown();
     }
@@ -118,7 +120,7 @@ public class ServerMain implements Runnable {
 
 
     private GameType handleNewClient(Socket socket) {
-        System.out.println("socket " + socket);
+        System.out.println("Socket " + socket);
         //listen for preferences
         String input;
         try{
@@ -129,20 +131,24 @@ public class ServerMain implements Runnable {
         }
         System.out.println(input);
         //decode preferences
-        Packet preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
-        Preferences preferences = (Preferences) preferencesPacket.getMessage();
-        String username = preferences.username();
-        System.out.println(username + " joined in");
+        Preferences preferences = decodePreferences(input);
         //adds the new client
         heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
         //starts the receiver
-        ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, username);
+        ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, preferences.username());
         //adds player to waiting room
         waitingRooms.addPlayer(preferences.getGameType(), sr);
         executor.submit(sr);
         //add player to list of connected players
-        connectedPlayers.put(username, sr);
+        connectedPlayers.put(preferences.username(), sr);
         return preferences.getGameType();
+    }
+
+    private Preferences decodePreferences(String input) {
+        Packet preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
+        Preferences preferences = (Preferences) preferencesPacket.getMessage();
+        System.out.println(preferences.username() + " joined in");
+        return preferences;
     }
 
 
