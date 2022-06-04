@@ -374,7 +374,7 @@ public class Board {
     /**
      * @return a map that contains the number of placed towers on the islands for each team
      */
-    private Map<Team,Integer> sumTowers() {
+    public Map<Team,Integer> sumTowers() {
         Map<Team, Integer> nTowers = new HashMap<>();
         for (Team t : Team.values()) { //fill nTowers map for all team at 0
             nTowers.put(t, 0);

@@ -5,15 +5,19 @@ import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController;
 import it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController;
+import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
+import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
@@ -45,12 +49,23 @@ public class Gui extends Application implements UserInterface {
         stage.show();
         loginPaneController.initialize(this);
         //FIXME: for testing.
-        //draw(createBoardData());
+        draw(createBoardData());
     }
 
-    private BoardData createBoardData() {
+    private BoardData createBoardData(){
         //FIXME: for testing.
-        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio", "lore"), new Turn(Arrays.asList("fede", "gio", "lore")));
+        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"), true, new Turn(Arrays.asList("fede", "gio")));
+        try{
+            b.playCard("fede", 1);
+            b.changePhase();
+            b.playCard("gio", 10);
+            b.changePhase();
+            //b.moveStudentsToDiningRoom("fede", List.of(StudentColor.PINK, StudentColor.BLUE));
+        } catch (PhaseNotRightException e) {
+            throw new RuntimeException(e);
+        } catch (NotYourTurnException e) {
+            throw new RuntimeException(e);
+        }
         return ModelDataBuilder.newBoardData("fede", b);
     }
 

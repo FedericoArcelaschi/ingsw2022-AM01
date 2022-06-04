@@ -2,6 +2,7 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
+import org.jetbrains.annotations.Range;
 
 
 public enum StudentColor implements PossibleParameters {
@@ -22,6 +23,17 @@ public enum StudentColor implements PossibleParameters {
         throw new IllegalArgumentException(s + " is not a valid color name.");
     };
 
+    public static StudentColor getColor(@Range(from = 0, to = 4) int i){
+        switch (i){
+            case 0: return GREEN;
+            case 1: return RED;
+            case 2: return YELLOW;
+            case 3: return PINK;
+            case 4: return BLUE;
+            default: return null;
+        }
+    }
+
     public String getColorCode(){
         return color;
     }
@@ -30,8 +42,11 @@ public enum StudentColor implements PossibleParameters {
         return "students/student_" + name().toLowerCase() + ".png";
     }
 
-    public String getCSS() {
+    public String getStudentCSS() {
         return "studentBackground" + name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
+    }
+    public String getTeacherCSS() {
+        return "teacherBackground" + name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
     }
 
     @Override

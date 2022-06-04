@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class CastleData {
@@ -14,15 +13,19 @@ public class CastleData {
     private final List<String> deck;
     private final String lastPlayedCard;
     private final Team towerColor;
+    private final int nTower;
     private final boolean isMyCastle;
+    private final List<StudentColor> teachers;
 
-    public CastleData(String username, List<StudentColor> waitingRoom, List<StudentColor> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, boolean isMyCastle) {
+    public CastleData(String username, List<StudentColor> waitingRoom, List<StudentColor> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, int nTower, List<StudentColor> teachers, boolean isMyCastle) {
         this.username = username;
         this.waitingRoom = waitingRoom;
         this.diningRoom = diningRoom;
         this.deck = deck;
         this.lastPlayedCard = lastPlayedCard;
         this.towerColor = towerColor;
+        this.nTower = nTower;
+        this.teachers = teachers;
         this.isMyCastle = isMyCastle;
     }
 
@@ -48,6 +51,14 @@ public class CastleData {
 
     public Team getTowerColor() {
         return towerColor;
+    }
+
+    public int getnTower() {
+        return nTower;
+    }
+
+    public List<StudentColor> getTeachers() {
+        return teachers;
     }
 
     @Override

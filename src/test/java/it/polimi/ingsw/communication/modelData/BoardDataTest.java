@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication.modelData;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
@@ -18,7 +19,7 @@ class BoardDataTest {
         BoardData bd;
         Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"), new Turn(Arrays.asList("fede","gio")));
         bd = ModelDataBuilder.newBoardData("fede", b);
-        System.out.println(bd);
+        System.out.println(new Gson().toJson(bd.getMyCastle()));
     }
 
 }

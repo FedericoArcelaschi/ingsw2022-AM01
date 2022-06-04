@@ -10,7 +10,7 @@
     -fx-background-color: lightblue;
 }
 
-#cardsHBox{
+#cardsFlowPane{
     -fx-background-color: lightblue;
 }
 
@@ -36,6 +36,14 @@
     -fx-background-color: transparent;
 }
 
+.teacher{
+    -fx-background-size: 35, 35;
+    -fx-opacity: 1;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: transparent;
+}
+
 .studentBackgroundBlue{
     -fx-background-image: url("/students/student_blue.png");
 }
@@ -54,6 +62,26 @@
 
 .studentBackgroundGreen{
     -fx-background-image: url("/students/student_green.png");
+}
+
+.teacherBackgroundBlue{
+    -fx-background-image: url("/teachers/teacher_blue.png");
+}
+
+.teacherBackgroundRed{
+    -fx-background-image: url("/teachers/teacher_red.png");
+}
+
+.teacherBackgroundYellow{
+    -fx-background-image: url("/teachers/teacher_yellow.png");
+}
+
+.teacherBackgroundPink{
+    -fx-background-image: url("/teachers/teacher_pink.png");
+}
+
+.teacherBackgroundGreen{
+    -fx-background-image: url("/teachers/teacher_green.png");
 }
 
 .assistant{

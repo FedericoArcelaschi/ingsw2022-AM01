@@ -20,8 +20,9 @@ import java.util.*;
 
 public class GamePaneController {
     @FXML private Pane turnPane;
-    @FXML private Pane greenDRPane, redDRPane, blueDRPane, yellowDRPane, pinkDRPane, waitingRoomPane;
-    @FXML private HBox cardsHBox, islandRow1, islandRow2;
+    @FXML private Pane greenDRPane, redDRPane, blueDRPane, yellowDRPane, pinkDRPane, waitingRoomPane, teacherTablePane;
+    @FXML private HBox islandRow1, islandRow2;
+    @FXML private FlowPane cardsFlowPane;
     @FXML private StackPane cloudStackPane;
     private ToggleGroup waitingRoomToggleGroup;
     private Map<StudentColor ,ToggleGroup> waitingRoomMap;
@@ -47,12 +48,6 @@ public class GamePaneController {
         waitingRoomMap.put(StudentColor.RED, redDiningRoomToggleGroup);
         waitingRoomMap.put(StudentColor.PINK, pinkDiningRoomToggleGroup);
         waitingRoomMap.put(StudentColor.YELLOW, yellowDiningRoomToggleGroup);
-
-        for (int i=0; i<10; ++i) {
-            Node node = cardsHBox.getChildren().get(i);
-            Pane pane = (Pane) node;
-            pane.getStyleClass().add("cardAssistant" + (i+1));
-        }
     }
 
     private void setToggleGroup(ToggleGroup toggleGroup, ObservableList<Node> children) {
@@ -66,11 +61,26 @@ public class GamePaneController {
         drawCastle(boardData.getMyCastle());
         drawClouds(boardData.getCloudList());
         drawIslands(boardData.getIslandList());
+        drawCards(boardData.getMyCastle().getDeck());
+    }
+
+    private void drawCards(List<String> assistants){
+        System.out.println(assistants);
+        for (int i=1; i<=10; ++i) {
+            String s = "[" + i + ", " + (i+1)/2 + "]";
+            if(assistants.contains(s)) {
+                Pane pane = new Pane();
+                pane.setPrefSize(111, 200);
+                pane.getStyleClass().addAll("cardAssistant" + (i), "assistant");
+                cardsFlowPane.getChildren().add(pane);
+            }
+        }
     }
     
     private void drawCastle(CastleData castleData) {
         drawWaitingRoom(castleData.getWaitingRoom());
         //drawDiningRoom(castleData.getDiningRoom());
+        drawTeachers(castleData.getTeachers());
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom) {
@@ -84,6 +94,15 @@ public class GamePaneController {
             for (int i = 0; i < 5; i++) {
                 setStudentButtonColor((ToggleButton) waitingRoomMap.get(color).getToggles().get(i), color);
             }
+        }
+    }
+
+    private void drawTeachers(List<StudentColor> teachers){
+        for (int i=0; i<teacherTablePane.getChildren().size(); i++){
+            Node node = teacherTablePane.getChildren().get(i);
+            ToggleButton teacher = (ToggleButton) node;
+            StudentColor teacherColor = StudentColor.getColor(i);
+            if(teachers.contains(teacherColor)) setTeacherButtonColor(teacher, teacherColor);
         }
     }
 
@@ -124,7 +143,11 @@ public class GamePaneController {
     }
 
     private void setStudentButtonColor(ToggleButton button, StudentColor studentColor) {
-        button.getStyleClass().add(studentColor.getCSS());
+        button.getStyleClass().add(studentColor.getStudentCSS());
+    }
+
+    private void setTeacherButtonColor(ToggleButton button, StudentColor studentColor) {
+        button.getStyleClass().add(studentColor.getTeacherCSS());
     }
 
     public void moveStudentToDiningRoom(MouseEvent mouseEvent) {

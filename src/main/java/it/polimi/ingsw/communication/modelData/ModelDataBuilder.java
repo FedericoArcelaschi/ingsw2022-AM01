@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.baseLogic.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public abstract class ModelDataBuilder {
@@ -14,16 +15,14 @@ public abstract class ModelDataBuilder {
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(ModelDataBuilder::newIslandData).toList(),
-                newCastleData(username, board.getCastle(username), true),
+                newCastleData(username, board.getCastle(username), true, board.sumTowers(), board.getProfessorsMap()),
                 board.getCastleMap().keySet().stream()
                         .filter(key -> !key.equals(username))
-                        .map(key -> newCastleData(key, board.getCastle(key), false))
+                        .map(key -> newCastleData(key, board.getCastle(key), false, board.sumTowers(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn())
         );
     }
-
-
 
     private static CloudData newCloudData(Cloud cloud) {
         return new CloudData(cloud.getStudentList(), cloud.isAvailable());
@@ -39,13 +38,17 @@ public abstract class ModelDataBuilder {
         return new IslandData(island.getOwnership(), students, island.getIslandNumber());
     }
 
-    private static CastleData newCastleData(String username, Castle castle, boolean isMyCastle) {
+    private static CastleData newCastleData(String username, Castle castle, boolean isMyCastle, Map<Team, Integer> towerPerTeam, Map<StudentColor, Team> teachersMap) {
         List<StudentColor> diningRoom = new ArrayList<>();
+        List<StudentColor> teachers = new ArrayList<>();
         for (StudentColor studentColor: castle.getDiningRoom().keySet()) {
             for (int i = 0; i < castle.getDiningRoom().get(studentColor); i++) {
                 diningRoom.add(studentColor);
             }
         }
+        for (StudentColor studentColor: teachersMap.keySet())
+            if(teachersMap.get(studentColor) == castle.getTeam())
+                teachers.add(studentColor);
         return new CastleData(
                 username,
                 castle.getWaitingRoom(),
@@ -53,6 +56,8 @@ public abstract class ModelDataBuilder {
                 isMyCastle ? castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList() : null,
                 castle.getLastCardPlayed() != null ?castle.getLastCardPlayed().toString() : null,
                 castle.getTeam(),
+                towerPerTeam.get(castle.getTeam()),
+                teachers,
                 isMyCastle);
     }
 
