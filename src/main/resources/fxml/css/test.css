@@ -52,6 +52,15 @@
     -fx-background-color: transparent;
 }
 
+.motherNature{
+    -fx-background-size: 35, 35;
+    -fx-opacity: 1;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/motherNature/mother_nature.png");
+}
+
 .studentBackgroundBlue{
     -fx-background-image: url("/students/student_blue.png");
 }

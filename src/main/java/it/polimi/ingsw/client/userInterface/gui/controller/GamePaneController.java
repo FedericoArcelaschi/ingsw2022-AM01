@@ -61,7 +61,7 @@ public class GamePaneController {
     public void draw(BoardData boardData) {
         drawCastle(boardData.getMyCastle());
         drawClouds(boardData.getCloudList());
-        drawIslands(boardData.getIslandList());
+        drawIslands(boardData.getIslandList(), boardData.getMotherNaturePosition());
         drawCards(boardData.getMyCastle().getDeck());
     }
 
@@ -119,7 +119,7 @@ public class GamePaneController {
         }
     }
 
-    private void drawIslands(List<IslandData> islandList){
+    private void drawIslands(List<IslandData> islandList, int motherNaturePosition){
         List<Pane> paneList = new ArrayList<>();
         for (Node n: islandRow1.getChildren()) {
             paneList.add((Pane) n);
@@ -140,9 +140,19 @@ public class GamePaneController {
                 FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
                 flowPane.getChildren().add(toggleButton);
             }
+            if (motherNaturePosition == i){
+                ToggleButton toggleButton = new ToggleButton();
+                toggleButton.getStyleClass().add("motherNature");
+                toggleButton.setDisable(true);
+                toggleButton.setPrefSize(35,35);
+                FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
+                flowPane.getChildren().add(toggleButton);
+            }
         }
+
     }
 
+    //FIXME: in case of 3 players towers must be 6 in total
     private void drawTower(Team towerColor, int usedTowers){
         for (int i = usedTowers; i < towerPane.getChildren().size(); i++) {
             Node node = towerPane.getChildren().get(i);
@@ -160,7 +170,6 @@ public class GamePaneController {
     }
     private void setTowerButtonColor(ToggleButton button, Team team) {
         button.getStyleClass().add(team.getCSS());
-        System.out.println(team.getCSS());
     }
 
     public void moveStudentToDiningRoom(MouseEvent mouseEvent) {
