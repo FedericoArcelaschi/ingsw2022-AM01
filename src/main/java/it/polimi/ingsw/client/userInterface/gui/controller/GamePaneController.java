@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.modelData.CastleData;
 import it.polimi.ingsw.communication.modelData.CloudData;
 import it.polimi.ingsw.communication.modelData.IslandData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.Team;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -20,7 +21,7 @@ import java.util.*;
 
 public class GamePaneController {
     @FXML private Pane turnPane;
-    @FXML private Pane greenDRPane, redDRPane, blueDRPane, yellowDRPane, pinkDRPane, waitingRoomPane, teacherTablePane;
+    @FXML private Pane greenDRPane, redDRPane, blueDRPane, yellowDRPane, pinkDRPane, waitingRoomPane, teacherTablePane, towerPane;
     @FXML private HBox islandRow1, islandRow2;
     @FXML private FlowPane cardsFlowPane;
     @FXML private StackPane cloudStackPane;
@@ -65,7 +66,6 @@ public class GamePaneController {
     }
 
     private void drawCards(List<String> assistants){
-        System.out.println(assistants);
         for (int i=1; i<=10; ++i) {
             String s = "[" + i + ", " + (i+1)/2 + "]";
             if(assistants.contains(s)) {
@@ -81,6 +81,7 @@ public class GamePaneController {
         drawWaitingRoom(castleData.getWaitingRoom());
         //drawDiningRoom(castleData.getDiningRoom());
         drawTeachers(castleData.getTeachers());
+        drawTower(castleData.getTowerColor(), castleData.getnTower());
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom) {
@@ -142,12 +143,24 @@ public class GamePaneController {
         }
     }
 
+    private void drawTower(Team towerColor, int usedTowers){
+        for (int i = usedTowers; i < towerPane.getChildren().size(); i++) {
+            Node node = towerPane.getChildren().get(i);
+            ToggleButton toggleButton = (ToggleButton) node;
+            setTowerButtonColor(toggleButton, towerColor);
+        }
+    }
+
     private void setStudentButtonColor(ToggleButton button, StudentColor studentColor) {
         button.getStyleClass().add(studentColor.getStudentCSS());
     }
 
     private void setTeacherButtonColor(ToggleButton button, StudentColor studentColor) {
         button.getStyleClass().add(studentColor.getTeacherCSS());
+    }
+    private void setTowerButtonColor(ToggleButton button, Team team) {
+        button.getStyleClass().add(team.getCSS());
+        System.out.println(team.getCSS());
     }
 
     public void moveStudentToDiningRoom(MouseEvent mouseEvent) {

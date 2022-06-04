@@ -44,6 +44,14 @@
     -fx-background-color: transparent;
 }
 
+.tower{
+    -fx-background-size: 50, 50;
+    -fx-opacity: 1;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: transparent;
+}
+
 .studentBackgroundBlue{
     -fx-background-image: url("/students/student_blue.png");
 }
@@ -129,6 +137,18 @@
 
 .cardAssistant10{
     -fx-background-image: url("/cards/Assistente10.png");
+}
+
+.towerBlack{
+    -fx-background-image: url("/towers/black_tower.png");
+}
+
+.towerWhite{
+    -fx-background-image: url("/towers/white_tower.png");
+}
+
+.towerGrey{
+    -fx-background-image: url("/towers/grey_tower.png");
 }
 
 .student:selected{

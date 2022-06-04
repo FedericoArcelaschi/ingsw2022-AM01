@@ -61,9 +61,7 @@ public class Gui extends Application implements UserInterface {
             b.playCard("gio", 10);
             b.changePhase();
             //b.moveStudentsToDiningRoom("fede", List.of(StudentColor.PINK, StudentColor.BLUE));
-        } catch (PhaseNotRightException e) {
-            throw new RuntimeException(e);
-        } catch (NotYourTurnException e) {
+        } catch (PhaseNotRightException | NotYourTurnException e) {
             throw new RuntimeException(e);
         }
         return ModelDataBuilder.newBoardData("fede", b);

@@ -30,8 +30,8 @@ public enum StudentColor implements PossibleParameters {
             case 2: return YELLOW;
             case 3: return PINK;
             case 4: return BLUE;
-            default: return null;
         }
+        throw new IllegalArgumentException("student index out of bound in getColor(int)");
     }
 
     public String getColorCode(){
