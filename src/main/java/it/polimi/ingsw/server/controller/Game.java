@@ -23,6 +23,7 @@ import java.util.*;
 public class Game {
     private final GameType gameType;
     private final Board board;
+
     private final Turn turn;
     private final Map<String, Socket> usernameSocketMap;
     private final Map<String, ServerReceiver> usernameServerReceiverMap;
@@ -30,7 +31,7 @@ public class Game {
     //TODO: more times per turn.
     private int movedStudents;
 
-    public Game(GameType gameType, int gameId, List<ServerReceiver> gameSocketList) {
+    public Game(GameType gameType, List<ServerReceiver> gameSocketList) {
         this.gameType = gameType;
         this.usernameServerReceiverMap = new HashMap<>();
         this.usernameSocketMap = new HashMap<>();
@@ -40,8 +41,8 @@ public class Game {
             usernameServerReceiverMap.put(gameSocketList.get(i).getUsername(), gameSocketList.get(i));
             usernameSocketMap.put(gameSocketList.get(i).getUsername(), gameSocketList.get(i).getSocket());
         }
-        turn = new Turn(usernameSocketMap.keySet().stream().toList());
-        this.board = BoardFactory.getBoard(usernameSocketMap.keySet().stream().toList(), gameType.expertMode, turn);
+        this.board = BoardFactory.getBoard(usernameSocketMap.keySet().stream().toList(), gameType.expertMode);
+        this.turn = board.getTurn();
         sendAllUpdate();
     }
 

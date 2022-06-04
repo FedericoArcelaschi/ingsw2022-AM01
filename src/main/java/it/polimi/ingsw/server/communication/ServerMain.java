@@ -19,7 +19,7 @@ import java.util.logging.*;
 
 import static it.polimi.ingsw.server.controller.GameType.getGameType;
 
-public class ServerMain implements Runnable{
+public class ServerMain implements Runnable {
 
     private final int port;
     private ExecutorService executor;
@@ -31,7 +31,7 @@ public class ServerMain implements Runnable{
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
     private int gameId = 0;
 
-    public static void init(){
+    public static void init() {
         FileHandler fileHandler;
         try{
             fileHandler = new FileHandler(System.getProperty("user.dir"));
@@ -84,7 +84,7 @@ public class ServerMain implements Runnable{
     /**
      * wait for players to connect and generate a game when there are 2 players connected
      */
-    public void acceptPlayers(){
+    public void acceptPlayers() {
 
         while (true) {
             Socket socket;
@@ -117,7 +117,7 @@ public class ServerMain implements Runnable{
     }
 
 
-    private GameType handleNewClient(Socket socket){
+    private GameType handleNewClient(Socket socket) {
         System.out.println("socket " + socket);
         //listen for preferences
         String input;

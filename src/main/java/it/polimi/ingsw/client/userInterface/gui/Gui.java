@@ -57,8 +57,8 @@ public class Gui extends Application implements UserInterface {
     }
 
     private BoardData createBoardData() {
-        //FIXME: for testing.
-        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"), new Turn(Arrays.asList("fede", "gio")));
+        //creates a random normal-mode board data for testing.
+        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio", "lore"), false);
         return ModelDataBuilder.newBoardData("fede", b);
     }
 
@@ -80,7 +80,6 @@ public class Gui extends Application implements UserInterface {
             throw new RuntimeException(e);
         }
         gamePaneController = gameLoader.getController();
-
         gamePaneController.draw(boardData);
         stage.setScene(new Scene(loginFXML));
         stage.centerOnScreen();

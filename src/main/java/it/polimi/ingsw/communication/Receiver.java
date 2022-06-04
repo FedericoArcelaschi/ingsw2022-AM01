@@ -20,7 +20,7 @@ public abstract class Receiver implements Runnable{
     protected final PrintWriter out;
     protected final ClientMain cm;
 
-    public Receiver(ClientMain cm, Socket socket){
+    public Receiver(ClientMain cm, Socket socket) {
         this.socket = socket;
         this.cm = cm;
         try {

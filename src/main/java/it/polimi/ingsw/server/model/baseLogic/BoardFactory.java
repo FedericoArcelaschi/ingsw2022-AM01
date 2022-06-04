@@ -5,19 +5,19 @@ import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import java.util.List;
 import java.util.random.RandomGenerator;
 
-public class BoardFactory {
-    @Deprecated
-    public static Board getBoard(List<String> playerList, Turn turn){
-        return getBoard(playerList, false, turn, RandomGenerator.getDefault().nextLong());
-    }
+public interface BoardFactory {
 
-    public static Board getBoard(List<String> playerList, boolean expert, Turn turn){
+    //without seed
+    static Board getBoard(List<String> playerList, boolean expert) {
+        Turn turn = new Turn(playerList);
         if(expert)
             return createExpertBoard(playerList, turn, RandomGenerator.getDefault().nextLong());
         return createBoard(playerList, turn, RandomGenerator.getDefault().nextLong());
     }
 
-    public static Board getBoard(List<String> playerList, boolean expert, Turn turn, long seed){
+    //with seed
+    static Board getBoard(List<String> playerList, boolean expert, long seed) {
+        Turn turn = new Turn(playerList);
         if(expert)
             return createExpertBoard(playerList, turn, seed);
         return createBoard(playerList, turn, seed);

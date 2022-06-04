@@ -61,7 +61,7 @@ public class ClientMain {
         state = ClientState.WAITING_ROOM;
     }
 
-    public void runCommand(String stringCommand){
+    public void runCommand(String stringCommand) {
         if (socket == null || socket.isClosed()) {
             return;
         }
