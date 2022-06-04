@@ -96,10 +96,9 @@ public class ServerMain implements Runnable {
                 System.err.println(e.getMessage());
                 break; // Would get here if server socket was to be closed.
             }
-
             GameType playerGameType = handleNewClient(socket);
-            handleGame(playerGameType);
-
+            if(playerGameType != null)
+                handleGame(playerGameType);
         }
         executor.shutdown();
     }
@@ -120,26 +119,19 @@ public class ServerMain implements Runnable {
 
 
     private GameType handleNewClient(Socket socket) {
-        System.out.println("Socket " + socket);
-        //listen for preferences
         String input;
-        try{
+        try{ //server receives preferences
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             input = in.readLine();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
+            return null;
         }
-        System.out.println(input);
-        //decode preferences
         Preferences preferences = decodePreferences(input);
-        //adds the new client
-        heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
-        //starts the receiver
+        heartBeatServer.addClient(socket);
         ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, preferences.username());
-        //adds player to waiting room
         waitingRooms.addPlayer(preferences.getGameType(), sr);
         executor.submit(sr);
-        //add player to list of connected players
         connectedPlayers.put(preferences.username(), sr);
         return preferences.getGameType();
     }
