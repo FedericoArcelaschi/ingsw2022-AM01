@@ -41,9 +41,6 @@ public class ClientMain {
         System.out.println(username + ":  connected");
 
         clientSender = new ClientSender(socket);
-        System.out.println("socket client: " + socket.getChannel()); // => null
-        System.out.println(socket.getPort());
-        System.out.println(socket.getRemoteSocketAddress());
 
         //sends player preferences to the server;
         clientSender.send(new Preferences(username, preferenceNPlayer, preferenceExpertMode));

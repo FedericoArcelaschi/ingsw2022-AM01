@@ -31,7 +31,7 @@ public class Main {
                 return UserType.getUserType(argIn);
             }
         }
-        System.out.println(Outputs.USER_TYPE_INVALID);
+        System.err.println(Outputs.USER_TYPE_INVALID);
         return getUserType();
     }
 

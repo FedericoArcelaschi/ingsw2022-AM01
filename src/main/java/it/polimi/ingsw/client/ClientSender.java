@@ -21,6 +21,5 @@ public class ClientSender {
 
     public void send(Message message){
         out.println(message.toJson());
-        System.out.println(message.toJson());
     }
 }

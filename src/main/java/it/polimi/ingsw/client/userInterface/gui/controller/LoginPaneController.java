@@ -40,10 +40,6 @@ public class LoginPaneController {
         }
     }
 
-    public void test(){
-        System.out.println("test");
-    }
-
     private Preferences getPreferences() {
         var username = usernameTextField.getText();
         var selectedNPlayer = (RadioButton) nPlayer.getSelectedToggle();

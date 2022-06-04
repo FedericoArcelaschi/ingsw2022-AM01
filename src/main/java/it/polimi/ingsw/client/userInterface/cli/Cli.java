@@ -49,6 +49,7 @@ public class Cli implements UserInterface {
      */
     @Override
     public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
+        //TODO: print a nicier view of the lobby
         StringBuilder sb = new StringBuilder();
         sb.append("Player in queue: \n");
         sb.append("Game type: ").append(gameType).append("\n");

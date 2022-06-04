@@ -85,7 +85,7 @@ public class ExpertBoard extends Board {
         try{
             ec.applyEffect(par);
         } catch (StudentException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             throw new StudentException(e);
         } catch (Exception e) {
             e.printStackTrace();

@@ -23,7 +23,7 @@ public class Command {
             //e.g.: playcard 1
             case MOVE_STUDENT_TO_CASTLE -> {
                 attributesMap.put(CommandAttribute.WHAT, String.join(",", attributes)); //What will be a list of students.
-                System.out.println(attributesMap.get(CommandAttribute.WHAT));
+                //System.out.println(attributesMap.get(CommandAttribute.WHAT));
             }
             //e.g.: moveStudentCastle Green, Blue, Pink
             case MOVE_STUDENT_TO_ISLAND -> {

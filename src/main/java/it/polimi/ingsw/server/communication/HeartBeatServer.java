@@ -55,7 +55,6 @@ public class HeartBeatServer implements Callable {
             heartBeats.put(client, new Ping()); //FIXME -> here the idea is to put the PING UUID associated to each client's ping. Not needed. Not implemented.
             String pingMessage = new Ping().toJson();
             out.println(pingMessage);
-            System.out.println("pingMessage" + pingMessage);
         }
         try {
             Thread.sleep(timeout - previousTime + new Date().getTime());

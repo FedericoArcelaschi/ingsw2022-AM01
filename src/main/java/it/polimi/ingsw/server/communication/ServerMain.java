@@ -107,8 +107,7 @@ public class ServerMain implements Runnable {
         Game game = waitingRooms.submitGame(gameId, gameType);
         if(game != null) {
             gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType()) + 1);
-            logger.info( StudentColor.YELLOW.getColorCode() +
-                    "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
+            logger.info("Server: created game " + gameId + " with players: " + game.toStringPlayers());
             for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
                 serverReceiver.setGame(game);
             }
