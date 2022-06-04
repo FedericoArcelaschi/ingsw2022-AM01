@@ -32,7 +32,11 @@ public class IslandData {
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (StudentColor student: students) {
-            s.append(" ").append(student).append(", ");
+            s.append(" ");
+            s.append(student.getColorCode());
+            s.append(student);
+            s.append(student.getColorCode());
+            s.append(", ");
         }
         if(ownership == null){
             s.append("0 towers");

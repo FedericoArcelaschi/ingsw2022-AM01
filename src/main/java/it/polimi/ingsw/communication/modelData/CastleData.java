@@ -67,16 +67,19 @@ public class CastleData {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("\n\t\tStudents in waiting room: ");
-        for (StudentColor c : waitingRoom) {
-            s.append(c).append(", ");
+        for (StudentColor color : waitingRoom) {
+            s.append(color.getColorCode());
+            s.append(color);
+            s.append(color.getColorCode());
+            s.append(", ");
         }
         s.append("\n\t\tStudents in dining room: ");
-        for (StudentColor c : diningRoom)
-            s.append(c).append(": ").append(diningRoom.toString()).append(", ");
+        for (StudentColor color : diningRoom)
+            s.append(color.getColorCode()).append(color).append(color.getColorCode()).append(": ").append(diningRoom).append(", ");
         if (isMyCastle) {
             s.append("\n\t\tAvailable Cards: ");
-            for (String c : deck)
-                s.append(c).append(", ");
+            for (String card : deck)
+                s.append(card).append(", ");
         }
         if(lastPlayedCard != null)
             s.append("\n\t\tThe last played card is: ").append(lastPlayedCard);

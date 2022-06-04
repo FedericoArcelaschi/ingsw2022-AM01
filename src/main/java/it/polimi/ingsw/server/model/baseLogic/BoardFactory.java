@@ -39,7 +39,7 @@ public interface BoardFactory {
                 case 2 -> new Board(playerList.get(0),playerList.get(1), turn, seed);
                 case 3 -> new Board(playerList.get(0),playerList.get(1),playerList.get(2), turn, seed);
                 case 4 -> new Board(playerList.get(0),playerList.get(1),playerList.get(2),playerList.get(3), turn, seed);
-                default -> throw new IllegalArgumentException("too many students");
+                default -> throw new IllegalArgumentException("too many players");
             };
     }
 }
