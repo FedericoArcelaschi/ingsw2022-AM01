@@ -1,10 +1,11 @@
 package it.polimi.ingsw.server.communication;
 
-import it.polimi.ingsw.communication.packet.PacketParser;
-import it.polimi.ingsw.communication.packet.message.Preferences;
+import com.google.gson.JsonParseException;
+import it.polimi.ingsw.communication.message.Message;
+import it.polimi.ingsw.communication.message.MessageParser;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
-import it.polimi.ingsw.communication.packet.Packet;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 
 import java.io.BufferedReader;
@@ -16,8 +17,6 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.*;
-
-import static it.polimi.ingsw.server.controller.GameType.getGameType;
 
 public class ServerMain implements Runnable {
 
@@ -33,14 +32,14 @@ public class ServerMain implements Runnable {
 
     public static void init() {
         FileHandler fileHandler;
-        try{
+        try {
             fileHandler = new FileHandler(System.getProperty("user.dir"));
             logger.addHandler(fileHandler);
             SimpleFormatter formatter = new SimpleFormatter();
             fileHandler.setFormatter(formatter);
             logger.setLevel(Level.FINE);
             logger.info("Logger has been initialized.");
-        }catch (Exception e){
+        } catch (Exception e){
             logger.log(Level.WARNING, "Exception: ", e);
         }
     }
@@ -127,7 +126,15 @@ public class ServerMain implements Runnable {
             System.err.println(e.getMessage());
             return null;
         }
-        Preferences preferences = decodePreferences(input);
+        Preferences preferences;
+        try {
+            preferences = (Preferences) MessageParser.gson.fromJson(input, Message.class);
+        } catch(JsonParseException e) {
+            System.err.println("not a preference packet!!");
+            e.printStackTrace();
+            return null;
+        }
+        System.out.println(preferences.username() + " joined in");
         heartBeatServer.addClient(socket);
         ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, preferences.username());
         waitingRooms.addPlayer(preferences.getGameType(), sr);
@@ -136,14 +143,6 @@ public class ServerMain implements Runnable {
         return preferences.getGameType();
     }
 
-    private Preferences decodePreferences(String input) {
-        Packet preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
-        Preferences preferences = (Preferences) preferencesPacket.getMessage();
-        System.out.println(preferences.username() + " joined in");
-        return preferences;
-    }
-
-
     public Map<String, ServerReceiver> getConnectedPlayers() {
         return new HashMap<>(connectedPlayers);
     }
@@ -151,4 +150,5 @@ public class ServerMain implements Runnable {
     public int getGamesNumber(GameType type){
         return gamesNumber.get(type);
     }
+
 }

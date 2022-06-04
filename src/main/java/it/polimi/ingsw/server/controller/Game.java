@@ -1,15 +1,14 @@
 package it.polimi.ingsw.server.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import it.polimi.ingsw.communication.packet.message.Error;
-import it.polimi.ingsw.communication.packet.message.command.Command;
-import it.polimi.ingsw.communication.packet.message.command.CommandAttribute;
+import it.polimi.ingsw.communication.message.*;
+import it.polimi.ingsw.communication.message.subclasses.*;
+import it.polimi.ingsw.communication.command.Command;
+import it.polimi.ingsw.communication.command.CommandAttribute;
+import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.server.communication.ServerReceiver;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
-import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
@@ -75,10 +74,9 @@ public class Game {
         }
         if(user == null) throw new IllegalArgumentException("the player isn't part of this game");
         Message message = new EndGame(user + " disconnected");
-        Packet packet = new Packet(message);
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
-            send(packet, usernameSocketMap.get(username));
+            send(message, usernameSocketMap.get(username));
         }
     }
 
@@ -86,41 +84,37 @@ public class Game {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             Message message = new WinUpdate(ModelDataBuilder.newBoardData(username, board), winner);
-            Packet packet  = new Packet(message);
-            send(packet, usernameSocketMap.get(username));
+            send(message, usernameSocketMap.get(username));
         }
     }
 
     private void sendAllUpdate() {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
-            Message message = new Update(ModelDataBuilder.newBoardData(username, board));
-            Packet packet  = new Packet(message);
-            send(packet, usernameSocketMap.get(username));
+            Message message = new Update(ModelDataBuilder.newBoardData(username, board)); //FIXME: in questa classe mi sembra ci sia un tot di codice ripetutto o sbalgio?
+            send(message, usernameSocketMap.get(username));
         }
     }
 
-    private void send(Packet packet, Socket socket) {
-        PrintWriter out = null;
+    private void send(Message message, Socket socket) {
+        PrintWriter out;
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        out.println(packet.toJson());
+        out.println(message.toJson());
     }
 
-    private Packet createUpdate(BoardData boardData){
-        Message message = new Update(boardData);
-        return new Packet(message);
+    private Message createUpdate(BoardData boardData) {
+        return new Update(boardData); //FIXME
     }
 
-    private Packet createError(int errorCode, String errorMessage){
-        Message message = new Error(errorCode, errorMessage);
-        return new Packet(message);
+    private Message createError(int errorCode, String errorMessage) {
+        return new Error(errorCode, errorMessage); //FIXME
     }
 
-    private void playCardCommand(Command command){
+    private void playCardCommand(Command command) {
         try {
             board.playCard(command.getUsername() ,Integer.parseInt(command.getAttributesMap().get(CommandAttribute.ID)));
             turn.changePhase();
@@ -203,7 +197,7 @@ public class Game {
                 sendWinUpdate(t);  //Also changes the state of the client to GAME_ENDED now.
             }
             turn.changePhase();
-        } catch (NotYourTurnException e) {
+        } catch (NotYourTurnException e) { //FIXME: usa il messaggio della exception per rendere il codice più pulito
             send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));
         } catch (TooManyStudentsException e) {
             send(createError(0, "The waiting room is full!"), usernameSocketMap.get(command.getUsername()));
@@ -232,8 +226,7 @@ public class Game {
         //The method does not throw exceptions as everyone can use it anytime during the game.
         int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
         try {
-            Packet characterInfo = new Packet(new CharInfo(board.getCharInfo(idChar)));
-            send(characterInfo, usernameSocketMap.get(command.getUsername()));
+            send(new CharInfo(board.getCharInfo(idChar)), usernameSocketMap.get(command.getUsername()));
         }catch (NotTheRightGamemodeException e){
             send(createError(0, "You can't use this command in this gamemode."), usernameSocketMap.get(command.getUsername()));
         }
@@ -244,20 +237,18 @@ public class Game {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             Message winner = new WinUpdate(ModelDataBuilder.newBoardData(username, board), t.name());
-            Packet packet  = new Packet(winner);
-            send(packet, usernameSocketMap.get(username));
+            send(winner, usernameSocketMap.get(username));
             Message gameOver = new EndGame("Game over. Changing state...");
-            Packet packet1 = new Packet(gameOver);
-            send(packet, usernameSocketMap.get(username));
+            send(gameOver, usernameSocketMap.get(username));//FIXME: qui non si capisce cosa succede idk
         }
     }
 
     private List<StudentColor> getStudentsFromCommand(String string){
         List<String> studentList =  new ArrayList<>(Arrays.asList(string.split(",")));
         List<StudentColor> students = new ArrayList<>();
-        StudentColor color = null;
+        StudentColor color;
         for (String s : studentList) {
-            color = StudentColor.parseColor(s);
+            color = StudentColor.getColor(s);
             students.add(color);
         }
         return students;

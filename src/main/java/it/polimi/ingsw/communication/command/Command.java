@@ -1,12 +1,10 @@
-package it.polimi.ingsw.communication.packet.message.command;
-
-import org.jetbrains.annotations.NotNull;
+package it.polimi.ingsw.communication.command;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static it.polimi.ingsw.communication.packet.message.command.CommandType.getCommandType;
+import static it.polimi.ingsw.communication.command.CommandType.getCommandType;
 
 /**
  * a representation of the command the player can compose and ask to be executed

@@ -1,11 +1,9 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.communication.ClientState;
-import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.Preferences;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.client.userInterface.UserInterface;
-import it.polimi.ingsw.communication.packet.message.command.Command;
-import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
+import it.polimi.ingsw.communication.message.subclasses.CommandMessage;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,15 +11,15 @@ import java.util.concurrent.Executors;
 
 public class ClientMain {
     private final String username;
-    private ClientState state = ClientState.NOT_CONNECTED;
     private final int preferenceNPlayer;
     private final boolean preferenceExpertMode;
     private final String IP;
     private final int port;
 
-    public Socket socket = null;
+    private Socket socket = null;
     private ClientSender clientSender;
     private ClientReceiver clientReceiver;
+    private ClientState state = ClientState.NOT_CONNECTED;
 
     public ClientMain(String IP, int port, Preferences preferences) {
         this.IP = IP;
@@ -48,10 +46,7 @@ public class ClientMain {
         System.out.println(socket.getRemoteSocketAddress());
 
         //sends player preferences to the server;
-        Preferences preferences = null;
-        preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
-        Packet packet = new Packet(preferences);
-        clientSender.sendPacket(packet);
+        clientSender.send(new Preferences(username, preferenceNPlayer, preferenceExpertMode));
 
         //runs the ClientReceiver
         clientReceiver = new ClientReceiver(this, socket, userInterface);
@@ -74,8 +69,8 @@ public class ClientMain {
                 System.err.println(e.getMessage());
                 return;
             }
-            Packet packet = new Packet(commandMessage);
-            clientSender.sendPacket(packet);
+
+            clientSender.send(commandMessage);
             System.out.println("command sent");
         }
     }

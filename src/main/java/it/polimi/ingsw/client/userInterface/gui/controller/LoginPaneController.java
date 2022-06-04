@@ -2,7 +2,7 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 
 import it.polimi.ingsw.client.ClientMain;
 import it.polimi.ingsw.client.userInterface.UserInterface;
-import it.polimi.ingsw.communication.packet.message.Preferences;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;

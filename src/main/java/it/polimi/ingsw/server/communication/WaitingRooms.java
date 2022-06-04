@@ -1,11 +1,9 @@
 package it.polimi.ingsw.server.communication;
 
-import com.google.gson.Gson;
-import it.polimi.ingsw.communication.packet.message.LobbyInfo;
+import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
-import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.Message;
+import it.polimi.ingsw.communication.message.Message;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -49,8 +47,10 @@ public class WaitingRooms {
         if(gameSocketMap.get(gameType).size() < numberOfPlayers){
             List<String> playersIn = new ArrayList<>(gameSocketMap.get(gameType).stream().map(ServerReceiver::getUsername).toList());
             Message lobbyInfo = new LobbyInfo(playersIn, gameType);
-            Packet packet = new Packet(lobbyInfo);
-            List<ServerReceiver> playersInLobby = new ArrayList<>(gameSocketMap.get(gameType).subList((gameSocketMap.get(gameType).size()-gameSocketMap.get(gameType).size()%numberOfPlayers),gameSocketMap.get(gameType).size()));
+            List<ServerReceiver> playersInLobby
+                    = new ArrayList<>(//FIXME: questo non va bene
+                            gameSocketMap.get(gameType)
+                                    .subList((gameSocketMap.get(gameType).size()-gameSocketMap.get(gameType).size()%numberOfPlayers),gameSocketMap.get(gameType).size()));
             for(ServerReceiver sr : playersInLobby){
                 PrintWriter out;
                 try {
@@ -59,7 +59,7 @@ public class WaitingRooms {
                     e.printStackTrace();
                     return;
                 }
-                out.println(packet.toJson());
+                out.println(lobbyInfo.toJson());
             }
         }
     }

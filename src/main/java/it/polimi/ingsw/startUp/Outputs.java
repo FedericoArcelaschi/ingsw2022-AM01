@@ -17,7 +17,7 @@ public enum Outputs {
             Not a valid application inputs.\s
             """),
 
-    START("Welcome to Eriantys v2.0 "),
+    START("Welcome to Eriantys v2.3 -better messages-"),
 
     HELP("""
               ");

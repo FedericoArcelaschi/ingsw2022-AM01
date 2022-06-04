@@ -1,4 +1,4 @@
-package it.polimi.ingsw.communication.packet.message;
+package it.polimi.ingsw.communication.message;
 
 /**
  * generalization of messages
@@ -11,8 +11,11 @@ public abstract class Message {
         this.messageType = messageType;
     }
 
-    public MessageType getMessageType() {
+    public MessageType getType() {
         return messageType;
     }
 
+    public String toJson() {
+        return MessageParser.gson.toJson(this, Message.class);
+    }
 }

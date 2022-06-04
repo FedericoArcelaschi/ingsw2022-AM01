@@ -2,10 +2,12 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.communication.ClientState;
 import it.polimi.ingsw.communication.Receiver;
-import it.polimi.ingsw.communication.packet.message.*;
+import it.polimi.ingsw.communication.message.*;
+import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.client.userInterface.UserInterface;
-import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.Error;
+import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
+import it.polimi.ingsw.communication.message.subclasses.Ping;
+import it.polimi.ingsw.communication.message.subclasses.Update;
 
 import java.net.Socket;
 
@@ -21,12 +23,11 @@ public class ClientReceiver extends Receiver {
     }
 
     protected void messageSwitch(Message message) {
-        switch (message.getMessageType()) {
+        switch (message.getType()) {
             case PING -> {
-                Ping ping = (Ping) message;
-                //System.out.println("PONG!");
-                Packet heartbeatToServer = new Packet(ping);
-                out.println(heartbeatToServer.toJson());
+                //TODO: are we interested in keeping the Ping UUID?
+                System.out.println("PONG!");
+                out.println(new Ping().toJson());
                 //TODO: add a timer on a new thread that makes the heart beat two way.
             }
             case UPDATE -> {
