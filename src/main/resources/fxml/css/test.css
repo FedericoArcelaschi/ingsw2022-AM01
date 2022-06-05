@@ -1,5 +1,5 @@
 .castlePane{
-    -fx-background-image: url("/castle/castle.png");
+    -fx-background-image: url("/castle/castle-desaturato.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 290, 675;
     -fx-opacity: 1;
@@ -15,7 +15,7 @@
 }
 
 .island{
-    -fx-background-image: url("/islands/island1.png");
+    -fx-background-image: url("/islands/island-desaturato.png");
     -fx-background-size: 220, 220;
     -fx-background-position: center center;
     -fx-background-repeat: stretch;

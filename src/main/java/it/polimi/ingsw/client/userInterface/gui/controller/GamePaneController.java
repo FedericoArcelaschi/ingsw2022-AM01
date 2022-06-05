@@ -12,14 +12,13 @@ import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 import java.util.*;
 
 public class GamePaneController {
+    @FXML public BorderPane castlePane0;
+    @FXML public HBox castleTabHBox;
     @FXML private Pane turnPane;
     @FXML private Pane greenDRPane, redDRPane, blueDRPane, yellowDRPane, pinkDRPane, waitingRoomPane, teacherTablePane, towerPane;
     @FXML private HBox islandRow1, islandRow2;
@@ -40,7 +39,18 @@ public class GamePaneController {
     }
 
     public void draw(BoardData boardData) {
-        drawCastle(boardData.getMyCastle());
+        drawCastle(boardData.getMyCastle(), castlePane0);
+        int i;
+        for (i = 0; i <boardData.getOtherCastles().size()+1; i++) {
+            VBox vbox = (VBox) castleTabHBox.getChildren().get(i);
+            BorderPane borderPane = (BorderPane) vbox.getChildren().get(1);
+            drawCastle( i == 0? boardData.getMyCastle() : boardData.getOtherCastles().get(i-1), borderPane);
+        }
+        for (; i<4; i++) {
+            VBox vbox = (VBox) castleTabHBox.getChildren().get(i);
+            BorderPane borderPane = (BorderPane) vbox.getChildren().get(1);
+            borderPane.setVisible(false);
+        }
         drawClouds(boardData.getCloudList());
         drawIslands(boardData.getIslandList(), boardData.getMotherNaturePosition());
         drawCards(boardData.getMyCastle().getDeck());
@@ -58,16 +68,21 @@ public class GamePaneController {
         }
     }
     
-    private void drawCastle(CastleData castleData) {
-        drawWaitingRoom(castleData.getWaitingRoom());
+    private void drawCastle(CastleData castleData, BorderPane castle) {
+        Pane waitingRoomPane = (Pane) castle.getBottom();
+        Pane towerPane = (Pane) castle.getTop();
+        Pane teacherTabelPane = (Pane) ((VBox) castle.getCenter()).getChildren().get(0);
+        Pane diningRoomPane = (Pane) ((VBox) castle.getCenter()).getChildren().get(1);
+
+        drawWaitingRoom(castleData.getWaitingRoom(),waitingRoomPane);
         //drawDiningRoom(castleData.getDiningRoom());
-        drawTeachers(castleData.getTeachers());
-        drawTower(castleData.getTowerColor(), castleData.getnTower());
+        drawTeachers(castleData.getTeachers(), teacherTabelPane);
+        drawTower(castleData.getTowerColor(), castleData.getnTower(), towerPane);
     }
 
-    private void drawWaitingRoom(List<StudentColor> waitingRoom) {
+    private void drawWaitingRoom(List<StudentColor> waitingRoom, Pane waitingRoomPane) {
         for (int i = 0; i < waitingRoom.size(); i++) {
-            setStudentButtonColor((ToggleButton) waitingRoomToggleGroup.getToggles().get(i), waitingRoom.get(i));
+            setStudentButtonColor((ToggleButton) waitingRoomPane.getChildren().get(i), waitingRoom.get(i));
         }
     }
 
@@ -79,7 +94,7 @@ public class GamePaneController {
         }
     }
 
-    private void drawTeachers(List<StudentColor> teachers){
+    private void drawTeachers(List<StudentColor> teachers, Pane teacherTablePane){
         for (int i=0; i<teacherTablePane.getChildren().size(); i++){
             Node node = teacherTablePane.getChildren().get(i);
             ToggleButton teacher = (ToggleButton) node;
@@ -134,7 +149,7 @@ public class GamePaneController {
     }
 
     //FIXME: in case of 3 players towers must be 6 in total
-    private void drawTower(Team towerColor, int usedTowers){
+    private void drawTower(Team towerColor, int usedTowers, Pane towerPane){
         for (int i = usedTowers; i < towerPane.getChildren().size(); i++) {
             Node node = towerPane.getChildren().get(i);
             ToggleButton toggleButton = (ToggleButton) node;

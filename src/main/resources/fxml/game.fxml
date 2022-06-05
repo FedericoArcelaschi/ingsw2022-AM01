@@ -323,15 +323,12 @@
                      </bottom>
                   </BorderPane>
                </center>
-               <stylesheets>
-                  <URL value="@css/test.css" />
-               </stylesheets>
             </BorderPane>
          </content>
       </Tab>
       <Tab text="Castle">
          <content>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox prefHeight="100.0" prefWidth="200.0"  fx:id="castleTabHBox">
                <!-- FIXME: secondary tab not inherit css -->
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0">
@@ -879,4 +876,7 @@
          </content>
       </Tab>
    </tabs>
+   <stylesheets>
+      <URL value="@css/test.css" />
+   </stylesheets>
 </TabPane>
