@@ -19,25 +19,25 @@ public class ExpertIslandData extends IslandData {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for (StudentColor student : getStudents().keySet()) {
-            if (getStudents().get(student) > 0) {
+        for (StudentColor student : students.keySet()) {
+            if (students.get(student) > 0) {
                 s.append(" ")
                         .append(student.toStringColored())
                         .append(" ")
-                        .append(getStudents().get(student))
+                        .append(students.get(student))
                         .append(", ");
             }
         }
 
         s.append(isBlocked ? "This island is blocked!" : "");
 
-        if (getOwnership() == null) {
+        if (ownership == null) {
             s.append("no towers");
         } else {
-            s.append(getIslandSize()) //TODO: here could color all this part to the team color!
+            s.append(islandSize) //TODO: here could color all this part to the team color!
                     .append(" ")
-                    .append(getOwnership())
-                    .append((getIslandSize() > 1) ? " towers" : " tower");
+                    .append(ownership)
+                    .append((islandSize > 1) ? " towers" : " tower");
         }
         return s.toString();
     }

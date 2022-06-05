@@ -26,34 +26,35 @@ public class ExpertCastleData extends CastleData {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("\n\t\tStudents in waiting room: ");
-        for (StudentColor student : waitingRoom()) {
+        for (StudentColor student : waitingRoom) {
             s.append(student.toStringColored());
             s.append(", ");
         }
         removesComma(s);
         s.append("\n\t\tStudents in dining room: ");
-        for (StudentColor student : diningRoom().keySet()) {
+        for (StudentColor student : diningRoom.keySet()) {
             s.append(student.toStringColored());
             s.append(": ");
-            s.append(diningRoom().get(student));
+            s.append(diningRoom.get(student));
             s.append(", ");
         }
         removesComma(s);
-        if (isMyCastle()) {
+        s.append("\n\t\tCoins: ").append(coins);
+        if (isMyCastle) {
             s.append("\n\t\tAvailable Cards: ");
             for (String card : deck())
                 s.append(card).append(", ");
             removesComma(s);
-            if (lastPlayedCard() != null)
-                s.append("\n\t\tThe last card you played is: ").append(lastPlayedCard());
+            if (lastPlayedCard != null)
+                s.append("\n\t\tThe last card you played is: ").append(lastPlayedCard);
             else
                 s.append("\n\t\tYou didn't played any card yet.");
         } else if (lastPlayedCard() != null)
-            s.append("\n\t\tThe last played card is: ").append(lastPlayedCard());
+            s.append("\n\t\tThe last played card is: ").append(lastPlayedCard);
         else
             s.append("\n\t\tThe player has not played any card yet.");
         s.append("\n\t\tTeam: ");
-        s.append(towerColor());
+        s.append(towerColor);
         return s.toString();
     }
 

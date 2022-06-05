@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -46,12 +47,23 @@ class BoardDataTest {
         System.out.println("\u001b[40;31m test TEST \u001b[0m");
     }
 
-
     @Test
     void CastleDataTest() { //with Maps!!
         BoardData boardData = ModelDataBuilder.newBoardData("pippo", new Board("pippo", "pluto", new Turn(List.of("pippo", "pluto")), RandomGenerator.getDefault().nextLong()));
         String Json = new Gson().toJson(boardData);
         BoardData boardDataDeserialized = new Gson().fromJson(Json, BoardData.class);
         Assertions.assertEquals(boardData, boardDataDeserialized);
+    }
+
+    @Test
+    void ExpertBoardDataTest() {
+        BoardData boardData = ModelDataBuilder.newExpertBoardData("lore",
+                new ExpertBoard("lore", "gio", "fede",
+                        new Turn(List.of("lore", "gio", "fede")),
+                        RandomGenerator.getDefault().nextLong()));
+
+        String Json = new Gson().toJson(boardData);
+        BoardData boardDataDeserialized = new Gson().fromJson(Json, BoardData.class);
+        System.out.println(boardDataDeserialized);
     }
 }

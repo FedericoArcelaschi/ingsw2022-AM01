@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class IslandData {
-    private final Team ownership;
-    private final EnumMap<StudentColor, Integer> students;
-    private final int islandSize;
+    protected final Team ownership;
+    protected final EnumMap<StudentColor, Integer> students;
+    protected final int islandSize;
 
     public IslandData(Team ownership, EnumMap<StudentColor, Integer> students, int islandSize) {
         this.ownership = ownership;

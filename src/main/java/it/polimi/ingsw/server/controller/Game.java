@@ -91,7 +91,7 @@ public class Game {
     private void sendAllUpdate() {
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
-            Message message = new Update(ModelDataBuilder.newBoardData(username, board)); //FIXME: in questa classe mi sembra ci sia un tot di codice ripetutto o sbalgio?
+            Message message = new Update(gameType.expertMode ? ModelDataBuilder.newExpertBoardData(username, board) : ModelDataBuilder.newBoardData(username, board)); //FIXME: in questa classe mi sembra ci sia un tot di codice ripetutto o sbalgio?
             send(message, usernameSocketMap.get(username));
         }
     }

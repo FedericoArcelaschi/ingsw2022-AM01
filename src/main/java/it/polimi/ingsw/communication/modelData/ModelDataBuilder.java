@@ -12,6 +12,7 @@ import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardChar
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public abstract class ModelDataBuilder {
@@ -35,7 +36,9 @@ public abstract class ModelDataBuilder {
         //TODO: this null is awful to look at. For now it works; find a better way regardless.
         List<CharacterData> characters = null;
         try {
-            characters = board.getAvailableCharacterCards().stream().map(ModelDataBuilder::newCharacterData).toList();
+            System.out.println(board.getAvailableCharacterCards());
+            characters = board.getAvailableCharacterCards().stream().filter(Objects::nonNull).map(ModelDataBuilder::newCharacterData).toList();
+            System.out.println(characters);
         } catch (NotTheRightGamemodeException e) {
             e.printStackTrace();
         }

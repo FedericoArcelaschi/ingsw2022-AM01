@@ -6,13 +6,13 @@ import it.polimi.ingsw.server.model.baseLogic.Team;
 import java.util.*;
 
 public class CastleData {
-    private final String username;
-    private final List<StudentColor> waitingRoom;
-    private final EnumMap<StudentColor, Integer> diningRoom;
-    private final List<String> deck;
-    private final String lastPlayedCard;
-    private final Team towerColor;
-    private final boolean isMyCastle;
+    protected final String username;
+    protected final List<StudentColor> waitingRoom;
+    protected final EnumMap<StudentColor, Integer> diningRoom;
+    protected final List<String> deck;
+    protected final String lastPlayedCard;
+    protected final Team towerColor;
+    protected final boolean isMyCastle;
 
     public CastleData(String username, List<StudentColor> waitingRoom, EnumMap<StudentColor, Integer> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, boolean isMyCastle) {
         this.username = username;
