@@ -232,13 +232,12 @@ public class Game {
     }
 
     private void sendWinUpdate(Team t){
-        Gson parser = new Gson();
         for (String username: usernameSocketMap.keySet()) {
             PrintWriter out = null;
             Message winner = new WinUpdate(ModelDataBuilder.newBoardData(username, board), t.name());
             send(winner, usernameSocketMap.get(username));
             Message gameOver = new EndGame("Game over. Changing state...");
-            send(gameOver, usernameSocketMap.get(username));//FIXME: qui non si capisce cosa succede idk
+            send(gameOver, usernameSocketMap.get(username)); //FIXME: qui non si capisce cosa succede idk
         }
     }
 

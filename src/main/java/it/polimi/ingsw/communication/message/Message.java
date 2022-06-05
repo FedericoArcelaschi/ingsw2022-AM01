@@ -1,8 +1,12 @@
 package it.polimi.ingsw.communication.message;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.JsonAdapter;
+
 /**
  * generalization of messages
  */
+@JsonAdapter(MessageAdapterSerDes.class)
 public abstract class Message {
 
     protected final MessageType messageType;
@@ -16,6 +20,6 @@ public abstract class Message {
     }
 
     public String toJson() {
-        return MessageParser.gson.toJson(this, Message.class);
+        return new Gson().toJson(this, Message.class);
     }
 }

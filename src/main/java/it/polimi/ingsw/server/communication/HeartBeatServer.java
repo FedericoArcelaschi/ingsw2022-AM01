@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.communication;
 
-import it.polimi.ingsw.communication.message.MessageParser;
 import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.Ping;
 

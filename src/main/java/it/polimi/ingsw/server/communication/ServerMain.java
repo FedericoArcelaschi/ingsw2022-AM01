@@ -1,12 +1,11 @@
 package it.polimi.ingsw.server.communication;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import it.polimi.ingsw.communication.message.Message;
-import it.polimi.ingsw.communication.message.MessageParser;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
-import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -127,7 +126,7 @@ public class ServerMain implements Runnable {
         }
         Preferences preferences;
         try {
-            preferences = (Preferences) MessageParser.gson.fromJson(input, Message.class);
+            preferences = (Preferences) new Gson().fromJson(input, Message.class);
         } catch(JsonParseException e) {
             System.err.println("not a preference packet!!");
             e.printStackTrace();

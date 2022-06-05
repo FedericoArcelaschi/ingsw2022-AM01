@@ -4,7 +4,7 @@ import it.polimi.ingsw.communication.modelData.BoardData;
 
 public class WinUpdate extends Update {
 
-    private final String winner;
+    private final String winner; //FIXME: this should contain e Team Type.
 
     public WinUpdate(BoardData boardData, String winner) {
         super(boardData);
