@@ -31,12 +31,12 @@ public class ExpertBoardData extends BoardData {
         StringBuilder s = new StringBuilder();
         //print island
         s.append("Islands: ");
-        for (int i = 0; i < super.islandList().size(); i++) {
+        for (int i = 0; i < super.islandList.size(); i++) {
             s.append("\n\tIsland ")
                     .append( i + 1 )
                     .append(": ")
-                    .append(super.islandList().get(i));
-            if (i == motherNaturePosition()) s.append(", mother nature is Here!");
+                    .append(super.islandList.get(i));
+            if (i == motherNaturePosition) s.append(", mother nature is Here!");
         }
         //Print characters
         s.append("\nCharacters:");
@@ -45,20 +45,20 @@ public class ExpertBoardData extends BoardData {
         }
         //Print cloud
         s.append("\nClouds: ");
-        for (int i = 0; i < cloudList().size(); i++)
+        for (int i = 0; i < cloudList.size(); i++)
             s       .append("\n\tCloud ")
                     .append(i + 1)
                     .append(" contains: ")
-                    .append(cloudList().get(i));
+                    .append(cloudList.get(i));
         //Print other castles
         s.append("\nOther Player castles:");
-        for (CastleData otherCastle : otherCastles())
+        for (CastleData otherCastle : otherCastles)
             s.append("\n\tCastle ").append(otherCastle.username()).append(": ").append(otherCastle);
         //Print turn
-        s.append("\nTurn: ").append(turn());
+        s.append("\nTurn: ").append(turn);
         //Print my castle with the hand of cards
         s.append("\nMy Castle:");
-        s.append("\n\tCastle ").append(username()).append(": ").append(myCastle());
+        s.append("\n\tCastle ").append(username).append(": ").append(myCastle);
         return s.toString();
     }
 

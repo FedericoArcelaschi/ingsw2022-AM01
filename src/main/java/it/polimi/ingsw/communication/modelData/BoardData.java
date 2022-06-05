@@ -7,14 +7,14 @@ import java.util.Objects;
  * A representation of the model containing only data useful for the clients
  */
 public class BoardData {
-    private final String username;
-    private final int nPlayer;
-    private final int motherNaturePosition;
-    private final List<CloudData> cloudList;
-    private final List<IslandData> islandList;
-    private final CastleData myCastle;
-    private final List<CastleData> otherCastles;
-    private final TurnData turn;
+    protected final String username;
+    protected final int nPlayer;
+    protected final int motherNaturePosition;
+    protected final List<CloudData> cloudList;
+    protected final List<IslandData> islandList;
+    protected final CastleData myCastle;
+    protected final List<CastleData> otherCastles;
+    protected final TurnData turn;
 
     /**
      */

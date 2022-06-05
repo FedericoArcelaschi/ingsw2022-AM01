@@ -14,6 +14,7 @@ import java.util.Map;
 
 public class WaitingRooms {
     private final Map<GameType, List<ServerReceiver>> gameSocketMap = new HashMap<>();
+    private final Map<String, Integer> duplicateNames = new HashMap<>();
 
     public WaitingRooms() {
         for(GameType g : GameType.values()) {
@@ -34,6 +35,12 @@ public class WaitingRooms {
      * @throws IOException
      */
     public void addPlayer(GameType gameType, ServerReceiver serverReceiver) {
+        if (!duplicateNames.containsKey(serverReceiver.getUsername())){
+            duplicateNames.put(serverReceiver.getUsername(), 0);
+        } else {
+            duplicateNames.merge(serverReceiver.getUsername(), 1, Integer::sum);
+            serverReceiver.setUsername(serverReceiver.getUsername()+duplicateNames.get(serverReceiver.getUsername()));
+        }
         gameSocketMap.get(gameType).add(serverReceiver);
         informPlayers(gameType, gameType.nPlayer);
     }

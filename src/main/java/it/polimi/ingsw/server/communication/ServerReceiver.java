@@ -15,7 +15,7 @@ public class ServerReceiver extends Receiver {
 
     private final HeartBeatServer hbs;
     private Game game;
-    private final String username;
+    private String username;
 
     public ServerReceiver (Socket socket, HeartBeatServer hbs, String username) {
         super(null, socket);
@@ -48,6 +48,10 @@ public class ServerReceiver extends Receiver {
 
     public void setGame(Game game){
         this.game = game;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Game getGame(){

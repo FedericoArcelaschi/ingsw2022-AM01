@@ -67,5 +67,6 @@ class BoardDataTest {
         String Json = new Gson().toJson(boardData);
         BoardData boardDataDeserialized = new Gson().fromJson(Json, ExpertBoardData.class);
         System.out.println(boardDataDeserialized);
+        Assertions.assertEquals(boardData, boardDataDeserialized);
     }
 }

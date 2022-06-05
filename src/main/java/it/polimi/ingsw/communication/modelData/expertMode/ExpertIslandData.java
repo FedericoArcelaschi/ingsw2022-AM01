@@ -29,7 +29,7 @@ public class ExpertIslandData extends IslandData {
             }
         }
 
-        s.append(isBlocked ? "This island is blocked!" : "");
+        s.append(isBlocked ? ", this island is blocked!" : "");
 
         if (ownership == null) {
             s.append("no towers");

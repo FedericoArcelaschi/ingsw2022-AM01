@@ -40,6 +40,8 @@ public abstract class ModelDataBuilder {
         } catch (NotTheRightGamemodeException e) {
             e.printStackTrace();
         }
+        //TODO: newExpertIslandData and newExpertCastleData return base game castles and islands... needs a fix
+        System.out.println("At least it uses this, right?");
         return new ExpertBoardData(
                 username,
                 board.getNPlayer(),
