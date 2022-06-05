@@ -61,7 +61,7 @@ public class Gui extends Application implements UserInterface {
             b.playCard("gio", 10);
             b.changePhase();
             b.moveStudentsToDiningRoom("fede", b.getCastle("fede").getWaitingRoom().subList(0,2));
-            b.moveStudentToIsland("fede", 2, b.getCastle("fede").getWaitingRoom().subList(0,1));
+            b.moveStudentToIsland("fede", 1, b.getCastle("fede").getWaitingRoom().subList(0,1));
             b.changePhase();
             //b.moveMotherNature(1);
         } catch (PhaseNotRightException | NotYourTurnException | NoSuchStudentException | TooManyStudentsException e) {
