@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.startUp.Outputs;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,14 +35,15 @@ public class Cli implements UserInterface {
                 String input = br.readLine();
                 clientMain.runCommand(input);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.err.println(e.getMessage());
+                //throw new RuntimeException(e);
             }
         }
     }
 
     @Override
-    public void draw (BoardData boardData) { //TODO: il problema è che forse non può fare questo se sta leggendo da input.
-        System.out.println(boardData.toString());
+    public void draw (BoardData boardData) {
+        System.out.println("\r" + boardData.toString());
     }
 
     /**
@@ -94,6 +96,7 @@ public class Cli implements UserInterface {
             return getValidPreferences();
         }
         try {
+            System.out.println(Outputs.CLEAR_SCREEN);
             return new Preferences(username, nPlayer, expertMode);
         } catch (IllegalAccessException e) {
             System.err.println(e.getMessage());

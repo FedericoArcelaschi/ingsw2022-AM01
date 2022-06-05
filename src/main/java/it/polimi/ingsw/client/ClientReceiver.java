@@ -11,6 +11,8 @@ import it.polimi.ingsw.communication.message.subclasses.Update;
 
 import java.net.Socket;
 
+import static it.polimi.ingsw.startUp.Outputs.CLEAR_SCREEN;
+
 /**
  * Allow the client to receive packets from the server socket and handle them.
  */
@@ -30,13 +32,16 @@ public class ClientReceiver extends Receiver {
                 //TODO: add a timer on a new thread that makes the heart beat two way.
             }
             case UPDATE -> {
+                System.out.println(CLEAR_SCREEN);
                 Update update = (Update) message;
                 //print data without saving it anywhere
                 userInterface.draw(update.getBoardData());
                 cm.setState(ClientState.GAME);
             }
             case LOBBYINFO -> {
+                System.out.println(CLEAR_SCREEN);
                 LobbyInfo lobbyInfoMessage = (LobbyInfo) message;
+                System.out.println("\r");
                 userInterface.printWaitingRoom(lobbyInfoMessage.getPlayers(), lobbyInfoMessage.getGameType());
             }
             case END -> cm.setState(ClientState.GAME_ENDED);

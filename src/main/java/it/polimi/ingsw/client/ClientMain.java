@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.ClientState;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.CommandMessage;
@@ -56,7 +55,7 @@ public class ClientMain {
 
     public void runCommand(String stringCommand) {
         if(stringCommand.strip().equalsIgnoreCase("help"))  {
-            System.out.println(Outputs.HELP.out);
+            System.out.println(Outputs.HELP);
             return;
         }
         if (socket == null || socket.isClosed()) {

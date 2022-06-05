@@ -20,7 +20,7 @@ public enum GameType {
         for (GameType gameType : GameType.values())
             if((nPlayer == gameType.nPlayer) && (expertMode == gameType.expertMode))
                 return gameType;
-        throw new IllegalArgumentException("not a valid game type");
+        throw new IllegalArgumentException("Not a valid game type");
     }
 
     @Override

@@ -99,9 +99,11 @@ public class Command {
     }
 
     public String toString(){
-        StringBuilder attribute = new StringBuilder();
-        for(String a : attributesMap.values()) attribute.append(" ").append(a);
-        //FIXME: don't think was required return type.getCommandString() + attribute;
-        return attribute.toString();
+        StringBuilder output = new StringBuilder();
+        for(CommandAttribute a : attributesMap.keySet()) {
+            output.append(a);
+            output.append(attributesMap.get(a));
+        }
+        return "type "+ type + " " + output;
     }
 }
