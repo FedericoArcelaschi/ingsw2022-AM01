@@ -54,6 +54,7 @@ public class GuiDrawer {
         for (int i = 0; i < islandList.size(); i++) {
             IslandData islandData = islandList.get(i);
             Pane pane = paneList.get(i);
+            //Adding students
             for (StudentColor student : islandData.getStudents()) {
                 ToggleButton toggleButton = new ToggleButton();
                 toggleButton.getStyleClass().add("student");
@@ -68,6 +69,16 @@ public class GuiDrawer {
                 toggleButton.getStyleClass().add("motherNature");
                 toggleButton.setDisable(true);
                 toggleButton.setPrefSize(35, 35);
+                FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
+                flowPane.getChildren().add(toggleButton);
+            }
+            //Adding towers
+            for (int j = 0; j < islandData.getIslandSize() && islandData.getOwnership() != null; j++) {
+                ToggleButton toggleButton = new ToggleButton();
+                toggleButton.getStyleClass().add("tower");
+                toggleButton.setDisable(true);
+                toggleButton.setPrefSize(35, 35);
+                setTowerButtonColor(toggleButton, islandData.getOwnership());
                 FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
                 flowPane.getChildren().add(toggleButton);
             }
