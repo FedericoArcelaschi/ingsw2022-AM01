@@ -57,7 +57,7 @@ public abstract class ModelDataBuilder {
     }
 
     private static CharacterData newCharacterData(StandardCharacter character){
-        return new CharacterData(character);
+        return new CharacterData(character.getName(), character.getCost());
     }
 
     private static CloudData newCloudData(Cloud cloud) {

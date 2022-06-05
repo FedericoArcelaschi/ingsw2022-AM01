@@ -6,14 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CharacterData {
-    private StandardCharacter character;
+    private String name;
+    private int cost;
 
-    public CharacterData(StandardCharacter character){
-        this.character = character;
+    public CharacterData(String name, int cost){
+        this.name = name;
+        this.cost = cost;
     }
 
     @Override
     public String toString(){
-        return character.getName() + ", cost: " + character.getCost();
+        return name + ", cost: " + cost;
     }
 }
