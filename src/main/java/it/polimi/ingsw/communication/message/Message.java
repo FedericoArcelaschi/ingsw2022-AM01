@@ -6,7 +6,7 @@ import com.google.gson.annotations.JsonAdapter;
 /**
  * generalization of messages
  */
-@JsonAdapter(MessageAdapterSerDes.class)
+@JsonAdapter(MessageAdapterGson.class)
 public abstract class Message {
 
     protected final MessageType messageType;
