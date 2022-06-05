@@ -18,6 +18,8 @@ public class Command {
         this.type = type;
         this.attributesMap = new HashMap<>();
         this.username = username;
+        if(Arrays.stream(attributes).toList().size() < 0)
+            throw new IllegalArgumentException(" needed X arguments. actual: 0");
         switch (type) {
             case PLAY_CARD -> attributesMap.put(CommandAttribute.ID, attributes[0]);
             //e.g.: playcard 1
@@ -61,7 +63,7 @@ public class Command {
         }
     }
 
-    public static Command createCommand(String username, String command) throws IllegalArgumentException {
+    public static Command createCommand(String username, String command) {
         String[] splitCommand = command.split(" ");
         //TODO: ct = getCommandString(splitCommand[0])
         CommandType commandType = getCommandType(splitCommand[0]);

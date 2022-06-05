@@ -5,21 +5,18 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertCastleData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
-import it.polimi.ingsw.server.model.exceptions.NotTheRightGamemodeException;
-import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
+import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public abstract class ModelDataBuilder {
     public static BoardData newBoardData(String username, Board board){
         return new BoardData(
                 username,
-                board.getNPlayer(),
+                board.getCloudList().size(),
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(ModelDataBuilder::newIslandData).toList(),
@@ -37,14 +34,14 @@ public abstract class ModelDataBuilder {
         List<CharacterData> characters = null;
         try {
             characters = board.getAvailableCharacterCards().stream().filter(Objects::nonNull).map(ModelDataBuilder::newCharacterData).toList();
-        } catch (NotTheRightGamemodeException e) {
+        } catch (NotTheRightGameModeException e) {
             e.printStackTrace();
         }
         //TODO: newExpertIslandData and newExpertCastleData return base game castles and islands... needs a fix
         System.out.println("At least it uses this, right?");
         return new ExpertBoardData(
                 username,
-                board.getNPlayer(),
+                board.getCloudList().size(),
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(ModelDataBuilder::newExpertIslandData).toList(),
@@ -74,7 +71,7 @@ public abstract class ModelDataBuilder {
         Boolean blocked = null;
         try{
             blocked = island.isBlocked();
-        } catch (NotTheRightGamemodeException e) {
+        } catch (NotTheRightGameModeException e) {
             e.printStackTrace();
         }
         return new ExpertIslandData(island.getOwnership(), island.getStudents(), island.getIslandNumber(), Boolean.TRUE.equals(blocked));
@@ -98,7 +95,7 @@ public abstract class ModelDataBuilder {
         Integer coins = null;
         try {
             coins = castle.getCoins();
-        } catch (NotTheRightGamemodeException e) {
+        } catch (NotTheRightGameModeException e) {
             e.printStackTrace();
         }
         return new ExpertCastleData(
