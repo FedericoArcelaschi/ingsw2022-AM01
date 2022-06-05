@@ -27,8 +27,8 @@ public class Game {
     private final Turn turn;
     private final Map<String, Socket> usernameSocketMap;
     private final Map<String, ServerReceiver> usernameServerReceiverMap;
-    //TODO: there could be a better way of doing this. The parameter is used to ensure that the player can move students
-    //TODO: more times per turn.
+    // TODO: there could be a better way of doing this. The parameter is used to ensure that the player can move students
+    // TODO: more times per turn.
     private int movedStudents;
 
     public Game(GameType gameType, List<ServerReceiver> gameSocketList) {
@@ -125,11 +125,9 @@ public class Game {
     }
 
     private void moveStudentToDiningRoomCommand(@NotNull Command command){
-        //Here for now I assume that the list of students in input is
-        //given as a single string of Color separated by commas.
-        //Needs to be changed accordingly if the convention changes.
-
-        //List of students in the command
+        // Here for now I assume that the list of students in input is
+        // given as a single string of Color separated by commas.
+        // Needs to be changed accordingly if the convention changes.
         List<StudentColor> students = getStudentsFromCommand(command.getAttributesMap().get(CommandAttribute.WHAT));
         movedStudents += students.size();
 
@@ -153,8 +151,6 @@ public class Game {
         }
         else {
             try {
-                //The -1 is needed because islands are indexed starting from 0; if the player inputs 1 the chosen island
-                //becomes the first one, which is island number 0.
                 board.moveStudentToIsland(command.getUsername(), Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE)) - 1, students);
                 if (movedStudents == 3) {
                     movedStudents = 0;
@@ -246,7 +242,7 @@ public class Game {
         }
     }
 
-    private List<StudentColor> getStudentsFromCommand(String string){
+    private List<StudentColor> getStudentsFromCommand(String string) { //FIXME this should go in the command
         List<String> studentList =  new ArrayList<>(Arrays.asList(string.split(",")));
         List<StudentColor> students = new ArrayList<>();
         StudentColor color;

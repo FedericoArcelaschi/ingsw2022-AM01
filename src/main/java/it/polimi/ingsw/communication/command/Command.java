@@ -66,6 +66,7 @@ public class Command {
         //TODO: ct = getCommandString(splitCommand[0])
         CommandType commandType = getCommandType(splitCommand[0]);
         return new Command(username, commandType, Arrays.copyOfRange(splitCommand, 1, splitCommand.length));
+        //FIXME : spiegare a Giovanni l'utilità di un metodi Constructor statico
         //StringBuilder stringBuilder = new StringBuilder();
         //stringBuilder.append(splitCommand[0]).append(" is not a valid command type, available commands are:\n");
         //for (CommandType ct : CommandType.values()) {

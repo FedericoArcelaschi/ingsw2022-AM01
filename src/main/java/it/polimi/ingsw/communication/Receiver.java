@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * abstract class that is able to receive packets from a socket.
+ * Receives messages from a socket.
  */
 public abstract class Receiver implements Runnable{
     protected final Socket socket;

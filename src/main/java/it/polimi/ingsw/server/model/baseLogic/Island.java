@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
-import it.polimi.ingsw.server.model.exceptions.NotTheRightGamemodeException;
+import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
 
 import java.util.EnumMap;
 
@@ -43,8 +43,8 @@ public class Island implements StudentPlaces {
         return this;
     }
 
-    public boolean isBlocked() throws NotTheRightGamemodeException {
-        throw new NotTheRightGamemodeException("You can't use this command now.");
+    public boolean isBlocked() throws NotTheRightGameModeException {
+        throw new NotTheRightGameModeException("You can't use this command now.");
     }
 
     /**
