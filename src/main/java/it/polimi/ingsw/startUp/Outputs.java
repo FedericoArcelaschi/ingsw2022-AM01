@@ -20,17 +20,16 @@ public enum Outputs {
     START("Welcome to Eriantys v2.3 -better messages-"),
 
     HELP("""
-              ");
-              System.out.println(
-            ();"available actions are:    -> plays the Nth assistant card
-              \tChooseCloud N           -> chooses the Nth cloud
-              \tMoveStudentCastle C,...C-> moves the requested students to your castle's dining room
-              \tMoveStudentIsland N C..C-> moves the requested students to the Nth island 
-              \tMoveMotherNature  N     -> moves mother nature of N steps clockwise
-              \t[ for expert mode only ]
-              \tPayChar NAME [N] [C]    -> pays for the requested character
-              \tMore NAME               -> further informations about expert characters effects
-              \t\tnote: N->number, C->color, capitalization is not required\s"""),
+          available actions are:
+          \tPlayCard N              -> plays the Nth assistant card
+          \tChooseCloud N           -> chooses the Nth cloud
+          \tMoveStudentCastle C,...C-> moves the requested students to your castle's dining room
+          \tMoveStudentIsland N C..C-> moves the requested students to the Nth island 
+          \tMoveMotherNature  N     -> moves mother nature of N steps clockwise
+          \t[ for expert mode only: ]
+          \tPayChar NAME [N] [C]    -> pays for the requested character
+          \tMore NAME               -> further informations about expert characters effects
+          \t\tnote: N->number, C->color, capitalization is not required\n\s"""),//TODO: add a full rulebook
     INFO_LOBBY_TEST(
 """
 --> %8s in sting formatter

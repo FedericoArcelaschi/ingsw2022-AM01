@@ -159,7 +159,7 @@ public class Game {
                     movedStudents = 0;
                     turn.changePhase();
                 }
-            } catch (NoSuchStudentException e) { //fixme e.getmessage()
+            } catch (NoSuchStudentException e) { //FIXME e.getmessage()
                 send(createError(0, "There aren't enough students!"), usernameSocketMap.get(command.getUsername()));
             } catch (NotYourTurnException e) {
                 send(createError(0, "It's not your turn yet!"), usernameSocketMap.get(command.getUsername()));

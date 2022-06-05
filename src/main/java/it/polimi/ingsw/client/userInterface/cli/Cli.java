@@ -50,13 +50,13 @@ public class Cli implements UserInterface {
     @Override
     public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
         //TODO: print a nicier view of the lobby
-        StringBuilder sb = new StringBuilder();
-        sb.append("Player in queue: \n");
-        sb.append("Game type: ").append(gameType).append("\n");
+        StringBuilder input = new StringBuilder();
+        input.append("Player in queue: \n");
+        input.append("Game type: ").append(gameType).append("\n");
         for (String user : connectedUser) {
-            sb.append("\t").append(user).append("\n");
+            input.append("\t").append(user).append("\n");
         }
-        System.out.println(sb);
+        System.out.println(input);
     }
     /**
      * Before opening the connection with the server the client requires to insert the preferences.

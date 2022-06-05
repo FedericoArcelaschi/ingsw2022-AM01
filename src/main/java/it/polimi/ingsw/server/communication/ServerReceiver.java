@@ -25,10 +25,7 @@ public class ServerReceiver extends Receiver {
 
     protected void messageSwitch (Message message) {
         switch (message.getType()){
-            case PING -> {
-                System.out.println("PING!");
-                hbs.validateResponse(message);
-            }
+            case PING -> hbs.validateResponse(message);
             case COMMAND -> {
                  CommandMessage commandMessage = (CommandMessage) message;
                  Command command = commandMessage.getCommand();

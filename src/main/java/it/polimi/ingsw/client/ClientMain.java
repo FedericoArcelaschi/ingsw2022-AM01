@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.communication.ClientState;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.CommandMessage;
+import it.polimi.ingsw.startUp.Outputs;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -54,6 +55,10 @@ public class ClientMain {
     }
 
     public void runCommand(String stringCommand) {
+        if(stringCommand.strip().equalsIgnoreCase("help"))  {
+            System.out.println(Outputs.HELP.out);
+            return;
+        }
         if (socket == null || socket.isClosed()) {
             return;
         }
@@ -66,7 +71,6 @@ public class ClientMain {
                 System.err.println(e.getMessage());
                 return;
             }
-
             clientSender.send(commandMessage);
             System.out.println("command sent");
         }

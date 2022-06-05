@@ -26,7 +26,6 @@ public class ClientReceiver extends Receiver {
         switch (message.getType()) {
             case PING -> {
                 //TODO: are we interested in keeping the Ping UUID?
-                //System.out.println("PONG!");
                 out.println(new Ping().toJson());
                 //TODO: add a timer on a new thread that makes the heart beat two way.
             }

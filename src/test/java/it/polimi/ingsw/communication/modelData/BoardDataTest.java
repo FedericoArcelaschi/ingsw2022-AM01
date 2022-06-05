@@ -26,8 +26,8 @@ class BoardDataTest {
 
     @Test
     void toStringColorTest() {
-        StudentColor red = StudentColor.RED;
-        System.out.println(red + " altro22");
+        StudentColor yellow = StudentColor.YELLOW;
+        System.out.println(yellow.toStringColored());
     }
 
     @Test
