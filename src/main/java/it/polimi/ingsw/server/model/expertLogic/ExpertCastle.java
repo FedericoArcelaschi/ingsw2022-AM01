@@ -74,6 +74,7 @@ public class ExpertCastle extends Castle implements StudentPlaces {
             throw new CoinException(price, coins);
     }
 
+    @Override
     public int getCoins() {
         return coins;
     }

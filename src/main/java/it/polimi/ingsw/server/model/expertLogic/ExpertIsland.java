@@ -24,6 +24,7 @@ public class ExpertIsland extends Island implements StudentPlaces {
     public ExpertIsland() {}
 
     //For Witch Effect:
+    @Override
     public boolean isBlocked() {
         return false;
     }

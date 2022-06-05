@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
+import it.polimi.ingsw.server.model.exceptions.NotTheRightGamemodeException;
 
 import java.util.EnumMap;
 
@@ -40,6 +41,10 @@ public class Island implements StudentPlaces {
     public Island setOwnership(Team ownership) {
         this.ownership = ownership;
         return this;
+    }
+
+    public boolean isBlocked() throws NotTheRightGamemodeException {
+        throw new NotTheRightGamemodeException("You can't use this command now.");
     }
 
     /**

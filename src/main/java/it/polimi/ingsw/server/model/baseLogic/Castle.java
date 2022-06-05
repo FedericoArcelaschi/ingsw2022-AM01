@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.server.model.exceptions.NotTheRightGamemodeException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import org.jetbrains.annotations.NotNull;
@@ -136,6 +137,10 @@ public class Castle implements StudentPlaces {
 
     public List<Card> getDeck() {
         return new ArrayList<>(deck);
+    }
+
+    public int getCoins() throws NotTheRightGamemodeException {
+        throw new NotTheRightGamemodeException("You can't use this command in this gamemode.");
     }
 
     @Override
