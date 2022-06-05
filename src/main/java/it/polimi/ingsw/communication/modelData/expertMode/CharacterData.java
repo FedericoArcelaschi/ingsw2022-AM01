@@ -14,8 +14,6 @@ public class CharacterData {
 
     @Override
     public String toString(){
-        StringBuilder s = new StringBuilder();
-        s.append(character.getName()).append(", cost: ").append(character.getCost());
-        return s.toString();
+        return character.getName() + ", cost: " + character.getCost();
     }
 }

@@ -1,10 +1,11 @@
 package it.polimi.ingsw.server.controller;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.communication.message.*;
-import it.polimi.ingsw.communication.message.subclasses.*;
+import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.command.CommandAttribute;
+import it.polimi.ingsw.communication.message.Message;
+import it.polimi.ingsw.communication.message.subclasses.*;
 import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.server.communication.ServerReceiver;
 import it.polimi.ingsw.communication.modelData.BoardData;

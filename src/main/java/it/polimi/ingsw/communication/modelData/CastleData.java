@@ -24,6 +24,10 @@ public class CastleData {
         this.isMyCastle = isMyCastle;
     }
 
+    public boolean getIsMyCastle(){
+        return isMyCastle;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

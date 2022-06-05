@@ -206,6 +206,7 @@ public class ExpertBoard extends Board {
 
 //Getter
 
+    @Override
     public List<StandardCharacter> getAvailableCharacterCards() {
         return expertCharactersCards;
     }

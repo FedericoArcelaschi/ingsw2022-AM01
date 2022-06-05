@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.GreaterTeam;
 import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
 import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
 import it.polimi.ingsw.server.model.exceptions.*;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -390,6 +391,10 @@ public class Board {
     }
 
     public String getCharInfo (int idChar) throws NotTheRightGamemodeException{
+        throw new NotTheRightGamemodeException("You can't use this command in this game mode!");
+    }
+
+    public List<StandardCharacter> getAvailableCharacterCards() throws NotTheRightGamemodeException{
         throw new NotTheRightGamemodeException("You can't use this command in this game mode!");
     }
 
