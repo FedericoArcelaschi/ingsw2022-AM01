@@ -2,15 +2,15 @@ package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.EnumMap;
 
 public class Island implements StudentPlaces {
-    private final Map<StudentColor, Integer> students;
+
+    private final EnumMap<StudentColor, Integer> students;
     private Team ownership;
 
     public Island(StudentColor student) {
-        this.students = new HashMap<>();
+        this.students = new EnumMap<>(StudentColor.class);
         for (StudentColor c : StudentColor.values()) {
             if (c == student) students.put(c, 1);
             else students.put(c, 0);
@@ -19,7 +19,7 @@ public class Island implements StudentPlaces {
     }
 
     public Island() {
-        this.students = new HashMap<>();
+        this.students = new EnumMap<>(StudentColor.class);
         for (StudentColor c : StudentColor.values())
             students.put(c, 0);
         this.ownership = null;
@@ -33,8 +33,8 @@ public class Island implements StudentPlaces {
         return 1;
     }
 
-    public Map<StudentColor, Integer> getStudents() {
-        return new HashMap<>(students);
+    public EnumMap<StudentColor, Integer> getStudents() {
+        return new EnumMap<>(students);
     }
 
     public Island setOwnership(Team ownership) {
@@ -58,7 +58,7 @@ public class Island implements StudentPlaces {
      * @param s Map that contains how many students per color to add
      * @return check boolean
      */
-    public boolean addStudent(Map<StudentColor, Integer> s) {
+    public boolean addStudent(EnumMap<StudentColor, Integer> s) {
         for (StudentColor c : s.keySet()) {
             students.put(c, students.get(c) + s.get(c));
         }

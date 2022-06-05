@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 
-import java.util.Map;
+import java.util.EnumMap;
 
 /**
  * Decorator to ExpertIsland.
@@ -45,7 +45,7 @@ public class BlockedIsland extends ExpertIsland implements StudentPlaces {
 
     //as for normal ExpertIsland.
     @Override
-    public Map<StudentColor, Integer> getStudents() {
+    public EnumMap<StudentColor, Integer> getStudents() {
         return island.getStudents();
     }
 
@@ -55,7 +55,7 @@ public class BlockedIsland extends ExpertIsland implements StudentPlaces {
     }
 
     @Override
-    public boolean addStudent(Map<StudentColor, Integer> s) {
+    public boolean addStudent(EnumMap<StudentColor, Integer> s) {
         return island.addStudent(s);
     }
 

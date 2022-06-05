@@ -10,7 +10,7 @@ import java.util.*;
 public class Castle implements StudentPlaces {
 
     protected final List<StudentColor> waitingRoom;
-    protected final Map<StudentColor, Integer> diningRoom;
+    protected final EnumMap<StudentColor, Integer> diningRoom;
     protected final List<Card> deck;
     protected Card lastPlayedCard;
     protected final Team towerColor;
@@ -25,9 +25,9 @@ public class Castle implements StudentPlaces {
         if (nPlayer == 3) this.waitingRoomSize = waitingRoomSize3Players;
         else this.waitingRoomSize = waitingRoomSize2Players;
         this.waitingRoom = new ArrayList<>(students);
-        this.diningRoom = new HashMap<>();
-        for (StudentColor c : StudentColor.values()) {
-            diningRoom.put(c, 0);
+        this.diningRoom = new EnumMap<>(StudentColor.class);
+        for (StudentColor color : StudentColor.values()) {
+            diningRoom.put(color, 0);
         }
         this.deck = new ArrayList<>();
         this.towerColor = team;
@@ -46,7 +46,7 @@ public class Castle implements StudentPlaces {
         if (waitingRoom.isEmpty())
             x = 0;
         else
-            x = waitingRoom.size();
+            x = waitingRoom.size(); //FIXME: is needed?
         if (students.size() + x > waitingRoomSize)
             throw new TooManyStudentsException("there are already " + waitingRoomSize +
                     " students in the waiting room");
@@ -57,13 +57,13 @@ public class Castle implements StudentPlaces {
     /**
      * Adds a single student to the dining room
      *
-     * @param student color
+     * @param color color
      */
-    public void addStudentInDiningRoom(StudentColor student) throws TooManyStudentsException {
-        if (diningRoom.get(student) == diningRoomSizePerColor) {
-            throw new TooManyStudentsException("THere are already " + diningRoomSizePerColor + " in your diningRoom");
+    public void addStudentInDiningRoom(StudentColor color) throws TooManyStudentsException {
+        if (diningRoom.get(color) == diningRoomSizePerColor) {
+            throw new TooManyStudentsException("There are already " + diningRoomSizePerColor + " " + color + " students  in your diningRoom");
         }
-        diningRoom.put(student, diningRoom.get(student) + 1);
+        diningRoom.put(color, diningRoom.get(color) + 1);
     }
 
     /**
@@ -118,17 +118,12 @@ public class Castle implements StudentPlaces {
             return false;
     }
 
-    public boolean equals(Castle c) {
-        return this.waitingRoom.equals(c.waitingRoom) && this.diningRoom.equals(c.diningRoom)
-                && this.towerColor == c.towerColor;
-    }
-
     public List<StudentColor> getWaitingRoom() {
         return new ArrayList<>(waitingRoom);
     }
 
-    public Map<StudentColor, Integer> getDiningRoom() {
-        return new HashMap<>(diningRoom);
+    public EnumMap<StudentColor, Integer> getDiningRoom() {
+        return new EnumMap<>(diningRoom);
     }
 
     public Team getTeam() {
@@ -152,5 +147,17 @@ public class Castle implements StudentPlaces {
                 ", lastPlayedCard=" + lastPlayedCard +
                 ", towerColor=" + towerColor +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (Castle) obj;
+        return  this.diningRoom == that.diningRoom &&
+                this.waitingRoom == that.waitingRoom &&
+                this.deck == that.deck &&
+                this.lastPlayedCard == that.lastPlayedCard &&
+                this.towerColor == that.towerColor;
     }
 }

@@ -5,17 +5,13 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import java.util.List;
 import java.util.Objects;
 
-public class CloudData {
+public final class CloudData {
     private final List<StudentColor> studentList;
     private final boolean available;
 
     public CloudData(List<StudentColor> studentList, boolean available) {
         this.studentList = studentList;
         this.available = available;
-    }
-
-    public List<StudentColor> getStudentList() {
-        return studentList;
     }
 
     @Override
@@ -29,12 +25,26 @@ public class CloudData {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for (StudentColor student: studentList) {
-            s.append(student);
+        for (StudentColor student : studentList) {
+            s.append(student.toStringColored());
             s.append(", ");
         }
         s.append(available ? "available" : "already taken");
         return s.toString();
     }
+
+    public List<StudentColor> studentList() {
+        return studentList;
+    }
+
+    public boolean available() {
+        return available;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(studentList, available);
+    }
+
 
 }

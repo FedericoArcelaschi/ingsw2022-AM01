@@ -1,4 +1,4 @@
-package it.polimi.ingsw.communication.modelData;
+package it.polimi.ingsw.communication.modelData.expertMode;
 
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 

@@ -32,8 +32,7 @@ public enum StudentColor implements PossibleParameters {
         throw new IllegalArgumentException(s + " is not a valid colorCode name.");
     }
 
-    @Override
-    public String toString() {
+    public String toStringColored() {
         return ESCAPE_CODE + colorCode + "m" + this.name().toLowerCase() + ESCAPE_CODE + "0m";
     }
 

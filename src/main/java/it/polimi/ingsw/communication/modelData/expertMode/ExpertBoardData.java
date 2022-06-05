@@ -1,12 +1,11 @@
-package it.polimi.ingsw.communication.modelData;
+package it.polimi.ingsw.communication.modelData.expertMode;
 
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StudentCharacter;
+import it.polimi.ingsw.communication.modelData.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExpertBoardData extends BoardData{
+public class ExpertBoardData extends BoardData {
 
     //To add: something to represent characters, with their cost and name and a token that says whether the character
     //is active or not.
@@ -32,12 +31,12 @@ public class ExpertBoardData extends BoardData{
         StringBuilder s = new StringBuilder();
         //print island
         s.append("Islands: ");
-        for (int i = 0; i < getIslandList().size(); i++) {
+        for (int i = 0; i < super.islandList().size(); i++) {
             s.append("\n\tIsland ")
                     .append( i + 1 )
                     .append(": ")
-                    .append(getIslandList().get(i));
-            if (i == getMotherNaturePosition()) s.append(", mother nature is Here!");
+                    .append(super.islandList().get(i));
+            if (i == motherNaturePosition()) s.append(", mother nature is Here!");
         }
         //Print characters
         s.append("\nCharacters: ");
@@ -46,20 +45,21 @@ public class ExpertBoardData extends BoardData{
         }
         //Print cloud
         s.append("\nClouds: ");
-        for (int i = 0; i < getCloudList().size(); i++)
+        for (int i = 0; i < cloudList().size(); i++)
             s       .append("\n\tCloud ")
                     .append(i + 1)
                     .append(" contains: ")
-                    .append(getCloudList().get(i));
+                    .append(cloudList().get(i));
         //Print other castles
         s.append("\nOther Player castles:");
-        for (CastleData otherCastle : getOtherCastles())
-            s.append("\n\tCastle ").append(otherCastle.getUsername()).append(": ").append(otherCastle);
+        for (CastleData otherCastle : otherCastles())
+            s.append("\n\tCastle ").append(otherCastle.username()).append(": ").append(otherCastle);
         //Print turn
-        s.append("\nTurn: ").append(getTurn());
+        s.append("\nTurn: ").append(turn());
         //Print my castle with the hand of cards
         s.append("\nMy Castle:");
-        s.append("\n\tCastle ").append(getUsername()).append(": ").append(getMyCastle());
+        s.append("\n\tCastle ").append(username()).append(": ").append(myCastle());
         return s.toString();
     }
+
 }

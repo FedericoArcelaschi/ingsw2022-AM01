@@ -60,11 +60,11 @@ public class GamePaneController {
     }
 
     public void draw(BoardData boardData) {
-        drawCastle(boardData.getMyCastle());
+        drawCastle(boardData.myCastle());
     }
     
     private void drawCastle(CastleData castleData) {
-        drawWaitingRoom(castleData.getWaitingRoom());
+        drawWaitingRoom(castleData.waitingRoom());
         //drawDiningRoom(castleData.getDiningRoom());
     }
 
