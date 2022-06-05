@@ -39,9 +39,9 @@ public class ExpertBoardData extends BoardData {
             if (i == motherNaturePosition()) s.append(", mother nature is Here!");
         }
         //Print characters
-        s.append("\nCharacters:\n");
+        s.append("\nCharacters:");
         for (CharacterData cd : characters) {
-            s.append("\t").append(cd).append("\n");
+            s.append("\n\t").append(cd);
         }
         //Print cloud
         s.append("\nClouds: ");

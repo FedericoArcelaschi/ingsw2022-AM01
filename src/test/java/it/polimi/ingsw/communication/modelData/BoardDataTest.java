@@ -1,6 +1,7 @@
 package it.polimi.ingsw.communication.modelData;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
@@ -62,8 +63,9 @@ class BoardDataTest {
                         new Turn(List.of("lore", "gio", "fede")),
                         RandomGenerator.getDefault().nextLong()));
 
+        System.out.println(boardData);
         String Json = new Gson().toJson(boardData);
-        BoardData boardDataDeserialized = new Gson().fromJson(Json, BoardData.class);
+        BoardData boardDataDeserialized = new Gson().fromJson(Json, ExpertBoardData.class);
         System.out.println(boardDataDeserialized);
     }
 }

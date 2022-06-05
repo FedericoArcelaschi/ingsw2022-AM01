@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.communication.ClientState;
+import it.polimi.ingsw.client.ClientState;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.CommandMessage;
