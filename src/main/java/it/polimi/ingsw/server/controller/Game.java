@@ -171,22 +171,26 @@ public class Game {
         }
     }
 
-    private void moveMotherNatureCommand(Command command){
-        if(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)) > board.getPossibleMovingSteps())
-            send(createError(0, "Too many steps; please try again."), usernameSocketMap.get(command.getUsername()));
-        else {
-            try{
-                board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
-            }catch(PhaseNotRightException e){
-                send(createError(0, "You can't use this command in this stage of the game."), usernameSocketMap.get(command.getUsername()));
-            }
-            Team t = board.isWinningPosition();
-            if (t != null) {
-                sendWinUpdate(t);  //Also changes the state of the client to GAME_ENDED now.
-            }
-            turn.changePhase();
-            sendAllUpdate();
+    private void moveMotherNatureCommand(Command command) {
+        System.out.println("MoveMotherNature: " + command);
+        try {
+            board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
+        } catch (PhaseNotRightException | IllegalArgumentException e) {
+            e.printStackTrace();
+            send(createError(0, e.getMessage()), usernameSocketMap.get(command.getUsername()));
+            return;
         }
+        if (board.isWinningState()) {
+            try {
+                sendWinUpdate(board.getWinner());
+            } catch (DrawException e) {
+                send(new EndGame(e.getMessage()), null); //FIXME
+                //FIXME: handle game-end.
+                return;
+            }
+        }
+        turn.changePhase();
+        sendAllUpdate();
     }
 
     private void chooseCloudCommand(Command command){

@@ -197,8 +197,8 @@ public class ExpertBoard extends Board {
         motherNaturePosition = firstIslandIndex;
     }
 
-    //
-    private void turnReset() {
+    @Override
+    public void endOfTurn() {
         cloudList.forEach(Cloud::refill);
         playedExpertChar = -1;
         ((ExpertInfluence)influence).reset();
