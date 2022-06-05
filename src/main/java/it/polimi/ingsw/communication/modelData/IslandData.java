@@ -18,6 +18,18 @@ public class IslandData {
         this.islandSize = islandSize;
     }
 
+    public Team getOwnership() {
+        return ownership;
+    }
+
+    public EnumMap<StudentColor, Integer> getStudents() {
+        return students;
+    }
+
+    public int getIslandSize() {
+        return islandSize;
+    }
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
