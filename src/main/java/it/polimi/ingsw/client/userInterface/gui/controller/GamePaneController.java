@@ -26,29 +26,10 @@ public class GamePaneController {
     @FXML private FlowPane cardsFlowPane;
     @FXML private StackPane cloudStackPane;
     private ToggleGroup waitingRoomToggleGroup;
-    private Map<StudentColor ,ToggleGroup> waitingRoomMap;
+    //private Map<StudentColor ,ToggleGroup> waitingRoomMap;
     public void initialize() {
         waitingRoomToggleGroup = new ToggleGroup();
-        ToggleGroup greenDiningRoomToggleGroup = new ToggleGroup();
-        ToggleGroup redDiningRoomToggleGroup = new ToggleGroup();
-        ToggleGroup pinkDiningRoomToggleGroup = new ToggleGroup();
-        ToggleGroup blueDiningRoomToggleGroup = new ToggleGroup();
-        ToggleGroup yellowDiningRoomToggleGroup = new ToggleGroup();
-        waitingRoomMap = new HashMap<>();
-
         setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
-
-        setToggleGroup(redDiningRoomToggleGroup, redDRPane.getChildren());
-        setToggleGroup(greenDiningRoomToggleGroup, greenDRPane.getChildren());
-        setToggleGroup(yellowDiningRoomToggleGroup, yellowDRPane.getChildren());
-        setToggleGroup(pinkDiningRoomToggleGroup, pinkDRPane.getChildren());
-        setToggleGroup(blueDiningRoomToggleGroup, blueDRPane.getChildren());
-
-        waitingRoomMap.put(StudentColor.GREEN, greenDiningRoomToggleGroup);
-        waitingRoomMap.put(StudentColor.BLUE, blueDiningRoomToggleGroup);
-        waitingRoomMap.put(StudentColor.RED, redDiningRoomToggleGroup);
-        waitingRoomMap.put(StudentColor.PINK, pinkDiningRoomToggleGroup);
-        waitingRoomMap.put(StudentColor.YELLOW, yellowDiningRoomToggleGroup);
     }
 
     private void setToggleGroup(ToggleGroup toggleGroup, ObservableList<Node> children) {
@@ -93,7 +74,7 @@ public class GamePaneController {
     private void drawDiningRoom(Map<StudentColor, Integer> studentColorIntegerMap) {
         for (StudentColor color: StudentColor.values()) {
             for (int i = 0; i < 5; i++) {
-                setStudentButtonColor((ToggleButton) waitingRoomMap.get(color).getToggles().get(i), color);
+                //setStudentButtonColor((ToggleButton) waitingRoomMap.get(color).getToggles().get(i), color);
             }
         }
     }

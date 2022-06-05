@@ -1,4 +1,4 @@
-#castlePane{
+.castlePane{
     -fx-background-image: url("/castle/castle.png");
     -fx-background-repeat: stretch;
     -fx-background-size: 290, 675;
