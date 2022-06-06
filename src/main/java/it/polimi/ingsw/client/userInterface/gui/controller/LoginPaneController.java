@@ -10,34 +10,27 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
+import java.util.function.Consumer;
+
 public class LoginPaneController {
     @FXML TextField usernameTextField, ipTextField, portTextField;
     @FXML RadioButton player2RadioButton, player3RadioButton, player4RadioButton;
     @FXML CheckBox expertModeButton;
     ToggleGroup nPlayer;
-    UserInterface userInterface;
+    Consumer<Preferences> connect;
 
-    public void initialize(UserInterface userInterface){
+    public void initialize(Consumer<Preferences> connect){
         nPlayer = new ToggleGroup();
         player2RadioButton.setToggleGroup(nPlayer);
         player3RadioButton.setToggleGroup(nPlayer);
         player4RadioButton.setToggleGroup(nPlayer);
         player2RadioButton.setSelected(true);
         expertModeButton.setSelected(false);
-        this.userInterface = userInterface;
+        this.connect = connect;
     }
 
     public void submitPreferences(ActionEvent actionEvent) {
-        ClientMain clientMain
-                = new ClientMain(
-                    ipTextField.getText().equals("") ? ipTextField.getPromptText() : ipTextField.getText(),
-                    Integer.parseInt(portTextField.getText().equals("") ? portTextField.getPromptText() : portTextField.getText()),
-                    getPreferences());
-        try {
-            clientMain.connect(userInterface);
-        } catch (IllegalAccessException e) {
-            System.err.println(e.getMessage());
-        }
+        connect.accept(getPreferences());
     }
 
     private Preferences getPreferences() {

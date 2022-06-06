@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<TabPane side="LEFT" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController">
+<TabPane prefHeight="800.0" side="LEFT" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController">
    <tabs>
       <Tab text="Game">
          <content>
@@ -164,32 +164,32 @@
                                  <children>
                                     <HBox fx:id="islandRow1" minWidth="-Infinity" prefHeight="200.0" prefWidth="1110.0">
                                        <children>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
@@ -200,14 +200,14 @@
                                        <children>
                                           <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" visible="false">
                                              <children>
-                                                <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                <Pane accessibleText="cloud1" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
                                                    <children>
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                    </children>
                                                 </Pane>
-                                                <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                <Pane accessibleText="cloud2" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
                                                    <children>
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
@@ -218,7 +218,7 @@
                                           </FlowPane>
                                           <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" visible="false">
                                              <children>
-                                                <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                <Pane accessibleText="cloud1" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
                                                    <children>
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
@@ -226,7 +226,7 @@
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                    </children>
                                                 </Pane>
-                                                <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                <Pane accessibleText="cloud2" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
                                                    <children>
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
@@ -234,7 +234,7 @@
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                    </children>
                                                 </Pane>
-                                                <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                <Pane accessibleText="cloud3" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
                                                    <children>
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
@@ -246,28 +246,28 @@
                                           </FlowPane>
                                           <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" visible="false">
                                              <children>
-                                                <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                <Pane accessibleText="cloud1" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
                                                    <children>
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                    </children>
                                                 </Pane>
-                                                <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                <Pane accessibleText="cloud2" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
                                                    <children>
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                    </children>
                                                 </Pane>
-                                                <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                <Pane accessibleText="cloud3" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
                                                    <children>
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                    </children>
                                                 </Pane>
-                                                <Pane prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                <Pane accessibleText="cloud4" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
                                                    <children>
                                                       <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                                       <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
@@ -280,32 +280,32 @@
                                     </StackPane>
                                     <HBox fx:id="islandRow2" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="200.0" prefWidth="1110.0">
                                        <children>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
@@ -327,10 +327,9 @@
       </Tab>
       <Tab text="Castle">
          <content>
-            <HBox fx:id="castleTabHBox" prefHeight="100.0" prefWidth="200.0">
-               <!-- FIXME: secondary tab not inherit css -->
+            <FlowPane fx:id="castleTabHBox" alignment="CENTER" hgap="50.0" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox prefHeight="800.0" prefWidth="100.0">
                      <children>
                         <Pane fx:id="turnPane1" minWidth="-Infinity" prefHeight="125.0" prefWidth="290.0">
                            <children>
@@ -347,15 +346,15 @@
                            <bottom>
                               <Pane fx:id="waitingRoomPane1" prefHeight="108.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <ToggleButton layoutX="37.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="84.5" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="84.5" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="132.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="132.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="179.5" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="179.5" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="227.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="227.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="37.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="84.5" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="84.5" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="132.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="132.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="179.5" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="179.5" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="227.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="227.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                  </children>
                               </Pane>
                            </bottom>
@@ -465,7 +464,7 @@
                         </BorderPane>
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox prefHeight="800.0" prefWidth="100.0">
                      <children>
                         <Pane fx:id="turnPane2" minWidth="-Infinity" prefHeight="125.0" prefWidth="290.0">
                            <children>
@@ -482,15 +481,15 @@
                            <bottom>
                               <Pane fx:id="waitingRoomPane2" prefHeight="108.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <ToggleButton layoutX="37.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="84.5" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="84.5" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="132.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="132.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="179.5" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="179.5" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="227.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="227.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="37.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="84.5" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="84.5" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="132.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="132.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="179.5" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="179.5" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="227.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="227.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                  </children>
                               </Pane>
                            </bottom>
@@ -600,7 +599,7 @@
                         </BorderPane>
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox prefHeight="800.0" prefWidth="100.0">
                      <children>
                         <Pane fx:id="turnPane3" minWidth="-Infinity" prefHeight="125.0" prefWidth="290.0">
                            <children>
@@ -617,15 +616,15 @@
                            <bottom>
                               <Pane fx:id="waitingRoomPane3" prefHeight="108.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <ToggleButton layoutX="37.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="84.5" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="84.5" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="132.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="132.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="179.5" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="179.5" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="227.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                    <ToggleButton layoutX="227.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="37.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="84.5" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="84.5" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="132.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="132.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="179.5" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="179.5" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="227.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                    <ToggleButton layoutX="227.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
                                  </children>
                               </Pane>
                            </bottom>
@@ -735,7 +734,7 @@
                         </BorderPane>
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox prefHeight="800.0" prefWidth="100.0">
                      <children>
                         <Pane fx:id="turnPane4" minWidth="-Infinity" prefHeight="125.0" prefWidth="290.0">
                            <children>
@@ -871,7 +870,7 @@
                      </children>
                   </VBox>
                </children>
-            </HBox>
+            </FlowPane>
          </content>
       </Tab>
    </tabs>

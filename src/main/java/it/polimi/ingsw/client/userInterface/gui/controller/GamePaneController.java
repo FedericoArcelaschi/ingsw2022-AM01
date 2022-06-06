@@ -14,9 +14,8 @@ import java.util.*;
 
 public class GamePaneController {
     @FXML public BorderPane castlePane0;
-    @FXML public HBox castleTabHBox;
-    @FXML private Pane turnPane;
-    @FXML private Pane greenDRPane, redDRPane, blueDRPane, yellowDRPane, pinkDRPane, waitingRoomPane, teacherTablePane, towerPane;
+    @FXML public FlowPane castleTabHBox;
+    @FXML private Pane waitingRoomPane;
     @FXML private HBox islandRow1, islandRow2;
     @FXML private FlowPane cardsFlowPane;
     @FXML private StackPane cloudStackPane;
@@ -38,7 +37,7 @@ public class GamePaneController {
         guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
         guiDrawer.drawClouds(boardData.cloudList(), cloudStackPane);
         guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2);
-        guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane);
+        guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
     }
 
     public void moveStudentToDiningRoom(MouseEvent mouseEvent) {
@@ -46,6 +45,33 @@ public class GamePaneController {
         if(selected == null)
             return;
         StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
+        //TODO: Create and send command
+    }
+
+    public void moveStudentToIsland(MouseEvent mouseEvent) {
+        ToggleButton selected = (ToggleButton) waitingRoomToggleGroup.getSelectedToggle();
+        if(selected == null)
+            return;
+        StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
+        //TODO: Create and send command
+    }
+
+
+    public void chooseCloud(MouseEvent mouseEvent) {
+        int cloudId;
+        //take cloud id from accessibleText
+        String accessibleText = ((Pane) mouseEvent.getTarget()).getAccessibleText();
+        cloudId = Integer.parseInt(accessibleText.substring(accessibleText.length()-1));
+        //TODO: Create and send command
+    }
+
+    public void playCard(MouseEvent mouseEvent) {
+        int cardId;
+        //take cloud id from accessibleText
+        String accessibleText = ((Pane) mouseEvent.getTarget()).getAccessibleText();
+        cardId = Integer.parseInt(accessibleText.substring(accessibleText.length()-1));
+        //if cardId is 0 replace it with 10
+        cardId = cardId == 0 ? 10 : cardId;
         //TODO: Create and send command
     }
 }

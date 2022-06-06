@@ -5,8 +5,10 @@ import it.polimi.ingsw.communication.modelData.CloudData;
 import it.polimi.ingsw.communication.modelData.IslandData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.Map;
 
 public class GuiDrawer {
 
-    public void drawCastles(CastleData myCaslte, List<CastleData> otherCastle, BorderPane myCastlePane , HBox castleTabHBox){
+    public void drawCastles(CastleData myCaslte, List<CastleData> otherCastle, BorderPane myCastlePane , FlowPane castleTabHBox){
         GuiDrawer guiDrawer = new GuiDrawer();
         int i;
         guiDrawer.drawCastle(myCaslte, myCastlePane);
@@ -25,18 +27,20 @@ public class GuiDrawer {
             BorderPane borderPane = (BorderPane) vbox.getChildren().get(1);
             guiDrawer.drawCastle( i == 0? myCaslte : otherCastle.get(i-1), borderPane);
         }
-        for (; i<4; i++) {
+        for (; i<castleTabHBox.getChildren().size();) {
             VBox vbox = (VBox) castleTabHBox.getChildren().get(i);
-            vbox.setVisible(false);
+            castleTabHBox.getChildren().remove(vbox);
         }
     }
 
-    public void drawCards(List<String> assistants, FlowPane cardsFlowPane){
+    public void drawCards(List<String> assistants, FlowPane cardsFlowPane, EventHandler<MouseEvent> playCard){
         for (int i=1; i<=10; ++i) {
             String s = "[" + i + ", " + (i+1)/2 + "]";
             if(assistants.contains(s)) {
                 Pane pane = new Pane();
                 pane.setPrefSize(111, 200);
+                pane.setOnMouseClicked(playCard);
+                pane.setAccessibleText("card"+i);
                 pane.getStyleClass().addAll("cardAssistant" + (i), "assistant");
                 cardsFlowPane.getChildren().add(pane);
             }

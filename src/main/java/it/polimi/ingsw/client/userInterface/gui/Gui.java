@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.userInterface.gui;
 
+import it.polimi.ingsw.client.communication.ClientMain;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.server.controller.GameType;
@@ -31,6 +33,7 @@ public class Gui extends Application implements UserInterface {
     Boolean inGame;
     LoginPaneController loginPaneController;
     GamePaneController gamePaneController;
+    ClientMain clientMain;
 
     @Override
     public void start(Stage stage) {
@@ -47,26 +50,36 @@ public class Gui extends Application implements UserInterface {
         stage.setTitle("Eriantys");
         stage.setScene(new Scene(loginFXML));
         stage.show();
-        loginPaneController.initialize(this);
+        loginPaneController.initialize(this::connect);
         //FIXME: for testing.
-        draw(createBoardData());
+        //draw(createBoardData());
     }
 
     private BoardData createBoardData(){
         //FIXME: for testing.
-        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"), true);
+        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio", "lore"/*, "pippo"*/), true);
         try{
             b.playCard("fede", 1);
             b.changePhase();
             b.playCard("gio", 10);
             b.changePhase();
+            b.playCard("lore", 9);
+            b.changePhase();
+//            b.playCard("pippo", 8);
+//            b.changePhase();
             List<StudentColor> studentColorList = b.getCastle("fede").getWaitingRoom().subList(0,1);
             b.moveStudentsToDiningRoom("fede", studentColorList);
             b.moveStudentToIsland("fede", 1, studentColorList);
+            b.moveStudentsToDiningRoom("fede", b.getCastle("fede").getWaitingRoom().subList(0,1));
             b.changePhase();
             b.moveMotherNature(1);
-        } catch (PhaseNotRightException | NotYourTurnException | NoSuchStudentException | TooManyStudentsException e) {
+            b.changePhase();
+            //b.chooseCloud("fede", 1);
+            //b.changePhase();
+        } catch (PhaseNotRightException | NotYourTurnException | TooManyStudentsException e) {
             throw new RuntimeException(e);
+        } catch (NoSuchStudentException e) {
+            return createBoardData();
         }
         return ModelDataBuilder.newBoardData("fede", b);
     }
@@ -103,5 +116,14 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
         //TODO:
+    }
+
+    public void connect(Preferences preferences) {
+        clientMain = new ClientMain("127.0.0.1", 12345, preferences);
+        try {
+            clientMain.connect(this);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
