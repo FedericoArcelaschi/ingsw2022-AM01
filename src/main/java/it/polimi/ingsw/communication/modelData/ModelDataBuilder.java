@@ -9,7 +9,9 @@ import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public abstract class ModelDataBuilder {
@@ -20,10 +22,10 @@ public abstract class ModelDataBuilder {
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(ModelDataBuilder::newIslandData).toList(),
-                newCastleData(username, board.getCastle(username), true),
+                newCastleData(username, board.getCastle(username), true, board.placedTower(), board.getProfessorsMap()),
                 board.getCastleMap().keySet().stream()
                         .filter(key -> !key.equals(username)) //selects only other players' castle
-                        .map(key -> newCastleData(key, board.getCastle(key), false))
+                        .map(key -> newCastleData(key, board.getCastle(key), false, board.placedTower(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn())
         );
@@ -45,10 +47,10 @@ public abstract class ModelDataBuilder {
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(ModelDataBuilder::newExpertIslandData).toList(),
-                newExpertCastleData(username, board.getCastle(username), true),
+                newExpertCastleData(username, board.getCastle(username), true, board.placedTower(), board.getProfessorsMap()),
                 board.getCastleMap().keySet().stream()
                         .filter(key -> !key.equals(username))
-                        .map(key -> newExpertCastleData(key, board.getCastle(key), false))
+                        .map(key -> newExpertCastleData(key, board.getCastle(key), false, board.placedTower(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn()),
                 characters
@@ -77,7 +79,7 @@ public abstract class ModelDataBuilder {
         return new ExpertIslandData(island.getOwnership(), island.getStudents(), island.getIslandNumber(), Boolean.TRUE.equals(blocked));
     }
 
-    private static CastleData newCastleData(String username, Castle castle, boolean isMyCastle) {
+    private static CastleData newCastleData(String username, Castle castle, boolean isMyCastle, EnumMap<Team, Integer> placedTower, Map<StudentColor, Team> teachers) {
         List<String> deck = castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList();
         return new CastleData(
                 username,
@@ -86,11 +88,13 @@ public abstract class ModelDataBuilder {
                 isMyCastle ? deck : null,
                 castle.getLastCardPlayed() != null ? castle.getLastCardPlayed().toString() : null,
                 castle.getTeam(),
+                placedTower.get(castle.getTeam()),
+                teachers,
                 isMyCastle
                 );
     }
 
-    private static CastleData newExpertCastleData(String username, Castle castle, boolean isMyCastle) {
+    private static CastleData newExpertCastleData(String username, Castle castle, boolean isMyCastle, EnumMap<Team, Integer> placedTower, Map<StudentColor, Team> teachers) {
         List<String> deck = castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList();
         Integer coins = null;
         try {
@@ -105,6 +109,8 @@ public abstract class ModelDataBuilder {
                 isMyCastle ? deck : null,
                 castle.getLastCardPlayed() != null ? castle.getLastCardPlayed().toString() : null,
                 castle.getTeam(),
+                placedTower.get(castle.getTeam()),
+                teachers,
                 isMyCastle,
                 coins
         );

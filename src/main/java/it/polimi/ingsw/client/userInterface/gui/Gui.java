@@ -60,10 +60,11 @@ public class Gui extends Application implements UserInterface {
             b.changePhase();
             b.playCard("gio", 10);
             b.changePhase();
-            b.moveStudentsToDiningRoom("fede", b.getCastle("fede").getWaitingRoom().subList(0,2));
-            b.moveStudentToIsland("fede", 1, b.getCastle("fede").getWaitingRoom().subList(0,1));
+            List<StudentColor> studentColorList = b.getCastle("fede").getWaitingRoom().subList(0,1);
+            b.moveStudentsToDiningRoom("fede", studentColorList);
+            b.moveStudentToIsland("fede", 1, studentColorList);
             b.changePhase();
-            //b.moveMotherNature(1);
+            b.moveMotherNature(1);
         } catch (PhaseNotRightException | NotYourTurnException | NoSuchStudentException | TooManyStudentsException e) {
             throw new RuntimeException(e);
         }

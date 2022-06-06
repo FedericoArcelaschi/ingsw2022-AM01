@@ -10,6 +10,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.*;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,16 +56,18 @@ public class GuiDrawer {
             IslandData islandData = islandList.get(i);
             Pane pane = paneList.get(i);
             //Adding students
-            //FIXME
             for (StudentColor student : islandData.students().keySet()) {
-                ToggleButton toggleButton = new ToggleButton();
-                toggleButton.getStyleClass().add("student");
-                toggleButton.setDisable(true);
-                toggleButton.setPrefSize(25, 25);
-                setStudentButtonColor(toggleButton, student);
-                FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
-                flowPane.getChildren().add(toggleButton);
+                for (int j = 0; j < islandData.students().get(student); j++) {
+                    ToggleButton toggleButton = new ToggleButton();
+                    toggleButton.getStyleClass().add("student");
+                    toggleButton.setDisable(true);
+                    toggleButton.setPrefSize(25, 25);
+                    setStudentButtonColor(toggleButton, student);
+                    FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
+                    flowPane.getChildren().add(toggleButton);
+                }
             }
+            //adding mother nature
             if (motherNaturePosition == i) {
                 ToggleButton toggleButton = new ToggleButton();
                 toggleButton.getStyleClass().add("motherNature");
@@ -105,9 +108,9 @@ public class GuiDrawer {
         Pane diningRoomPane = (Pane) ((VBox) castle.getCenter()).getChildren().get(1);
 
         drawWaitingRoom(castleData.waitingRoom(),waitingRoomPane);
-        //drawDiningRoom(castleData.getDiningRoom());
-        //FIXME: drawTeachers(castleData.pro, teacherTabelPane);
-        //FIXME: drawTower(castleData.towerColor(), castleData.nTower(), towerPane);
+        drawDiningRoom(castleData.diningRoom(), diningRoomPane);
+        drawTeachers(castleData.teachers(), castleData.towerColor(), teacherTabelPane);
+        drawTower(castleData.towerColor(), castleData.nTower(), towerPane);
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom, Pane waitingRoomPane) {
@@ -116,20 +119,22 @@ public class GuiDrawer {
         }
     }
 
-    private void drawDiningRoom(Map<StudentColor, Integer> studentColorIntegerMap) {
-        for (StudentColor color: StudentColor.values()) {
-            for (int i = 0; i < 5; i++) {
-                //setStudentButtonColor((ToggleButton) waitingRoomMap.get(color).getToggles().get(i), color);
+    private void drawDiningRoom(EnumMap<StudentColor, Integer> studentColorIntegerMap, Pane waitingRoomPane) {
+        for (StudentColor studentColor : studentColorIntegerMap.keySet()) {
+            Pane pane = (Pane) waitingRoomPane.getChildren().get(studentColor.ordinal());
+            for (int i = 0; i < studentColorIntegerMap.get(studentColor); i++) {
+                ToggleButton toggleButton = (ToggleButton) pane.getChildren().get(i);
+                setStudentButtonColor(toggleButton, studentColor);
             }
         }
     }
 
-    private void drawTeachers(List<StudentColor> teachers, Pane teacherTablePane){
+    private void drawTeachers(Map<StudentColor, Team> teachers, Team team, Pane teacherTablePane){
         for (int i=0; i<teacherTablePane.getChildren().size(); i++){
             Node node = teacherTablePane.getChildren().get(i);
             ToggleButton teacher = (ToggleButton) node;
             StudentColor teacherColor = StudentColor.values()[i];
-            if(teachers.contains(teacherColor)) setTeacherButtonColor(teacher, teacherColor);
+            if(teachers.get(teacherColor) == team) setTeacherButtonColor(teacher, teacherColor);
         }
     }
 

@@ -12,15 +12,19 @@ public class CastleData {
     protected final List<String> deck;
     protected final String lastPlayedCard;
     protected final Team towerColor;
-    protected final boolean isMyCastle;
+    private final int nTower;
+    private final boolean isMyCastle;
+    private final Map<StudentColor, Team> teachers;
 
-    public CastleData(String username, List<StudentColor> waitingRoom, EnumMap<StudentColor, Integer> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, boolean isMyCastle) {
+    public CastleData(String username, List<StudentColor> waitingRoom, EnumMap<StudentColor, Integer> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, int nTower, Map<StudentColor, Team> teachers, boolean isMyCastle) {
         this.username = username;
         this.waitingRoom = waitingRoom;
         this.diningRoom = new EnumMap<>(diningRoom);
         this.towerColor = towerColor;
         this.deck = deck;
         this.lastPlayedCard = lastPlayedCard;
+        this.nTower = nTower;
+        this.teachers = teachers;
         this.isMyCastle = isMyCastle;
     }
 
@@ -106,6 +110,14 @@ public class CastleData {
 
     public boolean isMyCastle() {
         return isMyCastle;
+    }
+
+    public int nTower() {
+        return nTower;
+    }
+
+    public Map<StudentColor, Team> teachers() {
+        return teachers;
     }
 
     @Override

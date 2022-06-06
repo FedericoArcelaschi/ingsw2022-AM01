@@ -49,7 +49,7 @@ public class ClientReceiver extends Receiver {
                 Error error = (Error) message;
                 System.err.println("new error received: " + error.getMessage());
                 //IDEA: cm.setState(error.getState());
-                //IDEA: UserInterface.handleError(error.getMessage());
+                //TODO: UserInterface.handleError(error.getMessage());
             }
         }
     }

@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.baseLogic.Team;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 public class ExpertCastleData extends CastleData {
     private final int coins;
@@ -16,8 +17,10 @@ public class ExpertCastleData extends CastleData {
                             List<String> deck,
                             String lastPlayedCard,
                             Team towerColor,
+                            int nTower,
+                            Map<StudentColor, Team> teachers,
                             boolean isMyCastle, int coins) {
-        super(username, waitingRoom, diningRoom, deck, lastPlayedCard, towerColor, isMyCastle);
+        super(username, waitingRoom, diningRoom, deck, lastPlayedCard, towerColor, nTower, teachers, isMyCastle);
         this.coins = coins;
     }
     //To add: Coins.
@@ -40,7 +43,7 @@ public class ExpertCastleData extends CastleData {
         }
         removesComma(s);
         s.append("\n\t\tCoins: ").append(coins);
-        if (isMyCastle) {
+        if (isMyCastle()) {
             s.append("\n\t\tAvailable Cards: ");
             for (String card : deck())
                 s.append(card).append(", ");

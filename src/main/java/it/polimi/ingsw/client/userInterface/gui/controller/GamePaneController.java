@@ -21,7 +21,6 @@ public class GamePaneController {
     @FXML private FlowPane cardsFlowPane;
     @FXML private StackPane cloudStackPane;
     private ToggleGroup waitingRoomToggleGroup;
-    //private Map<StudentColor ,ToggleGroup> waitingRoomMap;
     public void initialize() {
         waitingRoomToggleGroup = new ToggleGroup();
         setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
