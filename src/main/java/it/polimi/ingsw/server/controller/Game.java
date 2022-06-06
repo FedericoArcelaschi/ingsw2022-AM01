@@ -172,7 +172,6 @@ public class Game {
     }
 
     private void moveMotherNatureCommand(Command command) {
-        System.out.println("MoveMotherNature: " + command);
         try {
             board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
         } catch (PhaseNotRightException | IllegalArgumentException e) {

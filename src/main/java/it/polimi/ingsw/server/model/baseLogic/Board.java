@@ -211,7 +211,6 @@ public class Board {
     protected void checkJoinIsland(Integer islandIndex) {
         List<Integer> islandsToJoin = getNeighbouringIsland(islandIndex);
         islandsToJoin = getSameOwner(islandsToJoin);
-        System.out.println("islandsToJoin: " + islandsToJoin);//TODO: debug island merging
         if(!islandsToJoin.isEmpty())
             joinIslands(islandsToJoin);
     }
@@ -232,12 +231,10 @@ public class Board {
         Island  firstIsland = islandList.get(neightbouringIsland.get(0)),
                 secondIsland = islandList.get(neightbouringIsland.get(1)),
                 thirdIsland = islandList.get(neightbouringIsland.get(2));
-        System.out.println(neightbouringIsland);
         if (firstIsland.getOwnership() == secondIsland.getOwnership())
             islandToJoin.addAll(neightbouringIsland.subList(0, 2));
         if (secondIsland.getOwnership() == thirdIsland.getOwnership())
             islandToJoin.addAll(neightbouringIsland.subList(1, 3));
-        System.out.println(islandToJoin);
         return islandToJoin.stream().toList();
         //add all should remove the repetition of the second island index
     }
@@ -310,7 +307,6 @@ public class Board {
      * @return the winner team
      */
     public boolean isWinningState() {
-        System.out.println("test");
         EnumMap<Team, Integer> nTowers = placedTower();
         for (Team t : Team.values())
             if (nTowers.get(t) >= numberOfTowersToPlace)
@@ -343,7 +339,6 @@ public class Board {
 
     /** @return a map that contains the number of placed towers on the islands for each team */
     public EnumMap<Team,Integer> placedTower() {
-        System.out.println("test2");
         EnumMap<Team, Integer> teamTowersMap = new EnumMap<Team, Integer>(Team.class);
         for (Team t : Team.values()) { //fill nTowers map for all team at 0
             teamTowersMap.put(t, 0);
