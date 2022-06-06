@@ -33,7 +33,7 @@ public abstract class ModelDataBuilder {
         //TODO: this null is awful to look at. For now it works; find a better way regardless.
         List<CharacterData> characters = null;
         try {
-            characters = board.getAvailableCharacterCards().stream().filter(Objects::nonNull).map(ModelDataBuilder::newCharacterData).toList();
+            characters = board.getAvailableCharacterCards().stream().map(ModelDataBuilder::newCharacterData).toList();
         } catch (NotTheRightGameModeException e) {
             e.printStackTrace();
         }

@@ -26,8 +26,6 @@ public class WaitingRooms {
         return gameSocketMap;
     }
 
-
-
     /**
      * Adds a player to the requested lobby. Informs players of the same lobby that the state of the lobby changed.
      * @param gameType the provided gametype.
