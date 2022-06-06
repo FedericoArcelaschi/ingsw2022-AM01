@@ -55,7 +55,8 @@ public class GuiDrawer {
             IslandData islandData = islandList.get(i);
             Pane pane = paneList.get(i);
             //Adding students
-            for (StudentColor student : islandData.getStudents()) {
+            //FIXME
+            for (StudentColor student : islandData.students().keySet()) {
                 ToggleButton toggleButton = new ToggleButton();
                 toggleButton.getStyleClass().add("student");
                 toggleButton.setDisable(true);
@@ -91,8 +92,8 @@ public class GuiDrawer {
         for (int i=0; i<cloudList.size(); ++i) {
             CloudData cloud = cloudList.get(i);
             Pane pane = (Pane) cloudFlowPane.getChildren().get(i);
-            for (int j = 0; j < cloud.getStudentList().size(); j++)  {
-                setStudentButtonColor((ToggleButton)pane.getChildren().get(j) , cloud.getStudentList().get(j));
+            for (int j = 0; j < cloud.studentList().size(); j++)  {
+                setStudentButtonColor((ToggleButton)pane.getChildren().get(j) , cloud.studentList().get(j));
             }
         }
     }
@@ -103,10 +104,10 @@ public class GuiDrawer {
         Pane teacherTabelPane = (Pane) ((VBox) castle.getCenter()).getChildren().get(0);
         Pane diningRoomPane = (Pane) ((VBox) castle.getCenter()).getChildren().get(1);
 
-        drawWaitingRoom(castleData.getWaitingRoom(),waitingRoomPane);
+        drawWaitingRoom(castleData.waitingRoom(),waitingRoomPane);
         //drawDiningRoom(castleData.getDiningRoom());
-        drawTeachers(castleData.getTeachers(), teacherTabelPane);
-        drawTower(castleData.getTowerColor(), castleData.getnTower(), towerPane);
+        //FIXME: drawTeachers(castleData.pro, teacherTabelPane);
+        //FIXME: drawTower(castleData.towerColor(), castleData.nTower(), towerPane);
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom, Pane waitingRoomPane) {
@@ -127,7 +128,7 @@ public class GuiDrawer {
         for (int i=0; i<teacherTablePane.getChildren().size(); i++){
             Node node = teacherTablePane.getChildren().get(i);
             ToggleButton teacher = (ToggleButton) node;
-            StudentColor teacherColor = StudentColor.getColor(i);
+            StudentColor teacherColor = StudentColor.values()[i];
             if(teachers.contains(teacherColor)) setTeacherButtonColor(teacher, teacherColor);
         }
     }

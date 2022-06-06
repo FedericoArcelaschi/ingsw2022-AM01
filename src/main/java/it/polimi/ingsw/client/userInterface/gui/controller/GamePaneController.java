@@ -36,10 +36,10 @@ public class GamePaneController {
 
     public void draw(BoardData boardData) {
         GuiDrawer guiDrawer = new GuiDrawer();
-        guiDrawer.drawCastles(boardData.getMyCastle(), boardData.getOtherCastles(), castlePane0, castleTabHBox);
-        guiDrawer.drawClouds(boardData.getCloudList(), cloudStackPane);
-        guiDrawer.drawIslands(boardData.getIslandList(), boardData.getMotherNaturePosition(), islandRow1, islandRow2);
-        guiDrawer.drawCards(boardData.getMyCastle().getDeck(), cardsFlowPane);
+        guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
+        guiDrawer.drawClouds(boardData.cloudList(), cloudStackPane);
+        guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2);
+        guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane);
     }
 
     public void moveStudentToDiningRoom(MouseEvent mouseEvent) {

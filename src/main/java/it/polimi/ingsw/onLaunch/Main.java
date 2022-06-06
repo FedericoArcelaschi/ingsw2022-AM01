@@ -11,10 +11,10 @@ import java.io.InputStreamReader;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(Outputs.CLEAR_SCREEN);
+        //System.out.println(Outputs.CLEAR_SCREEN);
         System.out.println(Outputs.START);
         int ScreenSize = 0; // = System.getProperty("screenSize");
-        Outputs.getTitle(ScreenSize);
+        //Outputs.getTitle(ScreenSize);
         switch (getUserType(args)) {
             case SERVER -> new ServerMain(12345).run();
             case CLI -> new Cli();

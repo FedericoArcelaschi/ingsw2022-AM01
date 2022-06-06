@@ -54,7 +54,7 @@ public class Gui extends Application implements UserInterface {
 
     private BoardData createBoardData(){
         //FIXME: for testing.
-        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"), true, new Turn(Arrays.asList("fede", "gio")));
+        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"), true);
         try{
             b.playCard("fede", 1);
             b.changePhase();

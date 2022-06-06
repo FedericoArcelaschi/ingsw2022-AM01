@@ -1,7 +1,7 @@
 package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.client.communication.ClientMain;
-import it.polimi.ingsw.communication.packet.message.Preferences;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.communication.ServerMain;
 import org.junit.jupiter.api.Test;
 

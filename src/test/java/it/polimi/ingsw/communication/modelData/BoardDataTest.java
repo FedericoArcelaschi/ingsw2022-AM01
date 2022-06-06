@@ -17,9 +17,9 @@ class BoardDataTest {
     @Test
     void toStringTest() throws NotYourTurnException, NoSuchStudentException, TooManyStudentsException {
         BoardData bd;
-        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"), new Turn(Arrays.asList("fede","gio")));
+        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"), false);
         bd = ModelDataBuilder.newBoardData("fede", b);
-        System.out.println(new Gson().toJson(bd.getMyCastle()));
+        System.out.println(new Gson().toJson(bd.myCastle()));
     }
 
 }
