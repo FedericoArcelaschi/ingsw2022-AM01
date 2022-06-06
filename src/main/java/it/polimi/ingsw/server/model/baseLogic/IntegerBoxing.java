@@ -31,5 +31,10 @@ public class IntegerBoxing implements Affectable {
     public void affect(int increase) {
         i += increase;
     }
+
+    @Override
+    public String toString() {
+        return Integer.toString(i);
+    }
 }
 

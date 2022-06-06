@@ -3,62 +3,29 @@ package it.polimi.ingsw.communication.modelData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class CastleData {
-    private final String username;
-    private final List<StudentColor> waitingRoom;
-    private final List<StudentColor> diningRoom;
-    private final List<String> deck;
-    private final String lastPlayedCard;
-    private final Team towerColor;
-    private final int nTower;
-    private final boolean isMyCastle;
-    private final List<StudentColor> teachers;
+    protected final String username;
+    protected final List<StudentColor> waitingRoom;
+    protected final EnumMap<StudentColor, Integer> diningRoom;
+    protected final List<String> deck;
+    protected final String lastPlayedCard;
+    protected final Team towerColor;
+    protected final boolean isMyCastle;
 
-    public CastleData(String username, List<StudentColor> waitingRoom, List<StudentColor> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, int nTower, List<StudentColor> teachers, boolean isMyCastle) {
+    public CastleData(String username, List<StudentColor> waitingRoom, EnumMap<StudentColor, Integer> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, boolean isMyCastle) {
         this.username = username;
         this.waitingRoom = waitingRoom;
-        this.diningRoom = diningRoom;
+        this.diningRoom = new EnumMap<>(diningRoom);
+        this.towerColor = towerColor;
         this.deck = deck;
         this.lastPlayedCard = lastPlayedCard;
-        this.towerColor = towerColor;
-        this.nTower = nTower;
-        this.teachers = teachers;
         this.isMyCastle = isMyCastle;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public List<StudentColor> getWaitingRoom() {
-        return waitingRoom;
-    }
-
-    public List<StudentColor> getDiningRoom() {
-        return diningRoom;
-    }
-
-    public List<String> getDeck() {
-        return deck;
-    }
-
-    public String getLastPlayedCard() {
-        return lastPlayedCard;
-    }
-
-    public Team getTowerColor() {
-        return towerColor;
-    }
-
-    public int getnTower() {
-        return nTower;
-    }
-
-    public List<StudentColor> getTeachers() {
-        return teachers;
+    public boolean getIsMyCastle(){
+        return isMyCastle;
     }
 
     @Override
@@ -78,23 +45,73 @@ public class CastleData {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("\n\t\tStudents in waiting room: ");
-        for (StudentColor c : waitingRoom) {
-            s.append(c).append(", ");
+        for (StudentColor student : waitingRoom) {
+            s.append(student.toStringColored());
+            s.append(", ");
         }
+        removesComma(s);
         s.append("\n\t\tStudents in dining room: ");
-        for (StudentColor c : diningRoom)
-            s.append(c).append(": ").append(diningRoom.toString()).append(", ");
+        for (StudentColor student : diningRoom.keySet()) {
+            s.append(student.toStringColored());
+            s.append(": ");
+            s.append(diningRoom.get(student));
+            s.append(", ");
+        }
+        removesComma(s);
         if (isMyCastle) {
             s.append("\n\t\tAvailable Cards: ");
-            for (String c : deck)
-                s.append(c).append(", ");
-        }
-        if(lastPlayedCard != null)
+            for (String card : deck)
+                s.append(card).append(", ");
+            removesComma(s);
+            if (lastPlayedCard != null)
+                s.append("\n\t\tThe last card you played is: ").append(lastPlayedCard);
+            else
+                s.append("\n\t\tYou didn't played any card yet.");
+        } else if (lastPlayedCard != null)
             s.append("\n\t\tThe last played card is: ").append(lastPlayedCard);
         else
-            s.append("\n\t\tThe player has not played any cards yet.");
-        s.append("\n\t\tTeam: ").append(towerColor.toString());
+            s.append("\n\t\tThe player has not played any card yet.");
+        s.append("\n\t\tTeam: ");
+        s.append(towerColor);
         return s.toString();
     }
+
+    private void removesComma(StringBuilder s) {
+        s.replace(s.length() - 2, s.length(), "");
+    }
+
+    public String username() {
+        return username;
+    }
+
+    public List<StudentColor> waitingRoom() {
+        return waitingRoom;
+    }
+
+    public EnumMap<StudentColor, Integer> diningRoom() {
+        return diningRoom;
+    }
+
+    public List<String> deck() {
+        return deck;
+    }
+
+    public String lastPlayedCard() {
+        return lastPlayedCard;
+    }
+
+    public Team towerColor() {
+        return towerColor;
+    }
+
+    public boolean isMyCastle() {
+        return isMyCastle;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, waitingRoom, diningRoom, deck, lastPlayedCard, towerColor, isMyCastle);
+    }
+
 
 }

@@ -85,7 +85,7 @@ public class ExpertBoard extends Board {
         try{
             ec.applyEffect(par);
         } catch (StudentException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             throw new StudentException(e);
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,8 +197,8 @@ public class ExpertBoard extends Board {
         motherNaturePosition = firstIslandIndex;
     }
 
-    //
-    private void turnReset() {
+    @Override
+    public void endOfTurn() {
         cloudList.forEach(Cloud::refill);
         playedExpertChar = -1;
         ((ExpertInfluence)influence).reset();
@@ -206,6 +206,7 @@ public class ExpertBoard extends Board {
 
 //Getter
 
+    @Override
     public List<StandardCharacter> getAvailableCharacterCards() {
         return expertCharactersCards;
     }

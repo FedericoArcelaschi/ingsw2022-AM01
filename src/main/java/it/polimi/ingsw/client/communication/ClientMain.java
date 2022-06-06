@@ -1,10 +1,9 @@
-package it.polimi.ingsw.client.communication;
+package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.Preferences;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.client.userInterface.UserInterface;
-import it.polimi.ingsw.communication.packet.message.command.Command;
-import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
+import it.polimi.ingsw.communication.message.subclasses.CommandMessage;
+import it.polimi.ingsw.startUp.Outputs;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -12,15 +11,15 @@ import java.util.concurrent.Executors;
 
 public class ClientMain {
     private final String username;
-    private ClientState state = ClientState.NOT_CONNECTED;
     private final int preferenceNPlayer;
     private final boolean preferenceExpertMode;
     private final String IP;
     private final int port;
 
-    public Socket socket = null;
+    private Socket socket = null;
     private ClientSender clientSender;
     private ClientReceiver clientReceiver;
+    private ClientState state = ClientState.NOT_CONNECTED;
 
     public ClientMain(String IP, int port, Preferences preferences) {
         this.IP = IP;
@@ -42,15 +41,9 @@ public class ClientMain {
         System.out.println(username + ":  connected");
 
         clientSender = new ClientSender(socket);
-        System.out.println("socket client: " + socket.getChannel()); // => null
-        System.out.println(socket.getPort());
-        System.out.println(socket.getRemoteSocketAddress());
 
         //sends player preferences to the server;
-        Preferences preferences = null;
-        preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
-        Packet packet = new Packet(preferences);
-        clientSender.sendPacket(packet);
+        clientSender.send(new Preferences(username, preferenceNPlayer, preferenceExpertMode));
 
         //runs the ClientReceiver
         clientReceiver = new ClientReceiver(this, socket, userInterface);
@@ -60,7 +53,11 @@ public class ClientMain {
         state = ClientState.WAITING_ROOM;
     }
 
-    public void runCommand(String stringCommand){
+    public void runCommand(String stringCommand) {
+        if(stringCommand.strip().equalsIgnoreCase("help"))  {
+            System.out.println(Outputs.HELP);
+            return;
+        }
         if (socket == null || socket.isClosed()) {
             return;
         }
@@ -73,8 +70,7 @@ public class ClientMain {
                 System.err.println(e.getMessage());
                 return;
             }
-            Packet packet = new Packet(commandMessage);
-            clientSender.sendPacket(packet);
+            clientSender.send(commandMessage);
             System.out.println("command sent");
         }
     }

@@ -1,9 +1,8 @@
 package it.polimi.ingsw.communication;
 
-import it.polimi.ingsw.client.communication.ClientMain;
-import it.polimi.ingsw.communication.packet.PacketParser;
-import it.polimi.ingsw.communication.packet.message.Message;
-import it.polimi.ingsw.communication.packet.Packet;
+import com.google.gson.Gson;
+import it.polimi.ingsw.client.ClientMain;
+import it.polimi.ingsw.communication.message.Message;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,15 +11,15 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * abstract class that is able to receive packets from a socket.
+ * Receives messages from a socket.
  */
-public abstract class Receiver implements Runnable {
+public abstract class Receiver implements Runnable{
     protected final Socket socket;
     protected final BufferedReader in;
     protected final PrintWriter out;
     protected final ClientMain cm;
 
-    protected Receiver(ClientMain cm, Socket socket) {
+    public Receiver(ClientMain cm, Socket socket) {
         this.socket = socket;
         this.cm = cm;
         try {
@@ -40,8 +39,7 @@ public abstract class Receiver implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        var packet = PacketParser.gson.fromJson(read, Packet.class);
-        messageSwitch(packet.getMessage());
+        messageSwitch(new Gson().fromJson(read, Message.class));
         run();
     }
 

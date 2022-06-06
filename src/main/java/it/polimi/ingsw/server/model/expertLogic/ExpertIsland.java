@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -23,6 +24,7 @@ public class ExpertIsland extends Island implements StudentPlaces {
     public ExpertIsland() {}
 
     //For Witch Effect:
+    @Override
     public boolean isBlocked() {
         return false;
     }
@@ -45,7 +47,7 @@ public class ExpertIsland extends Island implements StudentPlaces {
     }
 
     @Override
-    public Map<StudentColor, Integer> getStudents() {
+    public EnumMap<StudentColor, Integer> getStudents() {
         return island.getStudents();
     }
 
@@ -62,7 +64,7 @@ public class ExpertIsland extends Island implements StudentPlaces {
     }
 
     @Override
-    public boolean addStudent(Map<StudentColor, Integer> s) {
+    public boolean addStudent(EnumMap<StudentColor, Integer> s) {
         return island.addStudent(s);
     }
 

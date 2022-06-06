@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.communication;
 
 import it.polimi.ingsw.communication.Receiver;
-import it.polimi.ingsw.communication.packet.message.Message;
-import it.polimi.ingsw.communication.packet.message.command.Command;
-import it.polimi.ingsw.communication.packet.message.command.CommandMessage;
+import it.polimi.ingsw.communication.message.Message;
+import it.polimi.ingsw.communication.command.Command;
+import it.polimi.ingsw.communication.message.subclasses.CommandMessage;
 import it.polimi.ingsw.server.controller.Game;
 
 import java.net.Socket;
@@ -15,7 +15,7 @@ public class ServerReceiver extends Receiver {
 
     private final HeartBeatServer hbs;
     private Game game;
-    private final String username;
+    private String username;
 
     public ServerReceiver (Socket socket, HeartBeatServer hbs, String username) {
         super(null, socket);
@@ -24,11 +24,8 @@ public class ServerReceiver extends Receiver {
     }
 
     protected void messageSwitch (Message message) {
-        switch (message.getMessageType()){
-            case PING -> {
-                System.out.println("PING!");
-                hbs.validateResponse(message);
-            }
+        switch (message.getType()){
+            case PING -> hbs.validateResponse(message);
             case COMMAND -> {
                  CommandMessage commandMessage = (CommandMessage) message;
                  Command command = commandMessage.getCommand();
@@ -51,6 +48,10 @@ public class ServerReceiver extends Receiver {
 
     public void setGame(Game game){
         this.game = game;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Game getGame(){

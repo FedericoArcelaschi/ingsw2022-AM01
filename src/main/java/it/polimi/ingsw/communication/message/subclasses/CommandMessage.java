@@ -1,7 +1,8 @@
-package it.polimi.ingsw.communication.packet.message.command;
+package it.polimi.ingsw.communication.message.subclasses;
 
-import it.polimi.ingsw.communication.packet.message.Message;
-import it.polimi.ingsw.communication.packet.message.MessageType;
+import it.polimi.ingsw.communication.message.Message;
+import it.polimi.ingsw.communication.message.MessageType;
+import it.polimi.ingsw.communication.command.Command;
 
 public class CommandMessage extends Message {
     private final Command command;

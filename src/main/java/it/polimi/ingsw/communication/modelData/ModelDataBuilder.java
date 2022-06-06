@@ -1,27 +1,62 @@
 package it.polimi.ingsw.communication.modelData;
 
+import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
+import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
+import it.polimi.ingsw.communication.modelData.expertMode.ExpertCastleData;
+import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
+import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public abstract class ModelDataBuilder {
     public static BoardData newBoardData(String username, Board board){
         return new BoardData(
                 username,
-                board.getNPlayer(),
+                board.getCloudList().size(),
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(ModelDataBuilder::newIslandData).toList(),
-                newCastleData(username, board.getCastle(username), true, board.sumTowers(), board.getProfessorsMap()),
+                newCastleData(username, board.getCastle(username), true),
                 board.getCastleMap().keySet().stream()
-                        .filter(key -> !key.equals(username))
-                        .map(key -> newCastleData(key, board.getCastle(key), false, board.sumTowers(), board.getProfessorsMap()))
+                        .filter(key -> !key.equals(username)) //selects only other players' castle
+                        .map(key -> newCastleData(key, board.getCastle(key), false))
                         .toList(),
                 newTurnData(board.getTurn())
         );
+    }
+
+    public static ExpertBoardData newExpertBoardData(String username, Board board) {
+        //TODO: this null is awful to look at. For now it works; find a better way regardless.
+        List<CharacterData> characters = null;
+        try {
+            characters = board.getAvailableCharacterCards().stream().filter(Objects::nonNull).map(ModelDataBuilder::newCharacterData).toList();
+        } catch (NotTheRightGameModeException e) {
+            e.printStackTrace();
+        }
+        //TODO: newExpertIslandData and newExpertCastleData return base game castles and islands... needs a fix
+        System.out.println("At least it uses this, right?");
+        return new ExpertBoardData(
+                username,
+                board.getCloudList().size(),
+                board.getMotherNaturePosition(),
+                board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
+                board.getIslandList().stream().map(ModelDataBuilder::newExpertIslandData).toList(),
+                newExpertCastleData(username, board.getCastle(username), true),
+                board.getCastleMap().keySet().stream()
+                        .filter(key -> !key.equals(username))
+                        .map(key -> newExpertCastleData(key, board.getCastle(key), false))
+                        .toList(),
+                newTurnData(board.getTurn()),
+                characters
+        );
+    }
+
+    private static CharacterData newCharacterData(StandardCharacter character){
+        return new CharacterData(character.getName(), character.getCost());
     }
 
     private static CloudData newCloudData(Cloud cloud) {
@@ -29,36 +64,50 @@ public abstract class ModelDataBuilder {
     }
 
     private static IslandData newIslandData(Island island) {
-        List<StudentColor> students = new ArrayList<>();
-        for (StudentColor studentColor: island.getStudents().keySet()) {
-            for (int i = 0; i < island.getStudents().get(studentColor); i++) {
-                students.add(studentColor);
-            }
-        }
-        return new IslandData(island.getOwnership(), students, island.getIslandNumber());
+        return new IslandData(island.getOwnership(), island.getStudents(), island.getIslandNumber());
     }
 
-    private static CastleData newCastleData(String username, Castle castle, boolean isMyCastle, Map<Team, Integer> towerPerTeam, Map<StudentColor, Team> teachersMap) {
-        List<StudentColor> diningRoom = new ArrayList<>();
-        List<StudentColor> teachers = new ArrayList<>();
-        for (StudentColor studentColor: castle.getDiningRoom().keySet()) {
-            for (int i = 0; i < castle.getDiningRoom().get(studentColor); i++) {
-                diningRoom.add(studentColor);
-            }
+    private static IslandData newExpertIslandData(Island island) {
+        Boolean blocked = null;
+        try{
+            blocked = island.isBlocked();
+        } catch (NotTheRightGameModeException e) {
+            e.printStackTrace();
         }
-        for (StudentColor studentColor: teachersMap.keySet())
-            if(teachersMap.get(studentColor) == castle.getTeam())
-                teachers.add(studentColor);
+        return new ExpertIslandData(island.getOwnership(), island.getStudents(), island.getIslandNumber(), Boolean.TRUE.equals(blocked));
+    }
+
+    private static CastleData newCastleData(String username, Castle castle, boolean isMyCastle) {
+        List<String> deck = castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList();
         return new CastleData(
                 username,
                 castle.getWaitingRoom(),
-                diningRoom,
-                isMyCastle ? castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList() : null,
-                castle.getLastCardPlayed() != null ?castle.getLastCardPlayed().toString() : null,
+                castle.getDiningRoom(),
+                isMyCastle ? deck : null,
+                castle.getLastCardPlayed() != null ? castle.getLastCardPlayed().toString() : null,
                 castle.getTeam(),
-                towerPerTeam.get(castle.getTeam()),
-                teachers,
-                isMyCastle);
+                isMyCastle
+                );
+    }
+
+    private static CastleData newExpertCastleData(String username, Castle castle, boolean isMyCastle) {
+        List<String> deck = castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList();
+        Integer coins = null;
+        try {
+            coins = castle.getCoins();
+        } catch (NotTheRightGameModeException e) {
+            e.printStackTrace();
+        }
+        return new ExpertCastleData(
+                username,
+                castle.getWaitingRoom(),
+                castle.getDiningRoom(),
+                isMyCastle ? deck : null,
+                castle.getLastCardPlayed() != null ? castle.getLastCardPlayed().toString() : null,
+                castle.getTeam(),
+                isMyCastle,
+                coins
+        );
     }
 
     private static TurnData newTurnData(Turn t){

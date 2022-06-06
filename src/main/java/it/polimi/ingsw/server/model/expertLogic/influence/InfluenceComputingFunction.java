@@ -15,6 +15,7 @@ import java.util.Map;
 public enum InfluenceComputingFunction {
     KNIGHT( //+2 of influence to the team who played paid the Knight
         (Island island, Map<StudentColor, Team> professorsMap, Team currTeam) -> {
+            //TODO: check for valid inputs!
             Map<Team, Integer> influenceMap = new HashMap<>();
             //counts the students
             for (Team t : Team.values()) {

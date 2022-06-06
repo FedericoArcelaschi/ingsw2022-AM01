@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.communication;
 
-import com.google.gson.Gson;
-import it.polimi.ingsw.communication.packet.Packet;
+import it.polimi.ingsw.communication.message.Message;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -20,8 +19,7 @@ public class ClientSender {
         }
     }
 
-    public void sendPacket(Packet packet){
-        out.println(packet.toJson());
-        System.out.println(packet.toJson());
+    public void send(Message message){
+        out.println(message.toJson());
     }
 }

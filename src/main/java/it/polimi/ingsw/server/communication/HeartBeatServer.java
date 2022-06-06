@@ -1,9 +1,7 @@
 package it.polimi.ingsw.server.communication;
 
-import it.polimi.ingsw.communication.packet.PacketParser;
-import it.polimi.ingsw.communication.packet.message.Message;
-import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.communication.packet.message.Ping;
+import it.polimi.ingsw.communication.message.Message;
+import it.polimi.ingsw.communication.message.subclasses.Ping;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -53,11 +51,9 @@ public class HeartBeatServer implements Callable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            var message = new Ping();
-            var packet = new Packet(message);
-            heartBeats.put(client, message);
-            var jsonMessage = PacketParser.gson.toJson(packet, Packet.class);
-            out.println(jsonMessage);
+            heartBeats.put(client, new Ping()); //FIXME -> here the idea is to put the PING UUID associated to each client's ping. Not needed. Not implemented.
+            String pingMessage = new Ping().toJson();
+            out.println(pingMessage);
         }
         try {
             Thread.sleep(timeout - previousTime + new Date().getTime());

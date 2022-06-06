@@ -1,11 +1,11 @@
 package it.polimi.ingsw.server.communication;
 
-import it.polimi.ingsw.communication.packet.PacketParser;
-import it.polimi.ingsw.communication.packet.message.Preferences;
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import it.polimi.ingsw.communication.message.Message;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
-import it.polimi.ingsw.communication.packet.Packet;
-import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,9 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.*;
 
-import static it.polimi.ingsw.server.controller.GameType.getGameType;
-
-public class ServerMain implements Runnable{
+public class ServerMain implements Runnable {
 
     private final int port;
     private ExecutorService executor;
@@ -31,16 +29,16 @@ public class ServerMain implements Runnable{
     private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
     private int gameId = 0;
 
-    public static void init(){
+    public static void init() {
         FileHandler fileHandler;
-        try{
+        try {
             fileHandler = new FileHandler(System.getProperty("user.dir"));
             logger.addHandler(fileHandler);
             SimpleFormatter formatter = new SimpleFormatter();
             fileHandler.setFormatter(formatter);
             logger.setLevel(Level.FINE);
             logger.info("Logger has been initialized.");
-        }catch (Exception e){
+        } catch (Exception e){
             logger.log(Level.WARNING, "Exception: ", e);
         }
     }
@@ -84,7 +82,7 @@ public class ServerMain implements Runnable{
     /**
      * wait for players to connect and generate a game when there are 2 players connected
      */
-    public void acceptPlayers(){
+    public void acceptPlayers() {
 
         while (true) {
             Socket socket;
@@ -97,7 +95,8 @@ public class ServerMain implements Runnable{
                 break; // Would get here if server socket was to be closed.
             }
             GameType playerGameType = handleNewClient(socket);
-            handleGame(playerGameType);
+            if(playerGameType != null)
+                handleGame(playerGameType);
         }
         executor.shutdown();
     }
@@ -107,8 +106,7 @@ public class ServerMain implements Runnable{
         Game game = waitingRooms.submitGame(gameId, gameType);
         if(game != null) {
             gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType()) + 1);
-            logger.info( StudentColor.YELLOW.getColorCode() +
-                    "Server: created game " + gameId + " with players: " + game.toStringPlayers() + "\u001B[0m");
+            logger.info("Server: created game " + gameId + " with players: " + game.toStringPlayers());
             for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
                 serverReceiver.setGame(game);
             }
@@ -117,34 +115,31 @@ public class ServerMain implements Runnable{
     }
 
 
-    private GameType handleNewClient(Socket socket){
-        System.out.println("socket " + socket);
-        //listen for preferences
+    private GameType handleNewClient(Socket socket) {
         String input;
-        try{
+        try{ //server receives preferences
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             input = in.readLine();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
+            return null;
         }
-        System.out.println(input);
-        //decode preferences
-        Packet preferencesPacket = PacketParser.gson.fromJson(input, Packet.class);
-        Preferences preferences = (Preferences) preferencesPacket.getMessage();
-        String username = preferences.username();
-        System.out.println(username + " joined in");
-        //adds the new client
-        heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
-        //starts the receiver
-        ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, username);
-        //adds player to waiting room
+        Preferences preferences;
+        try {
+            preferences = (Preferences) new Gson().fromJson(input, Message.class);
+        } catch(JsonParseException e) {
+            System.err.println("not a preference packet!!");
+            e.printStackTrace();
+            return null;
+        }
+        System.out.println(preferences.username() + " joined in");
+        heartBeatServer.addClient(socket);
+        ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, preferences.username());
         waitingRooms.addPlayer(preferences.getGameType(), sr);
         executor.submit(sr);
-        //add player to list of connected players
-        connectedPlayers.put(username, sr);
+        connectedPlayers.put(preferences.username(), sr);
         return preferences.getGameType();
     }
-
 
     public Map<String, ServerReceiver> getConnectedPlayers() {
         return new HashMap<>(connectedPlayers);
@@ -153,4 +148,5 @@ public class ServerMain implements Runnable{
     public int getGamesNumber(GameType type){
         return gamesNumber.get(type);
     }
+
 }

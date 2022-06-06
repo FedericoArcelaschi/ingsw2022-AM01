@@ -1,4 +1,7 @@
-package it.polimi.ingsw.communication.packet.message;
+package it.polimi.ingsw.communication.message.subclasses;
+
+import it.polimi.ingsw.communication.message.Message;
+import it.polimi.ingsw.communication.message.MessageType;
 
 public class Error extends Message {
     private final int errorCode; //TODO: UPDATE ERROR CODES

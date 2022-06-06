@@ -1,8 +1,12 @@
 package it.polimi.ingsw.server.model.baseLogic.interfaces;
 
 import it.polimi.ingsw.server.model.baseLogic.Team;
+import it.polimi.ingsw.server.model.exceptions.DrawException;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -10,22 +14,18 @@ import java.util.function.Function;
  */
 public interface GreaterTeam extends Function<Map<Team, Integer>, Team> {
 
-    static Team findGreaterTeam(Map<Team, Integer> teamIntegerMap){
-        int max
-                = teamIntegerMap.get(Team.WHITE);
-        Team winner
-                = Team.WHITE;
-        if(teamIntegerMap.get(Team.BLACK) > max) {
-            max = teamIntegerMap.get(Team.BLACK);
-            winner = Team.BLACK;
-        } else if (teamIntegerMap.get(Team.BLACK) == max)
-            winner = null;
-
-        if(teamIntegerMap.get(Team.GREY) > max) {
-            winner = Team.GREY;
-        }else if(teamIntegerMap.get(Team.GREY) == max)
-            winner = null;
-        return winner;
+    static Team findGreaterTeam(Map<Team, Integer> teamIntegerMap) {
+        Team max = null;
+        int maxScore = 0;
+        for (Team t1 : Team.values()) {
+            if(teamIntegerMap.get(t1) > maxScore) {
+                max = t1;
+                maxScore = teamIntegerMap.get(max);
+            } else if(teamIntegerMap.get(t1) == maxScore && t1 != max) {
+                max = null;
+            }
+        }
+        return max;
     }
 
 }

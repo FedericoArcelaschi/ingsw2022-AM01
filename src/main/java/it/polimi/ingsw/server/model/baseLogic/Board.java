@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.GreaterTeam;
 import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
 import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
 import it.polimi.ingsw.server.model.exceptions.*;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -143,7 +144,7 @@ public class Board {
             throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
         if(!turn.getCurrentPlayer().equals(playerID))
             throw new NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. "+ playerID +" can't play.");
-        if(turn.getCurrentPhase()!=TurnPhase.STUDENTS)
+        if(turn.getCurrentPhase() != TurnPhase.STUDENTS)
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
         Castle castle = castleMap.get(playerID);
         castle.removeStudentsFromWaitingRoom(students);
@@ -181,11 +182,10 @@ public class Board {
      * @param steps number of steps forward of mother nature
      */
     public void moveMotherNature(int steps) throws PhaseNotRightException {
-        if(turn.getCurrentPhase()!=TurnPhase.MOTHERNATURE)
-            throw new PhaseNotRightException("You can't use this command in this stage of the game.");
-        if (steps >
-                possibleMovingSteps.getInt())
-            throw new IllegalArgumentException("too many steps");
+        if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
+            throw new PhaseNotRightException("You can't move mother nature in this stage of the game. Current phase is " + turn.getCurrentPhase().toString());
+        if (steps > possibleMovingSteps.getInt())
+            throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.getInt());
         if ((motherNaturePosition + steps) > (islandList.size() - 1)) motherNaturePosition += steps - islandList.size();
         else motherNaturePosition += steps;
         conquerIsland(motherNaturePosition);
@@ -195,14 +195,12 @@ public class Board {
      * Calculates influence on given island and sets a new owner if possible.
      * @param islandIndex the current island mother nature is on
      */
-    protected void conquerIsland(@NotNull Integer islandIndex) {
-        Island island = islandList.get(islandIndex);
+    protected void conquerIsland(int islandIndex) {
+        Island island = islandList.remove(islandIndex);
         Team teamBeforeComputing = island.getOwnership();
         Team t = GreaterTeam.findGreaterTeam(influence.getInfluenceMap(island));
-        if(t == null || t.equals(teamBeforeComputing))
-            //No one conquers the island. We may want to differentiate the cases to tell the client
-            return;
-        island = island.setOwnership(t);
+        if (t == null || t == teamBeforeComputing) return;
+        islandList.add(islandIndex, island.setOwnership(t));
         checkJoinIsland(islandIndex);
     }
 
@@ -213,7 +211,9 @@ public class Board {
     protected void checkJoinIsland(Integer islandIndex) {
         List<Integer> islandsToJoin = getNeighbouringIsland(islandIndex);
         islandsToJoin = getSameOwner(islandsToJoin);
-        if(!islandsToJoin.isEmpty()) joinIslands(islandsToJoin);
+        System.out.println("islandsToJoin: " + islandsToJoin);//TODO: debug island merging
+        if(!islandsToJoin.isEmpty())
+            joinIslands(islandsToJoin);
     }
 
     @Contract(pure = true)
@@ -228,15 +228,16 @@ public class Board {
     }
 
     private List<Integer> getSameOwner(List<Integer> neightbouringIsland) {
-        Set<Integer> islandToJoin = new HashSet<>(neightbouringIsland);
-        Island firstIsland = islandList.get(neightbouringIsland.get(0)),
+        Set<Integer> islandToJoin = new HashSet<>();
+        Island  firstIsland = islandList.get(neightbouringIsland.get(0)),
                 secondIsland = islandList.get(neightbouringIsland.get(1)),
                 thirdIsland = islandList.get(neightbouringIsland.get(2));
-        neightbouringIsland.clear();
-        if(firstIsland.getOwnership() == secondIsland.getOwnership())
+        System.out.println(neightbouringIsland);
+        if (firstIsland.getOwnership() == secondIsland.getOwnership())
             islandToJoin.addAll(neightbouringIsland.subList(0, 2));
         if (secondIsland.getOwnership() == thirdIsland.getOwnership())
             islandToJoin.addAll(neightbouringIsland.subList(1, 3));
+        System.out.println(islandToJoin);
         return islandToJoin.stream().toList();
         //add all should remove the repetition of the second island index
     }
@@ -252,10 +253,9 @@ public class Board {
             newIsland = new Archipelago(islandList.get(firstIslandIndex), islandList.get(secondIslandIndex));
         else if(islandsToJoin.size()==3) {
             int thirdIslandIndex = islandsToJoin.get(2);
-            newIsland
-                = new Archipelago(  islandList.get(firstIslandIndex),
-                                    islandList.get(islandsToJoin.get(1)),
-                                    islandList.get(islandsToJoin.get(2)));
+            newIsland = new Archipelago(    islandList.get(firstIslandIndex),
+                                            islandList.get(secondIslandIndex),
+                                            islandList.get(thirdIslandIndex));
         } else
             throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
         for (int index : islandsToJoin)
@@ -272,43 +272,28 @@ public class Board {
      * @param cloudID the cloud that is chosen
      * @return if the move is legal and played or not
      */
-    public boolean chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
+    public void chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
         if(turn.getCurrentPhase()!=TurnPhase.CLOUD)
             throw new PhaseNotRightException("You can't use this command in this stage of the game.");
         if(!turn.getCurrentPlayer().equals(PlayerID))
             throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. " + PlayerID + " can't choose a cloud.");
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
-        return castle.addStudentsInWaitingRoom(cloud.choose());
+        castle.addStudentsInWaitingRoom(cloud.choose());
+        endOfTurn();
     }
 
     /**
      * Refills each cloud with new students.
      * @return if the move is legal and played or not
      */
-    public void refillClouds() {
+    public void endOfTurn() {
         for(Cloud c: cloudList){
             c.refill();
         }
     }
 
 //Ending of a game
-
-    /**
-     * Checks if the game is won after each player's turn is over by checking whether the players don't have any more
-     * cards or if there are no more students in the bag.
-     * @return the winner team
-     */
-    public Team isWonByResources() {
-        if(bag.remainingStudents() == 0 || remainingCards() == 0){
-            Map <Team, Integer> nTowers = sumTowers();
-            Team teamWithMostTowers = GreaterTeam.findGreaterTeam(nTowers);
-            if(teamWithMostTowers == null) return teamWithMostProfessors();
-            return teamWithMostTowers;
-        }
-        else return null;
-    }
-
 
     /**
      * Checks if there are no more cards.
@@ -321,76 +306,88 @@ public class Board {
     }
 
     /**
-     * Checks if the game is won after a player finishes his turn.
+     * Checks if the game is won (if he placed the 8th tower)
      * @return the winner team
      */
-    public Team isWinningPosition() {
-        Map <Team, Integer> nTowers = sumTowers();
-        Team winner = null;
-        for(Team t : Team.values()){
-            if(nTowers.get(t) >= numberOfTowersToPlace) return winner = t;
-        }
-        if(islandList.size() <= numberOfIslandsToEndGame){
-            winner = GreaterTeam.findGreaterTeam(nTowers);
-            if(winner == null){
-                winner = teamWithMostProfessors();
-            }else{
+    public boolean isWinningState() {
+        System.out.println("test");
+        EnumMap<Team, Integer> nTowers = sumTowers();
+        for (Team t : Team.values())
+            if (nTowers.get(t) >= numberOfTowersToPlace)
+                return true;
+        return false;
+    }
 
-            }
-        }
+    /**
+     * Checks if the game is won after each player's turn is over by checking whether the players don't have any more
+     * cards or if there are no more students in the bag.
+     * @return the winner team
+     */
+    public boolean isWonByResources() {
+        return bag.remainingStudents() == 0 || remainingCards() == 0;
+    }
+
+    /**
+     * In case of End of Game (by resources or by state) checks if there is a winner.
+     * @throws DrawException if the game is a tie both for the islands and the professors.
+     */
+    public Team getWinner() throws DrawException {
+        Map<Team, Integer> nTowers = sumTowers();
+        for (Team t : Team.values())
+            if (nTowers.get(t) == numberOfTowersToPlace) return t;
+        Team winner = GreaterTeam.findGreaterTeam(nTowers);
+        if (winner == null)
+            return teamWithMostProfessors();
         return winner;
     }
 
+    /** @return a map that contains the number of placed towers on the islands for each team */
+    private EnumMap<Team,Integer> sumTowers() {
+        System.out.println("test2");
+        EnumMap<Team, Integer> teamTowersMap = new EnumMap<Team, Integer>(Team.class);
+        for (Team t : Team.values()) { //fill nTowers map for all team at 0
+            teamTowersMap.put(t, 0);
+            for (Island i : islandList) //sum towers for each island to the map
+                if (i.getOwnership() == t)
+                    teamTowersMap.replace(t, teamTowersMap.get(t) + i.getIslandNumber());
+        }
+        return teamTowersMap;
+    }
+
     /**
-     * Returns the team with the most professors.
+     * @return the team with the most professors.
+     * @throws DrawException if there is no team with more professors than the others (E.g.: White: 2, Black: 1, Grey: 1)
      * //TODO: test after modifications.
-     * todo: maybe implement with greaterTeam()
      */
-    private Team teamWithMostProfessors() {
+    private @NotNull Team teamWithMostProfessors() throws DrawException {
         Team withMoreProfessors = null;
         int max = 0;
-        for(Team t1 : Team.values()){
+        for(Team t1 : Team.values()) {
             int sum = 0;
-            for(Team t2 : Team.values()){
+            for(Team t2 : getProfessorsMap().values()) {
                 if(t1 == t2) sum++;
             }
-            if(sum > max){
+            if (sum > max) {
                 max = sum;
                 withMoreProfessors = t1;
             }
-            else if (sum == max) {
+            else if (sum == max)
                 withMoreProfessors = null;
-            }
         }
+        if (withMoreProfessors == null) throw new DrawException("Two players have the same number of professors"); //FIXME
         return withMoreProfessors;
     }
 
-    /**
-     * Calculates who has the highest Integer in the map that he receives
-     * @param nTowers map that contains team and the numberOfTowers
-     * @return the team with the most towers.
-     */
-
-    /**
-     * @return a map that contains the number of placed towers on the islands for each team
-     */
-    public Map<Team,Integer> sumTowers() {
-        Map<Team, Integer> nTowers = new HashMap<>();
-        for (Team t : Team.values()) { //fill nTowers map for all team at 0
-            nTowers.put(t, 0);
-            for (Island i : islandList) //sum towers for each island to the map
-                if (i.getOwnership() == t)
-                    nTowers.replace(t, nTowers.get(t) + i.getIslandNumber());
-        }
-        return nTowers;
+    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, NotTheRightGameModeException, PhaseNotRightException {
+        throw new NotTheRightGameModeException("You can't use this command in this game mode!");
     }
 
-    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, NotTheRightGamemodeException, PhaseNotRightException {
-        throw new NotTheRightGamemodeException("You can't use this command in this game mode!");
+    public String getCharInfo (int idChar) throws NotTheRightGameModeException {
+        throw new NotTheRightGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
     }
 
-    public String getCharInfo (int idChar) throws NotTheRightGamemodeException{
-        throw new NotTheRightGamemodeException("You can't use this command in this game mode!");
+    public List<StandardCharacter> getAvailableCharacterCards() throws NotTheRightGameModeException {
+        throw new NotTheRightGameModeException("You can't use this command in this game mode!");
     }
 
     public void changePhase(){
@@ -420,16 +417,9 @@ public class Board {
     public Map<StudentColor, Team> getProfessorsMap() {//TODO: make return only a copy
         return influence.getProfessorsMap();
     }
-    public int getPossibleMovingSteps() {
-        return possibleMovingSteps.getInt();
-    }
 
     public int getMotherNaturePosition() {
         return motherNaturePosition;
-    }
-
-    public int getNPlayer() {
-        return nPlayer;
     }
 
     public Bag getBag(){

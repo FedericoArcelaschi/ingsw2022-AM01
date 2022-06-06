@@ -2,9 +2,10 @@ package it.polimi.ingsw.client.userInterface.cli;
 
 import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.client.userInterface.UserInterface;
-import it.polimi.ingsw.communication.packet.message.Preferences;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.startUp.Outputs;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,14 +35,15 @@ public class Cli implements UserInterface {
                 String input = br.readLine();
                 clientMain.runCommand(input);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.err.println(e.getMessage());
+                //throw new RuntimeException(e);
             }
         }
     }
 
     @Override
-    public void draw (BoardData boardData) { //TODO: il problema è che forse non può fare questo se sta leggendo da input.
-        System.out.println(boardData.toString());
+    public void draw (BoardData boardData) {
+        System.out.println("\r" + boardData.toString());
     }
 
     /**
@@ -49,13 +51,14 @@ public class Cli implements UserInterface {
      */
     @Override
     public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Player in queue: \n");
-        sb.append("Game type: ").append(gameType).append("\n");
+        //TODO: print a nicer view of the lobby
+        StringBuilder input = new StringBuilder();
+        input.append("Player in queue: \n");
+        input.append("Game type: ").append(gameType).append("\n");
         for (String user : connectedUser) {
-            sb.append("\t").append(user).append("\n");
+            input.append("\t").append(user).append("\n");
         }
-        System.out.println(sb);
+        System.out.println(input);
     }
     /**
      * Before opening the connection with the server the client requires to insert the preferences.
@@ -93,6 +96,7 @@ public class Cli implements UserInterface {
             return getValidPreferences();
         }
         try {
+            System.out.println(Outputs.CLEAR_SCREEN);
             return new Preferences(username, nPlayer, expertMode);
         } catch (IllegalAccessException e) {
             System.err.println(e.getMessage());

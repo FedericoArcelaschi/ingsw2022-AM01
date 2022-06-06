@@ -5,19 +5,19 @@ import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import java.util.List;
 import java.util.random.RandomGenerator;
 
-public class BoardFactory {
-    @Deprecated
-    public static Board getBoard(List<String> playerList, Turn turn){
-        return getBoard(playerList, false, turn, RandomGenerator.getDefault().nextLong());
-    }
+public interface BoardFactory {
 
-    public static Board getBoard(List<String> playerList, boolean expert, Turn turn){
+    //without seed
+    static Board getBoard(List<String> playerList, boolean expert) {
+        Turn turn = new Turn(playerList);
         if(expert)
             return createExpertBoard(playerList, turn, RandomGenerator.getDefault().nextLong());
         return createBoard(playerList, turn, RandomGenerator.getDefault().nextLong());
     }
 
-    public static Board getBoard(List<String> playerList, boolean expert, Turn turn, long seed){
+    //with seed
+    static Board getBoard(List<String> playerList, boolean expert, long seed) {
+        Turn turn = new Turn(playerList);
         if(expert)
             return createExpertBoard(playerList, turn, seed);
         return createBoard(playerList, turn, seed);
@@ -39,7 +39,7 @@ public class BoardFactory {
                 case 2 -> new Board(playerList.get(0),playerList.get(1), turn, seed);
                 case 3 -> new Board(playerList.get(0),playerList.get(1),playerList.get(2), turn, seed);
                 case 4 -> new Board(playerList.get(0),playerList.get(1),playerList.get(2),playerList.get(3), turn, seed);
-                default -> throw new IllegalArgumentException("too many students");
+                default -> throw new IllegalArgumentException("too many players");
             };
     }
 }
