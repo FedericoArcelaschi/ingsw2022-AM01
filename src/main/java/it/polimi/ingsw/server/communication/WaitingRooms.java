@@ -54,10 +54,7 @@ public class WaitingRooms {
         if(gameSocketMap.get(gameType).size() < numberOfPlayers){
             List<String> playersIn = new ArrayList<>(gameSocketMap.get(gameType).stream().map(ServerReceiver::getUsername).toList());
             Message lobbyInfo = new LobbyInfo(playersIn, gameType);
-            List<ServerReceiver> playersInLobby
-                    = new ArrayList<>(//FIXME: questo non va bene
-                            gameSocketMap.get(gameType)
-                                    .subList((gameSocketMap.get(gameType).size()-gameSocketMap.get(gameType).size()%numberOfPlayers),gameSocketMap.get(gameType).size()));
+            List<ServerReceiver> playersInLobby = new ArrayList<>(gameSocketMap.get(gameType));
             for(ServerReceiver sr : playersInLobby){
                 PrintWriter out;
                 try {
