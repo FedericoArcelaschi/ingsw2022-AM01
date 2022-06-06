@@ -1,13 +1,7 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
-import it.polimi.ingsw.client.userInterface.gui.Gui;
 import it.polimi.ingsw.communication.modelData.BoardData;
-import it.polimi.ingsw.communication.modelData.CastleData;
-import it.polimi.ingsw.communication.modelData.CloudData;
-import it.polimi.ingsw.communication.modelData.IslandData;
-import it.polimi.ingsw.server.model.baseLogic.Castle;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
-import it.polimi.ingsw.server.model.baseLogic.Team;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -49,6 +43,10 @@ public class GamePaneController {
     }
 
     public void moveStudentToDiningRoom(MouseEvent mouseEvent) {
-        //TODO: create and send command of move student
+        ToggleButton selected = (ToggleButton) waitingRoomToggleGroup.getSelectedToggle();
+        if(selected == null)
+            return;
+        StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
+        //TODO: Create and send command
     }
 }

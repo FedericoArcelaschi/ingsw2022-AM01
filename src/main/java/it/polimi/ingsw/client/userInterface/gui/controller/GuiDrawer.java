@@ -142,6 +142,7 @@ public class GuiDrawer {
 
     private void setStudentButtonColor(ToggleButton button, StudentColor studentColor) {
         button.getStyleClass().add(studentColor.getStudentCSS());
+        button.setAccessibleText(studentColor.name());
     }
 
     private void setTeacherButtonColor(ToggleButton button, StudentColor studentColor) {
