@@ -3,9 +3,7 @@ package it.polimi.ingsw.server.model.expertLogic.character.charTypes;
 import it.polimi.ingsw.server.model.baseLogic.Bag;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  *factory method for StandardCharacter generation
@@ -16,7 +14,6 @@ public class Tavern {
     private static Bag bag;
     private final int numberOfCharacters = CharacterUtility.values().length; //final = 12
     private final int numberOfPlayableCharacter = 3;
-    private final ArrayList<StandardCharacter> extractedCharacters = new ArrayList<>();
 
     /**
      * @param bag for StudentCharacter Character generation
@@ -24,28 +21,26 @@ public class Tavern {
     public Tavern(Bag bag){
         seed = bag.getSeed();
         Tavern.bag = bag;
-        for (int i = 0; i <= numberOfCharacters; i++) {
-            extractedCharacters.add(i, null);
-        }
     }
 
     /**
      * extract 3 different cards for the game
      * @return List<StandardCharacter>
      */
-    public List<StandardCharacter> extract(){
+    public Map<CharacterUtility, StandardCharacter> extract(){
         StandardCharacter ec;
         Random rand = new Random(seed);
         int idChar;
+        Map<CharacterUtility, StandardCharacter> characterMap = new EnumMap<>(CharacterUtility.class);
         for(int i= 0; i < numberOfPlayableCharacter; i++) {
             idChar = rand.nextInt(1, numberOfCharacters);
-            if(extractedCharacters.get(idChar) == null) {
-                ec = getExpertCharacter(idChar);
-                extractedCharacters.set(idChar, ec);
-            }else
-                i--;
+            CharacterUtility characterID = CharacterUtility.getChar(idChar);
+            if(!characterMap.containsKey(characterID))
+                characterMap.put(characterID, getExpertCharacter(idChar));
+            else --i;
+
         }
-        return extractedCharacters;
+        return characterMap;
 
     }
 
@@ -66,9 +61,7 @@ public class Tavern {
     }
 
     public StandardCharacter extract4testing(int idChar){
-        if(extractedCharacters.get(idChar) == null)
-            return getExpertCharacter(idChar);
-        return extractedCharacters.get(idChar);
+        return getExpertCharacter(idChar);
     }
 
 }

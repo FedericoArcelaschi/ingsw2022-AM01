@@ -12,9 +12,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+@SuppressWarnings("Redundant")
 public class Board {
-    private static final int numOfStudentsPerColor = 24;
+    protected static final int numOfStudentsPerColor = 24;
     protected int motherNaturePosition = 0;
+
     protected final int nPlayer;
     protected final Bag bag;
     protected final List<Cloud> cloudList = new ArrayList<>();
@@ -26,14 +28,14 @@ public class Board {
     protected final Turn turn;
     private final long seed;
     protected IntegerBoxing possibleMovingSteps = new IntegerBoxing(0); //calculated form the card: must be stored in memory til the player action turn
-    //TODO: fix this in expertLogic.
-
     //constants
     private final int INITIAL_NUMBER_OF_ISLANDS = 12;
     private final int MINIMUM_NUMBER_OF_ISLANDS = 3;
     private final int TOWERS_TO_PLACE_TO_WIN = 8;
     private final int CLOUD_SIZE_2_4_PLAYERS = 3;
     private final int CLOUD_SIZE_3_PLAYERS = 4;
+    private int MAX_STUDENTS_TO_MOVE; //Effectively final, TODO
+    protected int movedStudents;
 
 
     public Board(String playerID1, String playerID2, Turn turn, long seed) {
@@ -46,7 +48,7 @@ public class Board {
         construct();
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, Turn turn, long seed){
+    public Board(String playerID1, String playerID2, String playerID3, Turn turn, long seed) {
         nPlayer = 3;
         this.seed = seed;
         bag = new Bag(numOfStudentsPerColor, seed);
@@ -57,7 +59,7 @@ public class Board {
         construct();
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn, long seed){
+    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn, long seed) {
         nPlayer = 4;
         this.seed = seed;
         bag = new Bag(numOfStudentsPerColor, seed);
@@ -69,15 +71,8 @@ public class Board {
         construct();
     }
 
-    /**Cleans the constructor implementation
-     */
-    private void construct(){
-        setupClouds();
-        setupIslands();
-    }
-
     /**
-     * Constructor for ExpertBoard
+     * Constructor for ExpertBoard: doesn't generate the castles.
      */
     protected Board(Turn turn, long seed, int nPlayer){
         this.turn = turn;
@@ -85,6 +80,15 @@ public class Board {
         this.bag = new Bag(numOfStudentsPerColor, seed);
         this.nPlayer = nPlayer;
         construct();
+    }
+
+    /**
+     * Cleans the constructor implementation
+     */
+    private void construct(){
+        setupClouds();
+        setupIslands();
+        MAX_STUDENTS_TO_MOVE = ( nPlayer==3 ? 4 : 3);
     }
 
 
@@ -289,9 +293,14 @@ public class Board {
      * @return if the move is legal and played or not
      */
     public void endOfTurn() {
-        for(Cloud c: cloudList){
-            c.refill();
-        }
+        movedStudents = 0;
+    }
+
+    /**
+     * after a whole
+     */
+    public void cloudRefill() {
+        cloudList.forEach(Cloud::refill);
     }
 
 //Ending of a game
@@ -388,7 +397,7 @@ public class Board {
         throw new NotTheRightGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
     }
 
-    public List<StandardCharacter> getAvailableCharacterCards() throws NotTheRightGameModeException {
+    public Collection<StandardCharacter> getAvailableCharacterCards() throws NotTheRightGameModeException {
         throw new NotTheRightGameModeException("You can't use this command in this game mode!");
     }
 

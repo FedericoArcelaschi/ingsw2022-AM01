@@ -3,7 +3,7 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 
 public enum Team implements PossibleParameters {
     BLACK("37;40"),
-    WHITE("30;48;2;255;255;255"),
+    WHITE("30;47"),
     GREY("48;2;211;215;207;30");
 
     private final String colorCode;
