@@ -10,21 +10,22 @@ import static it.polimi.ingsw.communication.command.CommandType.getCommandType;
  * a representation of the command the player can compose and ask to be executed
  */
 public class Command {
-    private CommandType type;
-    private String username;
-    private Map<CommandAttribute, String> attributesMap;
+    //TODO: rework attributes map to invoke lambdas.
+    private final CommandType type;
+    private final String username;
+    private final Map<CommandAttribute, String> attributesMap;
 
     public Command(String username, CommandType type, String[] attributes) {
         this.type = type;
         this.attributesMap = new HashMap<>();
         this.username = username;
-        if(Arrays.stream(attributes).toList().size() < 0)
+        if (Arrays.stream(attributes).toList().size() < 1) //FIXME LORENZO
             throw new IllegalArgumentException(" needed X arguments. actual: 0");
         switch (type) {
             case PLAY_CARD -> attributesMap.put(CommandAttribute.ID, attributes[0]);
             //e.g.: playcard 1
             case MOVE_STUDENT_TO_CASTLE -> {
-                attributesMap.put(CommandAttribute.WHAT, String.join(",", attributes)); //What will be a list of students.
+                attributesMap.put(CommandAttribute.WHAT, String.join("", attributes)); //What will be a list of students.
                 //System.out.println(attributesMap.get(CommandAttribute.WHAT));
             }
             //e.g.: moveStudentCastle Green, Blue, Pink

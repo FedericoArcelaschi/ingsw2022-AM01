@@ -1,20 +1,16 @@
 package it.polimi.ingsw.server.communication;
 
+import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
-import it.polimi.ingsw.communication.message.Message;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WaitingRooms {
     private final Map<GameType, List<ServerReceiver>> gameSocketMap = new HashMap<>();
-    private final Map<String, Integer> duplicateNames = new HashMap<>();
 
     public WaitingRooms() {
         for(GameType g : GameType.values()) {
@@ -28,16 +24,11 @@ public class WaitingRooms {
 
     /**
      * Adds a player to the requested lobby. Informs players of the same lobby that the state of the lobby changed.
-     * @param gameType the provided gametype.
      * @param serverReceiver the serverReceiver of the new player.
-     * @throws IOException
      */
     public void addPlayer(GameType gameType, ServerReceiver serverReceiver) {
-        if (!duplicateNames.containsKey(serverReceiver.getUsername())){
-            duplicateNames.put(serverReceiver.getUsername(), 0);
-        } else {
-            duplicateNames.merge(serverReceiver.getUsername(), 1, Integer::sum);
-            serverReceiver.setUsername(serverReceiver.getUsername()+duplicateNames.get(serverReceiver.getUsername()));
+        while (gameSocketMap.get(gameType).stream().map(ServerReceiver::getUsername).toList().contains(serverReceiver.getUsername())) {
+            serverReceiver.setUsername(serverReceiver.getUsername() + "*");
         }
         gameSocketMap.get(gameType).add(serverReceiver);
         informPlayers(gameType, gameType.nPlayer);
@@ -69,11 +60,13 @@ public class WaitingRooms {
     /**
      * Computes the game type according to the player's preferences, if there are enough players.
      * Returns null otherwise.
-     * @param gameId
+     *
+     * @param gameId a sequential game identificator
      * @return the correct game.
      */
     public Game submitGame(int gameId, GameType type) {
         if(gameSocketMap.get(type).size() == type.nPlayer) {
+            Collections.reverse(gameSocketMap.get(type));
             Game g = new Game(type, gameSocketMap.get(type));
             gameSocketMap.get(type).clear();
             return g;

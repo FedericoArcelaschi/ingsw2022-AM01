@@ -6,14 +6,12 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertCastleData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
-import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 
 import java.util.List;
-import java.util.Objects;
 
 public abstract class ModelDataBuilder {
-    public static BoardData newBoardData(String username, Board board){
+    public static BoardData newBoardData(Board board, String username) {
         return new BoardData(
                 username,
                 board.getCloudList().size(),
@@ -29,7 +27,7 @@ public abstract class ModelDataBuilder {
         );
     }
 
-    public static ExpertBoardData newExpertBoardData(String username, Board board) {
+    public static ExpertBoardData newExpertBoardData(Board board, String username) {
         //TODO: this null is awful to look at. For now it works; find a better way regardless.
         List<CharacterData> characters = null;
         try {

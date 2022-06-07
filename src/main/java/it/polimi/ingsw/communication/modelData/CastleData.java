@@ -3,7 +3,9 @@ package it.polimi.ingsw.communication.modelData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Objects;
 
 public class CastleData {
     protected final String username;
@@ -76,7 +78,7 @@ public class CastleData {
         return s.toString();
     }
 
-    private void removesComma(StringBuilder s) {
+    protected void removesComma(StringBuilder s) {
         s.replace(s.length() - 2, s.length(), "");
     }
 

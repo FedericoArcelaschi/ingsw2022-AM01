@@ -1,11 +1,14 @@
 package it.polimi.ingsw.communication.modelData;
 
+import com.google.gson.annotations.JsonAdapter;
+
 import java.util.List;
 import java.util.Objects;
 
 /**
  * A representation of the model containing only data useful for the clients
  */
+@JsonAdapter(BoardDataAdapter.class)
 public class BoardData {
     protected final String username;
     protected final int nPlayer;

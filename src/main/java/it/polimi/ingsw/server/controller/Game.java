@@ -3,11 +3,10 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.command.CommandAttribute;
 import it.polimi.ingsw.communication.message.Message;
-import it.polimi.ingsw.communication.message.subclasses.*;
 import it.polimi.ingsw.communication.message.subclasses.Error;
-import it.polimi.ingsw.server.communication.ServerReceiver;
+import it.polimi.ingsw.communication.message.subclasses.*;
 import it.polimi.ingsw.communication.modelData.BoardData;
-import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
+import it.polimi.ingsw.server.communication.ServerReceiver;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
@@ -51,7 +50,6 @@ public class Game {
     /**
      * execute the command requested
      * @param command description of the command requested
-     * @return response to the command
      */
     public void executeCommand(Command command) {
         System.out.println("Executing command...");
@@ -72,27 +70,29 @@ public class Game {
 
     public void playerDisconnected(Socket s) {
         String user = null;
-        for (String username: usernameSocketMap.keySet()) {
-            if(usernameSocketMap.get(username).equals(s)) user = username;
+        for (String username : usernameSocketMap.keySet()) {
+            if (usernameSocketMap.get(username).equals(s)) user = username;
         }
-        if(user == null) throw new IllegalArgumentException("the player isn't part of this game");
+        if (user == null) throw new IllegalArgumentException("the player isn't part of this game");
         Message message = new EndGame(user + " disconnected");
-        for (String username: usernameSocketMap.keySet()) {
+        for (String username : usernameSocketMap.keySet()) {
             send(message, usernameSocketMap.get(username));
         }
     }
 
-    public void playerWin(String winner) {
-        for (String username: usernameSocketMap.keySet()) {
-            Message message = new WinUpdate(ModelDataBuilder.newBoardData(username, board), winner);
-            send(message, usernameSocketMap.get(username));
+    private void sendWinUpdate(Team t) {
+        for (String username : usernameSocketMap.keySet()) {
+            Message winner = new WinUpdate(board.getData(username), t.name());
+            send(winner, usernameSocketMap.get(username));
+            Message gameOver = new EndGame("Game over. Changing state...");
+            send(gameOver, usernameSocketMap.get(username)); //FIXME: qui non si capisce cosa succede idk
         }
     }
 
     private void sendAllUpdate() {
-        for (String username: usernameSocketMap.keySet()) {
-            PrintWriter out = null;
-            Message message = new Update(gameType.expertMode ? ModelDataBuilder.newExpertBoardData(username, board) : ModelDataBuilder.newBoardData(username, board)); //FIXME: in questa classe mi sembra ci sia un tot di codice ripetutto o sbalgio?
+        for (String username : usernameSocketMap.keySet()) {
+            //Fixme: maybe I shouldn't do it this way, but at least it prints out the right board...
+            Message message = createUpdate(board.getData(username));
             send(message, usernameSocketMap.get(username));
         }
     }
@@ -112,7 +112,7 @@ public class Game {
     }
 
     private Message createError(int errorCode, String errorMessage) {
-        return new Error(errorCode, errorMessage); //FIXME
+        return new Error(errorCode, errorMessage); //FIXME never used code
     }
 
     private void playCardCommand(Command command) {
@@ -184,7 +184,7 @@ public class Game {
             try {
                 sendWinUpdate(board.getWinner());
             } catch (DrawException e) {
-                send(new EndGame(e.getMessage()), null); //FIXME
+                send(new EndGame(e.getMessage()), new Socket()); //FIXME
                 //FIXME: handle game-end.
                 return;
             }
@@ -211,7 +211,7 @@ public class Game {
         sendAllUpdate();
     }
 
-    private void payCharCommand(Command command){
+    private void payCharCommand(Command command) {
         try {
             int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
             List<String> studentList = new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
@@ -220,30 +220,21 @@ public class Game {
                 StudentColor c = StudentColor.getColor(student);
                 students.add(c);
             }
-            board.playExpertCard(idChar, Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE)), students );
+            board.playExpertCard(idChar, Integer.parseInt(command.getAttributesMap().get(CommandAttribute.WHERE)), students);
         } catch (NotTheRightGameModeException | CoinException | StudentException | PhaseNotRightException e) {
             e.printStackTrace(); // todo: Error message
         }
     }
 
     @Contract(pure = true)
-    private void getCharInfo(Command command){
+    private void getCharInfo(Command command) {
         //The method does not throw exceptions as everyone can use it anytime during the game.
         int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
         try {
-            send(new CharInfo(board.getCharInfo(idChar)), usernameSocketMap.get(command.getUsername()));
+            Message charInfo = new CharInfo(board.getCharInfo(idChar));
+            send(charInfo, usernameSocketMap.get(command.getUsername()));
         } catch (NotTheRightGameModeException e) {
             send(createError(0, "You can't use this command in this gamemode."), usernameSocketMap.get(command.getUsername()));
-        }
-    }
-
-    private void sendWinUpdate(Team t){
-        for (String username: usernameSocketMap.keySet()) {
-            PrintWriter out = null;
-            Message winner = new WinUpdate(ModelDataBuilder.newBoardData(username, board), t.name());
-            send(winner, usernameSocketMap.get(username));
-            Message gameOver = new EndGame("Game over. Changing state...");
-            send(gameOver, usernameSocketMap.get(username)); //FIXME: qui non si capisce cosa succede idk
         }
     }
 
@@ -267,7 +258,7 @@ public class Game {
     }
 
     public String toStringPlayers() {
-        StringBuilder r = new StringBuilder("");
+        StringBuilder r = new StringBuilder();
         for (String username : usernameSocketMap.keySet()) {
             r.append(username).append(" ");
         }

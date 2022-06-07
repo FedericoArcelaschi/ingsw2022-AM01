@@ -1,19 +1,25 @@
 package it.polimi.ingsw.server.model.expertLogic;
 
+import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.exceptions.CoinException;
+import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
+import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.Tavern;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterParametersType;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
-import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.Tavern;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class ExpertBoard extends Board {
     private Tavern tavern;
@@ -208,20 +214,29 @@ public class ExpertBoard extends Board {
 
     @Override
     public List<StandardCharacter> getAvailableCharacterCards() {
-        return expertCharactersCards;
+        return expertCharactersCards.stream().filter((Objects::nonNull)).toList();
     }
 
-    public Team getCurrentTeam(){
+    public Team getCurrentTeam() {
         return castleMap.get(getCurrentPlayer()).getTeam();
     }
 
 //FOR TESTING
-    /**Adds to the available characters also the Character #idChar.
+
+    /**
+     * Adds to the available characters also the Character #idChar.
+     *
      * @param idChar number of the character as defined in the enum
      */
     public void extract4CharacterTesting(int idChar) {
         StandardCharacter ec = tavern.extract4testing(idChar);
         expertCharactersCards.set(idChar, ec);
     }
-    
+
+    //FOR VIEW:
+    @Override
+    public BoardData getData(String playerID) {
+        return ModelDataBuilder.newExpertBoardData(this, playerID);
+    }
+
 }

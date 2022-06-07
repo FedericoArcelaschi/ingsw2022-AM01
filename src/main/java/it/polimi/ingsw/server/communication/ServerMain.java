@@ -12,10 +12,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 public class ServerMain implements Runnable {
 
@@ -106,7 +110,7 @@ public class ServerMain implements Runnable {
         Game game = waitingRooms.submitGame(gameId, gameType);
         if(game != null) {
             gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType()) + 1);
-            logger.info("Server: created game " + gameId + " with players: " + game.toStringPlayers());
+            logger.info("Server: created " + (gameType.expertMode ? "expert" : "normal") + " game " + gameId + " with players: " + game.toStringPlayers().replace("[", "").replace("]", ""));//TODO);
             for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
                 serverReceiver.setGame(game);
             }

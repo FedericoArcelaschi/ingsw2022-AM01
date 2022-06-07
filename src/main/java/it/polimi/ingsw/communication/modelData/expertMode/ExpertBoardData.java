@@ -1,10 +1,12 @@
 package it.polimi.ingsw.communication.modelData.expertMode;
 
+import com.google.gson.annotations.JsonAdapter;
 import it.polimi.ingsw.communication.modelData.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonAdapter(BoardDataAdapter.class)
 public class ExpertBoardData extends BoardData {
 
     //To add: something to represent characters, with their cost and name and a token that says whether the character
@@ -26,6 +28,10 @@ public class ExpertBoardData extends BoardData {
         this.characters = new ArrayList<>(characters);
     }
 
+    public List<CharacterData> characters() {
+        return characters;
+    }
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
@@ -33,7 +39,7 @@ public class ExpertBoardData extends BoardData {
         s.append("Islands: ");
         for (int i = 0; i < super.islandList.size(); i++) {
             s.append("\n\tIsland ")
-                    .append( i + 1 )
+                    .append(i + 1)
                     .append(": ")
                     .append(super.islandList.get(i));
             if (i == motherNaturePosition) s.append(", mother nature is Here!");
