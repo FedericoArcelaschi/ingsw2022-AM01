@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.client.communication;
 
 import it.polimi.ingsw.communication.message.Message;
 import org.jetbrains.annotations.NotNull;

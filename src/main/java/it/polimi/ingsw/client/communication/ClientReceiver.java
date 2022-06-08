@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client;
+package it.polimi.ingsw.client.communication;
 
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.Receiver;

@@ -3,9 +3,7 @@ package it.polimi.ingsw.communication.modelData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class CastleData {
     protected final String username;
@@ -14,15 +12,19 @@ public class CastleData {
     protected final List<String> deck;
     protected final String lastPlayedCard;
     protected final Team towerColor;
-    protected final boolean isMyCastle;
+    private final int nTower;
+    private final boolean isMyCastle;
+    private final Map<StudentColor, Team> teachers;
 
-    public CastleData(String username, List<StudentColor> waitingRoom, EnumMap<StudentColor, Integer> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, boolean isMyCastle) {
+    public CastleData(String username, List<StudentColor> waitingRoom, EnumMap<StudentColor, Integer> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, int nTower, Map<StudentColor, Team> teachers, boolean isMyCastle) {
         this.username = username;
         this.waitingRoom = waitingRoom;
         this.diningRoom = new EnumMap<>(diningRoom);
         this.towerColor = towerColor;
         this.deck = deck;
         this.lastPlayedCard = lastPlayedCard;
+        this.nTower = nTower;
+        this.teachers = teachers;
         this.isMyCastle = isMyCastle;
     }
 
@@ -46,19 +48,22 @@ public class CastleData {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("\n\t\tStudents in waiting room: ");
+        s       .append("\n\t")
+                .append("Teachers in the castle: ")
+                .append(teachers.entrySet().stream().filter(entry->entry.getValue()==towerColor).map(i-> i.getKey().toStringColored() + " "))
+                .append("\n\tStudents in dining room: ");
+        for (StudentColor student : diningRoom.keySet()) {
+            s.append(student.toStringColored())
+                    .append(": ")
+                    .append(diningRoom.entrySet().stream().map())
+                    .append(", ");
+        }
+        s.append("\n\tStudents in waiting room: ");
         for (StudentColor student : waitingRoom) {
             s.append(student.toStringColored());
             s.append(", ");
         }
         removesComma(s);
-        s.append("\n\t\tStudents in dining room: ");
-        for (StudentColor student : diningRoom.keySet()) {
-            s.append(student.toStringColored());
-            s.append(": ");
-            s.append(diningRoom.get(student));
-            s.append(", ");
-        }
         removesComma(s);
         if (isMyCastle) {
             s.append("\n\t\tAvailable Cards: ");
@@ -78,7 +83,7 @@ public class CastleData {
         return s.toString();
     }
 
-    protected void removesComma(StringBuilder s) {
+    private void removesComma(StringBuilder s) {
         s.replace(s.length() - 2, s.length(), "");
     }
 
@@ -108,6 +113,14 @@ public class CastleData {
 
     public boolean isMyCastle() {
         return isMyCastle;
+    }
+
+    public int nTower() {
+        return nTower;
+    }
+
+    public Map<StudentColor, Team> teachers() {
+        return teachers;
     }
 
     @Override

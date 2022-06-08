@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.userInterface.cli;
 
-import it.polimi.ingsw.client.ClientMain;
+import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.GameType;

@@ -322,7 +322,7 @@ public class Board {
      */
     public boolean isWinningState() {
         System.out.println("test");
-        EnumMap<Team, Integer> nTowers = sumTowers();
+        EnumMap<Team, Integer> nTowers = placedTowers();
         for (Team t : Team.values())
             if (nTowers.get(t) >= TOWERS_TO_PLACE_TO_WIN || islandList.size() <= MINIMUM_NUMBER_OF_ISLANDS)
                 return true;
@@ -343,7 +343,7 @@ public class Board {
      * @throws DrawException if the game is a tie both for the islands and the professors.
      */
     public Team getWinner() throws DrawException {
-        Map<Team, Integer> nTowers = sumTowers();
+        Map<Team, Integer> nTowers = placedTowers();
         for (Team t : Team.values())
             if (nTowers.get(t) == TOWERS_TO_PLACE_TO_WIN) return t;
         Team winner = GreaterTeam.findGreaterTeam(nTowers);
@@ -353,7 +353,7 @@ public class Board {
     }
 
     /** @return a map that contains the number of placed towers on the islands for each team */
-    private EnumMap<Team,Integer> sumTowers() {
+    public EnumMap<Team,Integer> placedTowers() {
         System.out.println("test2");
         EnumMap<Team, Integer> teamTowersMap = new EnumMap<>(Team.class);
         for (Team t : Team.values()) { //fill nTowers map for all team at 0
