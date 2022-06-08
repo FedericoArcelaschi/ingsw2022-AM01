@@ -1,24 +1,29 @@
 package it.polimi.ingsw.server.model.expertLogic;
 
+import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.exceptions.CoinException;
+import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
+import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
+import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.Tavern;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterParametersType;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
-import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.Tavern;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public class ExpertBoard extends Board {
     private Tavern tavern;
-    private List<StandardCharacter> expertCharactersCards;
-    private int playedExpertChar = -1;
+    private Map<CharacterUtility, StandardCharacter> expertCharactersCards;
+    private CharacterUtility playedExpertChar = null;
 
     public ExpertBoard(String playerID1, String playerID2, Turn t, long seed) {
         super(t, seed, 2);
@@ -46,7 +51,7 @@ public class ExpertBoard extends Board {
      * Cleans the contructors' implementation
      */
     private void construct() {
-        for (int i = 0; i < 12; i++){
+        for (int i = 0; i < 12; i++) {
             Island oldIsland = islandList.remove(i);
             islandList.add(i, new ExpertIsland(oldIsland));
         }
@@ -90,36 +95,35 @@ public class ExpertBoard extends Board {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        playedExpertChar = idChar;
+        playedExpertChar = CharacterUtility.getChar(idChar);
         ((ExpertCastle) getCastle(getCurrentPlayer())).payCharacter(actualCost);
     }
 
     private @NotNull StandardCharacter checkLegalExpertCard(int idChar) throws CoinException {
         String charName = CharacterUtility.getChar(idChar).name();
-        if (playedExpertChar != -1) //another character is played this turn.
-            if(idChar == playedExpertChar)
-                throw new IllegalStateException(charName + " is already active in this turn.");
+        if (playedExpertChar != null) //another character is played this turn.
+            if(CharacterUtility.getChar(idChar) == playedExpertChar)
+                throw new IllegalStateException(charName + " is already active during this turn.");
             else
                 throw new IllegalStateException(
                         "Not possible to play " + charName + " card. During this turn " +
-                                CharacterUtility.getChar(playedExpertChar).name() + " is already active.");
+                                playedExpertChar.name() + " is already active.");
 
         StandardCharacter ec = expertCharactersCards.get(idChar);
 
         if (ec == null) { //case where there is no active character but the card isn't available
-            List<String> charactersName = new ArrayList<>();
-            for (StandardCharacter m : expertCharactersCards) {
-                if(m != null)
-                    charactersName.add(m.getName());
-            }
+            String charactersName = expertCharactersCards.values().stream().map(StandardCharacter::getName).toString().replace("[", "").replace("]", "");
             throw new IllegalArgumentException(CharacterUtility.getChar(idChar) + " was not an extracted character.\n" +
                     "Available characters are: " + charactersName);
         }
-        int availableCoins = ((ExpertCastle) castleMap
-                .get(getCurrentPlayer()))
-                .getCoins();
+        int availableCoins = 0;
+        try {
+            availableCoins = castleMap
+                    .get(getCurrentPlayer())
+                    .getCoins();
+        } catch (NotTheRightGameModeException ignored) {}
         if(availableCoins < ec.getCost())
-            throw new CoinException(ec.getCost(), availableCoins); //payment check
+            throw new CoinException(ec.getCost(), availableCoins);
         return ec;
     }
 
@@ -199,29 +203,24 @@ public class ExpertBoard extends Board {
 
     @Override
     public void endOfTurn() {
-        cloudList.forEach(Cloud::refill);
-        playedExpertChar = -1;
+        playedExpertChar = null;
         ((ExpertInfluence)influence).reset();
+        movedStudents = 0;
     }
-
-//Getter
 
     @Override
-    public List<StandardCharacter> getAvailableCharacterCards() {
-        return expertCharactersCards.stream().filter(Objects::nonNull).toList();
+    public Collection<StandardCharacter> getAvailableCharacterCards() {
+        return expertCharactersCards.values();
     }
 
-    public Team getCurrentTeam(){
+    public Team getCurrentTeam() {
         return castleMap.get(getCurrentPlayer()).getTeam();
     }
 
-//FOR TESTING
-    /**Adds to the available characters also the Character #idChar.
-     * @param idChar number of the character as defined in the enum
-     */
-    public void extract4CharacterTesting(int idChar) {
-        StandardCharacter ec = tavern.extract4testing(idChar);
-        expertCharactersCards.set(idChar, ec);
+    //FOR VIEW:
+    @Override
+    public BoardData getData(String playerID) {
+        return ModelDataBuilder.newExpertBoardData(this, playerID);
     }
-    
+
 }

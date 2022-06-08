@@ -8,7 +8,6 @@ import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
-import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController;
 import it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController;
@@ -82,7 +81,7 @@ public class Gui extends Application implements UserInterface {
         } catch (NoSuchStudentException e) {
             return createBoardData();
         }
-        return ModelDataBuilder.newBoardData("fede", b);
+        return b.getData("fede");
     }
 
     /**

@@ -1,8 +1,10 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
-import it.polimi.ingsw.server.model.baseLogic.interfaces.GreaterTeam;
+import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
 import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
+import it.polimi.ingsw.server.model.baseLogic.interfaces.GreaterTeam;
 import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import org.jetbrains.annotations.Contract;
@@ -10,9 +12,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+@SuppressWarnings("Redundant")
 public class Board {
-    private static final int numOfStudentsPerColor = 24;
+    protected static final int numOfStudentsPerColor = 24;
     protected int motherNaturePosition = 0;
+
     protected final int nPlayer;
     protected final Bag bag;
     protected final List<Cloud> cloudList = new ArrayList<>();
@@ -24,17 +28,17 @@ public class Board {
     protected final Turn turn;
     private final long seed;
     protected IntegerBoxing possibleMovingSteps = new IntegerBoxing(0); //calculated form the card: must be stored in memory til the player action turn
-        //TODO: fix this in expertLogic.
-
     //constants
-    private final int numberOfIslands = 12;
-    private final int numberOfIslandsToEndGame = 3;
-    private final int numberOfTowersToPlace = 8;
-    private final int cloudSize2_4Player = 3;
-    private final int cloudSize3Player = 4;
+    private final int INITIAL_NUMBER_OF_ISLANDS = 12;
+    private final int MINIMUM_NUMBER_OF_ISLANDS = 3;
+    private final int TOWERS_TO_PLACE_TO_WIN = 8;
+    private final int CLOUD_SIZE_2_4_PLAYERS = 3;
+    private final int CLOUD_SIZE_3_PLAYERS = 4;
+    private int MAX_STUDENTS_TO_MOVE; //Effectively final, TODO
+    protected int movedStudents;
 
 
-    public Board(String playerID1, String playerID2, Turn turn, long seed){
+    public Board(String playerID1, String playerID2, Turn turn, long seed) {
         nPlayer = 2;
         this.seed = seed;
         bag = new Bag(numOfStudentsPerColor, seed);
@@ -44,7 +48,7 @@ public class Board {
         construct();
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, Turn turn, long seed){
+    public Board(String playerID1, String playerID2, String playerID3, Turn turn, long seed) {
         nPlayer = 3;
         this.seed = seed;
         bag = new Bag(numOfStudentsPerColor, seed);
@@ -55,7 +59,7 @@ public class Board {
         construct();
     }
 
-    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn, long seed){
+    public Board(String playerID1, String playerID2, String playerID3, String playerID4, Turn turn, long seed) {
         nPlayer = 4;
         this.seed = seed;
         bag = new Bag(numOfStudentsPerColor, seed);
@@ -67,15 +71,8 @@ public class Board {
         construct();
     }
 
-    /**Cleans the constructor implementation
-     */
-    private void construct(){
-        setupClouds();
-        setupIslands();
-    }
-
     /**
-     * Constructor for ExpertBoard
+     * Constructor for ExpertBoard: doesn't generate the castles.
      */
     protected Board(Turn turn, long seed, int nPlayer){
         this.turn = turn;
@@ -85,12 +82,21 @@ public class Board {
         construct();
     }
 
+    /**
+     * Cleans the constructor implementation
+     */
+    private void construct(){
+        setupClouds();
+        setupIslands();
+        MAX_STUDENTS_TO_MOVE = ( nPlayer==3 ? 4 : 3);
+    }
+
 
     /**
      * Generates the clouds based on the nPlayer
      */
     protected void setupClouds(){
-        int cloudSize = nPlayer == 3 ? cloudSize3Player : cloudSize2_4Player;
+        int cloudSize = nPlayer == 3 ? CLOUD_SIZE_3_PLAYERS : CLOUD_SIZE_2_4_PLAYERS;
         for (int i = 0; i < nPlayer; i++) cloudList.add(new Cloud(bag, cloudSize));
     }
 
@@ -100,8 +106,8 @@ public class Board {
 
     private void setupIslands() {
         List<StudentColor> s = bag.extractForIslandSetup();
-        for (int i = 0, c = 0; i < numberOfIslands; i++) {
-            if (i % (numberOfIslands / 2) == 0) {
+        for (int i = 0, c = 0; i < INITIAL_NUMBER_OF_ISLANDS; i++) {
+            if (i % (INITIAL_NUMBER_OF_ISLANDS / 2) == 0) {
                 islandList.add(new Island());
             } else {
                 islandList.add(new Island(s.get(c)));
@@ -111,23 +117,23 @@ public class Board {
     }
 
 //methods for the PLANNING PHASE
+
     /**
-     * @param playerID  the id of the player that ask for this move
-     * @param card the number of the card the player want to use
+     * @param playerID the id of the player that ask for this move
+     * @param card     the number of the card the player want to use
      * @return if the move is legal and played, false otherwise
      */
-    public boolean playCard(String playerID, int card) throws NotYourTurnException, PhaseNotRightException {
-        if(!turn.getCurrentPlayer().equals(playerID))
+    public void playCard(String playerID, int card) throws NotYourTurnException, PhaseNotRightException {
+        if (!turn.getCurrentPlayer().equals(playerID))
             throw new NotYourTurnException("You can't play, It's " + getCurrentPlayer() + "'s turn.");
-        if(turn.getCurrentPhase()!=TurnPhase.PLANNING){
+        if (turn.getCurrentPhase() != TurnPhase.PLANNING) {
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
         }
         Castle castle = castleMap.get(playerID);
-        possibleMovingSteps.setInt((card + 1 )/2);
-        if(castle.playCard(card))
-            return turn.addCard(playerID, card);
-        else
-            throw new IllegalArgumentException("Card cannot be played.");
+        possibleMovingSteps.setInt((card + 1) / 2);
+        if (turn.addCard(playerID, card))
+            return;
+        throw new IllegalArgumentException("Card cannot be played.");
     }
 
 //methods for the action phase
@@ -155,22 +161,22 @@ public class Board {
     /**
      * Moves the students in the list <code>students</code> from <code>Player</code> 's waiting room
      * to the island n°<code>islandNumber</code>.
-     * @param playerID the id of the player that ask for this move
+     *
+     * @param playerID     the id of the player that ask for this move
      * @param islandNumber the number of the island where you want to move the students
-     * @param students a list of students you want to move
+     * @param students     a list of students you want to move
      * @return true if the students are present and added to the island.
      */
-    public boolean moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students)
+    public void moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students)
             throws NoSuchStudentException, NotYourTurnException, PhaseNotRightException {
-        if(!turn.getCurrentPlayer().equals(playerID)) throw new
-                NotYourTurnException("It's "+getCurrentPlayer()+"'s turn. "+ playerID +" can't play.");
-        if(turn.getCurrentPhase()!=TurnPhase.STUDENTS)
+        if (!turn.getCurrentPlayer().equals(playerID)) throw new
+                NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. " + playerID + " can't play.");
+        if (turn.getCurrentPhase() != TurnPhase.STUDENTS)
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
-        for(StudentColor c : students){
+        for (StudentColor c : students) {
             islandList.get(islandNumber).addStudent(c);
         }
-        return true;
     }
 
 
@@ -270,7 +276,6 @@ public class Board {
      * Moves students from the selected cloud to the waiting room of the current player.
      * @param PlayerID the id of the player that ask for this move
      * @param cloudID the cloud that is chosen
-     * @return if the move is legal and played or not
      */
     public void chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
         if(turn.getCurrentPhase()!=TurnPhase.CLOUD)
@@ -288,13 +293,19 @@ public class Board {
      * @return if the move is legal and played or not
      */
     public void endOfTurn() {
-        for(Cloud c: cloudList){
-            c.refill();
-        }
+        movedStudents = 0;
+    }
+
+    /**
+     * after a whole
+     */
+    public void cloudRefill() {
+        cloudList.forEach(Cloud::refill);
     }
 
 //Ending of a game
 
+    @SuppressWarnings("RedundantSuppression")
     /**
      * Checks if there are no more cards.
      * @return number of cards left.
@@ -313,7 +324,7 @@ public class Board {
         System.out.println("test");
         EnumMap<Team, Integer> nTowers = placedTowers();
         for (Team t : Team.values())
-            if (nTowers.get(t) >= numberOfTowersToPlace)
+            if (nTowers.get(t) >= TOWERS_TO_PLACE_TO_WIN || islandList.size() <= MINIMUM_NUMBER_OF_ISLANDS)
                 return true;
         return false;
     }
@@ -334,7 +345,7 @@ public class Board {
     public Team getWinner() throws DrawException {
         Map<Team, Integer> nTowers = placedTowers();
         for (Team t : Team.values())
-            if (nTowers.get(t) == numberOfTowersToPlace) return t;
+            if (nTowers.get(t) == TOWERS_TO_PLACE_TO_WIN) return t;
         Team winner = GreaterTeam.findGreaterTeam(nTowers);
         if (winner == null)
             return teamWithMostProfessors();
@@ -344,7 +355,7 @@ public class Board {
     /** @return a map that contains the number of placed towers on the islands for each team */
     public EnumMap<Team,Integer> placedTowers() {
         System.out.println("test2");
-        EnumMap<Team, Integer> teamTowersMap = new EnumMap<Team, Integer>(Team.class);
+        EnumMap<Team, Integer> teamTowersMap = new EnumMap<>(Team.class);
         for (Team t : Team.values()) { //fill nTowers map for all team at 0
             teamTowersMap.put(t, 0);
             for (Island i : islandList) //sum towers for each island to the map
@@ -386,7 +397,7 @@ public class Board {
         throw new NotTheRightGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
     }
 
-    public List<StandardCharacter> getAvailableCharacterCards() throws NotTheRightGameModeException {
+    public Collection<StandardCharacter> getAvailableCharacterCards() throws NotTheRightGameModeException {
         throw new NotTheRightGameModeException("You can't use this command in this game mode!");
     }
 
@@ -422,11 +433,16 @@ public class Board {
         return motherNaturePosition;
     }
 
-    public Bag getBag(){
+    public Bag getBag() {
         return new Bag(bag);
     }
 
     public Turn getTurn() {
-        return  turn;
+        return turn;
+    }
+
+    //FOR VIEW:
+    public BoardData getData(String playerID) {
+        return ModelDataBuilder.newBoardData(this, playerID);
     }
 }

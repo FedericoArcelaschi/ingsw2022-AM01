@@ -11,15 +11,15 @@ import static it.polimi.ingsw.communication.command.CommandType.getCommandType;
  */
 public class Command {
     //TODO: rework attributes map to invoke lambdas.
-    private CommandType type;
-    private String username;
-    private Map<CommandAttribute, String> attributesMap;
+    private final CommandType type;
+    private final String username;
+    private final Map<CommandAttribute, String> attributesMap;
 
     public Command(String username, CommandType type, String[] attributes) {
         this.type = type;
         this.attributesMap = new HashMap<>();
         this.username = username;
-        if(Arrays.stream(attributes).toList().size() < 0)
+        if (Arrays.stream(attributes).toList().size() < 1) //FIXME LORENZO
             throw new IllegalArgumentException(" needed X arguments. actual: 0");
         switch (type) {
             case PLAY_CARD -> attributesMap.put(CommandAttribute.ID, attributes[0]);

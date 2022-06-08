@@ -6,17 +6,13 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertCastleData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
-import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public abstract class ModelDataBuilder {
-    public static BoardData newBoardData(String username, Board board) {
+    public static BoardData newBoardData(Board board, String username) {
         return new BoardData(
                 username,
                 board.getCloudList().size(),
@@ -32,13 +28,16 @@ public abstract class ModelDataBuilder {
         );
     }
 
-    public static ExpertBoardData newExpertBoardData(String username, Board board) {
+    public static ExpertBoardData newExpertBoardData(Board board, String username) {
+        //TODO: this null is awful to look at. For now it works; find a better way regardless.
         List<CharacterData> characters = null;
         try {
             characters = board.getAvailableCharacterCards().stream().filter(Objects::nonNull).map(ModelDataBuilder::newCharacterData).toList();
         } catch (NotTheRightGameModeException e) {
-            e.getMessage();
+            e.printStackTrace();
         }
+        //TODO: newExpertIslandData and newExpertCastleData return base game castles and islands... needs a fix
+        System.out.println("At least it uses this, right?");
         return new ExpertBoardData(
                 username,
                 board.getCloudList().size(),

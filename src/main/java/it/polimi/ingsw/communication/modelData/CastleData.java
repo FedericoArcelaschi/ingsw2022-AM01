@@ -48,17 +48,20 @@ public class CastleData {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("\n\t\tStudents in waiting room: ");
-        for (StudentColor student : waitingRoom) {
-            s.append(student.toStringColored());
-            s.append(", ");
+        s       .append("\n\t")
+                .append("Teachers in the castle: ")
+                .append(teachers.entrySet().stream().filter(entry->entry.getValue()==towerColor).map(i-> i.getKey().toStringColored() + " "))
+                .append("\n\tStudents in dining room: ");
+        for (StudentColor student : diningRoom.keySet()) {
+            s       .append(student.toStringColored())
+                    .append(": ")
+                    .append(diningRoom.get(student))
+                    .append(", ");
         }
         removesComma(s);
-        s.append("\n\t\tStudents in dining room: ");
-        for (StudentColor student : diningRoom.keySet()) {
+        s.append("\n\tStudents in waiting room: ");
+        for (StudentColor student : waitingRoom) {
             s.append(student.toStringColored());
-            s.append(": ");
-            s.append(diningRoom.get(student));
             s.append(", ");
         }
         removesComma(s);

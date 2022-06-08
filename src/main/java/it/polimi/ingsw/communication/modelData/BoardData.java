@@ -1,10 +1,10 @@
 package it.polimi.ingsw.communication.modelData;
 
 import com.google.gson.annotations.JsonAdapter;
-import it.polimi.ingsw.communication.modelData.expertMode.BoardDataAdapter;
-import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 
-import java.util.ArrayList;
+import com.google.gson.annotations.JsonAdapter;
+import it.polimi.ingsw.communication.modelData.expertMode.BoardDataAdapter;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -33,51 +33,6 @@ public class BoardData {
         this.myCastle = myCastle;
         this.otherCastles = otherCastles;
         this.turn = turn;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder s = new StringBuilder();
-        //print island
-        s.append("Islands: ");
-        for (int i = 0; i < islandList.size(); i++) {
-            s.append("\n\tIsland ")
-                    .append(i + 1)
-                    .append(": ")
-                    .append(islandList.get(i));
-            if (i == motherNaturePosition) s.append(", mother nature is Here!");
-        }
-        //Print cloud
-        s.append("\nClouds: ");
-        for (int i = 0; i < cloudList.size(); i++)
-            s.append("\n\tCloud ")
-                    .append(i + 1)
-                    .append(" contains: ")
-                    .append(cloudList.get(i));
-        //Print other castles
-        s.append("\nOther Player castles:");
-        for (CastleData otherCastle : otherCastles)
-            s.append("\n\tCastle ").append(otherCastle.username()).append(": ").append(otherCastle);
-        //Print turn
-        s.append("\nTurn: ").append(turn);
-        //Print my castle with the hand of cards
-        s.append("\nMy Castle:");
-        s.append("\n\tCastle ").append(username).append(": ").append(myCastle).append("\n");
-        return s.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof BoardData that)) return false;
-        if (nPlayer != that.nPlayer) return false;
-        if (motherNaturePosition != that.motherNaturePosition) return false;
-        if (!username.equals(that.username)) return false;
-        if (!cloudList.equals(that.cloudList)) return false;
-        if (!islandList.equals(that.islandList)) return false;
-        if (!myCastle.equals(that.myCastle)) return false;
-        if (!otherCastles.equals(that.otherCastles)) return false;
-        return turn.equals(that.turn);
     }
 
     public String username() {
@@ -113,12 +68,48 @@ public class BoardData {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(username, nPlayer, motherNaturePosition, cloudList, islandList, myCastle, otherCastles, turn);
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (BoardData) obj;
+        return Objects.equals(this.username, that.username) &&
+                this.nPlayer == that.nPlayer &&
+                this.motherNaturePosition == that.motherNaturePosition &&
+                Objects.equals(this.cloudList, that.cloudList) &&
+                Objects.equals(this.islandList, that.islandList) &&
+                Objects.equals(this.myCastle, that.myCastle) &&
+                Objects.equals(this.otherCastles, that.otherCastles);
     }
 
-    public List<CharacterData> characters(){
-        return new ArrayList<>();
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        //print island
+        s.append("Islands: ");
+        for (int i = 0; i < islandList.size(); i++) {
+            s.append("\n\tIsland ")
+                    .append( i + 1 )
+                    .append(": ")
+                    .append(islandList.get(i));
+            if (i == motherNaturePosition) s.append(", mother nature is Here!");
+        }
+        //Print cloud
+        s.append("\nClouds: ");
+        for (int i = 0; i < cloudList.size(); i++)
+            s       .append("\n\tCloud ")
+                    .append(i + 1)
+                    .append(" contains: ")
+                    .append(cloudList.get(i));
+        //Print other castles
+        s.append("\nOther Player castles:");
+        for (CastleData otherCastle : otherCastles)
+            s.append("\n\tCastle ").append(otherCastle.username()).append(": ").append(otherCastle);
+        //Print turn
+        s.append("\nTurn: ").append(turn);
+        //Print my castle with the hand of cards
+        s.append("\nMy Castle:");
+        s.append("\n\tCastle ").append(username).append(": ").append(myCastle).append("\n");
+        return s.toString();
     }
 
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
+import it.polimi.ingsw.server.model.exceptions.CoinException;
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
@@ -165,4 +166,7 @@ public class Castle implements StudentPlaces {
                 this.lastPlayedCard == that.lastPlayedCard &&
                 this.towerColor == that.towerColor;
     }
-}
+
+    protected void payCharacter(int price) throws CoinException, NotTheRightGameModeException {
+       throw new NotTheRightGameModeException("method only available in ExpertCastle.");
+    }}

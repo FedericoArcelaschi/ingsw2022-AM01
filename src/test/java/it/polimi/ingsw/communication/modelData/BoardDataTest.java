@@ -1,16 +1,11 @@
 package it.polimi.ingsw.communication.modelData;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.communication.message.subclasses.Update;
-import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
-import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ApplyEffect;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +18,7 @@ class BoardDataTest {
     void toStringTest() {
         BoardData bd;
         Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"), false);
-        bd = ModelDataBuilder.newBoardData("fede", b);
+        bd = b.getData("fede");
         System.out.println(bd);
     }
 
@@ -36,22 +31,22 @@ class BoardDataTest {
     @Test
     void soutBoardDataTest() {
         System.out.println(
-                ModelDataBuilder
-                .newBoardData("pippo",
-                        new Board(
-                                "pippo", "pluto",
-                                new Turn(List.of("pippo", "pluto")),
-                                RandomGenerator.getDefault().nextLong())));
+                new Board(
+                        "pippo", "pluto",
+                        new Turn(List.of("pippo", "pluto")),
+                        RandomGenerator.getDefault().nextLong()).getData("pippo"));
     }
 
     @Test
     void TeamBackgroundColor() {
+        System.out.println("backgroundColor test: ");
         System.out.println("\u001b[40;31m test TEST \u001b[0m");
     }
 
     @Test
     void CastleDataTest() { //with Maps!!
-        BoardData boardData = ModelDataBuilder.newBoardData("pippo", new Board("pippo", "pluto", new Turn(List.of("pippo", "pluto")), RandomGenerator.getDefault().nextLong()));
+        Board board = new Board("pippo", "pluto", new Turn(List.of("pippo", "pluto")), RandomGenerator.getDefault().nextLong());
+        BoardData boardData = board.getData("pippo");
         String Json = new Gson().toJson(boardData);
         BoardData boardDataDeserialized = new Gson().fromJson(Json, BoardData.class);
         Assertions.assertEquals(boardData, boardDataDeserialized);
@@ -59,14 +54,11 @@ class BoardDataTest {
 
     @Test
     void ExpertBoardDataTest() {
-        BoardData boardData = ModelDataBuilder.newBoardData("lore",
-                new ExpertBoard("lore", "gio", "fede",
-                        new Turn(List.of("lore", "gio", "fede")),
-                        RandomGenerator.getDefault().nextLong()));
-
-        System.out.println(boardData);
-        String Json = new GsonBuilder().setPrettyPrinting().create().toJson(boardData);
-        System.out.println(Json);
+        Board board = new ExpertBoard("lore", "gio", "fede",
+                new Turn(List.of("lore", "gio", "fede")),
+                RandomGenerator.getDefault().nextLong());
+        BoardData boardData = board.getData("lore");
+        String Json = new Gson().toJson(boardData);
         BoardData boardDataDeserialized = new Gson().fromJson(Json, BoardData.class);
         System.out.println(boardDataDeserialized);
         Assertions.assertEquals(boardData, boardDataDeserialized);

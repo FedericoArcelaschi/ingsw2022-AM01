@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.communication;
 
 import it.polimi.ingsw.client.ClientState;
-import it.polimi.ingsw.client.communication.ClientSender;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.CommandMessage;
@@ -43,9 +42,14 @@ public class ClientMain {
         System.out.println(username + ":  connected");
 
         clientSender = new ClientSender(socket);
+        System.out.println("socket client: " + socket.getChannel()); // => null
+        System.out.println(socket.getPort());
+        System.out.println(socket.getRemoteSocketAddress());
 
         //sends player preferences to the server;
-        clientSender.send(new Preferences(username, preferenceNPlayer, preferenceExpertMode));
+        Preferences preferences = null;
+        preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
+        clientSender.send(preferences);
 
         //runs the ClientReceiver
         clientReceiver = new ClientReceiver(this, socket, userInterface);

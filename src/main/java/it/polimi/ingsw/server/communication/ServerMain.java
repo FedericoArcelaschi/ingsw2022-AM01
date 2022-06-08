@@ -6,16 +6,23 @@ import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.*;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+import static it.polimi.ingsw.server.controller.GameType.getGameType;
 
 public class ServerMain implements Runnable {
 
@@ -38,7 +45,7 @@ public class ServerMain implements Runnable {
             fileHandler.setFormatter(formatter);
             logger.setLevel(Level.FINE);
             logger.info("Logger has been initialized.");
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.log(Level.WARNING, "Exception: ", e);
         }
     }
@@ -106,7 +113,7 @@ public class ServerMain implements Runnable {
         Game game = waitingRooms.submitGame(gameId, gameType);
         if(game != null) {
             gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType()) + 1);
-            logger.info("Server: created " + (gameType.expertMode ? "expert" : "normal") + " game " + gameId + " with players: " + game.toStringPlayers());
+            logger.info("Server: created " + (gameType.expertMode ? "expert" : "normal") + " game " + gameId + " with players: " + game.toStringPlayers().replace("[", "").replace("]", ""));//TODO);
             for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
                 serverReceiver.setGame(game);
             }
@@ -124,22 +131,29 @@ public class ServerMain implements Runnable {
             System.err.println(e.getMessage());
             return null;
         }
-        Preferences preferences;
+        Preferences preferences =(Preferences) new Gson().fromJson(input, Message.class);
+        GameType playerGameType = null;
         try {
-            preferences = (Preferences) new Gson().fromJson(input, Message.class);
-        } catch(JsonParseException e) {
-            System.err.println("not a preference packet!!");
-            e.printStackTrace();
-            return null;
+            playerGameType = getGameType(preferences.nPlayer(), preferences.expertMode());
+        } catch (IllegalAccessException e) {
+            //TODO: handle error (a meno che non sia controllato nella creazione del Message - Preferences
         }
-        System.out.println(preferences.username() + " joined in");
-        heartBeatServer.addClient(socket);
-        ServerReceiver sr = new ServerReceiver(socket, heartBeatServer, preferences.username());
-        waitingRooms.addPlayer(preferences.getGameType(), sr);
+
+        String username = preferences.username();
+        //adds the new client
+        heartBeatServer.addClient(socket); //the heartbeat ping starts before the game is started
+        //starts the receiver
+        var sr = new ServerReceiver(socket, heartBeatServer, username);
+        //adds player to waiting room
+        waitingRooms.addPlayer(playerGameType, sr);
+
         executor.submit(sr);
-        connectedPlayers.put(preferences.username(), sr);
-        return preferences.getGameType();
+        //add player to list of connected players
+        connectedPlayers.put(username, sr);
+
+        return playerGameType;
     }
+
 
     public Map<String, ServerReceiver> getConnectedPlayers() {
         return new HashMap<>(connectedPlayers);
@@ -148,5 +162,4 @@ public class ServerMain implements Runnable {
     public int getGamesNumber(GameType type){
         return gamesNumber.get(type);
     }
-
 }

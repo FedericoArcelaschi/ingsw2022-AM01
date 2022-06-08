@@ -58,7 +58,7 @@ public enum CharacterUtility { //TODO: complete characters' explaination
     }
     public static CharacterUtility getChar(String charName) {
         for (CharacterUtility expertCharacter : CharacterUtility.values()) {
-            if(charName.equalsIgnoreCase(expertCharacter.name()))
+            if (charName.equalsIgnoreCase(expertCharacter.name()))
                 return expertCharacter;
         }
         throw new IllegalArgumentException(charName + " is not a character name");

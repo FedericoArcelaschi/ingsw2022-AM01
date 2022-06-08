@@ -13,7 +13,6 @@ import java.util.List;
 
 public class ExpertCastle extends Castle implements StudentPlaces {
 
-    //TODO: should use a decorator or a "sottoclasse"
     private int coins;
 
     /**
@@ -25,10 +24,8 @@ public class ExpertCastle extends Castle implements StudentPlaces {
         coins = 1;
     }
 
-    //ONLY METHODS FOR EXPERTMODE:
-    //COINS:
     /**
-     * Adds also a coin to the player
+     * Wheen needed adds a coin to the player
      * @param studentColor color of the student to add
      * @throws TooManyStudentsException if the dining room already contains 10 students of the color <code>color</code>
      */
@@ -56,9 +53,9 @@ public class ExpertCastle extends Castle implements StudentPlaces {
      * Only available in Expert mode.
      * @param studentColor color of the student to remove
      */
-    public void removeStudentFromDiningRoom(StudentColor studentColor) throws NoSuchStudentException {
-        if(diningRoom.get(studentColor) > 0){
-            diningRoom.replace(studentColor, diningRoom.get(studentColor)-1);
+    private void removeStudentFromDiningRoom(StudentColor studentColor) throws NoSuchStudentException {
+        if(diningRoom.get(studentColor) > 0) {
+            diningRoom.replace(studentColor, diningRoom.get(studentColor) - 1);
         }
         else
             throw new NoSuchStudentException("StudentCharacter " + studentColor + " not in dining room");
@@ -67,7 +64,7 @@ public class ExpertCastle extends Castle implements StudentPlaces {
     /**
      * Removes the cost of coins from the castle
      */
-    public void payCharacter(int price) throws CoinException {
+    protected void payCharacter(int price) throws CoinException {
         if(this.coins >= price)
             this.coins -= price;
         else
@@ -79,14 +76,14 @@ public class ExpertCastle extends Castle implements StudentPlaces {
         return coins;
     }
 
-//EXPERTCHARACTER IMPLEMENTATION:
+//EXPERT-CHARACTERS IMPLEMENTATION:
     @Override
     public void adds(StudentColor student, int place) throws TooManyStudentsException {
-        if(place == 0){
+        if(place == 0) {
             addStudentInDiningRoom(student);
             return;
         }
-        if(place == 1){
+        if(place == 1) {
             addStudentsInWaitingRoom(Arrays.asList(student));
             return;
         }
@@ -95,11 +92,11 @@ public class ExpertCastle extends Castle implements StudentPlaces {
 
     @Override
     public void removes(StudentColor student, int place) throws NoSuchStudentException {
-        if(place == 0){
+        if(place == 0) {
             removeStudentFromDiningRoom(student);
             return;
         }
-        if(place == 1){
+        if(place == 1) {
             removeStudentsFromWaitingRoom(Arrays.asList(student));
             return;
         }

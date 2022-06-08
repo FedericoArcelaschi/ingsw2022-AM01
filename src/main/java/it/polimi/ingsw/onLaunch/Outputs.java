@@ -1,6 +1,7 @@
 package it.polimi.ingsw.onLaunch;
 
 public enum Outputs {
+    CLEAR_SCREEN("\033[H\033[2J"),
     USER_TYPE_REQUEST(
             """
                         
@@ -18,9 +19,7 @@ public enum Outputs {
     START("Welcome to Eriantys v2.0 "),
 
     HELP("""
-              ");
-              System.out.println(
-            ();"available actions are:    -> plays the Nth assistant card
+             available actions are:    -> plays the Nth assistant card
               \tChooseCloud N           -> chooses the Nth cloud
               \tMoveStudentCastle C,...C-> moves the requested students to your castle's dining room
               \tMoveStudentIsland N C..C-> moves the requested students to the Nth island 

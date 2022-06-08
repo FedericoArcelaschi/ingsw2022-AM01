@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.communication;
 
+import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
-import it.polimi.ingsw.communication.message.Message;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,10 +11,14 @@ import java.util.*;
 
 public class WaitingRooms {
     private final Map<GameType, List<ServerReceiver>> gameSocketMap = new HashMap<>();
+    private final Map<GameType, List<String>> nicknameMap = new HashMap<>();
+    private final Map<GameType, Integer> gameTypeSize = new HashMap<>();
 
     public WaitingRooms() {
         for(GameType g : GameType.values()) {
             gameSocketMap.computeIfAbsent(g, k -> new ArrayList<>());
+            nicknameMap.computeIfAbsent(g, k -> new ArrayList<>());
+            gameTypeSize.putIfAbsent(g, 0);
         }
     }
 
@@ -24,13 +28,11 @@ public class WaitingRooms {
 
     /**
      * Adds a player to the requested lobby. Informs players of the same lobby that the state of the lobby changed.
-     * @param gameType the provided gametype.
      * @param serverReceiver the serverReceiver of the new player.
-     * @throws IOException
      */
     public void addPlayer(GameType gameType, ServerReceiver serverReceiver) {
         while (gameSocketMap.get(gameType).stream().map(ServerReceiver::getUsername).toList().contains(serverReceiver.getUsername())) {
-            serverReceiver.setUsername(serverReceiver.getUsername()+"*");
+            serverReceiver.setUsername(serverReceiver.getUsername() + "*");
         }
         gameSocketMap.get(gameType).add(serverReceiver);
         informPlayers(gameType, gameType.nPlayer);
@@ -62,7 +64,8 @@ public class WaitingRooms {
     /**
      * Computes the game type according to the player's preferences, if there are enough players.
      * Returns null otherwise.
-     * @param gameId
+     *
+     * @param gameId a sequential game identificator
      * @return the correct game.
      */
     public Game submitGame(int gameId, GameType type) {
