@@ -52,7 +52,7 @@ public class Gui extends Application implements UserInterface {
         stage.show();
         loginPaneController.initialize(this::connect);
         //FIXME: for testing.
-        //draw(createBoardData());
+        draw(createBoardData());
     }
 
     private BoardData createBoardData(){
@@ -74,8 +74,9 @@ public class Gui extends Application implements UserInterface {
             b.changePhase();
             b.moveMotherNature(1);
             b.changePhase();
-            //b.chooseCloud("fede", 1);
-            //b.changePhase();
+//            b.chooseCloud("fede", 1);
+//            b.changePhase();
+
         } catch (PhaseNotRightException | NotYourTurnException | TooManyStudentsException e) {
             throw new RuntimeException(e);
         } catch (NoSuchStudentException e) {

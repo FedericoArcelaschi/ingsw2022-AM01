@@ -110,15 +110,17 @@ public class GuiDrawer {
         Pane towerPane = (Pane) castle.getTop();
         Pane teacherTabelPane = (Pane) ((VBox) castle.getCenter()).getChildren().get(0);
         Pane diningRoomPane = (Pane) ((VBox) castle.getCenter()).getChildren().get(1);
+        ToggleButton coinButton = (ToggleButton) waitingRoomPane.getChildren().get(9);
 
         drawWaitingRoom(castleData.waitingRoom(),waitingRoomPane);
         drawDiningRoom(castleData.diningRoom(), diningRoomPane);
         drawTeachers(castleData.teachers(), castleData.towerColor(), teacherTabelPane);
         drawTower(castleData.towerColor(), castleData.nTower(), towerPane);
+        drawCoin(castleData.coin(), coinButton);
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom, Pane waitingRoomPane) {
-        for (int i = 0; i < waitingRoom.size(); i++) {
+        for (int i = 0; i < waitingRoom.size()-1; i++) {
             setStudentButtonColor((ToggleButton) waitingRoomPane.getChildren().get(i), waitingRoom.get(i));
         }
     }
@@ -147,6 +149,14 @@ public class GuiDrawer {
             Node node = towerPane.getChildren().get(i);
             ToggleButton toggleButton = (ToggleButton) node;
             setTowerButtonColor(toggleButton, towerColor);
+        }
+    }
+
+    //FIXME
+    private void drawCoin(int nCoin, ToggleButton coinButton){
+        if(nCoin > 0) {
+            coinButton.getStyleClass().add("coinBackground");
+            coinButton.setText(String.valueOf(nCoin));
         }
     }
 

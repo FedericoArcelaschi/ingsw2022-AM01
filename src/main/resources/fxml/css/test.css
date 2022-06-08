@@ -36,6 +36,14 @@
     -fx-background-color: transparent;
 }
 
+.coin{
+    -fx-background-size: 25, 25;
+    -fx-opacity: 1;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: transparent;
+}
+
 .teacher{
     -fx-background-size: 35, 35;
     -fx-opacity: 1;
@@ -59,6 +67,10 @@
     -fx-background-position: center;
     -fx-background-color: transparent;
     -fx-background-image: url("/motherNature/mother_nature.png");
+}
+
+.coinBackground{
+    -fx-background-image: url("/coin/coin.png");
 }
 
 .studentBackgroundBlue{

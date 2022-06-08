@@ -79,5 +79,7 @@ public class IslandData {
         return Objects.hash(ownership, students, islandSize);
     }
 
-
+    public boolean isBlocked() {
+        return false;
+    }
 }

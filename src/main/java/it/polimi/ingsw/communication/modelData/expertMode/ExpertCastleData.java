@@ -23,7 +23,10 @@ public class ExpertCastleData extends CastleData {
         super(username, waitingRoom, diningRoom, deck, lastPlayedCard, towerColor, nTower, teachers, isMyCastle);
         this.coins = coins;
     }
-    //To add: Coins.
+
+    public int coins() {
+        return coins;
+    }
 
     @Override
     public String toString() {

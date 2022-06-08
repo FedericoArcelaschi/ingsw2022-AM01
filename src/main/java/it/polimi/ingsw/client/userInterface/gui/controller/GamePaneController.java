@@ -19,6 +19,7 @@ public class GamePaneController {
     @FXML private HBox islandRow1, islandRow2;
     @FXML private FlowPane cardsFlowPane;
     @FXML private StackPane cloudStackPane;
+    @FXML private ToggleButton coin;
     private ToggleGroup waitingRoomToggleGroup;
     public void initialize() {
         waitingRoomToggleGroup = new ToggleGroup();

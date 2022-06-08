@@ -120,6 +120,10 @@ public class CastleData {
         return teachers;
     }
 
+    public int coin(){
+        return 0;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(username, waitingRoom, diningRoom, deck, lastPlayedCard, towerColor, isMyCastle);

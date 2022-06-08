@@ -2,7 +2,9 @@ package it.polimi.ingsw.communication.modelData;
 
 import com.google.gson.annotations.JsonAdapter;
 import it.polimi.ingsw.communication.modelData.expertMode.BoardDataAdapter;
+import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -115,5 +117,8 @@ public class BoardData {
         return Objects.hash(username, nPlayer, motherNaturePosition, cloudList, islandList, myCastle, otherCastles, turn);
     }
 
+    public List<CharacterData> characters(){
+        return new ArrayList<>();
+    }
 
 }
