@@ -9,6 +9,7 @@ import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
@@ -24,11 +25,12 @@ public class GuiDrawer {
     public void drawCastles(CastleData myCaslte, List<CastleData> otherCastle, BorderPane myCastlePane , FlowPane castleTabHBox){
         GuiDrawer guiDrawer = new GuiDrawer();
         int i;
-        guiDrawer.drawCastle(myCaslte, myCastlePane);
+        guiDrawer.drawCastle(myCaslte, myCastlePane, null);
         for (i = 0; i < otherCastle.size()+1; i++) {
             VBox vbox = (VBox) castleTabHBox.getChildren().get(i);
+            Label nameLabel = (Label) ((Pane) vbox.getChildren().get(0)).getChildren().get(0);
             BorderPane borderPane = (BorderPane) vbox.getChildren().get(1);
-            guiDrawer.drawCastle( i == 0? myCaslte : otherCastle.get(i-1), borderPane);
+            guiDrawer.drawCastle( i == 0? myCaslte : otherCastle.get(i-1), borderPane, nameLabel);
         }
         while (i<castleTabHBox.getChildren().size()) {
             VBox vbox = (VBox) castleTabHBox.getChildren().get(i);
@@ -98,7 +100,7 @@ public class GuiDrawer {
                 ToggleButton toggleButton = new ToggleButton();
                 toggleButton.getStyleClass().add("tower");
                 toggleButton.setDisable(true);
-                toggleButton.setPrefSize(35, 35);
+                toggleButton.setPrefSize(35, 50);
                 setTowerButtonColor(toggleButton, islandData.getOwnership());
                 FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
                 flowPane.getChildren().add(toggleButton);
@@ -118,12 +120,14 @@ public class GuiDrawer {
         }
     }
 
-    private void drawCastle(CastleData castleData, BorderPane castle) {
+    private void drawCastle(CastleData castleData, BorderPane castle, Label nameLabel) {
         Pane waitingRoomPane = (Pane) castle.getBottom();
         Pane towerPane = (Pane) castle.getTop();
         Pane teacherTabelPane = (Pane) ((VBox) castle.getCenter()).getChildren().get(0);
         Pane diningRoomPane = (Pane) ((VBox) castle.getCenter()).getChildren().get(1);
         ToggleButton coinButton = (ToggleButton) waitingRoomPane.getChildren().get(9);
+        if(nameLabel != null)
+            nameLabel.setText(castleData.username());
 
         drawWaitingRoom(castleData.waitingRoom(),waitingRoomPane);
         drawDiningRoom(castleData.diningRoom(), diningRoomPane);
@@ -133,7 +137,7 @@ public class GuiDrawer {
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom, Pane waitingRoomPane) {
-        for (int i = 0; i < waitingRoom.size()-1; i++) {
+        for (int i = 0; i < waitingRoom.size(); i++) {
             setStudentButtonColor((ToggleButton) waitingRoomPane.getChildren().get(i), waitingRoom.get(i));
         }
     }
@@ -165,7 +169,6 @@ public class GuiDrawer {
         }
     }
 
-    //FIXME
     private void drawCoin(int nCoin, ToggleButton coinButton){
         if(nCoin > 0) {
             coinButton.getStyleClass().add("coinBackground");

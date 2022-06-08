@@ -72,7 +72,7 @@ public class GamePaneController {
 
     public void playCard(MouseEvent mouseEvent) {
         int cardId;
-        //take cloud id from accessibleText
+        //take card id from accessibleText
         String accessibleText = ((Pane) mouseEvent.getTarget()).getAccessibleText();
         cardId = Integer.parseInt(accessibleText.substring(accessibleText.length()-1));
         //if cardId is 0 replace it with 10
