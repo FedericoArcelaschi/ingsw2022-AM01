@@ -23,7 +23,7 @@ public class ExpertCastleData extends CastleData {
         super(username, waitingRoom, diningRoom, deck, lastPlayedCard, towerColor, nTower, teachers, isMyCastle);
         this.coins = coins;
     }
-
+    @Override
     public int coins() {
         return coins;
     }

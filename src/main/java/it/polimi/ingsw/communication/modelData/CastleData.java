@@ -123,7 +123,7 @@ public class CastleData {
         return teachers;
     }
 
-    public int coin(){
+    public int coins() {
         return 0;
     }
 

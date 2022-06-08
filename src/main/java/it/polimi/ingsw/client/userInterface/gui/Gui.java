@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.userInterface.gui;
 import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.communication.modelData.BoardData;
-import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
@@ -81,7 +80,10 @@ public class Gui extends Application implements UserInterface {
         } catch (NoSuchStudentException e) {
             return createBoardData();
         }
-        return b.getData("fede");
+        BoardData bd = b.getData("fede");
+        System.out.println(bd.myCastle().coins());
+        //System.out.println(bd);
+        return bd;
     }
 
     /**

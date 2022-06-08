@@ -27,7 +27,7 @@ public class GuiDrawer {
             BorderPane borderPane = (BorderPane) vbox.getChildren().get(1);
             guiDrawer.drawCastle( i == 0? myCaslte : otherCastle.get(i-1), borderPane);
         }
-        for (; i<castleTabHBox.getChildren().size();) {
+        while (i<castleTabHBox.getChildren().size()) {
             VBox vbox = (VBox) castleTabHBox.getChildren().get(i);
             castleTabHBox.getChildren().remove(vbox);
         }
@@ -116,7 +116,7 @@ public class GuiDrawer {
         drawDiningRoom(castleData.diningRoom(), diningRoomPane);
         drawTeachers(castleData.teachers(), castleData.towerColor(), teacherTabelPane);
         drawTower(castleData.towerColor(), castleData.nTower(), towerPane);
-        drawCoin(castleData.coin(), coinButton);
+        drawCoin(castleData.coins(), coinButton);
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom, Pane waitingRoomPane) {

@@ -17,7 +17,7 @@ class BoardDataTest {
     @Test
     void toStringTest() {
         BoardData bd;
-        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"), false);
+        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"), true);
         bd = b.getData("fede");
         System.out.println(bd);
     }
