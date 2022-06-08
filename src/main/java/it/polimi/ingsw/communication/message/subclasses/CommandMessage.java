@@ -12,6 +12,11 @@ public class CommandMessage extends Message {
         this.command = Command.createCommand(username, command);
     }
 
+    public CommandMessage(Command command) {
+        super(MessageType.COMMAND);
+        this.command = command;
+    }
+
     public String getUsername() {
         return command.getUsername();
     }

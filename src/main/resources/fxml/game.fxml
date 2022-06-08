@@ -878,6 +878,17 @@
             </FlowPane>
          </content>
       </Tab>
+      <Tab fx:id="characterTab" disable="true" text="Characters">
+        <content>
+            <FlowPane fx:id="characterPane" alignment="CENTER" hgap="50.0" prefHeight="800.0" prefWidth="1400.0">
+               <children>
+                  <Pane prefHeight="400.0" prefWidth="222.0" styleClass="character" />
+                  <Pane prefHeight="400.0" prefWidth="222.0" styleClass="character" />
+                  <Pane prefHeight="400.0" prefWidth="222.0" styleClass="character" />
+               </children>
+            </FlowPane>
+        </content>
+      </Tab>
    </tabs>
    <stylesheets>
       <URL value="@css/test.css" />

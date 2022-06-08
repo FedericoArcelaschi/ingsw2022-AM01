@@ -69,8 +69,52 @@
     -fx-background-image: url("/motherNature/mother_nature.png");
 }
 
+.character{
+    -fx-background-size: 222, 400;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-color: transparent;
+}
+
 .coinBackground{
     -fx-background-image: url("/coin/coin.png");
+}
+
+.cardCharacterMonk{
+    -fx-background-image: url("/characters/monk.jpg");
+}
+.cardCharacterFarmer{
+    -fx-background-image: url("/characters/farmer.jpg");
+}
+.cardCharacterGuard{
+    -fx-background-image: url("/characters/guard.jpg");
+}
+.cardCharacterMailman{
+    -fx-background-image: url("/characters/mailman.jpg");
+}
+.cardCharacterWitch{
+    -fx-background-image: url("/characters/witch.jpg");
+}
+.cardCharacterCentaur{
+    -fx-background-image: url("/characters/centaur.jpg");
+}
+.cardCharacterJester{
+    -fx-background-image: url("/characters/jester.jpg");
+}
+.cardCharacterKnight{
+    -fx-background-image: url("/characters/knight.jpg");
+}
+.cardCharacterCook{
+    -fx-background-image: url("/characters/cook.jpg");
+}
+.cardCharacterStoryteller{
+    -fx-background-image: url("/characters/storyteller.jpg");
+}
+.cardCharacterQueen{
+    -fx-background-image: url("/characters/queen.jpg");
+}
+.cardCharacterTaxman{
+    -fx-background-image: url("/characters/taxman.jpg");
 }
 
 .studentBackgroundBlue{

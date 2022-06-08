@@ -1,29 +1,32 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
+import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-import java.util.*;
+import java.util.function.Consumer;
 
 public class GamePaneController {
     @FXML public BorderPane castlePane0;
-    @FXML public FlowPane castleTabHBox;
+    @FXML public FlowPane castleTabHBox, characterPane, cardsFlowPane;
     @FXML private Pane waitingRoomPane;
-    @FXML private HBox islandRow1, islandRow2;
-    @FXML private FlowPane cardsFlowPane;
     @FXML private StackPane cloudStackPane;
-    @FXML private ToggleButton coin;
+    @FXML private HBox islandRow1, islandRow2;
+    @FXML private Tab characterTab;
     private ToggleGroup waitingRoomToggleGroup;
-    public void initialize() {
+    private Consumer<Command> send;
+    public void initialize(Consumer<Command> send) {
         waitingRoomToggleGroup = new ToggleGroup();
         setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
+        this.send = send;
     }
 
     private void setToggleGroup(ToggleGroup toggleGroup, ObservableList<Node> children) {
@@ -39,6 +42,7 @@ public class GamePaneController {
         guiDrawer.drawClouds(boardData.cloudList(), cloudStackPane);
         guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
+        guiDrawer.drawCharacters(boardData.characters(), characterPane, characterTab);
     }
 
     public void moveStudentToDiningRoom(MouseEvent mouseEvent) {

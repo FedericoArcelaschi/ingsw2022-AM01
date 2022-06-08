@@ -3,10 +3,13 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 import it.polimi.ingsw.communication.modelData.CastleData;
 import it.polimi.ingsw.communication.modelData.CloudData;
 import it.polimi.ingsw.communication.modelData.IslandData;
+import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -44,6 +47,16 @@ public class GuiDrawer {
                 pane.getStyleClass().addAll("cardAssistant" + (i), "assistant");
                 cardsFlowPane.getChildren().add(pane);
             }
+        }
+    }
+
+    public void drawCharacters(List<CharacterData> characters, FlowPane characterPane, Tab characterTab){
+        if(characters.size() == 0)
+            return;
+        characterTab.setDisable(false);
+        for (int i = 0; i < characters.size(); i++) {
+            Pane pane = (Pane) characterPane.getChildren().get(i);
+            pane.getStyleClass().add(CharacterExplanation.getInstance(characters.get(i).getName()).getCSS());
         }
     }
 

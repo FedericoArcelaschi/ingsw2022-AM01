@@ -4,7 +4,9 @@ import com.google.gson.annotations.JsonAdapter;
 
 import com.google.gson.annotations.JsonAdapter;
 import it.polimi.ingsw.communication.modelData.expertMode.BoardDataAdapter;
+import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,6 +67,10 @@ public class BoardData {
 
     public TurnData turn() {
         return turn;
+    }
+
+    public List<CharacterData> characters() {
+        return new ArrayList<>();
     }
 
     @Override

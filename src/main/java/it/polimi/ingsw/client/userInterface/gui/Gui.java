@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.userInterface.gui;
 
 import it.polimi.ingsw.client.communication.ClientMain;
+import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.server.controller.GameType;
@@ -109,7 +110,7 @@ public class Gui extends Application implements UserInterface {
             throw new RuntimeException(e);
         }
         gamePaneController = gameLoader.getController();
-
+        gamePaneController.initialize(this::send);
         gamePaneController.draw(boardData);
         stage.setScene(new Scene(loginFXML));
         stage.centerOnScreen();
@@ -127,5 +128,9 @@ public class Gui extends Application implements UserInterface {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void send(Command command) {
+        clientMain.runCommand(command);
     }
 }
