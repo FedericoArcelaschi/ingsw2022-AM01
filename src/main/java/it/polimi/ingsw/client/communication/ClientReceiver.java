@@ -3,11 +3,9 @@ package it.polimi.ingsw.client.communication;
 import it.polimi.ingsw.client.ClientState;
 import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.message.*;
-import it.polimi.ingsw.communication.message.subclasses.Error;
+import it.polimi.ingsw.communication.message.subclasses.*;
 import it.polimi.ingsw.client.userInterface.UserInterface;
-import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
-import it.polimi.ingsw.communication.message.subclasses.Ping;
-import it.polimi.ingsw.communication.message.subclasses.Update;
+import it.polimi.ingsw.communication.message.subclasses.Error;
 
 import java.net.Socket;
 
@@ -49,7 +47,11 @@ public class ClientReceiver extends Receiver {
                 Error error = (Error) message;
                 System.err.println("new error received: " + error.getMessage());
                 //IDEA: cm.setState(error.getState());
-                //TODO: UserInterface.handleError(error.getMessage());
+                //IDEA: UserInterface.handleError(error.getMessage());
+            }
+            case CHARINFO -> {
+                CharInfo charInfo = (CharInfo) message;
+                System.out.println(charInfo.getInfo());
             }
         }
     }

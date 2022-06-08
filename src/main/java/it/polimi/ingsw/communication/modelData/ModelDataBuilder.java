@@ -6,6 +6,7 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertCastleData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 
@@ -15,42 +16,39 @@ import java.util.Map;
 import java.util.Objects;
 
 public abstract class ModelDataBuilder {
-    public static BoardData newBoardData(String username, Board board){
+    public static BoardData newBoardData(String username, Board board) {
         return new BoardData(
                 username,
                 board.getCloudList().size(),
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(ModelDataBuilder::newIslandData).toList(),
-                newCastleData(username, board.getCastle(username), true, board.placedTower(), board.getProfessorsMap()),
+                newCastleData(username, board.getCastle(username), true, board.placedTowers(), board.getProfessorsMap()),
                 board.getCastleMap().keySet().stream()
                         .filter(key -> !key.equals(username)) //selects only other players' castle
-                        .map(key -> newCastleData(key, board.getCastle(key), false, board.placedTower(), board.getProfessorsMap()))
+                        .map(key -> newCastleData(key, board.getCastle(key), false, board.placedTowers(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn())
         );
     }
 
     public static ExpertBoardData newExpertBoardData(String username, Board board) {
-        //TODO: this null is awful to look at. For now it works; find a better way regardless.
         List<CharacterData> characters = null;
         try {
             characters = board.getAvailableCharacterCards().stream().filter(Objects::nonNull).map(ModelDataBuilder::newCharacterData).toList();
         } catch (NotTheRightGameModeException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
-        //TODO: newExpertIslandData and newExpertCastleData return base game castles and islands... needs a fix
-        System.out.println("At least it uses this, right?");
         return new ExpertBoardData(
                 username,
                 board.getCloudList().size(),
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(ModelDataBuilder::newExpertIslandData).toList(),
-                newExpertCastleData(username, board.getCastle(username), true, board.placedTower(), board.getProfessorsMap()),
+                newExpertCastleData(username, board.getCastle(username), true, board.placedTowers(), board.getProfessorsMap()),
                 board.getCastleMap().keySet().stream()
                         .filter(key -> !key.equals(username))
-                        .map(key -> newExpertCastleData(key, board.getCastle(key), false, board.placedTower(), board.getProfessorsMap()))
+                        .map(key -> newExpertCastleData(key, board.getCastle(key), false, board.placedTowers(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn()),
                 characters

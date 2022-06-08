@@ -10,6 +10,7 @@ import static it.polimi.ingsw.communication.command.CommandType.getCommandType;
  * a representation of the command the player can compose and ask to be executed
  */
 public class Command {
+    //TODO: rework attributes map to invoke lambdas.
     private CommandType type;
     private String username;
     private Map<CommandAttribute, String> attributesMap;
@@ -24,7 +25,7 @@ public class Command {
             case PLAY_CARD -> attributesMap.put(CommandAttribute.ID, attributes[0]);
             //e.g.: playcard 1
             case MOVE_STUDENT_TO_CASTLE -> {
-                attributesMap.put(CommandAttribute.WHAT, String.join(",", attributes)); //What will be a list of students.
+                attributesMap.put(CommandAttribute.WHAT, String.join("", attributes)); //What will be a list of students.
                 //System.out.println(attributesMap.get(CommandAttribute.WHAT));
             }
             //e.g.: moveStudentCastle Green, Blue, Pink

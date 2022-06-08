@@ -208,7 +208,7 @@ public class ExpertBoard extends Board {
 
     @Override
     public List<StandardCharacter> getAvailableCharacterCards() {
-        return expertCharactersCards;
+        return expertCharactersCards.stream().filter(Objects::nonNull).toList();
     }
 
     public Team getCurrentTeam(){

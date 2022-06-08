@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.command.CommandAttribute;
 import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.*;
 import it.polimi.ingsw.communication.message.subclasses.Error;
+import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
 import it.polimi.ingsw.server.communication.ServerReceiver;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
@@ -55,18 +56,14 @@ public class Game {
      */
     public void executeCommand(Command command) {
         System.out.println("Executing command...");
-        if(command.getType() == null){
-            send(createError(0, "Command not valid; please, try again."), usernameSocketMap.get(command.getUsername()));
-        } else {
-            switch (command.getType()) {
-                case PLAY_CARD -> playCardCommand(command);
-                case MOVE_STUDENT_TO_CASTLE -> moveStudentToDiningRoomCommand(command);
-                case MOVE_STUDENT_TO_ISLAND -> moveStudentToIslandCommand(command);
-                case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
-                case CHOOSE_CLOUD -> chooseCloudCommand(command);
-                case PAY_CHARACTER -> payCharCommand(command);
-                case CHARACTER_INFO -> getCharInfo(command);
-            }
+        switch (command.getType()) {
+            case PLAY_CARD -> playCardCommand(command);
+            case MOVE_STUDENT_TO_CASTLE -> moveStudentToDiningRoomCommand(command);
+            case MOVE_STUDENT_TO_ISLAND -> moveStudentToIslandCommand(command);
+            case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
+            case CHOOSE_CLOUD -> chooseCloudCommand(command);
+            case PAY_CHARACTER -> payCharCommand(command);
+            case CHARACTER_INFO -> getCharInfo(command);
         }
     }
 
@@ -82,17 +79,19 @@ public class Game {
         }
     }
 
-    public void playerWin(String winner) {
+    private void sendWinUpdate(Team t){
         for (String username: usernameSocketMap.keySet()) {
-            Message message = new WinUpdate(ModelDataBuilder.newBoardData(username, board), winner);
-            send(message, usernameSocketMap.get(username));
+            Message winner = new WinUpdate(ModelDataBuilder.newBoardData(username, board), t.name());
+            send(winner, usernameSocketMap.get(username));
+            Message gameOver = new EndGame("Game over. Changing state...");
+            send(gameOver, usernameSocketMap.get(username)); //FIXME: qui non si capisce cosa succede idk
         }
     }
 
     private void sendAllUpdate() {
         for (String username: usernameSocketMap.keySet()) {
-            PrintWriter out = null;
-            Message message = new Update(gameType.expertMode ? ModelDataBuilder.newExpertBoardData(username, board) : ModelDataBuilder.newBoardData(username, board)); //FIXME: in questa classe mi sembra ci sia un tot di codice ripetutto o sbalgio?
+            //Fixme: maybe I shouldn't do it this way, but at least it prints out the right board...
+            Message message = createUpdate(gameType.expertMode ? ModelDataBuilder.newExpertBoardData(username, board) : ModelDataBuilder.newBoardData(username, board));
             send(message, usernameSocketMap.get(username));
         }
     }
@@ -172,6 +171,7 @@ public class Game {
     }
 
     private void moveMotherNatureCommand(Command command) {
+        System.out.println("MoveMotherNature: " + command);
         try {
             board.moveMotherNature(Integer.parseInt(command.getAttributesMap().get(CommandAttribute.DISTANCE)));
         } catch (PhaseNotRightException | IllegalArgumentException e) {
@@ -210,7 +210,7 @@ public class Game {
         sendAllUpdate();
     }
 
-    private void payCharCommand(Command command){
+    private void payCharCommand(Command command) {
         try {
             int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
             List<String> studentList = new ArrayList<>(Arrays.asList(command.getAttributesMap().get(CommandAttribute.WHAT).split(",")));
@@ -226,23 +226,14 @@ public class Game {
     }
 
     @Contract(pure = true)
-    private void getCharInfo(Command command){
+    private void getCharInfo(Command command) {
         //The method does not throw exceptions as everyone can use it anytime during the game.
         int idChar = CharacterUtility.getChar(command.getAttributesMap().get(CommandAttribute.WHO)).getId();
         try {
-            send(new CharInfo(board.getCharInfo(idChar)), usernameSocketMap.get(command.getUsername()));
+            Message charInfo = new CharInfo(board.getCharInfo(idChar));
+            send(charInfo, usernameSocketMap.get(command.getUsername()));
         } catch (NotTheRightGameModeException e) {
             send(createError(0, "You can't use this command in this gamemode."), usernameSocketMap.get(command.getUsername()));
-        }
-    }
-
-    private void sendWinUpdate(Team t){
-        for (String username: usernameSocketMap.keySet()) {
-            PrintWriter out = null;
-            Message winner = new WinUpdate(ModelDataBuilder.newBoardData(username, board), t.name());
-            send(winner, usernameSocketMap.get(username));
-            Message gameOver = new EndGame("Game over. Changing state...");
-            send(gameOver, usernameSocketMap.get(username)); //FIXME: qui non si capisce cosa succede idk
         }
     }
 
