@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
 import it.polimi.ingsw.communication.command.Command;
+import it.polimi.ingsw.communication.command.CommandType;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import javafx.collections.ObservableList;
@@ -12,6 +13,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class GamePaneController {
@@ -23,6 +26,7 @@ public class GamePaneController {
     @FXML private Tab characterTab;
     private ToggleGroup waitingRoomToggleGroup;
     private Consumer<Command> send;
+    private String username;
     public void initialize(Consumer<Command> send) {
         waitingRoomToggleGroup = new ToggleGroup();
         setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
@@ -37,6 +41,8 @@ public class GamePaneController {
     }
 
     public void draw(BoardData boardData) {
+        this.username = boardData.username();
+
         GuiDrawer guiDrawer = new GuiDrawer();
         guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
         guiDrawer.drawClouds(boardData.cloudList(), cloudStackPane);
@@ -51,6 +57,10 @@ public class GamePaneController {
             return;
         StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
         //TODO: Create and send command
+        List<String> parameters = new ArrayList<>();
+        parameters.add(studentColor.name());
+        Command command = new Command(username, CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
+        System.out.println(command);
     }
 
     public void moveStudentToIsland(MouseEvent mouseEvent) {
@@ -58,7 +68,14 @@ public class GamePaneController {
         if(selected == null)
             return;
         StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
+
         //TODO: Create and send command
+        Pane island = (Pane) mouseEvent.getTarget();
+        List<String> parameters = new ArrayList<>();
+        parameters.add(island.getAccessibleText());
+        parameters.add(studentColor.name());
+        Command command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
+        System.out.println(command);
     }
 
 
@@ -68,6 +85,10 @@ public class GamePaneController {
         String accessibleText = ((Pane) mouseEvent.getTarget()).getAccessibleText();
         cloudId = Integer.parseInt(accessibleText.substring(accessibleText.length()-1));
         //TODO: Create and send command
+        List<String> parameters = new ArrayList<>();
+        parameters.add(String.valueOf(cloudId));
+        Command command = new Command(username, CommandType.CHOOSE_CLOUD, parameters);
+        System.out.println(command);
     }
 
     public void playCard(MouseEvent mouseEvent) {
@@ -78,5 +99,9 @@ public class GamePaneController {
         //if cardId is 0 replace it with 10
         cardId = cardId == 0 ? 10 : cardId;
         //TODO: Create and send command
+        List<String> parameters = new ArrayList<>();
+        parameters.add(String.valueOf(cardId));
+        Command command = new Command(username, CommandType.PLAY_CARD, parameters);
+        System.out.println(command);
     }
 }
