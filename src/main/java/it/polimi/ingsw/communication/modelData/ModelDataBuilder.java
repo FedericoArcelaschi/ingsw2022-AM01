@@ -5,8 +5,7 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertCastleData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
-import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
-import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
+import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 
 import java.util.*;
@@ -33,7 +32,7 @@ public abstract class ModelDataBuilder {
         List<CharacterData> characters = null;
         try {
             characters = board.getAvailableCharacterCards().stream().filter(Objects::nonNull).map(ModelDataBuilder::newCharacterData).toList();
-        } catch (NotTheRightGameModeException e) {
+        } catch (WrongGameModeException e) {
             e.printStackTrace();
         }
         //TODO: newExpertIslandData and newExpertCastleData return base game castles and islands... needs a fix
@@ -69,7 +68,7 @@ public abstract class ModelDataBuilder {
         Boolean blocked = null;
         try{
             blocked = island.isBlocked();
-        } catch (NotTheRightGameModeException e) {
+        } catch (WrongGameModeException e) {
             e.printStackTrace();
         }
         return new ExpertIslandData(island.getOwnership(), island.getStudents(), island.getIslandNumber(), Boolean.TRUE.equals(blocked));
@@ -95,7 +94,7 @@ public abstract class ModelDataBuilder {
         Integer coins = null;
         try {
             coins = castle.getCoins();
-        } catch (NotTheRightGameModeException e) {
+        } catch (WrongGameModeException e) {
             e.printStackTrace();
         }
         return new ExpertCastleData(

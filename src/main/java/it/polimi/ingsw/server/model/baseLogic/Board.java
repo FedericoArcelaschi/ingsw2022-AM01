@@ -350,7 +350,7 @@ public class Board {
     }
 
     /** @return a map that contains the number of placed towers on the islands for each team */
-    private EnumMap<Team,Integer> placedTowers() {
+    public EnumMap<Team,Integer> placedTowers() {
         EnumMap<Team, Integer> teamTowersMap = new EnumMap<>(Team.class);
         for (Team t : Team.values()) { //fill nTowers map for all team at 0
             teamTowersMap.put(t, 0);

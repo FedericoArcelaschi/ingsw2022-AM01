@@ -191,6 +191,8 @@ public class Game {
             send(createError(0, e.getMessage()), usernameSocketMap.get(command.getUsername()));
             return;
         }
+        if(turn.getActionOrder().get(turn.getActionOrder().size()-1).equals(turn.getCurrentPlayer()))
+            board.cloudRefill();
         if (board.isWonByResources())
             try {
                 Team winner = board.getWinner();
@@ -206,7 +208,7 @@ public class Game {
         try {
             int idChar = CharacterUtility.getChar(command.getCharName()).getId();
             board.playExpertCard(idChar, command.getIslandId(), command.getStudents());
-        } catch (NotTheRightGameModeException | CoinException | StudentException | PhaseNotRightException e) {
+        } catch (WrongGameModeException | CoinException | StudentException | PhaseNotRightException e) {
             e.printStackTrace(); // todo: Error message
         }
     }

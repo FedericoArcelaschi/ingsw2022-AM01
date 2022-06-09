@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.command.CommandType;
 import it.polimi.ingsw.communication.modelData.BoardData;
-import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import javafx.collections.ObservableList;
@@ -68,7 +67,7 @@ public class GamePaneController {
     }
 
     public void moveStudentToIsland(MouseEvent mouseEvent) {
-        if(boardData.turn().currentPhase() == TurnPhase.STUDENTS){
+        if (boardData.turn().currentPhase() == TurnPhase.STUDENTS) {
             ToggleButton selected = (ToggleButton) waitingRoomToggleGroup.getSelectedToggle();
             if (selected == null)
                 return;
@@ -89,7 +88,6 @@ public class GamePaneController {
             send.accept(command);
         }
     }
-
 
     public void chooseCloud(MouseEvent mouseEvent) {
         int cloudId;

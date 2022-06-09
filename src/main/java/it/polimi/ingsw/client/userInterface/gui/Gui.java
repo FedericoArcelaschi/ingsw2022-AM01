@@ -98,6 +98,7 @@ public class Gui extends Application implements UserInterface {
 
 
     public void refresh(BoardData boardData) {
+        System.out.println(boardData);
         //draws the game panel for testing.
         FXMLLoader gameLoader
                 = new FXMLLoader(Objects.requireNonNull(getClass().getClassLoader().getResource("fxml/game.fxml")));
@@ -121,7 +122,7 @@ public class Gui extends Application implements UserInterface {
     }
 
     public void connect(Preferences preferences) {
-        clientMain = new ClientMain("127.0.0.1", 12345, preferences);
+        clientMain = new ClientMain("172.0.0.1", 12345, preferences);
         try {
             clientMain.connect(this);
         } catch (IllegalAccessException e) {
