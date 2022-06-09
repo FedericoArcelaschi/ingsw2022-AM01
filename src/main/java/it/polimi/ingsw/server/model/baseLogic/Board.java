@@ -130,11 +130,11 @@ public class Board {
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
         }
         Castle castle = castleMap.get(playerID);
-        if (castle.playCard(card) &&
-                (!turn.isAlreadyPlayed(card) || castle.getDeck().stream().allMatch(card1 -> turn.isAlreadyPlayed(card1.priority())))) {
-            possibleMovingSteps.setInt((card + 1) / 2);
-            turn.addCard(playerID, card);
-        } else
+        if(!turn.isAlreadyPlayed(card) || castle.getDeck().stream().allMatch(card1 -> turn.isAlreadyPlayed(card1.priority())))
+            if(castle.playCard(card)) {
+                possibleMovingSteps.setInt((card + 1) / 2);
+                turn.addCard(playerID, card);
+         }
             throw new IllegalArgumentException("Card cannot be played.");
     }
 

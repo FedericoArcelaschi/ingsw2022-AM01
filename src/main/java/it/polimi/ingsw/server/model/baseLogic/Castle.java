@@ -109,7 +109,7 @@ public class Castle implements StudentPlaces {
      * @param i priority of the card
      * @return true if the card was played correctly
      */
-    public boolean playCard(int i) {
+    public boolean playCard(int i) { // FIXME
         if (i < 1 || i > 10) throw new IllegalArgumentException();
         Card play = deck.get(i - 1);
         if (play.isAvailable()) {
