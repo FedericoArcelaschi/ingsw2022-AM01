@@ -20,7 +20,7 @@ public class Cli implements UserInterface {
 
     public Cli() {
         ClientMain clientMain = new ClientMain(
-                "172.20.10.3",
+                "127.0.0.1",
                 12345,
                 getValidPreferences());
         try {
