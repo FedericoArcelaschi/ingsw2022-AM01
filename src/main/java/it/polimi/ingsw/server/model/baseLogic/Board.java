@@ -134,7 +134,6 @@ public class Board {
                 (!turn.isAlreadyPlayed(card) || castle.getDeck().stream().allMatch(card1 -> turn.isAlreadyPlayed(card1.priority())))) {
             possibleMovingSteps.setInt((card + 1) / 2);
             turn.addCard(playerID, card);
-            turn.changePhase();
         } else
             throw new IllegalArgumentException("Card cannot be played.");
     }

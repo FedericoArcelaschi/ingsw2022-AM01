@@ -167,7 +167,7 @@
         <configuration>
           <archive>
             <manifest
-                    mainClass="it.polimi.ingsw.onLaunch.Main">
+                    mainClass="it.polimi.ingsw.startUp.Main">
             </manifest>
           </archive>
           <descriptorRefs>

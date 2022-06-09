@@ -4,8 +4,5 @@ public class PhaseNotRightException extends Exception{
     public PhaseNotRightException(String message) {
         super(message);
     }
-    public PhaseNotRightException() {
-        super();
-    }
 
 }

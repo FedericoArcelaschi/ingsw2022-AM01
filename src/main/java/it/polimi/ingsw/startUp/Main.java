@@ -1,4 +1,4 @@
-package it.polimi.ingsw.onLaunch;
+package it.polimi.ingsw.startUp;
 
 import it.polimi.ingsw.client.userInterface.cli.Cli;
 import it.polimi.ingsw.server.communication.ServerMain;
