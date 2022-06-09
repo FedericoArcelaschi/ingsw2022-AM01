@@ -5,7 +5,7 @@ import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.exceptions.CoinException;
-import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
+import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
 import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
@@ -121,7 +121,7 @@ public class ExpertBoard extends Board {
             availableCoins = castleMap
                     .get(getCurrentPlayer())
                     .getCoins();
-        } catch (NotTheRightGameModeException ignored) {}
+        } catch (WrongGameModeException ignored) {}
         if(availableCoins < ec.getCost())
             throw new CoinException(ec.getCost(), availableCoins);
         return ec;

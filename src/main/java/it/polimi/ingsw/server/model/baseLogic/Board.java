@@ -14,6 +14,7 @@ import java.util.*;
 
 @SuppressWarnings("Redundant")
 public class Board {
+
     protected static final int numOfStudentsPerColor = 24;
     protected int motherNaturePosition = 0;
 
@@ -121,7 +122,6 @@ public class Board {
     /**
      * @param playerID the id of the player that ask for this move
      * @param card     the number of the card the player want to use
-     * @return if the move is legal and played, false otherwise
      */
     public void playCard(String playerID, int card) throws NotYourTurnException, PhaseNotRightException {
         if (!turn.getCurrentPlayer().equals(playerID))
@@ -130,10 +130,13 @@ public class Board {
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
         }
         Castle castle = castleMap.get(playerID);
-        possibleMovingSteps.setInt((card + 1) / 2);
-        if (turn.addCard(playerID, card))
-            return;
-        throw new IllegalArgumentException("Card cannot be played.");
+        if (castle.playCard(card) &&
+                (!turn.isAlreadyPlayed(card) || castle.getDeck().stream().allMatch(card1 -> turn.isAlreadyPlayed(card1.priority())))) {
+            possibleMovingSteps.setInt((card + 1) / 2);
+            turn.addCard(playerID, card);
+            turn.changePhase();
+        } else
+            throw new IllegalArgumentException("Card cannot be played.");
     }
 
 //methods for the action phase
@@ -165,7 +168,6 @@ public class Board {
      * @param playerID     the id of the player that ask for this move
      * @param islandNumber the number of the island where you want to move the students
      * @param students     a list of students you want to move
-     * @return true if the students are present and added to the island.
      */
     public void moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students)
             throws NoSuchStudentException, NotYourTurnException, PhaseNotRightException {
@@ -217,7 +219,6 @@ public class Board {
     protected void checkJoinIsland(Integer islandIndex) {
         List<Integer> islandsToJoin = getNeighbouringIsland(islandIndex);
         islandsToJoin = getSameOwner(islandsToJoin);
-        //System.out.println("islandsToJoin: " + islandsToJoin);//TODO: debug island merging
         if(!islandsToJoin.isEmpty())
             joinIslands(islandsToJoin);
     }
@@ -238,12 +239,10 @@ public class Board {
         Island  firstIsland = islandList.get(neightbouringIsland.get(0)),
                 secondIsland = islandList.get(neightbouringIsland.get(1)),
                 thirdIsland = islandList.get(neightbouringIsland.get(2));
-        //System.out.println(neightbouringIsland);
         if (firstIsland.getOwnership() == secondIsland.getOwnership())
             islandToJoin.addAll(neightbouringIsland.subList(0, 2));
         if (secondIsland.getOwnership() == thirdIsland.getOwnership())
             islandToJoin.addAll(neightbouringIsland.subList(1, 3));
-        //System.out.println(islandToJoin);
         return islandToJoin.stream().toList();
         //add all should remove the repetition of the second island index
     }
@@ -289,8 +288,7 @@ public class Board {
     }
 
     /**
-     * Refills each cloud with new students.
-     * @return if the move is legal and played or not
+     * Resets the students that can be moved
      */
     public void endOfTurn() {
         movedStudents = 0;
@@ -305,11 +303,11 @@ public class Board {
 
 //Ending of a game
 
-    @SuppressWarnings("RedundantSuppression")
     /**
      * Checks if there are no more cards.
      * @return number of cards left.
      */
+    @SuppressWarnings("RedundantSuppression")
     private int remainingCards(){
         Castle currPlayerCastle = getCastle(getCurrentPlayer());
         int cardsLeft = (int) currPlayerCastle.getDeck().stream().filter(Card::isAvailable).count();
@@ -352,7 +350,7 @@ public class Board {
     }
 
     /** @return a map that contains the number of placed towers on the islands for each team */
-    public EnumMap<Team,Integer> placedTowers() {
+    private EnumMap<Team,Integer> placedTowers() {
         EnumMap<Team, Integer> teamTowersMap = new EnumMap<>(Team.class);
         for (Team t : Team.values()) { //fill nTowers map for all team at 0
             teamTowersMap.put(t, 0);
@@ -387,16 +385,16 @@ public class Board {
         return withMoreProfessors;
     }
 
-    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, NotTheRightGameModeException, PhaseNotRightException {
-        throw new NotTheRightGameModeException("You can't use this command in this game mode!");
+    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, WrongGameModeException, PhaseNotRightException {
+        throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 
-    public String getCharInfo (int idChar) throws NotTheRightGameModeException {
-        throw new NotTheRightGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
+    public String getCharInfo (int idChar) throws WrongGameModeException {
+        throw new WrongGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
     }
 
-    public Collection<StandardCharacter> getAvailableCharacterCards() throws NotTheRightGameModeException {
-        throw new NotTheRightGameModeException("You can't use this command in this game mode!");
+    public Collection<StandardCharacter> getAvailableCharacterCards() throws WrongGameModeException {
+        throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 
     public void changePhase(){

@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 
 
 public enum StudentColor implements PossibleParameters {
+
     GREEN("32"),
     RED("31"),
     YELLOW("38;2;252;233;79"),

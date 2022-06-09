@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.exceptions.CoinException;
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
+import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import org.jetbrains.annotations.NotNull;
@@ -140,8 +140,8 @@ public class Castle implements StudentPlaces {
         return new ArrayList<>(deck);
     }
 
-    public int getCoins() throws NotTheRightGameModeException {
-        throw new NotTheRightGameModeException("You can't use this command in this gamemode.");
+    public int getCoins() throws WrongGameModeException {
+        throw new WrongGameModeException("You can't use this command in this gamemode.");
     }
 
     @Override
@@ -167,6 +167,6 @@ public class Castle implements StudentPlaces {
                 this.towerColor == that.towerColor;
     }
 
-    protected void payCharacter(int price) throws CoinException, NotTheRightGameModeException {
-       throw new NotTheRightGameModeException("method only available in ExpertCastle.");
+    protected void payCharacter(int price) throws CoinException, WrongGameModeException {
+       throw new WrongGameModeException("method only available in ExpertCastle.");
     }}
