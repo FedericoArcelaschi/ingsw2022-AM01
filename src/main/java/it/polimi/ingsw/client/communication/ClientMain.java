@@ -48,7 +48,7 @@ public class ClientMain {
         System.out.println(socket.getRemoteSocketAddress());
 
         //sends player preferences to the server;
-        Preferences preferences = null;
+        Preferences preferences;
         preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
         clientSender.send(preferences);
 
@@ -83,7 +83,10 @@ public class ClientMain {
     }
 
     public void runCommand(Command command){
-
+        CommandMessage commandMessage;
+        commandMessage = new CommandMessage(command);
+        clientSender.send(commandMessage);
+        System.out.println("command sent");
     }
 
     public String getUsername() {

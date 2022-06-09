@@ -3,7 +3,9 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.command.CommandType;
 import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -27,6 +29,7 @@ public class GamePaneController {
     private ToggleGroup waitingRoomToggleGroup;
     private Consumer<Command> send;
     private String username;
+    private BoardData boardData;
     public void initialize(Consumer<Command> send) {
         waitingRoomToggleGroup = new ToggleGroup();
         setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
@@ -42,6 +45,7 @@ public class GamePaneController {
 
     public void draw(BoardData boardData) {
         this.username = boardData.username();
+        this.boardData = boardData;
 
         GuiDrawer guiDrawer = new GuiDrawer();
         guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
@@ -56,26 +60,34 @@ public class GamePaneController {
         if(selected == null)
             return;
         StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
-        //TODO: Create and send command
         List<String> parameters = new ArrayList<>();
         parameters.add(studentColor.name());
         Command command = new Command(username, CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
         System.out.println(command);
+        send.accept(command);
     }
 
     public void moveStudentToIsland(MouseEvent mouseEvent) {
-        ToggleButton selected = (ToggleButton) waitingRoomToggleGroup.getSelectedToggle();
-        if(selected == null)
-            return;
-        StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
-
-        //TODO: Create and send command
-        Pane island = (Pane) mouseEvent.getTarget();
-        List<String> parameters = new ArrayList<>();
-        parameters.add(island.getAccessibleText());
-        parameters.add(studentColor.name());
-        Command command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
-        System.out.println(command);
+        if(boardData.turn().currentPhase() == TurnPhase.STUDENTS){
+            ToggleButton selected = (ToggleButton) waitingRoomToggleGroup.getSelectedToggle();
+            if (selected == null)
+                return;
+            StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
+            Pane island = (Pane) mouseEvent.getTarget();
+            List<String> parameters = new ArrayList<>();
+            parameters.add(island.getAccessibleText());
+            parameters.add(studentColor.name());
+            Command command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
+            System.out.println(command);
+            send.accept(command);
+        } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
+            Pane island = (Pane) mouseEvent.getTarget();
+            List<String> parameters = new ArrayList<>();
+            parameters.add(island.getAccessibleText());
+            Command command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
+            System.out.println(command);
+            send.accept(command);
+        }
     }
 
 
@@ -84,11 +96,11 @@ public class GamePaneController {
         //take cloud id from accessibleText
         String accessibleText = ((Pane) mouseEvent.getTarget()).getAccessibleText();
         cloudId = Integer.parseInt(accessibleText.substring(accessibleText.length()-1));
-        //TODO: Create and send command
         List<String> parameters = new ArrayList<>();
         parameters.add(String.valueOf(cloudId));
         Command command = new Command(username, CommandType.CHOOSE_CLOUD, parameters);
         System.out.println(command);
+        send.accept(command);
     }
 
     public void playCard(MouseEvent mouseEvent) {
@@ -98,10 +110,10 @@ public class GamePaneController {
         cardId = Integer.parseInt(accessibleText.substring(accessibleText.length()-1));
         //if cardId is 0 replace it with 10
         cardId = cardId == 0 ? 10 : cardId;
-        //TODO: Create and send command
         List<String> parameters = new ArrayList<>();
         parameters.add(String.valueOf(cardId));
         Command command = new Command(username, CommandType.PLAY_CARD, parameters);
         System.out.println(command);
+        send.accept(command);
     }
 }

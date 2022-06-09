@@ -51,7 +51,7 @@ public class Gui extends Application implements UserInterface {
         stage.show();
         loginPaneController.initialize(this::connect);
         //FIXME: for testing.
-        draw(createBoardData());
+        //draw(createBoardData());
     }
 
     private BoardData createBoardData(){
@@ -90,7 +90,6 @@ public class Gui extends Application implements UserInterface {
     /**
      * draws the board data on update.
      * Loads the UX from the <code>/game.fxml</code> file.
-     * @param boardData
      */
     @Override
     public void draw(BoardData boardData){

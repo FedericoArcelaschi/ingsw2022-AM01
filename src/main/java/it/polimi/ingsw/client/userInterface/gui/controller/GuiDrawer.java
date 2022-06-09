@@ -90,7 +90,6 @@ public class GuiDrawer {
             if (motherNaturePosition == i) {
                 ToggleButton toggleButton = new ToggleButton();
                 toggleButton.getStyleClass().add("motherNature");
-                toggleButton.setDisable(true);
                 toggleButton.setPrefSize(35, 35);
                 FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
                 flowPane.getChildren().add(toggleButton);
