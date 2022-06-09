@@ -120,22 +120,25 @@ public class Board {
 //methods for the PLANNING PHASE
 
     /**
-     * @param playerID the id of the player that ask for this move
-     * @param card     the number of the card the player want to use
+     * @param playerID the id of the player that asks for this move.
+     * @param cardID   the number of the card the user wants to play.
+     * @throws IllegalArgumentException the card is not available
+     *                                  the card is already played and the player has another card he can play
      */
-    public void playCard(String playerID, int card) throws NotYourTurnException, PhaseNotRightException {
+    public void playCard(String playerID, int cardID) throws NotYourTurnException, PhaseNotRightException {
         if (!turn.getCurrentPlayer().equals(playerID))
             throw new NotYourTurnException("You can't play, It's " + getCurrentPlayer() + "'s turn.");
         if (turn.getCurrentPhase() != TurnPhase.PLANNING) {
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
         }
         Castle castle = castleMap.get(playerID);
-        if(!turn.isAlreadyPlayed(card) || castle.getDeck().stream().allMatch(card1 -> turn.isAlreadyPlayed(card1.priority())))
-            if(castle.playCard(card)) {
-                possibleMovingSteps.setInt((card + 1) / 2);
-                turn.addCard(playerID, card);
-         }
-            throw new IllegalArgumentException("Card cannot be played.");
+        if(!turn.isAlreadyPlayed(cardID) || castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority())))
+            if(castle.isAvailableCard(cardID)) {
+                Card card = castle.playCard(cardID);
+                possibleMovingSteps.setInt(card.distance());
+                turn.addCard(playerID, card.priority());
+            }
+        throw new IllegalArgumentException("Card cannot be played.");
     }
 
 //methods for the action phase
@@ -248,22 +251,24 @@ public class Board {
 
     /**
      * Joins the islands and puts the Archipelago in the list.
+     * @param islandsToJoin the indexes of 2 or three islands that are about to be merged
      */
     protected void joinIslands(@NotNull List<Integer> islandsToJoin) {
         int firstIslandIndex = islandsToJoin.get(0);
         int secondIslandIndex = islandsToJoin.get(1);
         Island newIsland;
-        if ( islandsToJoin.size() == 2 )
+        if (islandsToJoin.size() == 2)
             newIsland = new Archipelago(islandList.get(firstIslandIndex), islandList.get(secondIslandIndex));
-        else if(islandsToJoin.size()==3) {
+        else if(islandsToJoin.size() == 3) {
             int thirdIslandIndex = islandsToJoin.get(2);
             newIsland = new Archipelago(    islandList.get(firstIslandIndex),
                                             islandList.get(secondIslandIndex),
                                             islandList.get(thirdIslandIndex));
         } else
             throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
-        for (int index : islandsToJoin)
-            this.islandList.remove(index);
+        for (int i = 0; i < islandsToJoin.size(); i++) {
+            this.islandList.remove(firstIslandIndex);
+        }
         this.islandList.add(firstIslandIndex, newIsland);
         motherNaturePosition = firstIslandIndex;
     }

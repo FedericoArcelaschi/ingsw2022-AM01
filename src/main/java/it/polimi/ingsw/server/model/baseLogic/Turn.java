@@ -85,8 +85,8 @@ public class Turn {
     }
 
 
-    public void addCard(String player, int c){
-        playedCards.put(player, c);
+    public void addCard(String player, int card){
+        playedCards.put(player, card);
     }
 
     /**
@@ -118,5 +118,16 @@ public class Turn {
 
     public boolean isAlreadyPlayed(int card) {
         return playedCards.containsValue(card);
+    }
+
+    @Override
+    public String toString() {
+        return "Turn{" +
+                ((sittingOrder != null) ? ("sittingOrder=" + sittingOrder) : "") +
+                ((actionOrder != null) ? ("actionOrder=" + actionOrder) : "") +
+                ", currentPlayer='" + currentPlayer + '\'' +
+                ", currentPhase=" + currentPhase +
+                ", playedCards=" + playedCards +
+                "}\n";
     }
 }
