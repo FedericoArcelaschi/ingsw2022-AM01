@@ -16,10 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import org.apache.log4j.*;
 
 public class ServerMain implements Runnable {
 
@@ -30,21 +27,16 @@ public class ServerMain implements Runnable {
     private HeartBeatServer heartBeatServer;
     private final WaitingRooms waitingRooms;
     private final Map<GameType, Integer> gamesNumber;
-    private static final Logger logger = Logger.getLogger(ServerMain.class.getName());
     private int gameId = 0;
+    private static final Logger logger = Logger.getLogger(ServerMain.class);
 
     public static void init() {
-        FileHandler fileHandler;
-        try {
-            fileHandler = new FileHandler(System.getProperty("user.dir"));
-            logger.addHandler(fileHandler);
-            SimpleFormatter formatter = new SimpleFormatter();
-            fileHandler.setFormatter(formatter);
-            logger.setLevel(Level.FINE);
-            logger.info("Logger has been initialized.");
-        } catch (Exception e){
-            logger.log(Level.WARNING, "Exception: ", e);
-        }
+        ConsoleAppender consoleAppender = new ConsoleAppender();
+        consoleAppender.setThreshold(org.apache.log4j.Level.INFO);
+        consoleAppender.setLayout(new PatternLayout("%d [%p|%C{1}] %m\n"));
+        consoleAppender.activateOptions();
+        Logger.getRootLogger().addAppender(consoleAppender);
+        logger.info("Initialized server logger.");
     }
 
     public ServerMain(int port) {
@@ -55,6 +47,7 @@ public class ServerMain implements Runnable {
         for (GameType gt: GameType.values()) {
             gamesNumber.put(gt,0);
         }
+        init();
     }
 
     public void run(){
@@ -78,7 +71,7 @@ public class ServerMain implements Runnable {
             return;
         }
 
-        System.out.println("Server: Server ready on IP: " + serverSocket.getInetAddress() + " port: " + serverSocket.getLocalPort());
+        logger.info("Server: Server ready on IP: " + serverSocket.getInetAddress() + " port: " + serverSocket.getLocalPort());
         heartBeatServer = new HeartBeatServer();
         executor.submit(heartBeatServer);
     }
@@ -110,7 +103,7 @@ public class ServerMain implements Runnable {
         Game game = waitingRooms.submitGame(gameId, gameType);
         if(game != null) {
             gamesNumber.replace(game.getGameType(), gamesNumber.get(game.getGameType()) + 1);
-            logger.info("Server: created " + (gameType.expertMode ? "expert" : "normal") + " game " + gameId + " with players: " + game.toStringPlayers().replace("[", "").replace("]", ""));//TODO);
+            //logger.info("Server: created " + (gameType.expertMode ? "expert" : "normal") + " game " + gameId + " with players: " + game.toStringPlayers().replace("[", "").replace("]", ""));//TODO);
             for (ServerReceiver serverReceiver : game.getGameServerReceiverList()) {
                 serverReceiver.setGame(game);
             }

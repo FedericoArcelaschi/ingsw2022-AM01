@@ -1,6 +1,10 @@
 package it.polimi.ingsw.communication.modelData;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.communication.message.subclasses.Update;
+import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;

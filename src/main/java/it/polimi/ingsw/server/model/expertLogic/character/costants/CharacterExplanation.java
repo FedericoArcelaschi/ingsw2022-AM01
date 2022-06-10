@@ -4,7 +4,7 @@ public enum CharacterExplanation{
     MONK("""
             Monk: this character offers the opportunity to add
             a student to an island of your choice for 1 coin!
-            call function: Pay MONK: student, islandNumber
+            call function: Pay MONK: student islandNumber
             More MONK: cost - \s"""),
     FARMER( """
             Farmer: this character gives you the chance to have
@@ -19,8 +19,8 @@ public enum CharacterExplanation{
             call function: Pay GUARD islandNumber
             More GUARD: cost - \s"""),
     MAILMAN("""
-            Mailman: this character makes you move
-            mother nature further by 2 steps.
+            Mailman: this character allows you to optionally move
+            mother nature further by up to 2 steps.
             call function: Pay MAILMAN
             More MAILMAN: cost - \s"""),
     WITCH("""

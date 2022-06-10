@@ -66,7 +66,7 @@ public class ClientMain {
             CommandMessage commandMessage;
             try {
                 commandMessage = new CommandMessage(username, stringCommand);
-            }catch (IllegalArgumentException e){
+            }catch (IllegalArgumentException e) {
                 System.err.println(e.getMessage());
                 return;
             }

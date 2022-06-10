@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.GreaterTeam;
 import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -444,5 +445,9 @@ public class Board {
     //FOR VIEW:
     public BoardData getData(String playerID) {
         return ModelDataBuilder.newBoardData(this, playerID);
+    }
+
+    public CharacterUtility getPlayedExpertChar() throws NotTheRightGameModeException {
+        throw new NotTheRightGameModeException("You can't use this command in this gamemode.");
     }
 }

@@ -27,6 +27,7 @@ public class Cloud {
     public List<StudentColor> choose() {
         if(!available) return null;
         List<StudentColor> students = new ArrayList<>(studentList);
+        studentList.clear();
         available = false;
         return students;
     }

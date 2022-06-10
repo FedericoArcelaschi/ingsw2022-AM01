@@ -2,6 +2,11 @@ package it.polimi.ingsw.communication.modelData;
 
 import com.google.gson.annotations.JsonAdapter;
 
+import com.google.gson.annotations.JsonAdapter;
+import it.polimi.ingsw.communication.modelData.BoardDataAdapter;
+
+import com.google.gson.annotations.JsonAdapter;
+
 import java.util.List;
 import java.util.Objects;
 

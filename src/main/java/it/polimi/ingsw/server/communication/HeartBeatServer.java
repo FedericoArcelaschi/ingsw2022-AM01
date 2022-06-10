@@ -43,27 +43,28 @@ public class HeartBeatServer implements Callable {
     }
 
     public void run() {
-        var previousTime = new Date().getTime();
-        for (Socket client : clients) {
-            PrintWriter out;
+        while(true) {
+            long previousTime = new Date().getTime();
+            for (Socket client : clients) {
+                PrintWriter out;
+                try {
+                    out = new PrintWriter(client.getOutputStream(), true);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Ping pingMessage = new Ping();
+                heartBeats.put(client, pingMessage); //FIXME -> here the idea is to put the PING UUID associated to each client's ping. Not needed. Not implemented.
+                out.println(pingMessage.toJson());
+            }
             try {
-                out = new PrintWriter(client.getOutputStream(), true);
-            } catch (IOException e) {
+                Thread.sleep(timeout - previousTime + new Date().getTime());
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            heartBeats.put(client, new Ping()); //FIXME -> here the idea is to put the PING UUID associated to each client's ping. Not needed. Not implemented.
-            String pingMessage = new Ping().toJson();
-            out.println(pingMessage);
+            if (!heartBeats.isEmpty())
+                for (Socket client : heartBeats.keySet())
+                    System.out.println(client + " didn't ping back in time");
         }
-        try {
-            Thread.sleep(timeout - previousTime + new Date().getTime());
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        if(!heartBeats.isEmpty())
-            for (Socket client : heartBeats.keySet())
-                System.out.println(client + " didn't ping back in time");
-        run();
         //TODO: removeClient(s);
         //TODO: waitingRooms.removePlayer(s);
         //TODO: game.end(s);

@@ -4,6 +4,7 @@ import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
+import it.polimi.ingsw.communication.message.Message;
 
 import java.io.IOException;
 import java.io.PrintWriter;

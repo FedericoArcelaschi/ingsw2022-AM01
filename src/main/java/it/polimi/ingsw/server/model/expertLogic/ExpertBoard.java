@@ -109,7 +109,7 @@ public class ExpertBoard extends Board {
                         "Not possible to play " + charName + " card. During this turn " +
                                 playedExpertChar.name() + " is already active.");
 
-        StandardCharacter ec = expertCharactersCards.get(idChar);
+        StandardCharacter ec = expertCharactersCards.get(CharacterUtility.getChar(idChar));
 
         if (ec == null) { //case where there is no active character but the card isn't available
             String charactersName = expertCharactersCards.values().stream().map(StandardCharacter::getName).toString().replace("[", "").replace("]", "");
@@ -223,4 +223,7 @@ public class ExpertBoard extends Board {
         return ModelDataBuilder.newExpertBoardData(this, playerID);
     }
 
+    public CharacterUtility getPlayedExpertChar() {
+        return playedExpertChar;
+    }
 }

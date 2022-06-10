@@ -61,8 +61,4 @@ public class ExpertCastleData extends CastleData {
         return s.toString();
     }
 
-    private void removesComma(StringBuilder s) {
-        s.replace(s.length() - 2, s.length(), "");
-    }
-
 }

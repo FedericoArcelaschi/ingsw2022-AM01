@@ -6,8 +6,10 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertCastleData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
 import java.util.*;
 
@@ -19,10 +21,10 @@ public abstract class ModelDataBuilder {
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(ModelDataBuilder::newIslandData).toList(),
-                newCastleData(username, board.getCastle(username), true, board.placedTower(), board.getProfessorsMap()),
+                newCastleData(username, board.getCastle(username), true, board.placedTowers(), board.getProfessorsMap()),
                 board.getCastleMap().keySet().stream()
                         .filter(key -> !key.equals(username)) //selects only other players' castle
-                        .map(key -> newCastleData(key, board.getCastle(key), false, board.placedTower(), board.getProfessorsMap()))
+                        .map(key -> newCastleData(key, board.getCastle(key), false, board.placedTowers(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn())
         );
@@ -31,31 +33,32 @@ public abstract class ModelDataBuilder {
     public static ExpertBoardData newExpertBoardData(Board board, String username) {
         //TODO: this null is awful to look at. For now it works; find a better way regardless.
         List<CharacterData> characters = null;
+        CharacterUtility activeChar = null;
         try {
-            characters = board.getAvailableCharacterCards().stream().filter(Objects::nonNull).map(ModelDataBuilder::newCharacterData).toList();
+            characters = board.getAvailableCharacterCards().stream().filter((Objects::nonNull)).map(ModelDataBuilder::newCharacterData).toList();
+            activeChar = board.getPlayedExpertChar();
         } catch (NotTheRightGameModeException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
-        //TODO: newExpertIslandData and newExpertCastleData return base game castles and islands... needs a fix
-        System.out.println("At least it uses this, right?");
         return new ExpertBoardData(
                 username,
                 board.getCloudList().size(),
                 board.getMotherNaturePosition(),
                 board.getCloudList().stream().map(ModelDataBuilder::newCloudData).toList(),
                 board.getIslandList().stream().map(ModelDataBuilder::newExpertIslandData).toList(),
-                newExpertCastleData(username, board.getCastle(username), true, board.placedTower(), board.getProfessorsMap()),
+                newExpertCastleData(username, board.getCastle(username), true, board.placedTowers(), board.getProfessorsMap()),
                 board.getCastleMap().keySet().stream()
                         .filter(key -> !key.equals(username))
-                        .map(key -> newExpertCastleData(key, board.getCastle(key), false, board.placedTower(), board.getProfessorsMap()))
+                        .map(key -> newExpertCastleData(key, board.getCastle(key), false, board.placedTowers(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn()),
-                characters
+                characters,
+                activeChar
         );
     }
 
     private static CharacterData newCharacterData(StandardCharacter character){
-        return new CharacterData(character.getName(), character.getCost());
+        return new CharacterData(character.getName(), character.getCost(), character.getAvailableStudents(), character.getExplanation());
     }
 
     private static CloudData newCloudData(Cloud cloud) {
