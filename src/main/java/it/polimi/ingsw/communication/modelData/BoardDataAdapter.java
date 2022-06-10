@@ -47,7 +47,7 @@ public class BoardDataAdapter implements JsonSerializer<BoardData>, JsonDeserial
                     context.deserialize(wrapper.get("motherNaturePosition"), Integer.class),
                     context.deserialize(wrapper.get("cloudList"), cloudListType),
                     context.deserialize(wrapper.get("islandList"), islandListType),
-                    context.deserialize(wrapper.get("myCastle"), ExpertCastleData.class),
+                    context.deserialize(wrapper.get("myCastle"), CastleData.class),
                     context.deserialize(wrapper.get("otherCastles"), castleListType),
                     context.deserialize(wrapper.get("turn"), TurnData.class));
         }

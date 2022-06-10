@@ -34,7 +34,7 @@ public class ClientMain {
         try {
             this.socket = new Socket(IP, port);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             System.exit(1);
             //TODO: implement better exception handling
         }
@@ -54,7 +54,8 @@ public class ClientMain {
     }
 
     public void runCommand(String stringCommand) {
-        if(stringCommand.strip().equalsIgnoreCase("help"))  {
+        //TODO: switch (ClientState)
+        if(stringCommand.strip().equalsIgnoreCase("help")) {
             System.out.println(Outputs.HELP);
             return;
         }

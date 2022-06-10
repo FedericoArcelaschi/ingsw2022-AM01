@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.expertLogic.character.costants;
 
+import java.util.Locale;
+
 public enum CharacterExplanation{
     MONK("""
             Monk: this character offers the opportunity to add
@@ -76,7 +78,18 @@ public enum CharacterExplanation{
         return explanation;
     }
 
+    public String getCSS() {
+        return "cardCharacter" + name().substring(0,1).toUpperCase() + name().substring(1).toLowerCase();
+    }
+
     public static CharacterExplanation getInstance(int id) {
         return CharacterExplanation.values()[id-1];
+    }
+    public static CharacterExplanation getInstance(String name) {
+        for (CharacterExplanation ce: CharacterExplanation.values()) {
+            if(name.equals(ce.name()))
+                return ce;
+        }
+        return null;
     }
 }

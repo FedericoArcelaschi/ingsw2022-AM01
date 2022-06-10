@@ -5,11 +5,9 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertCastleData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
-import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
-import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
+import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
 import java.util.*;
 
@@ -30,16 +28,7 @@ public abstract class ModelDataBuilder {
         );
     }
 
-    public static ExpertBoardData newExpertBoardData(Board board, String username) {
-        //TODO: this null is awful to look at. For now it works; find a better way regardless.
-        List<CharacterData> characters = null;
-        CharacterUtility activeChar = null;
-        try {
-            characters = board.getAvailableCharacterCards().stream().filter((Objects::nonNull)).map(ModelDataBuilder::newCharacterData).toList();
-            activeChar = board.getPlayedExpertChar();
-        } catch (NotTheRightGameModeException e) {
-            e.getMessage();
-        }
+    public static ExpertBoardData newExpertBoardData(ExpertBoard board, String username) {
         return new ExpertBoardData(
                 username,
                 board.getCloudList().size(),
@@ -52,8 +41,8 @@ public abstract class ModelDataBuilder {
                         .map(key -> newExpertCastleData(key, board.getCastle(key), false, board.placedTowers(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn()),
-                characters,
-                activeChar
+                board.getAvailableCharacterCards().stream().map(ModelDataBuilder::newCharacterData).toList(),
+                board.getPlayedExpertChar()
         );
     }
 
@@ -73,7 +62,7 @@ public abstract class ModelDataBuilder {
         Boolean blocked = null;
         try{
             blocked = island.isBlocked();
-        } catch (NotTheRightGameModeException e) {
+        } catch (WrongGameModeException e) {
             e.printStackTrace();
         }
         return new ExpertIslandData(island.getOwnership(), island.getStudents(), island.getIslandNumber(), Boolean.TRUE.equals(blocked));
@@ -99,7 +88,7 @@ public abstract class ModelDataBuilder {
         Integer coins = null;
         try {
             coins = castle.getCoins();
-        } catch (NotTheRightGameModeException e) {
+        } catch (WrongGameModeException e) {
             e.printStackTrace();
         }
         return new ExpertCastleData(

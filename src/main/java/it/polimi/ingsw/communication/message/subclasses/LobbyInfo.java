@@ -4,32 +4,27 @@ import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.server.controller.GameType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+/**
+ * NEWER version of lobby info contains all the lobby.
+ * All the players connected for each game type and the number of active games for each gametipe
+ */
 public class LobbyInfo extends Message {
-
-    private final List<String> players;
-    private final GameType gameType;
-
-    public LobbyInfo(List<String> players, GameType g){
+    private final Map<GameType, Set<String>> clientsInLobbyMap;
+    private final Map<GameType, Integer> activeGames;
+    public LobbyInfo(Map<GameType, Set<String>> clientsInLobbyMap, Map<GameType, Integer> activeGames) {
         super(MessageType.LOBBYINFO);
-        this.players = new ArrayList<>(players);
-        this.gameType = g;
+        this.clientsInLobbyMap = clientsInLobbyMap;
+        this.activeGames = activeGames;
     }
 
-    public List<String> getPlayers(){
-        return players;
-    }
-
-    public GameType getGameType(){
-        return gameType;
-    }
+    public Map<GameType, Set<String>> getClientsInLobbyMap() {return clientsInLobbyMap;}
 
     @Override
     public String toString() {
-        return "players in queue: " + players +
-                "game type: " + gameType;
+        return "I'm a Lobby Info message"; //FIXME
     }
 
 }

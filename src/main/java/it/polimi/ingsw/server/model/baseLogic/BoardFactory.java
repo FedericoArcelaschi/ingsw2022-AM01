@@ -23,9 +23,9 @@ public interface BoardFactory {
         return createBoard(playerList, turn, seed);
     }
 
-    private static ExpertBoard createExpertBoard(List<String> playerList, Turn turn, long seed) {
+    private static Board createExpertBoard(List<String> playerList, Turn turn, long seed) {
         return
-            switch (playerList.size()){
+            switch (playerList.size()) {
                 case 2 -> new ExpertBoard(playerList.get(0), playerList.get(1), turn, seed);
                 case 3 -> new ExpertBoard(playerList.get(0), playerList.get(1),playerList.get(2), turn, seed);
                 case 4 -> new ExpertBoard(playerList.get(0), playerList.get(1),playerList.get(2),playerList.get(3), turn, seed);

@@ -1,81 +1,89 @@
 package it.polimi.ingsw.server.communication;
 
-import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.Ping;
+import org.apache.logging.log4j.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
-import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 
 /**
  * Class that implements the heart-beat protocol.
- * it uses a Map to save clients pinged and remove them from it when they ping back.
- * if a client doesn't ping back before timeout it gets removed from his game (the game end) or queue.
+ * if a client doesn't ping back before TIMEOUT //TODO it gets removed from his game (the game end) or queue.
  */
-public class HeartBeatServer implements Callable {
+public class HeartBeatServer implements Runnable {
 
-    private final int timeout = 5000;
-    private final List<Socket> clients;
-    private final Map<Socket, Message> heartBeats;
+    private final static Logger logger = LogManager.getLogger(HeartBeatServer.class); //.getName?
 
-    public HeartBeatServer(){
-        clients = new ArrayList<>();
-        heartBeats = new HashMap<>();
+    private final int TIMEOUT = 5000; // [ms]
+    private final Set<Socket> clients = new HashSet<>();
+    private final Set<Socket> heartBeats = new HashSet<>();
+
+    /**
+     * Adds a client to the connected clients list and starts the heartbeat on him as well
+     */
+    public void addClient(Client newClient) {
+        Socket newClientSocket = newClient.clientsSocket();
+        logger.info("Added client");
+        clients.add(newClientSocket);
     }
 
-    public void addClient(Socket newClient){
-        clients.add(newClient);
-    }
-
-    public void removeClient(Socket client){
-        clients.remove(client);
-    }
-
-    public void validateResponse(Message response) {
-        for(Socket key : heartBeats.keySet()) {
-            if (heartBeats.get(key).equals(response)) {
-                heartBeats.remove(key);
-                return;
-            }
+    /**Validate the connection with the client for another 5 seconds.
+     * @param socket the key in the Heartbeat server
+     */
+    public synchronized void validateResponse(Socket socket) {
+       // logger.info("client @ port " + socket.getPort() + "sent a ping validation.");
+        if (heartBeats.contains(socket)) {
+            heartBeats.remove(socket);
+            logger.info("Ping received. Pinging back...");
         }
+        else
+            logger.warn("client in port: " + socket.getLocalPort() + " shouldn't be connected");
     }
 
+    /**
+     * Heart-beat server main thread keeps executing the following methods to keep track of the connected players.
+     */
     public void run() {
-        while(true) {
-            long previousTime = new Date().getTime();
-            for (Socket client : clients) {
-                PrintWriter out;
-                try {
-                    out = new PrintWriter(client.getOutputStream(), true);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                Ping pingMessage = new Ping();
-                heartBeats.put(client, pingMessage); //FIXME -> here the idea is to put the PING UUID associated to each client's ping. Not needed. Not implemented.
-                out.println(pingMessage.toJson());
-            }
+        long previousTime = new Date().getTime();
+        sendsPing();
+        waits(previousTime);
+        synchronized (heartBeats) {
+            heartBeats.forEach(this::removeClient);
+        }
+        run();
+    }
+
+    private void sendsPing() {
+        for (Socket client : clients) {
+            PrintWriter out;
             try {
-                Thread.sleep(timeout - previousTime + new Date().getTime());
-            } catch (InterruptedException e) {
+                out = new PrintWriter(client.getOutputStream(), true);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            if (!heartBeats.isEmpty())
-                for (Socket client : heartBeats.keySet())
-                    System.out.println(client + " didn't ping back in time");
+            String pingMessage = new Ping().toJson();
+            out.println(pingMessage);
+            heartBeats.add(client);
+            //FIXME -> here the idea is to put the PING UUID associated to each client's ping. Not needed. Not implemented.
         }
-        //TODO: removeClient(s);
-        //TODO: waitingRooms.removePlayer(s);
-        //TODO: game.end(s);
-        //TODO: handle exceptions
-        //errorMessage.append(s).append(", ");
-        //throw new ClientNotRespondingException(errorMessage.toString());
     }
 
-    @Override
-    public Object call() {
-        run();
-        return null;
+    private void waits(long previousTime) {
+        try {
+            Thread.sleep(TIMEOUT - previousTime + new Date().getTime());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    private void removeClient(Socket client) {
+        clients.remove(client); //FIXME: clients not in the list should be removed from the server
+        heartBeats.remove(client);
+        //Executors.newSingleThreadExecutor().submit(this::endClientConnection);
+        logger.info("User on port " + client.getPort() + " disconnected.");
+    }
+
 }

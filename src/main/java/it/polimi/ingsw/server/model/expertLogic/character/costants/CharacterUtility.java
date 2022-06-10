@@ -53,9 +53,17 @@ public enum CharacterUtility { //TODO: complete characters' explaination
         return CharacterFunction.getCharFunction(id);
     }
 
+    /**
+     *
+     * @param charId >= 0, charId <= 12
+     * @return
+     */
     public static CharacterUtility getChar(int charId) {
+        if (charId == 0)
+            return null;
         return CharacterUtility.values()[charId - 1];
     }
+
     public static CharacterUtility getChar(String charName) {
         for (CharacterUtility expertCharacter : CharacterUtility.values()) {
             if (charName.equalsIgnoreCase(expertCharacter.name()))

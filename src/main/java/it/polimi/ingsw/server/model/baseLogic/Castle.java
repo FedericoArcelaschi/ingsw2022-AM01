@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.exceptions.CoinException;
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
+import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +34,7 @@ public class Castle implements StudentPlaces {
         this.deck = new ArrayList<>();
         this.towerColor = team;
         this.lastPlayedCard = null;
-        for (int i = 1; i <= numberOfCards; i++) deck.add(new Card(i, (i + 1) / 2, true));
+        for (int i = 1; i <= numberOfCards; i++) deck.add(new Card(i));
     }
 
     /**
@@ -103,21 +103,22 @@ public class Castle implements StudentPlaces {
         }
     }
 
+    public boolean isAvailableCard(int i) {
+        if (i < 1 || i > 10) throw new IllegalArgumentException("Illegal card number");
+        return deck.get(i - 1).isAvailable();
+    }
+
     /**
      * Method that allows the player to play the card.
      *
-     * @param i priority of the card
+     * @param i priority of the card i >= 1 || i <= 10
      * @return true if the card was played correctly
      */
-    public boolean playCard(int i) {
-        if (i < 1 || i > 10) throw new IllegalArgumentException();
+    public Card playCard(int i) { // FIXME
         Card play = deck.get(i - 1);
-        if (play.isAvailable()) {
-            play.setAvailable(false);
-            lastPlayedCard = play;
-            return true;
-        } else
-            return false;
+        play.setAvailable(false);
+        lastPlayedCard = play;
+        return play;
     }
 
     public List<StudentColor> getWaitingRoom() {
@@ -140,8 +141,8 @@ public class Castle implements StudentPlaces {
         return new ArrayList<>(deck);
     }
 
-    public int getCoins() throws NotTheRightGameModeException {
-        throw new NotTheRightGameModeException("You can't use this command in this gamemode.");
+    public int getCoins() throws WrongGameModeException {
+        throw new WrongGameModeException("You can't use this command in this gamemode.");
     }
 
     @Override
@@ -167,6 +168,6 @@ public class Castle implements StudentPlaces {
                 this.towerColor == that.towerColor;
     }
 
-    protected void payCharacter(int price) throws CoinException, NotTheRightGameModeException {
-       throw new NotTheRightGameModeException("method only available in ExpertCastle.");
+    protected void payCharacter(int price) throws CoinException, WrongGameModeException {
+       throw new WrongGameModeException("method only available in ExpertCastle.");
     }}

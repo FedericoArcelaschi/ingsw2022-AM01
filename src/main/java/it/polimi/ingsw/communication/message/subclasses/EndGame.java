@@ -8,7 +8,7 @@ public class EndGame extends Message {
 
     public EndGame(String cause) {
         super(MessageType.END);
-        this.cause = cause;
+        this.cause = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     }
 
     public String getCause() {

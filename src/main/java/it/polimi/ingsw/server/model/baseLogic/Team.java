@@ -13,6 +13,10 @@ public enum Team implements PossibleParameters {
         this.colorCode = colorCode;
     }
 
+    public String getCSS(){
+        return "tower" + name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
+    }
+
     @Override
     public String toString() {
         return ESCAPE_CODE + colorCode + "m" + this.name() + ESCAPE_CODE + "0m";

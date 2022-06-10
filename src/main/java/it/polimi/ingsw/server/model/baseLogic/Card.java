@@ -5,10 +5,10 @@ public final class Card {
     private final int distance;
     private boolean isAvailable;
 
-    public Card(int priority, int distance, boolean isAvailable) {
+    public Card(int priority) {
         this.priority = priority;
-        this.distance = distance;
-        this.isAvailable = isAvailable;
+        this.distance = (priority + 1 ) / 2;
+        this.isAvailable = true;
     }
 
     public int priority() {

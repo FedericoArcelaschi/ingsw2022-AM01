@@ -41,9 +41,11 @@ enum CharacterFunction {
             if (island == null)
                 throw new IllegalArgumentException("No island in monk");
 
-            if (availableStudents
-                    .contains(requestedStudents))
-                throw new NoSuchStudentException("Students not available on monk card");
+            List<StudentColor> availableStudentsCopy = new ArrayList<>(availableStudents);
+            for (StudentColor color : requestedStudents) {
+                if(!availableStudentsCopy.remove(color))
+                    throw new NoSuchStudentException("Students not available on monk card");
+            }
 
             try {
                 island.adds(requestedStudents.get(StudentToMovePosition), -1); //Adds one student per use.

@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ClientMainTest {
+class ServerReceiverMainTest {
     ClientMain c1,c2;
     ServerMain s;
 
@@ -39,7 +39,7 @@ class ClientMainTest {
             //new ClientMain("Lore4-"+i,4,false, "127.0.0.1", 1234).connect();
         }
         Thread.sleep(1000);
-        assertEquals(n2+n3+n4, s.getConnectedPlayers().size(), "n players should be connected");
+        assertEquals(n2+n3+n4, s.getConnectedPlayer(), "n players should be connected");
         assertEquals(50, s.getGamesNumber(GameType.NORMAL_2_PLAYER));
         assertEquals(30, s.getGamesNumber(GameType.NORMAL_3_PLAYER));
         assertEquals(25, s.getGamesNumber(GameType.NORMAL_4_PLAYER));
@@ -50,8 +50,6 @@ class ClientMainTest {
 
     @Test
     void testExecuteCommand() throws InterruptedException {
-        //c1.connect();
-        //c2.connect();
 
         Thread.sleep(100);
         c1.runCommand("playcard 1");

@@ -5,11 +5,12 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 
 
 public enum StudentColor implements PossibleParameters {
-    YELLOW("38;2;252;233;79"),
+
     GREEN("32"),
+    RED("31"),
+    YELLOW("38;2;252;233;79"),
     PINK("35"),
-    BLUE("34"),
-    RED("31");
+    BLUE("34");
 
     private final String colorCode;
     private static final String ESCAPE_CODE = "\u001b[";
@@ -22,8 +23,12 @@ public enum StudentColor implements PossibleParameters {
         return "students/student_" + name().toLowerCase() + ".png";
     }
 
-    public String getCSS() {
+    public String getStudentCSS() {
         return "studentBackground" + name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
+    }
+
+    public String getTeacherCSS() {
+        return "teacherBackground" + name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
     }
 
     public static StudentColor getColor(String s) {
@@ -34,6 +39,9 @@ public enum StudentColor implements PossibleParameters {
 
     public String toStringColored() {
         return ESCAPE_CODE + colorCode + "m" + this.name().toLowerCase() + ESCAPE_CODE + "0m";
+    }
+    public String toUppercaseStringColored() {
+        return ESCAPE_CODE + colorCode + "m" + this.name() + ESCAPE_CODE + "0m";
     }
 
 }

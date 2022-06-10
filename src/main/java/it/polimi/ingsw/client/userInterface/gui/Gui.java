@@ -3,8 +3,8 @@ package it.polimi.ingsw.client.userInterface.gui;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController;
 import it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController;
+import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.modelData.BoardData;
-import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import javafx.application.Application;
@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class Gui extends Application implements UserInterface {
@@ -83,7 +82,7 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
-    public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
+    public void printWaitingRoom(LobbyInfo lobbyInfo) {
         //TODO:
     }
 }

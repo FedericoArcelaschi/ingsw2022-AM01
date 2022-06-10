@@ -2,15 +2,14 @@ package it.polimi.ingsw.client.userInterface.cli;
 
 import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.client.userInterface.UserInterface;
+import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
-import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.startUp.Outputs;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 public class Cli implements UserInterface {
     String username;
@@ -20,7 +19,7 @@ public class Cli implements UserInterface {
 
     public Cli() {
         ClientMain clientMain = new ClientMain(
-                "127.0.0.1",
+                "localhost",
                 12345,
                 getValidPreferences());
         try {
@@ -34,7 +33,7 @@ public class Cli implements UserInterface {
             try {
                 String input = br.readLine();
                 clientMain.runCommand(input);
-            } catch (IOException e) {
+            } catch (IOException | NoClassDefFoundError e) {
                 System.err.println(e.getMessage());
                 //throw new RuntimeException(e);
             }
@@ -43,22 +42,16 @@ public class Cli implements UserInterface {
 
     @Override
     public void draw (BoardData boardData) {
-        System.out.println("\r" + boardData.toString());
+        System.out.println(boardData.toString());
     }
 
     /**
      * Method to handle the LobbyInfoMessages.
      */
     @Override
-    public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
+    public void printWaitingRoom(LobbyInfo lobbyInfo) {
         //TODO: print a nicer view of the lobby
-        StringBuilder input = new StringBuilder();
-        input.append("Player in queue: \n");
-        input.append("Game type: ").append(gameType).append("\n");
-        for (String user : connectedUser) {
-            input.append("\t").append(user).append("\n");
-        }
-        System.out.println(input);
+        System.out.println(lobbyInfo);
     }
     /**
      * Before opening the connection with the server the client requires to insert the preferences.

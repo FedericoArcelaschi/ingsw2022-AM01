@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 public enum GameType {
+
     NORMAL_2_PLAYER(2, false),
     NORMAL_3_PLAYER(3, false),
     NORMAL_4_PLAYER(4, false),
@@ -25,6 +26,6 @@ public enum GameType {
 
     @Override
     public String toString() {
-        return nPlayer +" players, " + (expertMode ? "expert-mode" : "normal-mode");
+        return super.toString();
     }
 }

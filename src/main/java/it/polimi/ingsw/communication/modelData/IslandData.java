@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Objects;
 
 public class IslandData {

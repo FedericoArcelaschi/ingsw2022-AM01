@@ -44,6 +44,7 @@ public class Turn {
         List<String> newOrder = new ArrayList<>(sortedMap.keySet());
         setActionOrder(newOrder);
         currentPhase = TurnPhase.STUDENTS;      //The next player is now ready to play.
+        playedCards.clear();
     }
 
     /**
@@ -84,9 +85,8 @@ public class Turn {
     }
 
 
-    public boolean addCard(String player, int c){
-        playedCards.put(player, c);
-        return true;
+    public void addCard(String player, int card){
+        playedCards.put(player, card);
     }
 
     /**
@@ -116,4 +116,18 @@ public class Turn {
         else return list.get(index +1);
     }
 
+    public boolean isAlreadyPlayed(int card) {
+        return playedCards.containsValue(card);
+    }
+
+    @Override
+    public String toString() {
+        return "Turn{" +
+                ((sittingOrder != null) ? ("sittingOrder=" + sittingOrder) : "") +
+                ((actionOrder != null) ? ("actionOrder=" + actionOrder) : "") +
+                ", currentPlayer='" + currentPlayer + '\'' +
+                ", currentPhase=" + currentPhase +
+                ", playedCards=" + playedCards +
+                "}\n";
+    }
 }

@@ -11,7 +11,6 @@ import static it.polimi.ingsw.communication.command.CommandType.getCommandType;
  * a representation of the command the player can compose and ask to be executed
  */
 public class Command {
-    //TODO: rework command attributes.
     private final CommandType type;
     private final String username;
     private int motherNaturePositionShift = 0;
@@ -35,7 +34,7 @@ public class Command {
             //e.g.: moveStudentCastle Green, Blue, Pink
             case MOVE_STUDENT_TO_ISLAND -> {
                 if(isInteger(attributes[0])) {
-                    islandId = Integer.parseInt(attributes[0].strip());
+                    islandId = Integer.parseInt(attributes[0].strip()); //TODO try catch exception.
                     students = Arrays.stream(Arrays.copyOfRange(attributes, 1, attributes.length)).map(StudentColor::getColor).toList();
                 }else{
                     students = Arrays.stream(Arrays.copyOfRange(attributes, 1, attributes.length-1)).map(StudentColor::getColor).toList();
@@ -115,7 +114,6 @@ public class Command {
                     else {
                         //If it is not then the user only wrote a list of students with no student place.
                         students.add(StudentColor.getColor(attributes.get(attributes.size() - 1)));
-                        islandId = -1; //0 is NOT in island range
                     }
                 }
             }
@@ -168,16 +166,23 @@ public class Command {
     public static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
-        } catch(NumberFormatException | NullPointerException e) {
+        } catch (NumberFormatException | NullPointerException e) {
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString() { //TODO: complete
-        StringBuilder output = new StringBuilder();
-        output.append("Card id: ").append(cardId);
-        return output.toString();
+    public String toString() {
+        return "Command{" +
+                "type=" + type +
+                ", username='" + username + '\'' +
+                ", motherNaturePositionShift=" + motherNaturePositionShift +
+                ", cardId=" + cardId +
+                ", students=" + students +
+                ", islandId=" + islandId +
+                ", charName='" + CharacterUtility.getChar(charId) + '\'' +
+                ", cloudId=" + cloudId +
+                "}";
     }
 }

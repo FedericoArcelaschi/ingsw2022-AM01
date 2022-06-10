@@ -1,9 +1,10 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
-import it.polimi.ingsw.server.model.exceptions.NotTheRightGameModeException;
+import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
 
 import java.util.EnumMap;
+import java.util.stream.Collectors;
 
 public class Island implements StudentPlaces {
 
@@ -43,8 +44,8 @@ public class Island implements StudentPlaces {
         return this;
     }
 
-    public boolean isBlocked() throws NotTheRightGameModeException {
-        throw new NotTheRightGameModeException("You can't use this command now.");
+    public boolean isBlocked() throws WrongGameModeException {
+        throw new WrongGameModeException("You can't use this command now.");
     }
 
     /**
@@ -73,9 +74,12 @@ public class Island implements StudentPlaces {
     @Override
     public String toString() {
         return "Island{" +
-                "students=" + students +
-                ", ownership=" + ownership +
-                '}';
+                "students=" +
+                students.entrySet().stream()
+                        .filter(entry -> entry.getValue() > 0)
+                        .collect(Collectors.toSet()) +
+                ((ownership == null) ? ("") : ( ", ownership=" + ownership ))
+                + "}\n";
     }
 
     @Override

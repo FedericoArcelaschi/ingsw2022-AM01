@@ -15,6 +15,7 @@ import java.util.*;
 
 @SuppressWarnings("Redundant")
 public class Board {
+
     protected static final int numOfStudentsPerColor = 24;
     protected int motherNaturePosition = 0;
 
@@ -120,21 +121,29 @@ public class Board {
 //methods for the PLANNING PHASE
 
     /**
-     * @param playerID the id of the player that ask for this move
-     * @param card     the number of the card the player want to use
-     * @return if the move is legal and played, false otherwise
+     * @param playerID the id of the player that asks for this move.
+     * @param cardID   the number of the card the user wants to play.
+     * @throws IllegalArgumentException the card is not available
+     *                                  the card is already played and the player has another card he can play
      */
-    public void playCard(String playerID, int card) throws NotYourTurnException, PhaseNotRightException {
+    public void playCard(String playerID, int cardID) throws NotYourTurnException, PhaseNotRightException {
         if (!turn.getCurrentPlayer().equals(playerID))
             throw new NotYourTurnException("You can't play, It's " + getCurrentPlayer() + "'s turn.");
-        if (turn.getCurrentPhase() != TurnPhase.PLANNING) {
+        if (turn.getCurrentPhase() != TurnPhase.PLANNING)
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
-        }
         Castle castle = castleMap.get(playerID);
-        possibleMovingSteps.setInt((card + 1) / 2);
-        if (turn.addCard(playerID, card))
-            return;
-        throw new IllegalArgumentException("Card cannot be played.");
+        if(!turn.isAlreadyPlayed(cardID) || castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority())))
+            if(castle.isAvailableCard(cardID)) {
+                Card card = castle.playCard(cardID);
+                possibleMovingSteps.setInt(card.distance());
+                turn.addCard(playerID, card.priority());
+                return;
+            }
+        throw new IllegalArgumentException("Card cannot be played." +
+                (!turn.isAlreadyPlayed(cardID) && castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
+                        ? " card is already played &You have another card to play." : "") +
+                (castle.isAvailableCard(cardID)
+                        ? "" : "You don't have this card in the castle"));
     }
 
 //methods for the action phase
@@ -166,7 +175,6 @@ public class Board {
      * @param playerID     the id of the player that ask for this move
      * @param islandNumber the number of the island where you want to move the students
      * @param students     a list of students you want to move
-     * @return true if the students are present and added to the island.
      */
     public void moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students)
             throws NoSuchStudentException, NotYourTurnException, PhaseNotRightException {
@@ -218,7 +226,6 @@ public class Board {
     protected void checkJoinIsland(Integer islandIndex) {
         List<Integer> islandsToJoin = getNeighbouringIsland(islandIndex);
         islandsToJoin = getSameOwner(islandsToJoin);
-        System.out.println("islandsToJoin: " + islandsToJoin);//TODO: debug island merging
         if(!islandsToJoin.isEmpty())
             joinIslands(islandsToJoin);
     }
@@ -239,34 +246,34 @@ public class Board {
         Island  firstIsland = islandList.get(neightbouringIsland.get(0)),
                 secondIsland = islandList.get(neightbouringIsland.get(1)),
                 thirdIsland = islandList.get(neightbouringIsland.get(2));
-        System.out.println(neightbouringIsland);
         if (firstIsland.getOwnership() == secondIsland.getOwnership())
             islandToJoin.addAll(neightbouringIsland.subList(0, 2));
         if (secondIsland.getOwnership() == thirdIsland.getOwnership())
             islandToJoin.addAll(neightbouringIsland.subList(1, 3));
-        System.out.println(islandToJoin);
         return islandToJoin.stream().toList();
         //add all should remove the repetition of the second island index
     }
 
     /**
      * Joins the islands and puts the Archipelago in the list.
+     * @param islandsToJoin the indexes of 2 or three islands that are about to be merged
      */
     protected void joinIslands(@NotNull List<Integer> islandsToJoin) {
         int firstIslandIndex = islandsToJoin.get(0);
         int secondIslandIndex = islandsToJoin.get(1);
         Island newIsland;
-        if ( islandsToJoin.size() == 2 )
+        if (islandsToJoin.size() == 2)
             newIsland = new Archipelago(islandList.get(firstIslandIndex), islandList.get(secondIslandIndex));
-        else if(islandsToJoin.size()==3) {
+        else if(islandsToJoin.size() == 3) {
             int thirdIslandIndex = islandsToJoin.get(2);
             newIsland = new Archipelago(    islandList.get(firstIslandIndex),
                                             islandList.get(secondIslandIndex),
                                             islandList.get(thirdIslandIndex));
         } else
             throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
-        for (int index : islandsToJoin)
-            this.islandList.remove(index);
+        for (int i = 0; i < islandsToJoin.size(); i++) {
+            this.islandList.remove(firstIslandIndex);
+        }
         this.islandList.add(firstIslandIndex, newIsland);
         motherNaturePosition = firstIslandIndex;
     }
@@ -290,8 +297,7 @@ public class Board {
     }
 
     /**
-     * Refills each cloud with new students.
-     * @return if the move is legal and played or not
+     * Resets the students that can be moved
      */
     public void endOfTurn() {
         movedStudents = 0;
@@ -306,11 +312,11 @@ public class Board {
 
 //Ending of a game
 
-    @SuppressWarnings("RedundantSuppression")
     /**
      * Checks if there are no more cards.
      * @return number of cards left.
      */
+    @SuppressWarnings("RedundantSuppression")
     private int remainingCards(){
         Castle currPlayerCastle = getCastle(getCurrentPlayer());
         int cardsLeft = (int) currPlayerCastle.getDeck().stream().filter(Card::isAvailable).count();
@@ -322,7 +328,6 @@ public class Board {
      * @return the winner team
      */
     public boolean isWinningState() {
-        System.out.println("test");
         EnumMap<Team, Integer> nTowers = placedTowers();
         for (Team t : Team.values())
             if (nTowers.get(t) >= TOWERS_TO_PLACE_TO_WIN || islandList.size() <= MINIMUM_NUMBER_OF_ISLANDS)
@@ -355,7 +360,6 @@ public class Board {
 
     /** @return a map that contains the number of placed towers on the islands for each team */
     public EnumMap<Team,Integer> placedTowers() {
-        System.out.println("test2");
         EnumMap<Team, Integer> teamTowersMap = new EnumMap<>(Team.class);
         for (Team t : Team.values()) { //fill nTowers map for all team at 0
             teamTowersMap.put(t, 0);
@@ -390,16 +394,16 @@ public class Board {
         return withMoreProfessors;
     }
 
-    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, NotTheRightGameModeException, PhaseNotRightException {
-        throw new NotTheRightGameModeException("You can't use this command in this game mode!");
+    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, WrongGameModeException, PhaseNotRightException {
+        throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 
-    public String getCharInfo (int idChar) throws NotTheRightGameModeException {
-        throw new NotTheRightGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
+    public String getCharInfo (int idChar) throws WrongGameModeException {
+        throw new WrongGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
     }
 
-    public Collection<StandardCharacter> getAvailableCharacterCards() throws NotTheRightGameModeException {
-        throw new NotTheRightGameModeException("You can't use this command in this game mode!");
+    public Collection<StandardCharacter> getAvailableCharacterCards() throws WrongGameModeException {
+        throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 
     public void changePhase(){
@@ -447,7 +451,7 @@ public class Board {
         return ModelDataBuilder.newBoardData(this, playerID);
     }
 
-    public CharacterUtility getPlayedExpertChar() throws NotTheRightGameModeException {
-        throw new NotTheRightGameModeException("You can't use this command in this gamemode.");
+    public CharacterUtility getPlayedExpertChar() throws WrongGameModeException {
+        throw new WrongGameModeException("You can't use this command in this gamemode.");
     }
 }

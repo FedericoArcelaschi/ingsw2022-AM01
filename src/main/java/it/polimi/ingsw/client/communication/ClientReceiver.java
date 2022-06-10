@@ -21,7 +21,7 @@ public class ClientReceiver extends Receiver {
         this.userInterface = userInterface;
     }
 
-    protected void messageSwitch(Message message) {
+    protected synchronized void messageSwitch(Message message) {
         switch (message.getType()) {
             case PING -> {
                 out.println(new Ping().toJson());
@@ -37,8 +37,7 @@ public class ClientReceiver extends Receiver {
             case LOBBYINFO -> {
                 System.out.println(CLEAR_SCREEN);
                 LobbyInfo lobbyInfoMessage = (LobbyInfo) message;
-                System.out.println("\r");
-                userInterface.printWaitingRoom(lobbyInfoMessage.getPlayers(), lobbyInfoMessage.getGameType());
+                userInterface.printWaitingRoom(lobbyInfoMessage);
             }
             case END -> cm.setState(ClientState.GAME_ENDED);
 
@@ -47,10 +46,6 @@ public class ClientReceiver extends Receiver {
                 System.err.println("new error received: " + error.getMessage());
                 //IDEA: cm.setState(error.getState());
                 //IDEA: UserInterface.handleError(error.getMessage());
-            }
-            case CHARINFO -> {
-                CharInfo charInfo = (CharInfo) message;
-                System.out.println(charInfo.getInfo());
             }
         }
     }
