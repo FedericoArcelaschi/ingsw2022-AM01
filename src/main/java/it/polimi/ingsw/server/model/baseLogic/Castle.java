@@ -34,7 +34,7 @@ public class Castle implements StudentPlaces {
         this.deck = new ArrayList<>();
         this.towerColor = team;
         this.lastPlayedCard = null;
-        for (int i = 1; i <= numberOfCards; i++) deck.add(new Card(i, (i + 1) / 2, true));
+        for (int i = 1; i <= numberOfCards; i++) deck.add(new Card(i));
     }
 
     /**
@@ -103,23 +103,22 @@ public class Castle implements StudentPlaces {
         }
     }
 
+    public boolean isAvailableCard(int i) {
+        if (i < 1 || i > 10) throw new IllegalArgumentException("Illegal card number");
+        return deck.get(i - 1).isAvailable();
+    }
+
     /**
      * Method that allows the player to play the card.
      *
-     * @param i priority of the card
+     * @param i priority of the card i >= 1 || i <= 10
      * @return true if the card was played correctly
      */
     public Card playCard(int i) { // FIXME
-        if (i < 1 || i > 10) throw new IllegalArgumentException();
         Card play = deck.get(i - 1);
         play.setAvailable(false);
         lastPlayedCard = play;
         return play;
-    }
-
-    public boolean isAvailableCard(int i) {
-        if (i < 1 || i > 10) throw new IllegalArgumentException();
-        return deck.get(i - 1).isAvailable();
     }
 
     public List<StudentColor> getWaitingRoom() {

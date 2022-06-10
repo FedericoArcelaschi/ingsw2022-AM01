@@ -128,17 +128,21 @@ public class Board {
     public void playCard(String playerID, int cardID) throws NotYourTurnException, PhaseNotRightException {
         if (!turn.getCurrentPlayer().equals(playerID))
             throw new NotYourTurnException("You can't play, It's " + getCurrentPlayer() + "'s turn.");
-        if (turn.getCurrentPhase() != TurnPhase.PLANNING) {
+        if (turn.getCurrentPhase() != TurnPhase.PLANNING)
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
-        }
         Castle castle = castleMap.get(playerID);
         if(!turn.isAlreadyPlayed(cardID) || castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority())))
             if(castle.isAvailableCard(cardID)) {
                 Card card = castle.playCard(cardID);
                 possibleMovingSteps.setInt(card.distance());
                 turn.addCard(playerID, card.priority());
+                return;
             }
-        throw new IllegalArgumentException("Card cannot be played.");
+        throw new IllegalArgumentException("Card cannot be played." +
+                (!turn.isAlreadyPlayed(cardID) ? "card is already played &" : "") +
+                (castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority())) ?
+                        "You have another card to play." : "") +
+                (castle.isAvailableCard(cardID) ? "You don't have this card in the castle":""));
     }
 
 //methods for the action phase
