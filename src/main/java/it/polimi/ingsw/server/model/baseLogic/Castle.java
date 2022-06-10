@@ -109,15 +109,17 @@ public class Castle implements StudentPlaces {
      * @param i priority of the card
      * @return true if the card was played correctly
      */
-    public boolean playCard(int i) {
+    public Card playCard(int i) { // FIXME
         if (i < 1 || i > 10) throw new IllegalArgumentException();
         Card play = deck.get(i - 1);
-        if (play.isAvailable()) {
-            play.setAvailable(false);
-            lastPlayedCard = play;
-            return true;
-        } else
-            return false;
+        play.setAvailable(false);
+        lastPlayedCard = play;
+        return play;
+    }
+
+    public boolean isAvailableCard(int i) {
+        if (i < 1 || i > 10) throw new IllegalArgumentException();
+        return deck.get(i - 1).isAvailable();
     }
 
     public List<StudentColor> getWaitingRoom() {

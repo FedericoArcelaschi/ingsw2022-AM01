@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
 
 import java.util.EnumMap;
+import java.util.stream.Collectors;
 
 public class Island implements StudentPlaces {
 
@@ -73,9 +74,12 @@ public class Island implements StudentPlaces {
     @Override
     public String toString() {
         return "Island{" +
-                "students=" + students +
-                ", ownership=" + ownership +
-                '}';
+                "students=" +
+                students.entrySet().stream()
+                        .filter(entry -> entry.getValue() > 0)
+                        .collect(Collectors.toSet()) +
+                ((ownership == null) ? ("") : ( ", ownership=" + ownership ))
+                + "}\n";
     }
 
     @Override
