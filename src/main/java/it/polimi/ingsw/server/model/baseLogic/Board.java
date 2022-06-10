@@ -139,10 +139,10 @@ public class Board {
                 return;
             }
         throw new IllegalArgumentException("Card cannot be played." +
-                (!turn.isAlreadyPlayed(cardID) ? "card is already played &" : "") +
+                (turn.isAlreadyPlayed(cardID) ? "card is already played" : "") +
                 (castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority())) ?
-                        "You have another card to play." : "") +
-                (castle.isAvailableCard(cardID) ? "You don't have this card in the castle":""));
+                        " & You have another card to play." : "") +
+                (!castle.isAvailableCard(cardID) ? "You don't have this card in the castle":""));
     }
 
 //methods for the action phase

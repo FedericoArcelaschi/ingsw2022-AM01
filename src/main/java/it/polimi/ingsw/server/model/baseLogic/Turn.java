@@ -117,7 +117,7 @@ public class Turn {
     }
 
     public boolean isAlreadyPlayed(int card) {
-        return !playedCards.containsValue(card);
+        return playedCards.containsValue(card);
     }
 
     @Override
