@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 
 import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.client.userInterface.UserInterface;
+import it.polimi.ingsw.client.userInterface.gui.LoginPreferences;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,9 +18,9 @@ public class LoginPaneController {
     @FXML RadioButton player2RadioButton, player3RadioButton, player4RadioButton;
     @FXML CheckBox expertModeButton;
     ToggleGroup nPlayer;
-    Consumer<Preferences> connect;
+    Consumer<LoginPreferences> connect;
 
-    public void initialize(Consumer<Preferences> connect){
+    public void initialize(Consumer<LoginPreferences> connect){
         nPlayer = new ToggleGroup();
         player2RadioButton.setToggleGroup(nPlayer);
         player3RadioButton.setToggleGroup(nPlayer);
@@ -33,13 +34,15 @@ public class LoginPaneController {
         connect.accept(getPreferences());
     }
 
-    private Preferences getPreferences() {
-        var username = usernameTextField.getText();
-        var selectedNPlayer = (RadioButton) nPlayer.getSelectedToggle();
-        var nPlayers = Integer.parseInt(selectedNPlayer.getText().substring(0, 1));
-        var expertMode = expertModeButton.selectedProperty().get();
+    private LoginPreferences getPreferences() {
+        String username = usernameTextField.getText();
+        RadioButton selectedNPlayer = (RadioButton) nPlayer.getSelectedToggle();
+        int nPlayers = Integer.parseInt(selectedNPlayer.getText().substring(0, 1));
+        boolean expertMode = expertModeButton.selectedProperty().get();
+        String ip = ipTextField.getText().equals("") ? ipTextField.getPromptText() : ipTextField.getText();
+        int port = Integer.parseInt(portTextField.getText().equals("") ? portTextField.getPromptText() : portTextField.getText());
         try {
-            return new Preferences(username, nPlayers, expertMode);
+            return new LoginPreferences(ip, port, new Preferences(username, nPlayers, expertMode));
         } catch (IllegalAccessException e) {
             System.err.println(e.getMessage());
             getPreferences();

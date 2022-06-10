@@ -121,8 +121,9 @@ public class Gui extends Application implements UserInterface {
         //TODO:
     }
 
-    public void connect(Preferences preferences) {
-        clientMain = new ClientMain("127.0.0.1", 12345, preferences);
+    public void connect(LoginPreferences loginPreferences) {
+        Preferences preferences = loginPreferences.getPreferences();
+        clientMain = new ClientMain(loginPreferences.getIP(), loginPreferences.getPort(), preferences);
         try {
             clientMain.connect(this);
         } catch (IllegalAccessException e) {
