@@ -61,6 +61,11 @@ public class Cli implements UserInterface {
         }
         System.out.println(input);
     }
+
+    @Override
+    public void printError(String error) {
+        System.err.println("new error received from server:\n\t" + error);
+    }
     /**
      * Before opening the connection with the server the client requires to insert the preferences.
      */

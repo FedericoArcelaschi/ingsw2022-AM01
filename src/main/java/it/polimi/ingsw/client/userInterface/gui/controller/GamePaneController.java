@@ -6,8 +6,11 @@ import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -52,6 +55,12 @@ public class GamePaneController {
         guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
         guiDrawer.drawCharacters(boardData.characters(), characterPane, characterTab);
+    }
+
+    public void printError(String error){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(error);
+        alert.show();
     }
 
     public void moveStudentToDiningRoom(MouseEvent mouseEvent) {
@@ -113,5 +122,13 @@ public class GamePaneController {
         Command command = new Command(username, CommandType.PLAY_CARD, parameters);
         System.out.println(command);
         send.accept(command);
+    }
+
+    public void payCharacter(MouseEvent mouseEvent) {
+        Pane character = (Pane) mouseEvent.getTarget();
+        List<String> parameters = new ArrayList<>();
+        parameters.add(character.getAccessibleText());
+        Command command = new Command(username, CommandType.PAY_CHARACTER, parameters);
+        System.out.println(command);
     }
 }

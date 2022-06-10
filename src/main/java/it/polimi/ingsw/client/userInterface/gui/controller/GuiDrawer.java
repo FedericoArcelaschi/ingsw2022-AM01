@@ -59,6 +59,8 @@ public class GuiDrawer {
         for (int i = 0; i < characters.size(); i++) {
             Pane pane = (Pane) characterPane.getChildren().get(i);
             pane.getStyleClass().add(CharacterExplanation.getInstance(characters.get(i).getName()).getCSS());
+            pane.setAccessibleText(characters.get(i).getName());
+            pane.getChildren().get(0).setAccessibleText(characters.get(i).getName());
         }
     }
 

@@ -12,4 +12,5 @@ public interface UserInterface {
      */
     void draw(BoardData boardData);
     void printWaitingRoom(List<String> connectedUser, GameType gameType);
+    void printError(String error);
 }

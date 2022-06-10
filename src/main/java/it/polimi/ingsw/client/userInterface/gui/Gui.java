@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController;
 import it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
@@ -56,14 +57,14 @@ public class Gui extends Application implements UserInterface {
 
     private BoardData createBoardData(){
         //FIXME: for testing.
-        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio", "lore"/*, "pippo"*/), true);
+        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"/*, "pippo"*/), true);
+        Turn t = b.getTurn();
         try{
-            b.playCard("fede", 1);
-            b.changePhase();
-            b.playCard("gio", 10);
-            b.changePhase();
-            b.playCard("lore", 9);
-            b.changePhase();
+            for (String player: t.getSittingOrder()) {
+                int cardId = player.equals("fede") ? 1 : 10;
+                b.playCard(player, cardId);
+                b.changePhase();
+            }
 //            b.playCard("pippo", 8);
 //            b.changePhase();
             List<StudentColor> studentColorList = b.getCastle("fede").getWaitingRoom().subList(0,1);
@@ -82,7 +83,6 @@ public class Gui extends Application implements UserInterface {
             return createBoardData();
         }
         BoardData bd = b.getData("fede");
-        System.out.println(bd.myCastle().coins());
         //System.out.println(bd);
         return bd;
     }
@@ -119,6 +119,11 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
         //TODO:
+    }
+
+    @Override
+    public void printError(String error) {
+        if(gamePaneController != null) gamePaneController.printError(error);
     }
 
     public void connect(LoginPreferences loginPreferences) {
