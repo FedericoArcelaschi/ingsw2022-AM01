@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 import it.polimi.ingsw.communication.modelData.CastleData;
 import it.polimi.ingsw.communication.modelData.CloudData;
 import it.polimi.ingsw.communication.modelData.IslandData;
+import it.polimi.ingsw.communication.modelData.TurnData;
 import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
@@ -14,6 +15,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -118,6 +121,31 @@ public class GuiDrawer {
             for (int j = 0; j < cloud.studentList().size(); j++)  {
                 setStudentButtonColor((ToggleButton)pane.getChildren().get(j) , cloud.studentList().get(j));
             }
+        }
+    }
+
+    public void drawTurn(TurnData turnData, Pane turnPane){
+        Label phaseLabel = (Label) turnPane.getChildren().get(1);
+        TextFlow playerOrderLabel = (TextFlow) turnPane.getChildren().get(2);
+        int i=0;
+
+        StringBuilder phase;
+        phase = new StringBuilder("Turn Phase:  ");
+        playerOrderLabel.getChildren().add(new Text("Player Order:  "));
+
+        phase.append(turnData.currentPhase());
+
+        phaseLabel.setText(phase.toString());
+        for (String player: turnData.actionOrder()) {
+            Text text = new Text();
+            if(i != 0){
+               playerOrderLabel.getChildren().add(new Text(",  "));
+            }
+            i++;
+            text.setText(player);
+            if(player.equals(turnData.currentPlayer()))
+                text.setStyle("-fx-font-size: 16px");
+            playerOrderLabel.getChildren().add(text);
         }
     }
 

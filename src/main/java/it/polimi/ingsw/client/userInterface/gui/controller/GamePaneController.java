@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 public class GamePaneController {
     @FXML public BorderPane castlePane0;
     @FXML public FlowPane castleTabHBox, characterPane, cardsFlowPane;
+    @FXML public Pane turnPane;
     @FXML private Pane waitingRoomPane;
     @FXML private StackPane cloudStackPane;
     @FXML private HBox islandRow1, islandRow2;
@@ -55,6 +56,7 @@ public class GamePaneController {
         guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
         guiDrawer.drawCharacters(boardData.characters(), characterPane, characterTab);
+        guiDrawer.drawTurn(boardData.turn(), turnPane);
     }
 
     public void printError(String error){
