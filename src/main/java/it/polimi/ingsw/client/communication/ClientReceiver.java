@@ -47,7 +47,8 @@ public class ClientReceiver extends Receiver {
             }
 
             case ERROR -> {
-                Error error = (Error) message;
+                Error
+                        error = (Error) message;
                 userInterface.printError(error.getMessage());
                 //IDEA: cm.setState(error.getState());
                 //IDEA: UserInterface.handleError(error.getMessage());

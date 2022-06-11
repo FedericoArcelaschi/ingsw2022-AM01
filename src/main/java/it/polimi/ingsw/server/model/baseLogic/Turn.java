@@ -11,7 +11,7 @@ public class Turn {
     private List<String> actionOrder;
     private String currentPlayer;
     private TurnPhase currentPhase;
-    private final Map<String, Card> playedCards;
+    private final Map<String, Integer> playedCards;
     private final int N_PLAYERS;
     private final int FIRST_PLANNING_TURN = 1;
     private int planningCounter = FIRST_PLANNING_TURN;
@@ -43,15 +43,15 @@ public class Turn {
      *
      * @param playerCardMap to be sorted
      */
-    private void setNewRound(Map<String, Card> playerCardMap) {
+    private void setNewRound(Map<String, Integer> playerCardMap) {
         List<String> newOrder = new ArrayList<>(actionOrder);
         for (String player : actionOrder) {
             for (String player2 : actionOrder) {
                 if(!player.equals(player2))
-                    if(playerCardMap.get(player).priority() < playerCardMap.get(player2).priority()) {
+                    if(playerCardMap.get(player) < playerCardMap.get(player2)) {
                         newOrder.remove(player);
                         newOrder.add(newOrder.indexOf(player2) - 1, player);
-                    }else if(playerCardMap.get(player).priority() > playerCardMap.get(player2).priority()) {
+                    }else if(playerCardMap.get(player) > playerCardMap.get(player2)) {
                         newOrder.remove(player2);
                         newOrder.add(newOrder.indexOf(player) - 1, player2);
                     }
@@ -76,7 +76,7 @@ public class Turn {
         if(new HashSet<>(newerTurns).containsAll(sittingOrder) && new HashSet<>(sittingOrder).containsAll(newerTurns))
             this.actionOrder = newerTurns;
         else
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Error in Turn .setActionOrder");
         currentPlayer = actionOrder.get(0);
     }
 
@@ -107,7 +107,7 @@ public class Turn {
 
 
     public void addCard(String player, Card card) {
-        playedCards.put(player, card);
+        playedCards.put(player, card.priority());
     }
 
     @Contract(pure = true)

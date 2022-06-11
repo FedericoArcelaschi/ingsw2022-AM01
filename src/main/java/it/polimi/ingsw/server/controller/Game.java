@@ -46,6 +46,7 @@ public class Game {
         try {
             board.playCard(command.getUsername(), command.getCardId());
         } catch (NotYourTurnException | IllegalArgumentException | PhaseNotRightException e) {
+            logger.info(e);
             return errorMessage(e, command.getUsername());
         }
         return updateAll();
@@ -61,6 +62,7 @@ public class Game {
         try {
             board.moveStudentsToDiningRoom(command.getUsername(), command.getStudents());
         } catch (NoSuchStudentException | TooManyStudentsException | NotYourTurnException | PhaseNotRightException e) {
+            logger.info(e);
             movedStudents -= students.size();
             return errorMessage(e, command.getUsername());
         }
@@ -80,6 +82,7 @@ public class Game {
         try {
             board.moveStudentToIsland(command.getUsername(), command.getIslandId() - 1, command.getStudents());
         } catch (NoSuchStudentException | NotYourTurnException | PhaseNotRightException e) {
+            logger.info(e);
             return errorMessage(e, command.getUsername());
         }
         if (movedStudents == MAX_STUDENTS_TO_MOVE) {
@@ -93,13 +96,14 @@ public class Game {
         try {
             board.moveMotherNature(command.getMotherNaturePositionShift());
         } catch (PhaseNotRightException | IllegalArgumentException e) {
-            e.printStackTrace();
+            logger.info(e);
             return errorMessage(e, command.getUsername());
         }
         if (board.isWinningState()) {
             try {
                 winUpdate(board.getWinner());
             } catch (DrawException e) {
+                logger.info(e);
                 return errorMessage(e, command.getUsername());
                 //FIXME: handle game-end.
                 //parità?
@@ -113,6 +117,7 @@ public class Game {
             board.chooseCloud(command.getUsername(), command.getCloudId() - 1);
             logger.info(board.getData(command.getUsername()));
         } catch (NotYourTurnException | TooManyStudentsException | PhaseNotRightException | IllegalArgumentException e) {
+            logger.info(e);
             return errorMessage(e, command.getUsername());
         }
         if (board.isWonByResources()) {
@@ -142,6 +147,7 @@ public class Game {
         try {
             board.playExpertCard(command.getCharId(), command.getIslandId() - 1, command.getStudents());
         } catch (WrongGameModeException | CoinException | StudentException | PhaseNotRightException e) {
+            logger.info(e);
             return errorMessage(e, command.getUsername());
         }
         return updateAll();

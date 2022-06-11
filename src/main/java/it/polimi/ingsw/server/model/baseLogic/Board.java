@@ -140,8 +140,8 @@ public class Board {
                 return;
             }
         throw new IllegalArgumentException("Card cannot be played. " +
-                (!turn.isAlreadyPlayed(cardID) && !castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
-                        ? " Card is already played & you have another card to play in your castle. " : " ") +
+                (turn.isAlreadyPlayed(cardID) && !castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
+                        ? "Card is already played & you have another card to play in your castle. " : " ") +
                 (castle.isAvailableCard(cardID) ? "" : "You don't have this card in the castle"));
     }
 
