@@ -202,9 +202,8 @@ public class ExpertBoard extends Board {
     }
 
     @Override
-    public void endOfTurn() {
-        if(turn.isLastActionTurn())
-            cloudRefill();
+    protected void endOfTurn() {
+        super.endOfTurn();
         playedExpertChar = null;
         influence.reset();
         movedStudents = 0;

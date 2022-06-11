@@ -313,7 +313,7 @@ public class Board {
     /**
      * Resets the students that can be moved
      */
-    public void endOfTurn() {
+    protected void endOfTurn() {
         if(turn.isLastActionTurn())
             cloudRefill();
     }

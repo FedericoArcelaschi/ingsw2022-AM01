@@ -112,7 +112,7 @@ public class Game {
         try {
             board.chooseCloud(command.getUsername(), command.getCloudId() - 1);
             logger.info(board.getData(command.getUsername()));
-        } catch (NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
+        } catch (NotYourTurnException | TooManyStudentsException | PhaseNotRightException | IllegalArgumentException e) {
             return errorMessage(e, command.getUsername());
         }
         if (board.isWonByResources()) {

@@ -129,7 +129,7 @@ public class Turn {
 
     @Contract(pure = true)
     public boolean isLastActionTurn() {
-        return actionOrder.get(N_PLAYERS).equals(currentPlayer);
+        return actionOrder.get(N_PLAYERS - 1).equals(currentPlayer);
     }
 
     @Override
