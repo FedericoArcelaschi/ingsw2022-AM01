@@ -136,7 +136,6 @@ public class Board {
                 Card card = castle.playCard(cardID);
                 possibleMovingSteps.setInt(card.distance());
                 turn.addCard(playerID, card);
-                turn.changePhase();
                 return;
             }
         throw new IllegalArgumentException("Card cannot be played. " +

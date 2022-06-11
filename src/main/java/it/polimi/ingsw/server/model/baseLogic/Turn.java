@@ -43,27 +43,29 @@ public class Turn {
      *
      * @param playerCardMap to be sorted
      */
-    private void setNewRound(Map<String, Integer> playerCardMap) {
-        List<String> newOrder = new ArrayList<>(actionOrder);
-        for (String player : actionOrder) {
-            for (String player2 : actionOrder) {
-                if(!player.equals(player2))
-                    if(playerCardMap.get(player) < playerCardMap.get(player2)) {
-                        newOrder.remove(player);
-                        newOrder.add(newOrder.indexOf(player2) - 1, player);
-                    }else if(playerCardMap.get(player) > playerCardMap.get(player2)) {
-                        newOrder.remove(player2);
-                        newOrder.add(newOrder.indexOf(player) - 1, player2);
-                    }
-                    //else, if they played the same card, the order stays the same as in the action order
-                    //TODO: testing, is important for this one =)
-            }
-        }
-//        Map<String, Integer> sortedMap =
-//                playerCardMap.entrySet().stream()
-//                .sorted(Map.Entry.comparingByValue())
-//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
+    protected void setNewRound(Map<String, Integer> playerCardMap) {
+//        FIXME: handle case of equal cards.
+//        if(actionOrder.isEmpty()) actionOrder = new ArrayList<>(sittingOrder);
+//        List<String> newOrder = new ArrayList<>(actionOrder);
+//        for (String player : actionOrder) {
+//            for (String player2 : actionOrder) {
+//                if(!player.equals(player2))
+//                    if(playerCardMap.get(player) < playerCardMap.get(player2)) {
+//                        newOrder.remove(player);
+//                        newOrder.add(newOrder.indexOf(player2), player);
+//                    }else if(playerCardMap.get(player) > playerCardMap.get(player2)) {
+//                        newOrder.remove(player2);
+//                        newOrder.add(newOrder.indexOf(player), player2);
+//                    }
+//                    //else, if they played the same card, the order stays the same as in the action order
+//                    //TODO: testing, is important for this one =)
+//            }
+//        }
+        Map<String, Integer> sortedMap =
+                playerCardMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        List<String> newOrder = new ArrayList<>(sortedMap.keySet());
         setActionOrder(newOrder);
         currentPhase = TurnPhase.STUDENTS;      //The next player is now ready to play.
         playedCards.clear();

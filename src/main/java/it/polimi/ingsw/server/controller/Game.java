@@ -45,6 +45,7 @@ public class Game {
     private @NotNull MessageUsernameSet playCardCommand(@NotNull Command command) {
         try {
             board.playCard(command.getUsername(), command.getCardId());
+            board.changePhase();
         } catch (NotYourTurnException | IllegalArgumentException | PhaseNotRightException e) {
             logger.info(e);
             return errorMessage(e, command.getUsername());
