@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.communication;
 
 
-import it.polimi.ingsw.client.ClientState;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.message.subclasses.*;
