@@ -4,6 +4,7 @@ import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.server.controller.GameType;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,19 +14,84 @@ import java.util.Set;
  */
 public class LobbyInfo extends Message {
     private final Map<GameType, Integer> activeGames;
-    private final Map<GameType, Set<String>> clientsInLobbyMap;
+    private final Map<GameType, Set<String>> playerInLobbyMap;
+
     public LobbyInfo(Map<GameType, Set<String>> clientsInLobbyMap, Map<GameType, Integer> activeGames) {
         super(MessageType.LOBBYINFO);
-        this.clientsInLobbyMap = clientsInLobbyMap;
+        this.playerInLobbyMap = clientsInLobbyMap;
         this.activeGames = activeGames;
     }
 
-    public Map<GameType, Integer> getActiveGames() {return activeGames;}
+    public Map<GameType, Integer> getActiveGames() {
+        return activeGames;
+    }
 
-    public Map<GameType, Set<String>> getClientsInLobbyMap() {return clientsInLobbyMap;}
+    public Map<GameType, Set<String>> getPlayerInLobbyMap() {
+        return playerInLobbyMap;
+    }
 
     @Override
     public String toString() {
-        return "I'm a Lobby Info message"; //FIXME
+        final int SIZE = 87;
+        StringBuilder builder = new StringBuilder();
+
+        builder .append("-".repeat(SIZE - 2))
+                .append("||")
+                .append("ACTIVE GAMES:||\n");
+        for (GameType gameType : GameType.values()) {
+            int numberOfDrawnPlayers = 0;
+            builder.append("|               |  ")
+                    .append(gameType.expertMode ? "expert" : "normal")
+                    .append(" mode  ||");
+            playerInLobbyMap.computeIfAbsent(gameType, k -> new HashSet<String>());
+            for (String player : (playerInLobbyMap.get(gameType).stream().toList())) {
+                numberOfDrawnPlayers++;
+                if (player.length() > 10) {
+                    builder.append(" ")
+                            .append(player.substring(0, 7))
+                            .append("...")
+                            .append(' ')
+                            .append('|');
+                } else {
+                    builder.append(" ")
+                            .append(player)
+                            .append(" ".repeat(10 - player.length()))
+                            .append(' ')
+                            .append('|');
+                }
+            }
+            for (; numberOfDrawnPlayers < gameType.nPlayer; numberOfDrawnPlayers++) { //padding for empty lobbys
+                builder.append(' ')
+                        .append(" ".repeat(10))
+                        .append(' ')
+                        .append('|');
+            }
+            for (; numberOfDrawnPlayers < 4; numberOfDrawnPlayers++) {
+                builder.append(' ')
+                        .append("x".repeat(10))
+                        .append(' ')
+                        .append("|");
+            }
+            builder.append("|")
+            //ACtive games:
+                    .append("  --> ");
+            if(activeGames.containsKey(gameType))
+                builder.append(activeGames.get(gameType))
+                        .append(" <--  ||\n");
+            else
+                builder .append("NONE   ||\n");
+            if (!gameType.expertMode)
+                builder .append("|   ")
+                        .append(gameType.nPlayer)
+                        .append(" PLAYERS")
+                        .append("   |---------------||---------------------------------------------------");
+            else
+                builder .append("-".repeat(SIZE - 2));
+            builder.append("||             ||\n");
+        }
+
+        return builder.toString();
     }
+
 }
+
