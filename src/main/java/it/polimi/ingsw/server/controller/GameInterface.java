@@ -33,10 +33,14 @@ public class GameInterface {
 
     public void executeCommand(Command command, Socket socket) {
         logger.info(this + " is executing command: "+ command);
-        if (clients.getClients().stream().anyMatch(i -> (i.clientsSocket().equals(socket)) && (i.username().equals(command.getUsername())))) {
-            send(game.executeCommand(command));
-        } else
-           new Client(socket).send(new Error("you are in the wrong game. userID-socket don't match. Quit."));
+        try {
+            if (clients.getClients().stream().anyMatch(i -> (i.clientsSocket().equals(socket)) && (i.username().equals(command.getUsername())))) {
+                send(game.executeCommand(command));
+            } else
+                new Client(socket).send(new Error("you are in the wrong game. userID-socket don't match. Quit."));
+        } catch (Exception e) {
+            logger.info("exception during a Game move:\n\t", e); //should be a WARNING
+        }
     }
 
     private void send(MessageUsernameSet messageUsernameSet) {
