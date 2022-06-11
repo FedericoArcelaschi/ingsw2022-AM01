@@ -18,8 +18,8 @@ public class LobbyInfo extends Message {
 
     public LobbyInfo(Map<GameType, Set<String>> clientsInLobbyMap, Map<GameType, Integer> activeGames) {
         super(MessageType.LOBBYINFO);
-        this.playerInLobbyMap = clientsInLobbyMap;
         this.activeGames = activeGames;
+        playerInLobbyMap = clientsInLobbyMap;
     }
 
     public Map<GameType, Integer> getActiveGames() {
@@ -89,7 +89,6 @@ public class LobbyInfo extends Message {
                 builder .append("-".repeat(SIZE - 2));
             builder.append("||             ||\n");
         }
-
         return builder.toString();
     }
 

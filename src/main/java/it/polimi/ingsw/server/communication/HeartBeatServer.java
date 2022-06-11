@@ -40,7 +40,7 @@ public class HeartBeatServer implements Runnable {
             logger.info("Ping received. Pinging back...");
         }
         else
-            logger.warn("client in port: " + socket.getLocalPort() + " shouldn't be connected");
+            logger.info("client in port: " + socket.getLocalPort() + " shouldn't be connected");
     }
 
     /**

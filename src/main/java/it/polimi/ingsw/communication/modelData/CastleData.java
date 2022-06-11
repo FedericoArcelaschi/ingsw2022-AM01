@@ -87,7 +87,7 @@ public class CastleData {
         else
             s.append("\n\t\tThe player has not played any card yet.");
         s.append("\n\t\tTeam: ");
-        s.append(towerColor);
+        s.append(towerColor.toStringColored());
         return s.toString();
     }
 

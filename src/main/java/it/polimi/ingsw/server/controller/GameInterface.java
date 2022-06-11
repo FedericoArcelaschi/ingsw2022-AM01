@@ -24,6 +24,7 @@ public class GameInterface {
     public GameInterface(GameType gameType, ClientList clients) {
         logger.info(this + ": creating a new instance with players: " + clients.getClients().stream().map(Client::username).toList());
         logger.info("sockets are: " + clients.getClients().stream().map(Client::clientsSocket).toList());
+
         this.game       = new Game(gameType, clients.getClients().stream().map(Client::username).toList());
         this.clients    = new ClientList(clients);
         this.gameType   = gameType;
@@ -41,7 +42,6 @@ public class GameInterface {
     private void send(MessageUsernameSet messageUsernameSet) {
         logger.info(this + " is sending an update to the clients.");
         logger.info("clients: " + clients.getClients().stream().map(Client::clientsSocket).collect(Collectors.toSet()));
-        logger.info("message:\n\t" + messageUsernameSet.values().stream().findAny().get().message());
         messageUsernameSet.values()
                 .forEach(
                     messageUsername ->

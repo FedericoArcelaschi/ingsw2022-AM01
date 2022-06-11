@@ -24,9 +24,4 @@ public enum GameType {
         throw new IllegalArgumentException("Not a valid game type");
     }
 
-    @Override
-    public String toString() {
-        return nPlayer +" players, " + (expertMode ? "expert-mode" : "normal-mode");
-    }
-
 }

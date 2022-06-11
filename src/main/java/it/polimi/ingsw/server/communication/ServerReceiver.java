@@ -30,7 +30,7 @@ public class ServerReceiver extends Receiver {
     @Override
     protected void messageSwitch(Message message) {
         if(message.getType() != MessageType.PING)
-            logger.info("Server received message: " + message.getType());
+            logger.info("Server received message: " + message.getType() + " - from port: " + socket.getPort());
         switch (message.getType()) {
             case PING ->
                     hbs.validateResponse(socket);
