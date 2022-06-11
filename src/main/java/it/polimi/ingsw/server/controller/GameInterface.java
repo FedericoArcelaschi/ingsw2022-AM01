@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.command.Command;
+import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.server.communication.Client;
 import it.polimi.ingsw.server.communication.ClientList;
@@ -44,7 +45,7 @@ public class GameInterface {
     }
 
     private void send(MessageUsernameSet messageUsernameSet) {
-        logger.info(this + " is sending an update to the clients.");
+        logger.info(this + " is sending an update to the client(s).");
         logger.info("clients: " + clients.getClients().stream().map(Client::clientsSocket).collect(Collectors.toSet()));
         messageUsernameSet.values()
                 .forEach(

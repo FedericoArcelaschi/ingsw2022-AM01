@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.communication;
 
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.Message;
+import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.server.controller.GameInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

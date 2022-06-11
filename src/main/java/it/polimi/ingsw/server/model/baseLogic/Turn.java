@@ -11,7 +11,7 @@ public class Turn {
     private List<String> actionOrder;
     private String currentPlayer;
     private TurnPhase currentPhase;
-    private final Map<String, Integer> playedCards;
+    private final Map<String, Card> playedCards;
     private final int N_PLAYERS;
     private final int FIRST_PLANNING_TURN = 1;
     private int planningCounter = FIRST_PLANNING_TURN;
@@ -40,13 +40,30 @@ public class Turn {
 
     /**
      * Sets the new turn order.
-     * @param map to be sorted
+     *
+     * @param playerCardMap to be sorted
      */
-    private void setNewRound(Map<String, Integer> map) {
-        Map<String, Integer> sortedMap =  map.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-        List<String> newOrder = new ArrayList<>(sortedMap.keySet());
+    private void setNewRound(Map<String, Card> playerCardMap) {
+        List<String> newOrder = new ArrayList<>(actionOrder);
+        for (String player : actionOrder) {
+            for (String player2 : actionOrder) {
+                if(!player.equals(player2))
+                    if(playerCardMap.get(player).priority() < playerCardMap.get(player2).priority()) {
+                        newOrder.remove(player);
+                        newOrder.add(newOrder.indexOf(player2) - 1, player);
+                    }else if(playerCardMap.get(player).priority() > playerCardMap.get(player2).priority()) {
+                        newOrder.remove(player2);
+                        newOrder.add(newOrder.indexOf(player) - 1, player2);
+                    }
+                    //else, if they played the same card, the order stays the same as in the action order
+                    //TODO: testing, is important for this one =)
+            }
+        }
+//        Map<String, Integer> sortedMap =
+//                playerCardMap.entrySet().stream()
+//                .sorted(Map.Entry.comparingByValue())
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
         setActionOrder(newOrder);
         currentPhase = TurnPhase.STUDENTS;      //The next player is now ready to play.
         playedCards.clear();
@@ -89,7 +106,7 @@ public class Turn {
     }
 
 
-    public void addCard(String player, int card) {
+    public void addCard(String player, Card card) {
         playedCards.put(player, card);
     }
 

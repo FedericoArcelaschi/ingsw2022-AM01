@@ -135,15 +135,14 @@ public class Board {
             if(castle.isAvailableCard(cardID)) {
                 Card card = castle.playCard(cardID);
                 possibleMovingSteps.setInt(card.distance());
-                turn.addCard(playerID, card.priority());
+                turn.addCard(playerID, card);
                 turn.changePhase();
                 return;
             }
-        throw new IllegalArgumentException("Card cannot be played." +
-                (!turn.isAlreadyPlayed(cardID) && castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
-                        ? " card is already played &You have another card to play." : "") +
-                (castle.isAvailableCard(cardID)
-                        ? "" : "You don't have this card in the castle"));
+        throw new IllegalArgumentException("Card cannot be played. " +
+                (!turn.isAlreadyPlayed(cardID) && !castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
+                        ? " Card is already played & you have another card to play in your castle. " : " ") +
+                (castle.isAvailableCard(cardID) ? "" : "You don't have this card in the castle"));
     }
 
 //methods for the action phase

@@ -44,6 +44,7 @@ public class Cli implements UserInterface {
 
     @Override
     public void draw (BoardData boardData) {
+        System.out.println("\r");
         System.out.println(boardData.toString());
     }
 
@@ -52,7 +53,7 @@ public class Cli implements UserInterface {
      */
     @Override
     public void printLobby(LobbyInfo lobbyInfo) {
-        //TODO: print a nicer view of the lobby
+        System.out.println("\r");
         System.out.println(lobbyInfo);
     }
 

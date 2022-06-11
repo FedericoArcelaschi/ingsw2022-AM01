@@ -61,7 +61,7 @@ public class BoardData {
         //Print turn
         s.append("\n\nTurn: ").append(turn);
         //Print my castle with the hand of cards
-        s.append("\nMy Castle:");
+        s.append("\n\nMy Castle:");
         s.append("\n\tCastle ").append(username).append(": ").append(myCastle).append("\n");
         return s.toString();
     }

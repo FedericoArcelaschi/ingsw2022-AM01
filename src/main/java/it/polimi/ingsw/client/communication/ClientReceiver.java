@@ -38,7 +38,6 @@ public class ClientReceiver extends Receiver {
             case LOBBYINFO -> {
                 System.out.println(CLEAR_SCREEN);
                 LobbyInfo lobbyInfoMessage = (LobbyInfo) message;
-                System.out.println("\r");
                 userInterface.printLobby(lobbyInfoMessage);
             }
             case END -> {
