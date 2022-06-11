@@ -1,25 +1,20 @@
 package it.polimi.ingsw.server.model.baseLogic;
+import org.jetbrains.annotations.Contract;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cloud {
+
     private final Bag bag;
     private final List<StudentColor> studentList;
-    private final int size;
+    private final int STUDENTS_ON_CLOUD;
 
     public Cloud(Bag bag, int size) {
         this.bag = bag;
-        this.size = size;
+        this.STUDENTS_ON_CLOUD = size;
         this.studentList = new ArrayList<>();
         refill();
-    }
-
-    public boolean refill() {
-        studentList.clear();
-        for(int i = 0; i < size; i++) {
-            studentList.add(bag.extract());
-        }
-        return true;
     }
 
     public List<StudentColor> choose() {
@@ -29,14 +24,16 @@ public class Cloud {
         return students;
     }
 
-    public int getSize() {
-        return size;
+    public void refill() {
+        studentList.addAll(bag.multipleExtract(STUDENTS_ON_CLOUD));
     }
 
+    @Contract(pure = true)
     public boolean isAvailable() {
         return !studentList.isEmpty();
     }
 
+    @Contract(pure = true)
     public List<StudentColor> getStudentList() {
         return new ArrayList<>(studentList);
     }

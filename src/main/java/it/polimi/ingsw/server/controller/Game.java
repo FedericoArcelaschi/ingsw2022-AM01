@@ -15,12 +15,12 @@ import java.util.*;
 
 public class Game {
 
+    private final static Logger logger = Logger.getLogger(Game.class);
     private final Board board;
     private final Turn turn;
     private final int MAX_STUDENTS_TO_MOVE;
     private int movedStudents;
     private boolean isLastTurn = false; //FIXME: implement for Ending position, out of resources.
-    private final static Logger logger = Logger.getLogger(Game.class);
 
     public Game(GameType gameType, List<String> usernames) {
         this.board = BoardFactory.getBoard(usernames, gameType.expertMode);
@@ -31,7 +31,6 @@ public class Game {
     }
 
     public @NotNull MessageUsernameSet executeCommand(@NotNull Command command) {
-        System.out.println("Executing command...");
         return switch (command.getType()) {
             case PLAY_CARD -> playCardCommand(command);
             case MOVE_STUDENT_TO_CASTLE -> moveStudentToDiningRoomCommand(command);
@@ -49,18 +48,16 @@ public class Game {
         } catch (NotYourTurnException | IllegalArgumentException | PhaseNotRightException e) {
             return errorMessage(e, command.getUsername());
         }
-        turn.changePhase();
         return updateAll();
     }
 
     private @NotNull MessageUsernameSet moveStudentToDiningRoomCommand(@NotNull Command command) {
-        // Here for now I assume that the list of students in input is
-        // given as a single string of Color separated by commas.
-        // Needs to be changed accordingly if the convention changes.
         List<StudentColor> students = command.getStudents();
         movedStudents += students.size();
-        if (movedStudents > MAX_STUDENTS_TO_MOVE)
-           return MessageUsernameSet.of(new Error("You are trying to move too many students"), command.getUsername());
+        if (movedStudents > MAX_STUDENTS_TO_MOVE) {
+            movedStudents -= students.size();
+            return MessageUsernameSet.of(new Error("You are trying to move too many students"), command.getUsername());
+        }
         try {
             board.moveStudentsToDiningRoom(command.getUsername(), command.getStudents());
         } catch (NoSuchStudentException | TooManyStudentsException | NotYourTurnException | PhaseNotRightException e) {
@@ -80,7 +77,6 @@ public class Game {
         if (movedStudents > MAX_STUDENTS_TO_MOVE) {
             return MessageUsernameSet.of(new Error("you are trying to move too many students"), command.getUsername());
         }
-        int islandIndex = command.getIslandId() - 1;
         try {
             board.moveStudentToIsland(command.getUsername(), command.getIslandId() - 1, command.getStudents());
         } catch (NoSuchStudentException | NotYourTurnException | PhaseNotRightException e) {
@@ -106,27 +102,27 @@ public class Game {
             } catch (DrawException e) {
                 return errorMessage(e, command.getUsername());
                 //FIXME: handle game-end.
-                //Draw scenario
+                //parità?
             }
         }
-        turn.changePhase();
         return updateAll();
     }
 
     private @NotNull MessageUsernameSet chooseCloudCommand(@NotNull Command command) {
         try {
-            board.chooseCloud(command.getUsername(), command.getCloudId());
+            board.chooseCloud(command.getUsername(), command.getCloudId() - 1);
+            logger.info(board.getData(command.getUsername()));
         } catch (NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
             return errorMessage(e, command.getUsername());
         }
         if (board.isWonByResources()) {
+            logger.info("the game is ending!!");
             try {
                 return winUpdate(board.getWinner());
             } catch (DrawException e) {
-                return null;//FIXME WinUpdate
+                return null; //FIXME WinUpdate
             }
         }
-        turn.changePhase();
         return updateAll();
     }
 
@@ -162,17 +158,16 @@ public class Game {
     private @NotNull MessageUsernameSet winUpdate(@Nullable Team winner) {
         MessageUsernameSet messageUsernameSet = new MessageUsernameSet();
                 board.getCastleMap()
-                .entrySet()
-                .forEach(
-                        entry -> {
-                            if(entry.getValue().getTeam() == winner)
-                                messageUsernameSet.add(new WinUpdate(board.getData(entry.getKey()),"HEY" ), entry.getKey());
+                        .forEach((key, value) -> {
+                            if (value.getTeam() == winner)
+                                messageUsernameSet.add(new WinUpdate(board.getData(key), "HEY"), key);
                             messageUsernameSet.add(new Ping(), "PIPPO"); //FIXME
-                });
+                        });
         return messageUsernameSet;
     }
 
     private @NotNull MessageUsernameSet errorMessage(@NotNull Throwable error, @NotNull String addressee) {
+        logger.info("game command error", error);
         return MessageUsernameSet.of(new Error(error.getMessage()), addressee);
     }
 

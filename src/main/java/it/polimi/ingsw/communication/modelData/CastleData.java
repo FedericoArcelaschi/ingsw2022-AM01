@@ -59,18 +59,18 @@ public class CastleData {
                         .map(StudentColor::toUppercaseStringColored)
                 .forEach(teacher-> s.append(teacher).append(", "));
         removesComma(s);
+        s.append("\n\tStudents in waiting room: ");
+        for (StudentColor student : waitingRoom) {
+            s.append(student.toStringColored());
+            s.append(", ");
+        }
+        removesComma(s);
         s.append("\n\tStudents in dining room: ");
         for (StudentColor student : diningRoom.keySet()) {
             s.append(student.toStringColored())
                     .append(": ")
                     .append(diningRoom.get(student))
                     .append(", ");
-        }
-        removesComma(s);
-        s.append("\n\tStudents in waiting room: ");
-        for (StudentColor student : waitingRoom) {
-            s.append(student.toStringColored());
-            s.append(", ");
         }
         removesComma(s);
         if (isMyCastle) {

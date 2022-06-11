@@ -34,7 +34,7 @@ public class GameInterface {
         if (clients.getClients().stream().anyMatch(i -> (i.clientsSocket().equals(socket)) && (i.username().equals(command.getUsername())))) {
             send(game.executeCommand(command));
         } else
-            Client.send(new Error("you are in the wrong game. command-socket don't match. Quit."), socket);
+           new Client(socket).send(new Error("you are in the wrong game. userID-socket don't match. Quit."));
     }
 
     private void send(MessageUsernameSet messageUsernameSet) {

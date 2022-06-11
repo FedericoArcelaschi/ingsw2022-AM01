@@ -191,11 +191,11 @@ public class ExpertBoard extends Board {
             int thirdIslandIndex = islandsToJoin.get(2);
             newIsland
                     = new ExpertIsland(new Archipelago(  islandList.get(firstIslandIndex),
-                    islandList.get(islandsToJoin.get(1)),
-                    islandList.get(islandsToJoin.get(2))));
+                    islandList.get(secondIslandIndex),
+                    islandList.get(thirdIslandIndex)));
         } else
             throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
-        for (Integer index : islandsToJoin)
+        for (int index : islandsToJoin)
             this.islandList.remove(index);
         this.islandList.add(firstIslandIndex, newIsland);
         motherNaturePosition = firstIslandIndex;
@@ -203,14 +203,19 @@ public class ExpertBoard extends Board {
 
     @Override
     public void endOfTurn() {
+        if(turn.isLastActionTurn())
+            cloudRefill();
         playedExpertChar = null;
-        ((ExpertInfluence)influence).reset();
+        influence.reset();
         movedStudents = 0;
     }
 
-    @Override
-    public Collection<StandardCharacter> getAvailableCharacterCards() {
-        return expertCharactersCards.values();
+    public List<String> getAvailableCharactersName() {
+        return expertCharactersCards.values().stream().map(StandardCharacter::getName).toList();
+    }
+
+    public List<StandardCharacter> getAvailableCharacters() {
+        return expertCharactersCards.values().stream().toList();
     }
 
     public Team getCurrentTeam() {

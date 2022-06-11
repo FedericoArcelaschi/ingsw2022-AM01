@@ -2,6 +2,7 @@ package it.polimi.ingsw.communication.modelData.expertMode;
 
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,18 @@ public class CharacterData {
         this.description = description;
     }
 
-    @Override
-    public String toString(){
+    public String toString(CharacterUtility characterUtility){
         StringBuilder output = new StringBuilder();
-        output.append(name).append(", cost: ").append(cost);
+//        if(characterUtility.name().equals(name))
+//            output  .append("\u0033[48;2;252;233;79m")
+//                    .append(name.charAt(0))
+//                    .append(name.substring(1).toLowerCase())
+//                    .append("\u0033[0m");
+//        else
+//            output  .append(name.charAt(0))
+//                    .append(name.substring(1).toLowerCase());
+//        output  .append(", cost: ")
+//                .append(cost);
         if(students!=null){
             output.append(", students on here: ").append(students);
         }

@@ -15,6 +15,7 @@ import java.util.Map;
  * Is also useful to implement new features with inheritance
  */
 public class Influence {
+
     private Professors professorsMap;
 
     public Influence(Professors professorsMap) {
@@ -71,4 +72,7 @@ public class Influence {
             }
             return influenceMap;
         };
+
+    public void reset() {}
+
 }

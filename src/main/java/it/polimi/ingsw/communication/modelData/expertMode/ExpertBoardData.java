@@ -43,12 +43,10 @@ public class ExpertBoardData extends BoardData {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append(super.toString());
-        //Print characters
-        s.append("Characters:");
+        s.append("Available characters:");
         for (CharacterData cd : characters) {
-            s.append("\n\t").append(cd);
+            s.append("\n\t").append(cd.toString(activeChar));
         }
-        s.append("\nActive character: ").append(activeChar!=null ? activeChar.toString() : "none.");
         return s.toString();
     }
 

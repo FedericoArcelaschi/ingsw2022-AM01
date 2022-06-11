@@ -6,7 +6,6 @@ import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
 import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.GreaterTeam;
 import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -98,7 +97,7 @@ public class Board {
      * Generates the clouds based on the nPlayer
      */
     protected void setupClouds(){
-        int cloudSize = nPlayer == 3 ? CLOUD_SIZE_3_PLAYERS : CLOUD_SIZE_2_4_PLAYERS;
+        int cloudSize = (nPlayer == 3) ? CLOUD_SIZE_3_PLAYERS : CLOUD_SIZE_2_4_PLAYERS;
         for (int i = 0; i < nPlayer; i++) cloudList.add(new Cloud(bag, cloudSize));
     }
 
@@ -137,6 +136,7 @@ public class Board {
                 Card card = castle.playCard(cardID);
                 possibleMovingSteps.setInt(card.distance());
                 turn.addCard(playerID, card.priority());
+                turn.changePhase();
                 return;
             }
         throw new IllegalArgumentException("Card cannot be played." +
@@ -178,14 +178,17 @@ public class Board {
      */
     public void moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students)
             throws NoSuchStudentException, NotYourTurnException, PhaseNotRightException {
-        if (!turn.getCurrentPlayer().equals(playerID)) throw new
-                NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. " + playerID + " can't play.");
+
+        if (!turn.getCurrentPlayer().equals(playerID))
+            throw new NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. " + playerID + " can't play.");
+
         if (turn.getCurrentPhase() != TurnPhase.STUDENTS)
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
+
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
-        for (StudentColor c : students) {
-            islandList.get(islandNumber).addStudent(c);
-        }
+
+        students.forEach(color->islandList.get(islandNumber).addStudent(color));
+
     }
 
 
@@ -197,13 +200,19 @@ public class Board {
      * @param steps number of steps forward of mother nature
      */
     public void moveMotherNature(int steps) throws PhaseNotRightException {
+
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
             throw new PhaseNotRightException("You can't move mother nature in this stage of the game. Current phase is " + turn.getCurrentPhase().toString());
-        if (steps > possibleMovingSteps.getInt())
+
+        if (steps > possibleMovingSteps.getInt() || steps < 1)
             throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.getInt());
-        if ((motherNaturePosition + steps) > (islandList.size() - 1)) motherNaturePosition += steps - islandList.size();
-        else motherNaturePosition += steps;
+
+        if ((motherNaturePosition + steps) >= (islandList.size()))
+            motherNaturePosition += steps - islandList.size();
+        else
+            motherNaturePosition += steps;
         conquerIsland(motherNaturePosition);
+        turn.changePhase();
     }
 
     /**
@@ -214,9 +223,9 @@ public class Board {
         Island island = islandList.remove(islandIndex);
         Team teamBeforeComputing = island.getOwnership();
         Team t = GreaterTeam.findGreaterTeam(influence.getInfluenceMap(island));
-        if (t == null || t == teamBeforeComputing) return;
         islandList.add(islandIndex, island.setOwnership(t));
-        checkJoinIsland(islandIndex);
+        if (t != null && t != teamBeforeComputing)
+            checkJoinIsland(islandIndex);
     }
 
     /**
@@ -283,24 +292,30 @@ public class Board {
     /**
      * Moves students from the selected cloud to the waiting room of the current player.
      * @param PlayerID the id of the player that ask for this move
-     * @param cloudID the cloud that is chosen
+     * @param cloudID  0<=cloudID<nPlayers
      */
     public void chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
-        if(turn.getCurrentPhase()!=TurnPhase.CLOUD)
+        if(turn.getCurrentPhase() != TurnPhase.CLOUD)
             throw new PhaseNotRightException("You can't use this command in this stage of the game.");
         if(!turn.getCurrentPlayer().equals(PlayerID))
-            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. " + PlayerID + " can't choose a cloud.");
+            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. You can't choose a cloud.");
+        if(cloudID < 0 || cloudID >= nPlayer)
+            throw new IllegalArgumentException("Illegal cloudId number. Please, insert a number between 1 and " + nPlayer);
+        if(!cloudList.get(cloudID).isAvailable())
+            throw new IllegalArgumentException("This cloud is no longer available.");
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
         castle.addStudentsInWaitingRoom(cloud.choose());
         endOfTurn();
+        turn.changePhase();
     }
 
     /**
      * Resets the students that can be moved
      */
     public void endOfTurn() {
-        movedStudents = 0;
+        if(turn.isLastActionTurn())
+            cloudRefill();
     }
 
     /**
@@ -316,7 +331,7 @@ public class Board {
      * Checks if there are no more cards.
      * @return number of cards left.
      */
-    @SuppressWarnings("RedundantSuppression")
+    @SuppressWarnings("UnnecessaryLocalVariable")
     private int remainingCards(){
         Castle currPlayerCastle = getCastle(getCurrentPlayer());
         int cardsLeft = (int) currPlayerCastle.getDeck().stream().filter(Card::isAvailable).count();
@@ -402,7 +417,7 @@ public class Board {
         throw new WrongGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
     }
 
-    public Collection<StandardCharacter> getAvailableCharacterCards() throws WrongGameModeException {
+    public List<String> getAvailableCharacterName() throws WrongGameModeException {
         throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 
@@ -453,5 +468,9 @@ public class Board {
 
     public CharacterUtility getPlayedExpertChar() throws WrongGameModeException {
         throw new WrongGameModeException("You can't use this command in this gamemode.");
+    }
+
+    public int getPossibleMovingSteps() {
+        return possibleMovingSteps.getInt();
     }
 }

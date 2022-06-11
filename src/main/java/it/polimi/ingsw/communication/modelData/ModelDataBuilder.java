@@ -41,7 +41,7 @@ public abstract class ModelDataBuilder {
                         .map(key -> newExpertCastleData(key, board.getCastle(key), false, board.placedTowers(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn()),
-                board.getAvailableCharacterCards().stream().map(ModelDataBuilder::newCharacterData).toList(),
+                board.getAvailableCharacters().stream().map(ModelDataBuilder::newCharacterData).toList(),
                 board.getPlayedExpertChar()
         );
     }

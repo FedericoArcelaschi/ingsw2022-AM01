@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
  */
 public class HeartBeatServer implements Runnable {
 
-    private final static Logger logger = LogManager.getLogger(HeartBeatServer.class); //.getName?
+    private final static Logger logger = LogManager.getLogger(HeartBeatServer.class);
 
     private final int TIMEOUT = 5000; // [ms]
     private final Set<Socket> clients = new HashSet<>();
@@ -34,7 +34,7 @@ public class HeartBeatServer implements Runnable {
      * @param socket the key in the Heartbeat server
      */
     public synchronized void validateResponse(Socket socket) {
-       // logger.info("client @ port " + socket.getPort() + "sent a ping validation.");
+        // logger.info("client @ port " + socket.getPort() + "sent a ping validation.");
         if (heartBeats.contains(socket)) {
             heartBeats.remove(socket);
             logger.info("Ping received. Pinging back...");
