@@ -123,15 +123,16 @@ public class Command {
 
     @Override
     public String toString() {
-        return "Command{" +
-                "type=" + type +
-                ", username='" + username + '\'' +
-                ", motherNaturePositionShift=" + motherNaturePositionShift +
-                ", cardId=" + cardId +
-                ", students=" + students +
-                ", islandId=" + islandId +
-                ", charName='" + CharacterUtility.getChar(charId) + '\'' +
-                ", cloudId=" + cloudId +
-                "}";
+        return new StringBuilder()
+                .append("Command{")
+                .append("type=").append(type)
+                .append(", username='").append(username).append('\'')
+                .append(", motherNaturePositionShift=").append(motherNaturePositionShift)
+                .append(", cardId=").append(cardId)
+                .append(", students=").append(students)
+                .append(", islandId=").append(islandId)
+                .append(", charName='").append(charId != 0 ? CharacterUtility.getChar(charId) : "null").append('\'')
+                .append(", cloudId=").append(cloudId)
+                .append("}").toString();
     }
 }
