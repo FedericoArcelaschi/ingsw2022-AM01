@@ -50,17 +50,19 @@ public class LobbyManager {
         Socket socket = client.clientsSocket();
         client.setUsername(preferences.username());
         logger.info("client on port" + socket.getPort());
-        logger.info(preferences.username() + " << joined the lobby. connected clients in lobby: " + getSumClientsInLobby());
+        logger.info("\t" + preferences.username() + " << joined the lobby. connected clients in lobby: " + getSumClientsInLobby());
         clientsToInform.remove(socket);
         ClientList oldClientList = gameClientsMap.get(preferences.getGameType());
         gameClientsMap.replace(
                 preferences.getGameType(),
                 oldClientList.add(client));
-
         submitGame(preferences.getGameType());
         informPlayers();
     }
 
+    public int countGames(GameType type) {
+        return this.gameManager.countGames(type);
+    }
 
     /**
      * Sends to all the players in the lobby an updated
@@ -77,7 +79,7 @@ public class LobbyManager {
      * Computes the game type according to the player's preferences, if there are enough players.
      * Returns null otherwise.
      */
-    public void submitGame(@NotNull GameType type) {
+    private void submitGame(@NotNull GameType type) {
         if(gameClientsMap.get(type).getClients().size() == type.nPlayer) {
             logger.info("Server: created " + (type.expertMode ? "expert" : "normal") + " game " + gameManager.countGames(type) + " with players: " + gameClientsMap.get(type).getClients().stream().map(Client::username).toList());
             gameManager.createGame(type, gameClientsMap.get(type));
@@ -106,10 +108,6 @@ public class LobbyManager {
             gameTypeUsernameMap.put(g, clients);
         }
         return new LobbyInfo(gameTypeUsernameMap, gameManager.getActiveGames());
-    }
-
-    public int countGames(GameType type) {
-        return this.gameManager.countGames(type);
     }
 
     private int getSumClientsInLobby() {

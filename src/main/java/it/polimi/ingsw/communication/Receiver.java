@@ -13,7 +13,7 @@ import java.net.Socket;
 /**
  * Receives messages from a socket.
  */
-public abstract class Receiver implements Runnable{
+public abstract class Receiver implements Runnable {
     protected final Socket socket;
     protected final BufferedReader in;
     protected final PrintWriter out;

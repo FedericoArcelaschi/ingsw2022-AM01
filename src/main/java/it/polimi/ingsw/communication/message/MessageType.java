@@ -13,7 +13,6 @@ public enum MessageType {
     LOBBYINFO(LobbyInfo.class),
     COMMAND(CommandMessage.class),
     UPDATE(Update.class),
-    CHARINFO(CharInfo.class),
     ERROR(Error.class),
     END(EndGame.class);
 

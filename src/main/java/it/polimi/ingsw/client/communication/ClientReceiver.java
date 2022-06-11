@@ -42,7 +42,11 @@ public class ClientReceiver extends Receiver {
                 System.out.println("\r");
                 userInterface.printLobby(lobbyInfoMessage);
             }
-            case END -> cm.setState(ClientState.GAME_ENDED);
+            case END -> {
+                Error error = (Error) message;
+                System.err.println(error.getMessage());
+                cm.setState(ClientState.GAME_ENDED);
+            }
 
             case ERROR -> {
                 Error error = (Error) message;

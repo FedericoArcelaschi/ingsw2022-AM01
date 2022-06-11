@@ -44,7 +44,7 @@ public class Cli implements UserInterface {
 
     @Override
     public void draw (BoardData boardData) {
-        System.out.println("\r" + boardData.toString());
+        System.out.println(boardData.toString());
     }
 
     /**
@@ -58,8 +58,9 @@ public class Cli implements UserInterface {
 
     @Override
     public void printError(String error) {
-        System.err.println("new error received from server:\n\t" + error);
+        System.err.println(error);
     }
+
     /**
      * Before opening the connection with the server the client requires to insert the preferences.
      */

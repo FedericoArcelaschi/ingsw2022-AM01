@@ -38,12 +38,12 @@ public final class Client {
     }
 
     public void send(Message message) {
-        logger.debug("client " + username + " sending data. (" + message.getType() + ").");
+        logger.info("client " + username + " sending data. (" + message.getType() + ").");
         OutputStream outputStream;
         try {
             outputStream = clientsSocket.getOutputStream();
         } catch (IOException e) {
-            logger.warn("client " + this + " failed opening the output stream", e);
+            logger.info("client " + this + " failed opening the output stream", e);
             return;
         }
         PrintWriter out = new PrintWriter(outputStream, true);

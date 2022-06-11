@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  */
 public class GameInterface {
 
-    private static Logger logger = LogManager.getLogger(GameInterface.class);
+    private static final Logger logger = LogManager.getLogger(GameInterface.class);
 
     private final Game game;
     private final ClientList clients;
@@ -24,10 +24,10 @@ public class GameInterface {
     public GameInterface(GameType gameType, ClientList clients) {
         logger.info(this + ": creating a new instance with players: " + clients.getClients().stream().map(Client::username).toList());
         logger.info("sockets are: " + clients.getClients().stream().map(Client::clientsSocket).toList());
-        this.clients = new ClientList(clients);
-        this.game = new Game(gameType, clients.getClients().stream().map(Client::username).toList());
+        this.game       = new Game(gameType, clients.getClients().stream().map(Client::username).toList());
+        this.clients    = new ClientList(clients);
+        this.gameType   = gameType;
         send(game.updateAll());
-        this.gameType = gameType;
     }
 
     public void executeCommand(Command command, Socket socket) {

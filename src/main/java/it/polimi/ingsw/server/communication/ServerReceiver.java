@@ -28,16 +28,17 @@ public class ServerReceiver extends Receiver {
     }
 
     @Override
-    protected synchronized void messageSwitch(Message message) {
+    protected void messageSwitch(Message message) {
         if(message.getType() != MessageType.PING)
             logger.info("Server received message: " + message.getType());
         switch (message.getType()) {
-            case PING -> hbs.validateResponse(socket);
+            case PING ->
+                    hbs.validateResponse(socket);
             case COMMAND -> {
-                CommandMessage commandMessage = (CommandMessage) message;
-                System.out.println(commandMessage);
-                Command command = commandMessage.getCommand();
-                client.executeCommand(command, socket);
+                    CommandMessage commandMessage = (CommandMessage) message;
+                    System.out.println(commandMessage);
+                    Command command = commandMessage.getCommand();
+                    client.executeCommand(command, socket);
             }
             case END -> {/*TODO: the serverReceiver received the end message from the server and sent back an acknowledgment.*/}
             case ERROR -> {/*TODO: the serverReceiver received the error message from the server and sent back an acknowledgment.*/}
