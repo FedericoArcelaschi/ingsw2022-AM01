@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class ExpertBoard extends Board {
-    private Tavern tavern;
+
     private Map<CharacterUtility, StandardCharacter> expertCharactersCards;
     private CharacterUtility playedExpertChar = null;
 
@@ -63,7 +63,7 @@ public class ExpertBoard extends Board {
      * Initializes <code>expertCharactersCards</code>. It's a factory method
      */
     private void drawExpertCharacters() {
-        tavern = new Tavern(bag);
+        Tavern tavern = new Tavern(bag);
         expertCharactersCards = tavern.extract();
     }
 

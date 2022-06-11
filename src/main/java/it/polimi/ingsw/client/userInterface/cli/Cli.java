@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
+import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.startUp.Outputs;
 
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Cli implements UserInterface {
+
     String username;
     int nPlayer;
     Boolean expertMode;
@@ -42,16 +44,21 @@ public class Cli implements UserInterface {
 
     @Override
     public void draw (BoardData boardData) {
-        System.out.println(boardData.toString());
+        System.out.println("\r" + boardData.toString());
     }
 
     /**
      * Method to handle the LobbyInfoMessages.
      */
     @Override
-    public void printWaitingRoom(LobbyInfo lobbyInfo) {
+    public void printLobby(LobbyInfo lobbyInfo) {
         //TODO: print a nicer view of the lobby
         System.out.println(lobbyInfo);
+    }
+
+    @Override
+    public void printError(String error) {
+        System.err.println("new error received from server:\n\t" + error);
     }
     /**
      * Before opening the connection with the server the client requires to insert the preferences.

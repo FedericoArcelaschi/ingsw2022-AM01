@@ -16,19 +16,22 @@ public class ServerMain implements Runnable {
     private static Logger logger = LogManager.getLogger(ServerMain.class); //.getName?
 
     private int port;
-    private final ExecutorService executor;
+    private final int DEFAULT_PORT = 12345;
+    private final ExecutorService executor = Executors.newCachedThreadPool();
     private @NotNull ServerSocket serverSocket;
     private HeartBeatServer heartBeatServer;
-    private final LobbyManager lobbyManager;
+    private final LobbyManager lobbyManager = new LobbyManager();
     private int gameId = 0;
     private int connectedPlayer = 0;
 
 
 
+    public ServerMain() {
+        this.port = DEFAULT_PORT;
+    }
+
     public ServerMain(int port) {
         this.port = port;
-        this.lobbyManager = new LobbyManager();
-        executor = Executors.newCachedThreadPool();
     }
 
     public void run() {

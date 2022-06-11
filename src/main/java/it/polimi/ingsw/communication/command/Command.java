@@ -24,22 +24,25 @@ public class Command {
     public Command(String username, CommandType type, List<String> attributes) {
         this.type = type;
         this.username = username;
-        if (attributes.size() < 1)
-            throw new IllegalArgumentException(" needed X arguments. actual: 0");
         switch (type) {
             case PLAY_CARD -> cardId = Integer.parseInt(attributes.get(0).strip());
             //e.g.: playcard 1
+
             case MOVE_STUDENT_TO_CASTLE -> students = attributes.stream().map(StudentColor::getColor).toList();
             //e.g.: moveStudentCastle Green, Blue, Pink
+
             case MOVE_STUDENT_TO_ISLAND -> {
                 islandId = Integer.parseInt(attributes.get(0).strip());
                 students = attributes.subList(1, attributes.size()).stream().map(StudentColor::getColor).toList();
             }
             //e.g.: moveStudentIsland 4, green, blue, pink
+
             case MOVE_MOTHER_NATURE -> motherNaturePositionShift = Integer.parseInt(attributes.get(0).strip());
             //e.g.: moveMotherNature 1
+
             case CHOOSE_CLOUD -> cloudId = Integer.parseInt(attributes.get(0).strip());
             //e.g.: cloud 1
+
             case PAY_CHARACTER -> {
                 charId = CharacterUtility.getChar(attributes.get(0).strip()).getId();
                 if(isInteger(attributes.get(1)) && attributes.size()==2){  //If there is only a number as parameter and nothing else
@@ -67,6 +70,8 @@ public class Command {
         CommandType commandType = getCommandType(splitCommand[0]);
         List<String> commandAttributes = new ArrayList<>(Arrays.stream(splitCommand).toList());
         commandAttributes.remove(0);
+        if (commandAttributes.size() < 1)
+            throw new IllegalArgumentException("put a valid command. help to get more information.");
         return new Command(
                 username,
                 commandType,

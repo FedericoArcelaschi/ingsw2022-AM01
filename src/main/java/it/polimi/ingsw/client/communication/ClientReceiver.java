@@ -1,10 +1,12 @@
 package it.polimi.ingsw.client.communication;
 
+
+import it.polimi.ingsw.client.ClientState;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.Receiver;
-import it.polimi.ingsw.communication.message.Message;
-import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.communication.message.subclasses.*;
+import it.polimi.ingsw.communication.message.subclasses.Error;
+import it.polimi.ingsw.communication.message.Message;
 
 import java.net.Socket;
 
@@ -21,7 +23,7 @@ public class ClientReceiver extends Receiver {
         this.userInterface = userInterface;
     }
 
-    protected synchronized void messageSwitch(Message message) {
+    protected void messageSwitch(Message message) {
         switch (message.getType()) {
             case PING -> {
                 out.println(new Ping().toJson());
@@ -37,13 +39,14 @@ public class ClientReceiver extends Receiver {
             case LOBBYINFO -> {
                 System.out.println(CLEAR_SCREEN);
                 LobbyInfo lobbyInfoMessage = (LobbyInfo) message;
-                userInterface.printWaitingRoom(lobbyInfoMessage);
+                System.out.println("\r");
+                userInterface.printLobby(lobbyInfoMessage);
             }
             case END -> cm.setState(ClientState.GAME_ENDED);
 
             case ERROR -> {
                 Error error = (Error) message;
-                System.err.println("new error received: " + error.getMessage());
+                userInterface.printError(error.getMessage());
                 //IDEA: cm.setState(error.getState());
                 //IDEA: UserInterface.handleError(error.getMessage());
             }

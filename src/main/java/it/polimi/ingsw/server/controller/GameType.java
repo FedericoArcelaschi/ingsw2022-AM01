@@ -26,6 +26,6 @@ public enum GameType {
 
     @Override
     public String toString() {
-        return super.toString();
+        return nPlayer +" players, " + (expertMode ? "expert-mode" : "normal-mode");
     }
 }

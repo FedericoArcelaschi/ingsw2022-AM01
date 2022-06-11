@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.communication;
+package it.polimi.ingsw.client;
 
 public enum ClientState {
     NOT_CONNECTED,

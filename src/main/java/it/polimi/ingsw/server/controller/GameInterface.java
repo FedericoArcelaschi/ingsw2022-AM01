@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.Socket;
+import java.util.stream.Collectors;
 
 /**
  * class to adapt the communication layer to the controller.
@@ -39,11 +40,15 @@ public class GameInterface {
 
     private void send(MessageUsernameSet messageUsernameSet) {
         logger.info(this + " is sending an update to the clients.");
+        logger.info("clients: " + clients.getClients().stream().map(Client::clientsSocket).collect(Collectors.toSet()));
+        logger.info("message:\n\t" + messageUsernameSet.values().stream().findAny().get().message());
         messageUsernameSet.values()
-                .forEach(messageUsername ->
-                clients.getClients().stream()
-                .filter(i -> i.username().equals(messageUsername.addressee()))
-                .forEach(client -> client.send(messageUsername.message())));
+                .forEach(
+                    messageUsername ->
+                        {clients.getClients().stream()
+                         .filter(i -> i.username().equals(messageUsername.addressee()))
+                         .forEach(client -> client.send(messageUsername.message()));}
+                );
     }
 
     public GameType getGameType() {

@@ -1,55 +1,42 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
+import it.polimi.ingsw.communication.command.Command;
+import it.polimi.ingsw.communication.command.CommandType;
 import it.polimi.ingsw.communication.modelData.BoardData;
-import it.polimi.ingsw.communication.modelData.CastleData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Consumer;
 
 public class GamePaneController {
-    @FXML private Pane turnPane;
-    @FXML private Pane greenDRPane, redDRPane, blueDRPane, yellowDRPane, pinkDRPane, waitingRoomPane;
-    @FXML private HBox cardsHBox, islandRow1, islandRow2, cloudRow;
+    @FXML public BorderPane castlePane0;
+    @FXML public FlowPane castleTabHBox, characterPane, cardsFlowPane;
+    @FXML public Pane turnPane;
+    @FXML private Pane waitingRoomPane;
+    @FXML private StackPane cloudStackPane;
+    @FXML private HBox islandRow1, islandRow2;
+    @FXML private Tab characterTab;
     private ToggleGroup waitingRoomToggleGroup;
-    private Map<StudentColor ,ToggleGroup> waitingRoomMap;
-    public void initialize() {
+    private Consumer<Command> send;
+    private String username;
+    private BoardData boardData;
+    public void initialize(Consumer<Command> send) {
         waitingRoomToggleGroup = new ToggleGroup();
-        ToggleGroup greenDiningRoomToggleGroup = new ToggleGroup();
-        ToggleGroup redDiningRoomToggleGroup = new ToggleGroup();
-        ToggleGroup pinkDiningRoomToggleGroup = new ToggleGroup();
-        ToggleGroup blueDiningRoomToggleGroup = new ToggleGroup();
-        ToggleGroup yellowDiningRoomToggleGroup = new ToggleGroup();
-        waitingRoomMap = new HashMap<>();
-
         setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
-
-        setToggleGroup(redDiningRoomToggleGroup, redDRPane.getChildren());
-        setToggleGroup(greenDiningRoomToggleGroup, greenDRPane.getChildren());
-        setToggleGroup(yellowDiningRoomToggleGroup, yellowDRPane.getChildren());
-        setToggleGroup(pinkDiningRoomToggleGroup, pinkDRPane.getChildren());
-        setToggleGroup(blueDiningRoomToggleGroup, blueDRPane.getChildren());
-
-        waitingRoomMap.put(StudentColor.GREEN, greenDiningRoomToggleGroup);
-        waitingRoomMap.put(StudentColor.BLUE, blueDiningRoomToggleGroup);
-        waitingRoomMap.put(StudentColor.RED, redDiningRoomToggleGroup);
-        waitingRoomMap.put(StudentColor.PINK, pinkDiningRoomToggleGroup);
-        waitingRoomMap.put(StudentColor.YELLOW, yellowDiningRoomToggleGroup);
-
-        for (int i=0; i<10; ++i) {
-            Node node = cardsHBox.getChildren().get(i);
-            Pane pane = (Pane) node;
-            pane.getStyleClass().add("cardAssistant" + (i+1));
-        }
+        this.send = send;
     }
 
     private void setToggleGroup(ToggleGroup toggleGroup, ObservableList<Node> children) {
@@ -60,33 +47,90 @@ public class GamePaneController {
     }
 
     public void draw(BoardData boardData) {
-        drawCastle(boardData.myCastle());
-    }
-    
-    private void drawCastle(CastleData castleData) {
-        drawWaitingRoom(castleData.waitingRoom());
-        //drawDiningRoom(castleData.getDiningRoom());
+        this.username = boardData.username();
+        this.boardData = boardData;
+
+        GuiDrawer guiDrawer = new GuiDrawer();
+        guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
+        guiDrawer.drawClouds(boardData.cloudList(), cloudStackPane);
+        guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2);
+        guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
+        guiDrawer.drawCharacters(boardData.characters(), characterPane, characterTab);
+        guiDrawer.drawTurn(boardData.turn(), turnPane);
     }
 
-    private void drawWaitingRoom(List<StudentColor> waitingRoom) {
-        for (int i = 0; i < waitingRoom.size(); i++) {
-            setStudentButtonColor((ToggleButton) waitingRoomToggleGroup.getToggles().get(i), waitingRoom.get(i));
-        }
-    }
-
-    private void drawDiningRoom(Map<StudentColor, Integer> studentColorIntegerMap) {
-        for (StudentColor color: StudentColor.values()) {
-            for (int i = 0; i < 5; i++) {
-                setStudentButtonColor((ToggleButton) waitingRoomMap.get(color).getToggles().get(i), color);
-            }
-        }
-    }
-
-    private void setStudentButtonColor(ToggleButton button, StudentColor studentColor) {
-        button.getStyleClass().add(studentColor.getStudentCSS());
+    public void printError(String error){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(error);
+        alert.show();
     }
 
     public void moveStudentToDiningRoom(MouseEvent mouseEvent) {
-        //TODO: create and send command of move student
+        ToggleButton selected = (ToggleButton) waitingRoomToggleGroup.getSelectedToggle();
+        if(selected == null)
+            return;
+        StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
+        List<String> parameters = new ArrayList<>();
+        parameters.add(studentColor.name());
+        Command command = new Command(username, CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
+        System.out.println(command);
+        send.accept(command);
+    }
+
+    public void moveStudentToIsland(MouseEvent mouseEvent) {
+        if (boardData.turn().currentPhase() == TurnPhase.STUDENTS) {
+            ToggleButton selected = (ToggleButton) waitingRoomToggleGroup.getSelectedToggle();
+            if (selected == null)
+                return;
+            StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
+            Pane island = (Pane) mouseEvent.getTarget();
+            List<String> parameters = new ArrayList<>();
+            parameters.add(island.getAccessibleText());
+            parameters.add(studentColor.name());
+            Command command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
+            System.out.println(command);
+            send.accept(command);
+        } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
+            Pane island = (Pane) mouseEvent.getTarget();
+            List<String> parameters = new ArrayList<>();
+            parameters.add(island.getAccessibleText());
+            Command command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
+            System.out.println(command);
+            send.accept(command);
+        }
+    }
+
+    public void chooseCloud(MouseEvent mouseEvent) {
+        int cloudId;
+        //take cloud id from accessibleText
+        String accessibleText = ((Pane) mouseEvent.getTarget()).getAccessibleText();
+        cloudId = Integer.parseInt(accessibleText.substring(accessibleText.length()-1));
+        List<String> parameters = new ArrayList<>();
+        parameters.add(String.valueOf(cloudId));
+        Command command = new Command(username, CommandType.CHOOSE_CLOUD, parameters);
+        System.out.println(command);
+        send.accept(command);
+    }
+
+    public void playCard(MouseEvent mouseEvent) {
+        int cardId;
+        //take card id from accessibleText
+        String accessibleText = ((Pane) mouseEvent.getTarget()).getAccessibleText();
+        cardId = Integer.parseInt(accessibleText.substring(accessibleText.length()-1));
+        //if cardId is 0 replace it with 10
+        cardId = cardId == 0 ? 10 : cardId;
+        List<String> parameters = new ArrayList<>();
+        parameters.add(String.valueOf(cardId));
+        Command command = new Command(username, CommandType.PLAY_CARD, parameters);
+        System.out.println(command);
+        send.accept(command);
+    }
+
+    public void payCharacter(MouseEvent mouseEvent) {
+        Pane character = (Pane) mouseEvent.getTarget();
+        List<String> parameters = new ArrayList<>();
+        parameters.add(character.getAccessibleText());
+        Command command = new Command(username, CommandType.PAY_CHARACTER, parameters);
+        System.out.println(command);
     }
 }

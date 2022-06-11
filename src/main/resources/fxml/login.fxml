@@ -34,7 +34,7 @@
             <Label fx:id="ipLabel" layoutX="90" layoutY="180" text="IP:" />
             <TextField fx:id="ipTextField" layoutX="90" layoutY="195" promptText="127.0.0.1" />
             <Label fx:id="portLabel" layoutX="88" layoutY="230" text="Port:" />
-            <TextField fx:id="portTextField" layoutX="90" layoutY="245" promptText="1234" />
+            <TextField fx:id="portTextField" layoutX="90" layoutY="245" promptText="12345" />
          </children>
       </Pane>
       <Button fx:id="submitButton" layoutX="530" layoutY="460" mnemonicParsing="false" onAction="#submitPreferences" text="Submit" />

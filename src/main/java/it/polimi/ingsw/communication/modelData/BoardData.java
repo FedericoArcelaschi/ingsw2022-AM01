@@ -2,10 +2,8 @@ package it.polimi.ingsw.communication.modelData;
 
 import com.google.gson.annotations.JsonAdapter;
 
-import com.google.gson.annotations.JsonAdapter;
-import it.polimi.ingsw.communication.modelData.BoardDataAdapter;
-
-import com.google.gson.annotations.JsonAdapter;
+import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
 import java.util.List;
 import java.util.Objects;
@@ -114,10 +112,13 @@ public class BoardData {
         return turn;
     }
 
+    public List<CharacterData> characters() { return null;}
+
     @Override
     public int hashCode() {
         return Objects.hash(username, nPlayer, motherNaturePosition, cloudList, islandList, myCastle, otherCastles, turn);
     }
 
 
+    public CharacterUtility activeChar() { return null;}
 }

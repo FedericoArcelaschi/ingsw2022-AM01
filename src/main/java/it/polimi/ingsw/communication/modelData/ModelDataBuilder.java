@@ -5,8 +5,8 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertCastleData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
-import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 
 import java.util.*;
@@ -29,6 +29,8 @@ public abstract class ModelDataBuilder {
     }
 
     public static ExpertBoardData newExpertBoardData(ExpertBoard board, String username) {
+        //TODO: this null is awful to look at. For now it works; find a better way regardless.
+        //TODO: newExpertIslandData and newExpertCastleData return base game castles and islands... needs a fix
         return new ExpertBoardData(
                 username,
                 board.getCloudList().size(),
@@ -47,7 +49,7 @@ public abstract class ModelDataBuilder {
     }
 
     private static CharacterData newCharacterData(StandardCharacter character){
-        return new CharacterData(character.getName(), character.getCost(), character.getAvailableStudents(), character.getExplanation());
+        return new CharacterData(character.getName(), character.getCost(), Optional.of(character.getAvailableStudents()), character.getExplanation());
     }
 
     private static CloudData newCloudData(Cloud cloud) {

@@ -1,6 +1,9 @@
 package it.polimi.ingsw.client.communication;
 
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
+import it.polimi.ingsw.client.ClientState;
+import it.polimi.ingsw.communication.command.Command;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.CommandMessage;
 import it.polimi.ingsw.startUp.Outputs;
@@ -67,13 +70,19 @@ public class ClientMain {
             CommandMessage commandMessage;
             try {
                 commandMessage = new CommandMessage(username, stringCommand);
-            }catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 System.err.println(e.getMessage());
                 return;
             }
             clientSender.send(commandMessage);
-            System.out.println("command sent");
         }
+    }
+
+    public void runCommand(Command command){
+        CommandMessage commandMessage;
+        commandMessage = new CommandMessage(command);
+        clientSender.send(commandMessage);
+        System.out.println("command sent");
     }
 
     public String getUsername() {
