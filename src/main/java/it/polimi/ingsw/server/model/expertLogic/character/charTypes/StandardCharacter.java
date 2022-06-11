@@ -56,9 +56,10 @@ public class StandardCharacter {
         return character.name();
     }
 
-    public List<StudentColor> getAvailableStudents(){
+    public List<StudentColor> getAvailableStudents() {
         return null;
     }
+
     public int getCost() {
         return cost;
     }

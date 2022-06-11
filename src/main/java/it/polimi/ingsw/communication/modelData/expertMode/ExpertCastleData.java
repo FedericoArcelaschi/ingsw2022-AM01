@@ -19,7 +19,8 @@ public class ExpertCastleData extends CastleData {
                             Team towerColor,
                             int nTower,
                             Map<StudentColor, Team> teachers,
-                            boolean isMyCastle, int coins) {
+                            boolean isMyCastle,
+                            Integer coins) {
         super(username, waitingRoom, diningRoom, deck, lastPlayedCard, towerColor, nTower, teachers, isMyCastle);
         this.coins = coins;
     }

@@ -50,7 +50,7 @@ public class BoardData {
         //Print cloud
         s.append("\n\nClouds: ");
         for (int i = 0; i < cloudList.size(); i++)
-        s.append("\n\tCloud ")
+             s  .append("\n\tCloud ")
                 .append(i + 1)
                 .append(" contains: ")
                 .append(cloudList.get(i));
@@ -113,12 +113,6 @@ public class BoardData {
     }
 
     public List<CharacterData> characters() { return null;}
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(username, nPlayer, motherNaturePosition, cloudList, islandList, myCastle, otherCastles, turn);
-    }
-
 
     public CharacterUtility activeChar() { return null;}
 }

@@ -14,7 +14,7 @@ public class Main {
         System.out.println(Outputs.CLEAR_SCREEN);
         System.out.println(Outputs.START);
         int ScreenSize = 0; // = System.getProperty("screenSize");
-        //FIXME Outputs.getTitle(ScreenSize);
+        Outputs.getTitle(ScreenSize);
         switch (getUserType(args)) {
             case SERVER -> new ServerMain().run();
             case CLI -> new Cli();

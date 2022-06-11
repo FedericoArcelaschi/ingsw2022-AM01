@@ -451,10 +451,6 @@ public class Board {
         return motherNaturePosition;
     }
 
-    public Bag getBag() {
-        return new Bag(bag);
-    }
-
     public Turn getTurn() {
         return turn;
     }

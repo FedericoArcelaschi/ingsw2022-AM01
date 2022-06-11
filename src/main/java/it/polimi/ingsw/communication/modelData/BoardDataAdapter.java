@@ -25,9 +25,9 @@ public class BoardDataAdapter implements JsonSerializer<BoardData>, JsonDeserial
         wrapper.add("myCastle", context.serialize(src.myCastle()));
         wrapper.add("otherCastles", context.serialize(src.otherCastles()));
         wrapper.add("turn", context.serialize(src.turn()));
-        if (src instanceof ExpertBoardData) {
-            wrapper.add("characters", context.serialize(((ExpertBoardData) src).characters()));
-            wrapper.add("activeChar", context.serialize(((ExpertBoardData) src).activeChar()));
+        if (src instanceof ExpertBoardData ebd) {
+            wrapper.add("characters", context.serialize(ebd.characters()));
+            wrapper.add("activeChar", context.serialize(ebd.activeChar()));
         }
         return wrapper;
     }

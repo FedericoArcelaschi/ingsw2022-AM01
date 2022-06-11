@@ -14,9 +14,6 @@ import java.io.InputStreamReader;
 
 public class Cli implements UserInterface {
 
-    String username;
-    int nPlayer;
-    Boolean expertMode;
     final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public Cli() {
@@ -69,9 +66,9 @@ public class Cli implements UserInterface {
         int nPlayer;
         Boolean expertMode;
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String query = "Enter username:";
+        String username;
         try {
-            String query
-                    = "Enter username:";
             do{
                 System.out.println(query);
                 username = br.readLine();

@@ -1,19 +1,11 @@
 package it.polimi.ingsw.server.communication;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.HashSet;
 import java.util.Set;
 
 public class ClientList {
 
     private final Set<Client> clients;
-
-    public ClientList(Client client) {
-        clients = new HashSet<>();
-        clients.add(client);
-    }
 
     public ClientList() {
         clients = new HashSet<>();

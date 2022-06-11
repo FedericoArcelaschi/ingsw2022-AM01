@@ -29,8 +29,6 @@ public abstract class ModelDataBuilder {
     }
 
     public static ExpertBoardData newExpertBoardData(ExpertBoard board, String username) {
-        //TODO: this null is awful to look at. For now it works; find a better way regardless.
-        //TODO: newExpertIslandData and newExpertCastleData return base game castles and islands... needs a fix
         return new ExpertBoardData(
                 username,
                 board.getCloudList().size(),
@@ -49,7 +47,7 @@ public abstract class ModelDataBuilder {
     }
 
     private static CharacterData newCharacterData(StandardCharacter character){
-        return new CharacterData(character.getName(), character.getCost(), Optional.of(character.getAvailableStudents()), character.getExplanation());
+        return new CharacterData(character.getName(), character.getCost(), Optional.ofNullable(character.getAvailableStudents()), character.getExplanation());
     }
 
     private static CloudData newCloudData(Cloud cloud) {
@@ -65,6 +63,7 @@ public abstract class ModelDataBuilder {
         try{
             blocked = island.isBlocked();
         } catch (WrongGameModeException e) {
+            System.err.println("In ExpertIsland data factory, " + e.getMessage());
             e.printStackTrace();
         }
         return new ExpertIslandData(island.getOwnership(), island.getStudents(), island.getIslandNumber(), Boolean.TRUE.equals(blocked));
@@ -108,6 +107,6 @@ public abstract class ModelDataBuilder {
     }
 
     private static TurnData newTurnData(Turn t){
-        return new TurnData(t.getSittingOrder(), t.getActionOrder(), t.getCurrentPhase(), t.getCurrentPlayer());
+        return new TurnData(t.getSittingOrder(), t.getActionOrder(), t.getCurrentPhase(), t.getCurrentPlayer()); //FIXME
     }
 }

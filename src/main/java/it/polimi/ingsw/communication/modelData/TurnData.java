@@ -33,6 +33,7 @@ public final class TurnData {
                 s.append(player).append(", ");
             }
         }
+        removesComma(s);
         s.append("\n\tCurrent Player: ").append(currentPlayer);
         return s.toString();
     }
@@ -62,6 +63,10 @@ public final class TurnData {
                 Objects.equals(this.actionOrder, that.actionOrder) &&
                 Objects.equals(this.currentPhase, that.currentPhase) &&
                 Objects.equals(this.currentPlayer, that.currentPlayer);
+    }
+
+    private void removesComma(StringBuilder s) {
+        s.replace(s.length() - 2, s.length(), "");
     }
 
     @Override

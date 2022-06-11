@@ -19,7 +19,6 @@ public final class Client {
 
     private String username;
     private final Socket clientsSocket;
-    private ServerReceiver serverReceiver;
     private GameInterface gameInterface;
 
     public Client(Socket clientsSocket) {
@@ -28,10 +27,11 @@ public final class Client {
     }
 
     public void setup(HeartBeatServer heartBeatServer, LobbyManager lobbyManager, ExecutorService executor) {
-        this.serverReceiver = new ServerReceiver(this, heartBeatServer, lobbyManager);
         heartBeatServer.addClient(this);
-        lobbyManager.addPlayerNoPreferences(this.clientsSocket);
+        ServerReceiver serverReceiver = new ServerReceiver(this, heartBeatServer, lobbyManager);
         executor.submit(serverReceiver);
+        //FIXME needs to be moved
+        //lobbyManager.addPlayerNoPreferences(this.clientsSocket);
     }
 
     public void executeCommand(Command command, Socket socket) {
@@ -51,13 +51,6 @@ public final class Client {
         out.println(message.toJson());
     }
 
-    @Override
-    public String toString() {
-        return "Client[" +
-                "username=" + username + ", " +
-                "clientsSocket=" + clientsSocket + ", " +
-                "serverReceiver=" + serverReceiver + ']';
-    }
 
     public void setGameInterface(GameInterface gameInterface) {
         this.gameInterface = gameInterface;

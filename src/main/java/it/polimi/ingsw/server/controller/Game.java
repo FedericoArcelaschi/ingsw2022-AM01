@@ -5,9 +5,7 @@ import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.communication.message.subclasses.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.apache.log4j.Logger;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,15 +17,13 @@ public class Game {
     private final Board board;
     private final Turn turn;
     private final int MAX_STUDENTS_TO_MOVE;
-    private int movedStudents;
     private boolean isLastTurn = false; //FIXME: implement for Ending position, out of resources.
+    private int movedStudents = 0;
 
     public Game(GameType gameType, List<String> usernames) {
         this.board = BoardFactory.getBoard(usernames, gameType.expertMode);
-        this.turn = board.getTurn();
-        this.movedStudents = 0;
+        this.turn  = board.getTurn();
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
-        updateAll();
     }
 
     public @NotNull MessageUsernameSet executeCommand(@NotNull Command command) {
