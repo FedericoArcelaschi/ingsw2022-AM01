@@ -55,4 +55,5 @@ public class CharacterData {
     public String getDescription() {
         return description;
     }
+
 }

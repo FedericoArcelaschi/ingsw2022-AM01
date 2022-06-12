@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class GuiDrawer {
 
-    public void drawCastles(CastleData myCastle, List<CastleData> otherCastle, BorderPane myCastlePane , FlowPane castleTabHBox){
+    public void drawCastles(CastleData myCastle, List<CastleData> otherCastle, BorderPane myCastlePane , FlowPane castleTabHBox) {
         GuiDrawer guiDrawer = new GuiDrawer();
         int i;
         guiDrawer.drawCastle(myCastle, myCastlePane, null);

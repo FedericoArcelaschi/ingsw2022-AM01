@@ -68,7 +68,7 @@ public class ExpertBoard extends Board {
     }
 
     @Override
-    public String getCharInfo(int idChar){
+    public String getCharInfo(int idChar) {
         return CharacterExplanation.getInstance(idChar).getDescription();
     }
 

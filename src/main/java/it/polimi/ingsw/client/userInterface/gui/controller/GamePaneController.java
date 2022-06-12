@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class GamePaneController {
+
     @FXML public BorderPane castlePane0;
     @FXML public FlowPane castleTabHBox, characterPane, cardsFlowPane;
     @FXML public Pane turnPane;
@@ -31,6 +32,7 @@ public class GamePaneController {
     private Consumer<Command> send;
     private String username;
     private BoardData boardData;
+
     public void initialize(Consumer<Command> send) {
         waitingRoomToggleGroup = new ToggleGroup();
         setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
@@ -131,4 +133,5 @@ public class GamePaneController {
         Command command = new Command(username, CommandType.PAY_CHARACTER, parameters);
         System.out.println(command);
     }
+
 }
