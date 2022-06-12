@@ -213,6 +213,7 @@ public class ExpertBoard extends Board {
         return expertCharactersCards.values().stream().map(StandardCharacter::getName).toList();
     }
 
+    @Override
     public List<StandardCharacter> getAvailableCharacters() {
         return expertCharactersCards.values().stream().toList();
     }

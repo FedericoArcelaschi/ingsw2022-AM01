@@ -69,6 +69,11 @@ public class StandardCharacter {
     }
 
     @Override
+    public String toString() {
+        return CharacterUtility.getChar(idChar).toString().toLowerCase();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof StandardCharacter)) return false;

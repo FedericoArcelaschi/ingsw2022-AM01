@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
 import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.GreaterTeam;
 import it.polimi.ingsw.server.model.exceptions.*;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -415,7 +416,7 @@ public class Board {
         throw new WrongGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
     }
 
-    public List<String> getAvailableCharacterName() throws WrongGameModeException {
+    public List<StandardCharacter> getAvailableCharacters() throws WrongGameModeException {
         throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 
