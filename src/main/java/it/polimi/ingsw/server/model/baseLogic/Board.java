@@ -199,7 +199,7 @@ public class Board {
      * @param steps number of steps forward of mother nature
      */
     public void moveMotherNature(int steps) throws PhaseNotRightException {
-
+        possibleMovingSteps = turn.getPossibleMovingSteps();
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
             throw new PhaseNotRightException("You can't move mother nature in this stage of the game. Current phase is " + turn.getCurrentPhase().toString());
 
@@ -211,7 +211,6 @@ public class Board {
         else
             motherNaturePosition += steps;
         conquerIsland(motherNaturePosition);
-        turn.changePhase();
     }
 
     /**
@@ -306,7 +305,6 @@ public class Board {
         Cloud cloud = cloudList.get(cloudID);
         castle.addStudentsInWaitingRoom(cloud.choose());
         endOfTurn();
-        turn.changePhase();
     }
 
     /**

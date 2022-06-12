@@ -72,6 +72,7 @@ public class Command {
         CommandType commandType = getCommandType(splitCommand[0]);
         List<String> commandAttributes = new ArrayList<>(Arrays.stream(splitCommand).toList());
         commandAttributes.remove(0);
+        command = command.strip();
         if (commandAttributes.size() < 1)
             throw new IllegalArgumentException("put a valid command. help to get more information.");
         return new Command(
