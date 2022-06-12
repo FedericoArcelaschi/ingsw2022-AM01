@@ -7,11 +7,20 @@ import java.util.stream.Collectors;
 
 public class Turn {
 
+    /**
+     * ordered list of players as they joined the game.
+     */
     private final List<String> sittingOrder;
+    /**
+     * ordered list of players as of the current turn computed priority.
+     */
     private List<String> actionOrder;
     private String currentPlayer;
     private TurnPhase currentPhase;
-    private final Map<String, Integer> playedCards;
+    /**
+     * Current hands played card.
+     */
+    private final Map<String, Card> playedCards;
     private final int N_PLAYERS;
     private final int FIRST_PLANNING_TURN = 1;
     private int planningCounter = FIRST_PLANNING_TURN;
@@ -43,32 +52,17 @@ public class Turn {
      *
      * @param playerCardMap to be sorted
      */
-    protected void setNewRound(Map<String, Integer> playerCardMap) {
+    protected void setNewRound(Map<String, Card> playerCardMap) {
 //        FIXME: handle case of equal cards.
-//        if(actionOrder.isEmpty()) actionOrder = new ArrayList<>(sittingOrder);
-//        List<String> newOrder = new ArrayList<>(actionOrder);
-//        for (String player : actionOrder) {
-//            for (String player2 : actionOrder) {
-//                if(!player.equals(player2))
-//                    if(playerCardMap.get(player) < playerCardMap.get(player2)) {
-//                        newOrder.remove(player);
-//                        newOrder.add(newOrder.indexOf(player2), player);
-//                    }else if(playerCardMap.get(player) > playerCardMap.get(player2)) {
-//                        newOrder.remove(player2);
-//                        newOrder.add(newOrder.indexOf(player), player2);
-//                    }
-//                    //else, if they played the same card, the order stays the same as in the action order
-//                    //TODO: testing, is important for this one =)
-//            }
-//        }
+        Map<String, Integer> priorityMap = new HashMap<>();
+        playerCardMap.forEach((key, value) -> priorityMap.put(key, value.priority()));
         Map<String, Integer> sortedMap =
-                playerCardMap.entrySet().stream()
+                priorityMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
         List<String> newOrder = new ArrayList<>(sortedMap.keySet());
         setActionOrder(newOrder);
         currentPhase = TurnPhase.STUDENTS;      //The next player is now ready to play.
-        playedCards.clear();
     }
 
     /**
@@ -95,13 +89,14 @@ public class Turn {
             }
             default -> currentPhase = currentPhase.next();  //We can move on to the next phase as normal and the turn player stays the same
             case CLOUD -> {
-                if (actionOrder.indexOf(currentPlayer) < N_PLAYERS - 1) { //If there are other players that need to play
+                if (actionOrder.indexOf(currentPlayer) < N_PLAYERS - 1) {       //If there are other players that need to play
                     currentPlayer = next(actionOrder, currentPlayer);           //then we change the current player
                     currentPhase = TurnPhase.STUDENTS;                          //and set the phase to students
                 } else {                                    //If we're done throughout the turn
                     currentPlayer = actionOrder.get(0);     //then set the right player as the first that has to play the card.
                     currentPhase = TurnPhase.PLANNING;      //and we go back to planning
                     planningCounter = FIRST_PLANNING_TURN;
+                    playedCards.clear();
                 }
             }
         }
@@ -109,7 +104,7 @@ public class Turn {
 
 
     public void addCard(String player, Card card) {
-        playedCards.put(player, card.priority());
+        playedCards.put(player, card);
     }
 
     @Contract(pure = true)
@@ -143,7 +138,7 @@ public class Turn {
 
     @Contract(pure = true)
     public boolean isAlreadyPlayed(int card) {
-        return playedCards.containsValue(card);
+        return playedCards.containsValue(new Card(card));
     }
 
     @Contract(pure = true)
@@ -160,5 +155,9 @@ public class Turn {
                 ", currentPhase=" + currentPhase +
                 ", playedCards=" + playedCards +
                 "}\n";
+    }
+
+    public IntegerBoxing getPossibleMovingSteps() {
+        return new IntegerBoxing(playedCards.get(currentPlayer).distance());
     }
 }
