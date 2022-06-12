@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.communication;
 
 
+import it.polimi.ingsw.client.ClientState;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.message.subclasses.*;
@@ -52,6 +53,10 @@ public class ClientReceiver extends Receiver {
                 userInterface.printError(error.getMessage());
                 //IDEA: cm.setState(error.getState());
                 //IDEA: UserInterface.handleError(error.getMessage());
+            }
+            case CHARINFO -> {
+                CharInfo info = (CharInfo) message;
+                System.out.println(info.getInfo());
             }
         }
     }

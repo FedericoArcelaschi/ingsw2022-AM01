@@ -5,68 +5,57 @@ import java.util.Locale;
 public enum CharacterExplanation{
     MONK("""
             Monk: this character offers the opportunity to add
-            a student to an island of your choice for 1 coin!
-            call function: Pay MONK: student islandNumber
-            More MONK: cost - \s"""),
+            a student from the list of characters on this card to an island of your choice.
+            call function: paychar MONK: student islandNumber\s"""),
     FARMER( """
             Farmer: this character gives you the chance to have
             more influence than your competitor.
-            Pay 2 or 3 coins to breaktie the number of students
+            Pay 2 or 3 coins to break tie the number of students
             in your Castle and take the control over of the professors!
-            call function: Pay FARMER
-            More FARMER: cost - \s"""),
+            call function: paychar FARMER\s"""),
     GUARD("""
             Guard: this character offers you the chance to conquer another
             island, besides the one where mother nature in on.
-            call function: Pay GUARD islandNumber
-            More GUARD: cost - \s"""),
+            call function: paychar GUARD islandNumber\s"""),
     MAILMAN("""
             Mailman: this character allows you to optionally move
-            mother nature further by up to 2 steps.
-            call function: Pay MAILMAN
-            More MAILMAN: cost - \s"""),
+            mother nature further by up to 2 steps during the MOTHERNATURE phase.
+            call function: paychar MAILMAN\s"""),
     WITCH("""
             Witch: this character can prevent anyone from conquering
             an island, the effect is valid through someone moves
             mother nature on that island.
-            call function: Pay WITCH islandNumber
-            More WITCH: cost - \s"""),
+            call function: paychar WITCH islandNumber\s"""),
     CENTAUR("""
             Centaur: this character gives you the chance to conquer an island
-            calculating the influence with the students and not the towers
-            call function: Pay CENTAUR
-            More CENTAUR: cost - \s"""),
+            ignoring the influence provided by towers.
+            call function: paychar CENTAUR\s"""),
     JESTER("""
             Jester: this character can change the students in your waiting room.
             You can swap one, two or three students from your waiting room, with the
             ones available in this card.
-            call function: Pay JESTER: in(c1 [c2 c3]) out(c4 [c5 c6])
-            More JESTER: cost - \s"""),
+            call function: paychar JESTER: in(c1 [c2 c3]) out(c4 [c5 c6])\s"""),
     KNIGHT("""
             Knight: this character gives you 2 additional points of influence.
-            call function: Pay KNIGHT
-            More KNIGHT: cost - \s"""),
+            call function: paychar KNIGHT\s"""),
     COOK("""
             Cook: this character offers you the opportunity to overcome your
-            opponent in an island conquer. It makes a given students' Color
+            opponent when conquering an island. It makes a given student Color
             be worthless in the influence count.
-            call function: Pay COOK: Color
-            More COOK: cost - \s"""),
+            call function: paychar COOK: Color\s"""),
     STORYTELLER("""
-            Story-Teller: this character lets you swap one or two students
+            Storyteller: this character lets you swap one or two students
             between your dining room and your waiting room.
-            call function: Pay STORYTELLER: inWR(student1 [student2]) inDR(student1 [student2])
-            More STORYTELLER: cost - \s"""),
+            call function: paychar STORYTELLER: inWR(student1 [student2]) inDR(student1 [student2])\s"""),
     QUEEN("""
-            Queen: this character let's you add a student to your dining room.
-            call function: Pay QUEEN: studentToMove
-            More QUEEN: cost - \s"""),
+            Queen: this character lets you add a student to your dining room from the
+            list of characters on this card.
+            call function: paychar QUEEN: studentToMove\s"""),
     TAXMAN("""
             Taxman: this character forces every player to remove 3 students
             of the chosen studentColor. If a player has less students, he/she must
             remove all students of that studentColor.
-            call function: Pay TAXMAN: Color
-            More TAXMAN: cost - \s""");
+            call function: paychar TAXMAN: Color\s""");
 
 
     private final String explanation;

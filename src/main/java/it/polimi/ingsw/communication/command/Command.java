@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtil
 
 import java.util.*;
 
+import static it.polimi.ingsw.communication.command.CommandType.CHARINFO;
 import static it.polimi.ingsw.communication.command.CommandType.getCommandType;
 
 /**
@@ -62,6 +63,7 @@ public class Command {
                 }
             }
             //e.g.: payChar Monk Green 0
+            case CHARINFO -> charId = CharacterUtility.getChar(attributes.get(0).strip()).getId();
         }
     }
 
@@ -131,7 +133,7 @@ public class Command {
                 .append(", cardId=").append(cardId)
                 .append(", students=").append(students)
                 .append(", islandId=").append(islandId)
-                .append(", charName='").append(charId != 0 ? CharacterUtility.getChar(charId) : "null").append('\'')
+                .append(", charId='").append(charId != 0 ? CharacterUtility.getChar(charId) : "null").append('\'')
                 .append(", cloudId=").append(cloudId)
                 .append("}").toString();
     }

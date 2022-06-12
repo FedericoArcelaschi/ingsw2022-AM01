@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.command.Command;
+import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.communication.message.subclasses.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
@@ -34,18 +35,30 @@ public class Game {
             case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
             case CHOOSE_CLOUD -> chooseCloudCommand(command);
             case PAY_CHARACTER -> payCharCommand(command);
+            case CHARINFO -> getCharInfo(command);
             };
     }
 
+    private @NotNull MessageUsernameSet getCharInfo(Command command) {
+        String info;
+        try {
+            info = board.getCharInfo(command.getCharId());
+        } catch (WrongGameModeException e) {
+            return errorMessage(e, command.getUsername());
+        }
+        MessageUsernameSet messageUsernameSet = new MessageUsernameSet();
+        messageUsernameSet.add(new CharInfo(MessageType.CHARINFO, info), command.getUsername());
+        return messageUsernameSet;
+    }
 
     private @NotNull MessageUsernameSet playCardCommand(@NotNull Command command) {
         try {
             board.playCard(command.getUsername(), command.getCardId());
-            board.changePhase();
         } catch (NotYourTurnException | IllegalArgumentException | PhaseNotRightException e) {
             logger.info(e);
             return errorMessage(e, command.getUsername());
         }
+        turn.changePhase();
         return updateAll();
     }
 
@@ -106,6 +119,7 @@ public class Game {
                 //parità?
             }
         }
+        turn.changePhase();
         return updateAll();
     }
 
@@ -125,6 +139,7 @@ public class Game {
                 return null; //FIXME WinUpdate
             }
         }
+        turn.changePhase();
         return updateAll();
     }
 

@@ -14,7 +14,8 @@ public enum MessageType {
     COMMAND(CommandMessage.class),
     UPDATE(Update.class),
     ERROR(Error.class),
-    END(EndGame.class);
+    END(EndGame.class),
+    CHARINFO(CharInfo.class);
 
     private final Type type;
 
