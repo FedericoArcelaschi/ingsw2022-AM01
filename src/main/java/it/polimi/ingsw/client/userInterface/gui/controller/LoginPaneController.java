@@ -18,7 +18,7 @@ public class LoginPaneController {
     ToggleGroup nPlayer;
     Consumer<LoginPreferences> connect;
 
-    public void initialize(Consumer<LoginPreferences> connect){
+    public void initialize(Consumer<LoginPreferences> connect) {
         nPlayer = new ToggleGroup();
         player2RadioButton.setToggleGroup(nPlayer);
         player3RadioButton.setToggleGroup(nPlayer);
