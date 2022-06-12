@@ -1,9 +1,9 @@
 package it.polimi.ingsw.client.communication;
 
-import it.polimi.ingsw.client.ClientState;
+
+import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.Receiver;
 import it.polimi.ingsw.communication.message.subclasses.*;
-import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.communication.message.Message;
 
@@ -38,21 +38,20 @@ public class ClientReceiver extends Receiver {
             case LOBBYINFO -> {
                 System.out.println(CLEAR_SCREEN);
                 LobbyInfo lobbyInfoMessage = (LobbyInfo) message;
-                System.out.println("\r");
-                userInterface.printWaitingRoom(lobbyInfoMessage.getPlayers(), lobbyInfoMessage.getGameType());
+                userInterface.printLobby(lobbyInfoMessage);
             }
-            case END -> cm.setState(ClientState.GAME_ENDED);
+            case END -> {
+                Error error = (Error) message;
+                System.err.println(error.getMessage());
+                cm.setState(ClientState.GAME_ENDED);
+            }
 
             case ERROR -> {
-                Error error = (Error) message;
+                Error
+                        error = (Error) message;
                 userInterface.printError(error.getMessage());
-                //System.err.println("new error received: " + error.getMessage());
                 //IDEA: cm.setState(error.getState());
                 //IDEA: UserInterface.handleError(error.getMessage());
-            }
-            case CHARINFO -> {
-                CharInfo charInfo = (CharInfo) message;
-                System.out.println(charInfo.getInfo());
             }
         }
     }

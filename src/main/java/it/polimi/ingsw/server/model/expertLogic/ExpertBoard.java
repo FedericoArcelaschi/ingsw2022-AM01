@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class ExpertBoard extends Board {
-    private Tavern tavern;
+
     private Map<CharacterUtility, StandardCharacter> expertCharactersCards;
     private CharacterUtility playedExpertChar = null;
 
@@ -63,7 +63,7 @@ public class ExpertBoard extends Board {
      * Initializes <code>expertCharactersCards</code>. It's a factory method
      */
     private void drawExpertCharacters() {
-        tavern = new Tavern(bag);
+        Tavern tavern = new Tavern(bag);
         expertCharactersCards = tavern.extract();
     }
 
@@ -109,7 +109,7 @@ public class ExpertBoard extends Board {
                         "Not possible to play " + charName + " card. During this turn " +
                                 playedExpertChar.name() + " is already active.");
 
-        StandardCharacter ec = expertCharactersCards.get(idChar);
+        StandardCharacter ec = expertCharactersCards.get(CharacterUtility.getChar(idChar));
 
         if (ec == null) { //case where there is no active character but the card isn't available
             String charactersName = expertCharactersCards.values().stream().map(StandardCharacter::getName).toString().replace("[", "").replace("]", "");
@@ -191,26 +191,30 @@ public class ExpertBoard extends Board {
             int thirdIslandIndex = islandsToJoin.get(2);
             newIsland
                     = new ExpertIsland(new Archipelago(  islandList.get(firstIslandIndex),
-                    islandList.get(islandsToJoin.get(1)),
-                    islandList.get(islandsToJoin.get(2))));
+                    islandList.get(secondIslandIndex),
+                    islandList.get(thirdIslandIndex)));
         } else
             throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
-        for (Integer index : islandsToJoin)
+        for (int index : islandsToJoin)
             this.islandList.remove(index);
         this.islandList.add(firstIslandIndex, newIsland);
         motherNaturePosition = firstIslandIndex;
     }
 
     @Override
-    public void endOfTurn() {
+    protected void endOfTurn() {
+        super.endOfTurn();
         playedExpertChar = null;
-        ((ExpertInfluence)influence).reset();
+        influence.reset();
         movedStudents = 0;
     }
 
-    @Override
-    public Collection<StandardCharacter> getAvailableCharacterCards() {
-        return expertCharactersCards.values();
+    public List<String> getAvailableCharactersName() {
+        return expertCharactersCards.values().stream().map(StandardCharacter::getName).toList();
+    }
+
+    public List<StandardCharacter> getAvailableCharacters() {
+        return expertCharactersCards.values().stream().toList();
     }
 
     public Team getCurrentTeam() {
@@ -223,4 +227,7 @@ public class ExpertBoard extends Board {
         return ModelDataBuilder.newExpertBoardData(this, playerID);
     }
 
+    public CharacterUtility getPlayedExpertChar() {
+        return playedExpertChar;
+    }
 }

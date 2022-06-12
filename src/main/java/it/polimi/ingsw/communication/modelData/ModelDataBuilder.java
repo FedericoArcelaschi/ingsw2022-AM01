@@ -6,6 +6,7 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertCastleData;
 import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 
 import java.util.*;
@@ -27,15 +28,7 @@ public abstract class ModelDataBuilder {
         );
     }
 
-    public static ExpertBoardData newExpertBoardData(Board board, String username) {
-        //TODO: this null is awful to look at. For now it works; find a better way regardless.
-        List<CharacterData> characters = null;
-        try {
-            characters = board.getAvailableCharacterCards().stream().filter(Objects::nonNull).map(ModelDataBuilder::newCharacterData).toList();
-        } catch (WrongGameModeException e) {
-            e.printStackTrace();
-        }
-        //TODO: newExpertIslandData and newExpertCastleData return base game castles and islands... needs a fix
+    public static ExpertBoardData newExpertBoardData(ExpertBoard board, String username) {
         return new ExpertBoardData(
                 username,
                 board.getCloudList().size(),
@@ -48,12 +41,13 @@ public abstract class ModelDataBuilder {
                         .map(key -> newExpertCastleData(key, board.getCastle(key), false, board.placedTowers(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn()),
-                characters
+                board.getAvailableCharacters().stream().map(ModelDataBuilder::newCharacterData).toList(),
+                board.getPlayedExpertChar()
         );
     }
 
     private static CharacterData newCharacterData(StandardCharacter character){
-        return new CharacterData(character.getName(), character.getCost());
+        return new CharacterData(character.getName(), character.getCost(), Optional.ofNullable(character.getAvailableStudents()), character.getExplanation());
     }
 
     private static CloudData newCloudData(Cloud cloud) {
@@ -69,6 +63,7 @@ public abstract class ModelDataBuilder {
         try{
             blocked = island.isBlocked();
         } catch (WrongGameModeException e) {
+            System.err.println("In ExpertIsland data factory, " + e.getMessage());
             e.printStackTrace();
         }
         return new ExpertIslandData(island.getOwnership(), island.getStudents(), island.getIslandNumber(), Boolean.TRUE.equals(blocked));
@@ -112,6 +107,6 @@ public abstract class ModelDataBuilder {
     }
 
     private static TurnData newTurnData(Turn t){
-        return new TurnData(t.getSittingOrder(), t.getActionOrder(), t.getCurrentPhase(), t.getCurrentPlayer());
+        return new TurnData(t.getSittingOrder(), t.getActionOrder(), t.getCurrentPhase(), t.getCurrentPlayer()); //FIXME
     }
 }

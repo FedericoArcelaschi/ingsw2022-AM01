@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.communication.command.Command;
 
 public class CommandMessage extends Message {
+
     private final Command command;
 
     public CommandMessage(String username, String command) {

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.communication;
 
-import it.polimi.ingsw.client.ClientState;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.client.userInterface.UserInterface;
@@ -36,21 +36,16 @@ public class ClientMain {
         try {
             this.socket = new Socket(IP, port);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             System.exit(1);
             //TODO: implement better exception handling
         }
         System.out.println(username + ":  connected");
 
         clientSender = new ClientSender(socket);
-        System.out.println("socket client: " + socket.getChannel()); // => null
-        System.out.println(socket.getPort());
-        System.out.println(socket.getRemoteSocketAddress());
 
         //sends player preferences to the server;
-        Preferences preferences;
-        preferences = new Preferences(username, preferenceNPlayer, preferenceExpertMode);
-        clientSender.send(preferences);
+        clientSender.send(new Preferences(username, preferenceNPlayer, preferenceExpertMode));
 
         //runs the ClientReceiver
         clientReceiver = new ClientReceiver(this, socket, userInterface);
@@ -61,7 +56,8 @@ public class ClientMain {
     }
 
     public void runCommand(String stringCommand) {
-        if(stringCommand.strip().equalsIgnoreCase("help"))  {
+        //TODO: switch (ClientState)
+        if(stringCommand.strip().equalsIgnoreCase("help")) {
             System.out.println(Outputs.HELP);
             return;
         }
@@ -73,12 +69,11 @@ public class ClientMain {
             CommandMessage commandMessage;
             try {
                 commandMessage = new CommandMessage(username, stringCommand);
-            }catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 System.err.println(e.getMessage());
                 return;
             }
             clientSender.send(commandMessage);
-            System.out.println("command sent");
         }
     }
 

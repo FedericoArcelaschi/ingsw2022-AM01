@@ -1,11 +1,13 @@
 package it.polimi.ingsw.server.model.expertLogic.character.charTypes;
 
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ApplyEffect;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterParametersType;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
+import java.util.List;
 import java.util.Objects;
 
 public class StandardCharacter {
@@ -52,6 +54,10 @@ public class StandardCharacter {
     }
     public String getName() {
         return character.name();
+    }
+
+    public List<StudentColor> getAvailableStudents() {
+        return null;
     }
 
     public int getCost() {

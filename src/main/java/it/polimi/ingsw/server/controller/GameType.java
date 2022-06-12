@@ -1,11 +1,12 @@
 package it.polimi.ingsw.server.controller;
 
 public enum GameType {
+
     NORMAL_2_PLAYER(2, false),
-    NORMAL_3_PLAYER(3, false),
-    NORMAL_4_PLAYER(4, false),
     EXPERT_2_PLAYER(2, true),
+    NORMAL_3_PLAYER(3, false),
     EXPERT_3_PLAYER(3, true),
+    NORMAL_4_PLAYER(4, false),
     EXPERT_4_PLAYER(4, true);
 
     public final int nPlayer;
@@ -23,8 +24,4 @@ public enum GameType {
         throw new IllegalArgumentException("Not a valid game type");
     }
 
-    @Override
-    public String toString() {
-        return nPlayer +" players, " + (expertMode ? "expert-mode" : "normal-mode");
-    }
 }

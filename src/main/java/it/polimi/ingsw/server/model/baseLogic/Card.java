@@ -32,9 +32,7 @@ public final class Card {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (Card) obj;
-        return this.priority == that.priority &&
-                this.distance == that.distance &&
-                this.isAvailable == that.isAvailable;
+        return this.priority == that.priority;
     }
 
     @Override

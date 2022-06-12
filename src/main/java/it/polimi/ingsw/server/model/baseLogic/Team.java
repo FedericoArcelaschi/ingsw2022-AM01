@@ -17,8 +17,8 @@ public enum Team implements PossibleParameters {
         return "tower" + name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
     }
 
-    @Override
-    public String toString() {
+    public String toStringColored() {
         return ESCAPE_CODE + colorCode + "m" + this.name() + ESCAPE_CODE + "0m";
     }
+
 }

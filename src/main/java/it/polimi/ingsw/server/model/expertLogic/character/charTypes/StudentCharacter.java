@@ -61,6 +61,7 @@ public class StudentCharacter extends StandardCharacter {
     /**
      * To be used only for tests.
      */
+    @Override
     public List<StudentColor> getAvailableStudents() {
         return new ArrayList<>(availableStudents);
     }

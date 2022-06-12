@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.userInterface.cli;
 
 import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.client.userInterface.UserInterface;
+import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.communication.modelData.BoardData;
@@ -10,18 +11,14 @@ import it.polimi.ingsw.startUp.Outputs;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
 
 public class Cli implements UserInterface {
 
-    String username;
-    int nPlayer;
-    Boolean expertMode;
     final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public Cli() {
         ClientMain clientMain = new ClientMain(
-                "127.0.0.1",
+                "localhost",
                 12345,
                 getValidPreferences());
         try {
@@ -35,7 +32,7 @@ public class Cli implements UserInterface {
             try {
                 String input = br.readLine();
                 clientMain.runCommand(input);
-            } catch (IOException e) {
+            } catch (IOException | NoClassDefFoundError e) {
                 System.err.println(e.getMessage());
                 //throw new RuntimeException(e);
             }
@@ -44,28 +41,24 @@ public class Cli implements UserInterface {
 
     @Override
     public void draw (BoardData boardData) {
-        System.out.println("\r" + boardData.toString());
+        System.out.println("\r");
+        System.out.println(boardData.toString());
     }
 
     /**
      * Method to handle the LobbyInfoMessages.
      */
     @Override
-    public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
-        //TODO: print a nicer view of the lobby
-        StringBuilder input = new StringBuilder();
-        input.append("Player in queue: \n");
-        input.append("Game type: ").append(gameType).append("\n");
-        for (String user : connectedUser) {
-            input.append("\t").append(user).append("\n");
-        }
-        System.out.println(input);
+    public void printLobby(LobbyInfo lobbyInfo) {
+        System.out.println("\r");
+        System.out.println(lobbyInfo);
     }
 
     @Override
     public void printError(String error) {
-        System.err.println("new error received from server:\n\t" + error);
+        System.err.println(error);
     }
+
     /**
      * Before opening the connection with the server the client requires to insert the preferences.
      */
@@ -73,9 +66,9 @@ public class Cli implements UserInterface {
         int nPlayer;
         Boolean expertMode;
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String query = "Enter username:";
+        String username;
         try {
-            String query
-                    = "Enter username:";
             do{
                 System.out.println(query);
                 username = br.readLine();

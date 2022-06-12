@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.expertLogic.character.costants;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ApplyEffect;
 import org.jetbrains.annotations.Contract;
 
-public enum CharacterUtility { //TODO: complete characters' explaination
+public enum  CharacterUtility { //TODO: complete characters' explaination
     MONK(CharacterParametersType.STUDENT),
     FARMER(CharacterParametersType.INFLUENCE),
     GUARD(CharacterParametersType.ISLAND),
@@ -53,9 +53,15 @@ public enum CharacterUtility { //TODO: complete characters' explaination
         return CharacterFunction.getCharFunction(id);
     }
 
+    /**
+     * @param charId >= 0, charId <= 12
+     */
     public static CharacterUtility getChar(int charId) {
+        if(charId <=  0 || charId > CharacterUtility.values().length)
+            throw new IllegalArgumentException("Please insert a valid Character ID");
         return CharacterUtility.values()[charId - 1];
     }
+
     public static CharacterUtility getChar(String charName) {
         for (CharacterUtility expertCharacter : CharacterUtility.values()) {
             if (charName.equalsIgnoreCase(expertCharacter.name()))

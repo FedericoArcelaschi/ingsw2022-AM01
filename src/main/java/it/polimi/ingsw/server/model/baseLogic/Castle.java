@@ -51,7 +51,7 @@ public class Castle implements StudentPlaces {
             x = waitingRoom.size(); //FIXME: is needed?
         if (students.size() + x > waitingRoomSize)
             throw new TooManyStudentsException("there are already " + waitingRoomSize +
-                    " students in the waiting room");
+                    " students in the waiting room", null);
         waitingRoom.addAll(students);
         return true;
     }
@@ -63,7 +63,7 @@ public class Castle implements StudentPlaces {
      */
     public void addStudentInDiningRoom(StudentColor color) throws TooManyStudentsException {
         if (diningRoom.get(color) == diningRoomSizePerColor) {
-            throw new TooManyStudentsException("There are already " + diningRoomSizePerColor + " " + color + " students  in your diningRoom");
+            throw new TooManyStudentsException("There are already " + diningRoomSizePerColor + " " + color + " students  in your diningRoom", color);
         }
         diningRoom.put(color, diningRoom.get(color) + 1);
     }
@@ -74,9 +74,17 @@ public class Castle implements StudentPlaces {
      * @param students – The list of students to add to the dining room.
      */
     public void addStudentsInDiningRoom(List<StudentColor> students) throws TooManyStudentsException {
+        Throwable exception = null;
         for (StudentColor c : students) {
-            addStudentInDiningRoom(c);
+            try {
+                addStudentInDiningRoom(c);
+            } catch (TooManyStudentsException e) {
+                exception = e;
+                this.addStudentsInWaitingRoom(List.of(e.getColor()));
+            }
         }
+        if(exception != null)
+            throw new TooManyStudentsException(exception.getMessage());
     }
 
     /**
@@ -92,14 +100,13 @@ public class Castle implements StudentPlaces {
             throw new NoSuchStudentException("There aren't " + students.size() + " students in waiting room. " +
                     "There are only " + waitingRoom.size() + " students.");
         }
-        if (!waitingRoom.containsAll(students)) {
-            List<StudentColor> temp = new ArrayList<>(waitingRoom);
-            for (StudentColor s : students)
-                if (!temp.remove(s))
-                    throw new NoSuchStudentException("StudentCharacter " + s + " not in the WaitingRoom");
+        List<StudentColor> temp = new ArrayList<>(waitingRoom);
+        for (StudentColor s : students) {
+            if (!temp.remove(s))
+                throw new NoSuchStudentException("StudentCharacter " + s + " not in the WaitingRoom");
         }
-        for (StudentColor col : students) {
-            waitingRoom.remove(col);
+        for (StudentColor s : students) {
+            waitingRoom.remove(s);
         }
     }
 

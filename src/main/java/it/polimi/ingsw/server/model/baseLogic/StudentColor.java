@@ -40,5 +40,8 @@ public enum StudentColor implements PossibleParameters {
     public String toStringColored() {
         return ESCAPE_CODE + colorCode + "m" + this.name().toLowerCase() + ESCAPE_CODE + "0m";
     }
+    public String toUppercaseStringColored() {
+        return ESCAPE_CODE + colorCode + "m" + this.name() + ESCAPE_CODE + "0m";
+    }
 
 }

@@ -1,14 +1,18 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
+import org.jetbrains.annotations.Contract;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Turn {
+
     private final List<String> sittingOrder;
     private List<String> actionOrder;
     private String currentPlayer;
     private TurnPhase currentPhase;
-    private Map<String, Integer> playedCards;
+    private final Map<String, Integer> playedCards;
+    private final int N_PLAYERS;
     private final int FIRST_PLANNING_TURN = 1;
     private int planningCounter = FIRST_PLANNING_TURN;
 
@@ -22,6 +26,7 @@ public class Turn {
         playedCards = new HashMap<>();
         currentPlayer = sittingOrder.get(0);
         currentPhase = TurnPhase.PLANNING;
+        N_PLAYERS = sittingOrder.size();
     }
 
     /** Sets the current turn to the player besides him. Used in the planning phase of the turn.
@@ -35,10 +40,29 @@ public class Turn {
 
     /**
      * Sets the new turn order.
-     * @param map to be sorted
+     *
+     * @param playerCardMap to be sorted
      */
-    private void setNewRound(Map<String, Integer> map){
-        Map<String, Integer> sortedMap =  map.entrySet().stream()
+    protected void setNewRound(Map<String, Integer> playerCardMap) {
+//        FIXME: handle case of equal cards.
+//        if(actionOrder.isEmpty()) actionOrder = new ArrayList<>(sittingOrder);
+//        List<String> newOrder = new ArrayList<>(actionOrder);
+//        for (String player : actionOrder) {
+//            for (String player2 : actionOrder) {
+//                if(!player.equals(player2))
+//                    if(playerCardMap.get(player) < playerCardMap.get(player2)) {
+//                        newOrder.remove(player);
+//                        newOrder.add(newOrder.indexOf(player2), player);
+//                    }else if(playerCardMap.get(player) > playerCardMap.get(player2)) {
+//                        newOrder.remove(player2);
+//                        newOrder.add(newOrder.indexOf(player), player2);
+//                    }
+//                    //else, if they played the same card, the order stays the same as in the action order
+//                    //TODO: testing, is important for this one =)
+//            }
+//        }
+        Map<String, Integer> sortedMap =
+                playerCardMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
         List<String> newOrder = new ArrayList<>(sortedMap.keySet());
@@ -50,29 +74,28 @@ public class Turn {
     /**
      * Support method for setNewTurn.
      */
-    private void setActionOrder(List<String> newerTurns) throws IllegalArgumentException{
+    private void setActionOrder(List<String> newerTurns) throws IllegalArgumentException {
         if(new HashSet<>(newerTurns).containsAll(sittingOrder) && new HashSet<>(sittingOrder).containsAll(newerTurns))
             this.actionOrder = newerTurns;
         else
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Error in Turn .setActionOrder");
         currentPlayer = actionOrder.get(0);
     }
 
     /**
      * Changes the phase and the player according to the rules of the game.
      */
-    public void changePhase(){
-        int numberOfPlayers = sittingOrder.size();
+    public void changePhase() {
         switch (currentPhase) {
             case PLANNING -> {
-                if (planningCounter < numberOfPlayers) {
+                if (planningCounter < N_PLAYERS) {
                     currentPlayer = nextPlayerPlanning();   //we don't change phase, and we change the player that needs to play the card
                 } else                                      //If we're done all the way through the planning phase we can switch phase and set the new order
                     setNewRound(playedCards);               //Method that sets the new order for the turn and switches turn player to the new one
             }
             default -> currentPhase = currentPhase.next();  //We can move on to the next phase as normal and the turn player stays the same
             case CLOUD -> {
-                if (actionOrder.indexOf(currentPlayer) < numberOfPlayers - 1) { //If there are other players that need to play
+                if (actionOrder.indexOf(currentPlayer) < N_PLAYERS - 1) { //If there are other players that need to play
                     currentPlayer = next(actionOrder, currentPlayer);           //then we change the current player
                     currentPhase = TurnPhase.STUDENTS;                          //and set the phase to students
                 } else {                                    //If we're done throughout the turn
@@ -85,39 +108,47 @@ public class Turn {
     }
 
 
-    public void addCard(String player, int card){
-        playedCards.put(player, card);
+    public void addCard(String player, Card card) {
+        playedCards.put(player, card.priority());
     }
 
-    /**
-     * @return the turn player
-     */
-    public String getCurrentPlayer(){
+    @Contract(pure = true)
+    public String getCurrentPlayer() {
         return currentPlayer;
     }
 
+    @Contract(pure = true)
     public TurnPhase getCurrentPhase() {
         return currentPhase;
     }
 
+    @Contract(pure = true)
     public List<String> getActionOrder() {
-        return actionOrder;
+        return new ArrayList<>(actionOrder);
     }
 
+    @Contract(pure = true)
     public List<String> getSittingOrder() {
-        return sittingOrder;
+        return new ArrayList<>(sittingOrder);
     }
 
-    private String next(List<String> list, String element){
+    @Contract(pure = true)
+    private String next(List<String> list, String element) {
         int dim = list.size();
         int index = list.indexOf(element);
-        if(index == dim -1)
+        if(index == dim - 1)
             return list.get(0);
         else return list.get(index +1);
     }
 
+    @Contract(pure = true)
     public boolean isAlreadyPlayed(int card) {
         return playedCards.containsValue(card);
+    }
+
+    @Contract(pure = true)
+    public boolean isLastActionTurn() {
+        return actionOrder.get(N_PLAYERS - 1).equals(currentPlayer);
     }
 
     @Override

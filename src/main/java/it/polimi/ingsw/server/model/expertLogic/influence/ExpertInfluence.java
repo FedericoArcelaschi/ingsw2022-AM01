@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.InterfaceAdapter;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ProfessorsComputingExpert;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
 import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Map;
 import java.util.Optional;
@@ -42,6 +43,7 @@ public class ExpertInfluence extends Influence {
     /**
      * End of turn: function reset method.
      */
+    @Override
     public void reset() {
         professors.reset();
         function = InterfaceAdapter.adaptExpertInfluence(defaultFunction);

@@ -1,10 +1,18 @@
 package it.polimi.ingsw.communication.modelData;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.communication.message.subclasses.Update;
+import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
+import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
+import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
+import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,9 +23,16 @@ import java.util.random.RandomGenerator;
 
 class BoardDataTest {
     @Test
-    void toStringTest() {
+    void toStringTest() throws PhaseNotRightException, NotYourTurnException, NoSuchStudentException, TooManyStudentsException {
         BoardData bd;
-        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio"), true);
+        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio", "pippo"), false);
+        b.playCard("fede", 2);
+        b.changePhase();
+        b.playCard("gio", 3);
+        b.changePhase();
+        b.playCard("pippo", 4);
+        b.changePhase();
+        b.moveStudentsToDiningRoom("fede", b.getCastle("fede").getWaitingRoom().subList(0, 3));
         bd = b.getData("fede");
         System.out.println(bd);
     }

@@ -2,7 +2,7 @@
 Comunication Protocol:
 
 +---------------+												+---------------+
-|Client			|												|Server			|
+| Client		|												| Server		|
 +---------------+												+---------------+
 		|																| SERVER IS LISTENING on PORT 8888
 		|																|

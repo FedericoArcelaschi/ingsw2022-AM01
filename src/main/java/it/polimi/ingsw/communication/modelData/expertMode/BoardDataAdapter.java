@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.modelData.*;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -27,8 +28,8 @@ public class BoardDataAdapter implements JsonSerializer<BoardData>, JsonDeserial
         wrapper.add("myCastle", context.serialize(src.myCastle()));
         wrapper.add("otherCastles", context.serialize(src.otherCastles()));
         wrapper.add("turn", context.serialize(src.turn()));
-        if(typeOfSrc==ExpertBoardData.class)
-            wrapper.add("characters", context.serialize(((ExpertBoardData) src).characters()));
+        wrapper.add("characters", context.serialize(src.characters()));
+        wrapper.add("activeCharacter", context.serialize(src.activeChar()));
         return wrapper;
     }
 
@@ -64,7 +65,8 @@ public class BoardDataAdapter implements JsonSerializer<BoardData>, JsonDeserial
                 context.deserialize(wrapper.get("myCastle"), ExpertCastleData.class),
                 context.deserialize(wrapper.get("otherCastles"), expertCastleListType),
                 context.deserialize(wrapper.get("turn"), TurnData.class),
-                context.deserialize(wrapper.get("characters"), characterListType)
+                context.deserialize(wrapper.get("characters"), characterListType),
+                context.deserialize(wrapper.get("activeCharacter"), CharacterUtility.class)
                 );
     }
 

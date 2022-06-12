@@ -3,7 +3,10 @@ package it.polimi.ingsw.communication.modelData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class CastleData {
     protected final String username;
@@ -14,7 +17,7 @@ public class CastleData {
     protected final Team towerColor;
     private final int nTower;
     private final boolean isMyCastle;
-    private final Map<StudentColor, Team> teachers;
+    private final Map<StudentColor, Team> teachers; //FIXME
 
     public CastleData(String username, List<StudentColor> waitingRoom, EnumMap<StudentColor, Integer> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, int nTower, Map<StudentColor, Team> teachers, boolean isMyCastle) {
         this.username = username;
@@ -49,20 +52,25 @@ public class CastleData {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s       .append("\n\t")
-                .append("Teachers in the castle: ")
-                .append(teachers.entrySet().stream().filter(entry->entry.getValue()==towerColor).map(i-> i.getKey().toStringColored() + " "))
-                .append("\n\tStudents in dining room: ");
-        for (StudentColor student : diningRoom.keySet()) {
-            s       .append(student.toStringColored())
-                    .append(": ")
-                    .append(diningRoom.get(student))
-                    .append(", ");
-        }
+                .append("Teachers in the castle: ");
+        teachers.entrySet().stream()
+                        .filter(entry -> entry.getValue() == towerColor) //filter by the one belonging to this castle.
+                        .map(Map.Entry::getKey)
+                        .map(StudentColor::toUppercaseStringColored)
+                .forEach(teacher-> s.append(teacher).append(", "));
         removesComma(s);
         s.append("\n\tStudents in waiting room: ");
         for (StudentColor student : waitingRoom) {
             s.append(student.toStringColored());
             s.append(", ");
+        }
+        removesComma(s);
+        s.append("\n\tStudents in dining room: ");
+        for (StudentColor student : diningRoom.keySet()) {
+            s.append(student.toStringColored())
+                    .append(": ")
+                    .append(diningRoom.get(student))
+                    .append(", ");
         }
         removesComma(s);
         if (isMyCastle) {
@@ -79,11 +87,11 @@ public class CastleData {
         else
             s.append("\n\t\tThe player has not played any card yet.");
         s.append("\n\t\tTeam: ");
-        s.append(towerColor);
+        s.append(towerColor.toStringColored());
         return s.toString();
     }
 
-    private void removesComma(StringBuilder s) {
+    protected void removesComma(StringBuilder s) {
         s.replace(s.length() - 2, s.length(), "");
     }
 
@@ -123,9 +131,7 @@ public class CastleData {
         return teachers;
     }
 
-    public int coins() {
-        return 0;
-    }
+    public int coins() {return 0;}
 
     @Override
     public int hashCode() {

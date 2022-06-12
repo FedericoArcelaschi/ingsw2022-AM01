@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.userInterface.gui;
 
 import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.communication.command.Command;
+import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.server.controller.GameType;
@@ -117,7 +118,7 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
-    public void printWaitingRoom(List<String> connectedUser, GameType gameType) {
+    public void printLobby(LobbyInfo lobbyInfo) {
         //TODO:
     }
 

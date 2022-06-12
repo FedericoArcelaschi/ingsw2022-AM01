@@ -14,10 +14,7 @@ public class ExpertIslandData extends IslandData {
         super(ownership, students, islandSize);
         this.isBlocked = isBlocked;
     }
-
-    public boolean isBlocked() {
-        return isBlocked;
-    }
+    //To add: Blocked island.
 
     @Override
     public String toString() {
