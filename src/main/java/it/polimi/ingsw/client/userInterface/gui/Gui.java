@@ -5,7 +5,6 @@ import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.communication.modelData.BoardData;
-import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
@@ -53,29 +52,29 @@ public class Gui extends Application implements UserInterface {
         stage.show();
         loginPaneController.initialize(this::connect);
         //FIXME: for testing.
-        //draw(createBoardData());
+        draw(createBoardData());
     }
 
     private BoardData createBoardData(){
         //FIXME: for testing.
-        Board b =  BoardFactory.getBoard(Arrays.asList("fede", "gio"/*, "pippo"*/), true);
+        Board b =  BoardFactory.getBoard(Arrays.asList("Fede", "Gio"/*, "pippo"*/), true);
         Turn t = b.getTurn();
         try{
             for (String player: t.getSittingOrder()) {
-                int cardId = player.equals("fede") ? 1 : 10;
+                int cardId = player.equals("Fede") ? 1 : 10;
                 b.playCard(player, cardId);
                 b.changePhase();
             }
 //            b.playCard("pippo", 8);
 //            b.changePhase();
-            List<StudentColor> studentColorList = b.getCastle("fede").getWaitingRoom().subList(0,1);
-            b.moveStudentsToDiningRoom("fede", studentColorList);
-            b.moveStudentToIsland("fede", 1, studentColorList);
-            b.moveStudentsToDiningRoom("fede", b.getCastle("fede").getWaitingRoom().subList(0,1));
+            List<StudentColor> studentColorList = b.getCastle("Fede").getWaitingRoom().subList(0,1);
+            b.moveStudentsToDiningRoom("Fede", studentColorList);
+            b.moveStudentToIsland("Fede", 1, studentColorList);
+            b.moveStudentsToDiningRoom("Fede", b.getCastle("Fede").getWaitingRoom().subList(0,1));
             b.changePhase();
             b.moveMotherNature(1);
             b.changePhase();
-//            b.chooseCloud("fede", 1);
+//            b.chooseCloud("Fede", 1);
 //            b.changePhase();
 
         } catch (PhaseNotRightException | NotYourTurnException | TooManyStudentsException e) {
@@ -83,9 +82,8 @@ public class Gui extends Application implements UserInterface {
         } catch (NoSuchStudentException e) {
             return createBoardData();
         }
-        BoardData bd = b.getData("fede");
         //System.out.println(bd);
-        return bd;
+        return b.getData("Fede");
     }
 
     /**
@@ -128,8 +126,8 @@ public class Gui extends Application implements UserInterface {
     }
 
     public void connect(LoginPreferences loginPreferences) {
-        Preferences preferences = loginPreferences.getPreferences();
-        clientMain = new ClientMain(loginPreferences.getIP(), loginPreferences.getPort(), preferences);
+        Preferences preferences = loginPreferences.preferences();
+        clientMain = new ClientMain(loginPreferences.IP(), loginPreferences.port(), preferences);
         try {
             clientMain.connect(this);
         } catch (IllegalAccessException e) {
