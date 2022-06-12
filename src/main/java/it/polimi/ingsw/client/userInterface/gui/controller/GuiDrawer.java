@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -63,7 +64,10 @@ public class GuiDrawer {
             Pane pane = (Pane) characterPane.getChildren().get(i);
             pane.getStyleClass().add(CharacterExplanation.getInstance(characters.get(i).getName()).getCSS());
             pane.setAccessibleText(characters.get(i).getName());
+            Tooltip tooltip = new Tooltip(characters.get(i).getDescription());
             FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
+            Tooltip.install(pane, tooltip);
+            Tooltip.install(flowPane, tooltip);
             flowPane.setAccessibleText(characters.get(i).getName());
             for (StudentColor studentColor: characters.get(i).getStudents().orElse(new ArrayList<>())) {
                 ToggleButton toggleButton = new ToggleButton();

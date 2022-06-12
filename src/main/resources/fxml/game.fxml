@@ -875,17 +875,17 @@
         <content>
             <FlowPane fx:id="characterPane" alignment="CENTER" hgap="50.0" prefHeight="800.0" prefWidth="1400.0">
                <children>
-                  <Pane prefHeight="400.0" prefWidth="222.0" styleClass="character">
+                  <Pane onMouseClicked="#payCharacter" prefHeight="400.0" prefWidth="222.0" styleClass="character">
                      <children>
                         <FlowPane alignment="CENTER" hgap="10.0" layoutY="100.0" prefHeight="200.0" prefWidth="222.0" />
                      </children>
                   </Pane>
-                  <Pane prefHeight="400.0" prefWidth="222.0" styleClass="character">
+                  <Pane onMouseClicked="#payCharacter" prefHeight="400.0" prefWidth="222.0" styleClass="character">
                      <children>
                         <FlowPane alignment="CENTER" hgap="10.0" layoutY="100.0" prefHeight="200.0" prefWidth="222.0" />
                      </children>
                   </Pane>
-                  <Pane prefHeight="400.0" prefWidth="222.0" styleClass="character">
+                  <Pane onMouseClicked="#payCharacter" prefHeight="400.0" prefWidth="222.0" styleClass="character">
                      <children>
                         <FlowPane alignment="CENTER" hgap="10.0" layoutY="100.0" prefHeight="200.0" prefWidth="222.0" />
                      </children>
