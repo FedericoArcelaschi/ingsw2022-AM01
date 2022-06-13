@@ -6,12 +6,10 @@ import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Tab;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
@@ -28,27 +26,29 @@ public class GamePaneController {
     @FXML private StackPane cloudStackPane;
     @FXML private HBox islandRow1, islandRow2;
     @FXML private Tab characterTab;
-    private ToggleGroup waitingRoomToggleGroup;
+    private MultipleToggleGroup waitingRoomToggleGroup;
     private Consumer<Command> send;
     private String username;
     private BoardData boardData;
 
     public void initialize(Consumer<Command> send) {
-        waitingRoomToggleGroup = new ToggleGroup();
-        setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
         this.send = send;
     }
 
-    private void setToggleGroup(ToggleGroup toggleGroup, ObservableList<Node> children) {
+    private void setToggleGroup(MultipleToggleGroup toggleGroup, ObservableList<Node> children) {
         for (Node node : children) {
             ToggleButton toggleButton = (ToggleButton) node;
-            toggleButton.setToggleGroup(toggleGroup);
+            toggleGroup.add(toggleButton);
+            toggleButton.setOnMouseClicked(this::selectWaitingRoom);
         }
     }
 
     public void draw(BoardData boardData) {
         this.username = boardData.username();
         this.boardData = boardData;
+
+        waitingRoomToggleGroup = new MultipleToggleGroup(boardData.nPlayer() == 3 ? 4 : 3);
+        setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
 
         GuiDrawer guiDrawer = new GuiDrawer();
         guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
@@ -65,13 +65,20 @@ public class GamePaneController {
         alert.show();
     }
 
+    public void selectWaitingRoom(MouseEvent mouseEvent) {
+        ToggleButton toggleButton = (ToggleButton) mouseEvent.getTarget();
+        waitingRoomToggleGroup.select(toggleButton);
+    }
+
     public void moveStudentToDiningRoom() {
-        ToggleButton selected = (ToggleButton) waitingRoomToggleGroup.getSelectedToggle();
-        if(selected == null)
+        List<ToggleButton> selected = waitingRoomToggleGroup.getSelectedToggles();
+        if (selected.size() == 0)
             return;
-        StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
         List<String> parameters = new ArrayList<>();
-        parameters.add(studentColor.name());
+        for (ToggleButton toggleButton: selected) {
+            StudentColor studentColor = StudentColor.getColor(toggleButton.getAccessibleText());
+            parameters.add(studentColor.name());
+        }
         Command command = new Command(username, CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
         System.out.println(command);
         send.accept(command);
@@ -79,14 +86,16 @@ public class GamePaneController {
 
     public void moveStudentToIsland(MouseEvent mouseEvent) {
         if (boardData.turn().currentPhase() == TurnPhase.STUDENTS) {
-            ToggleButton selected = (ToggleButton) waitingRoomToggleGroup.getSelectedToggle();
-            if (selected == null)
+            List<ToggleButton> selected = waitingRoomToggleGroup.getSelectedToggles();
+            if (selected.size() == 0)
                 return;
-            StudentColor studentColor = StudentColor.getColor(selected.getAccessibleText());
-            Pane island = (Pane) mouseEvent.getTarget();
             List<String> parameters = new ArrayList<>();
+            Pane island = (Pane) mouseEvent.getTarget();
             parameters.add(island.getAccessibleText());
-            parameters.add(studentColor.name());
+            for (ToggleButton toggleButton: selected) {
+                StudentColor studentColor = StudentColor.getColor(toggleButton.getAccessibleText());
+                parameters.add(studentColor.name());
+            }
             Command command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
             System.out.println(command);
             send.accept(command);
