@@ -31,6 +31,7 @@
                               </Label>
                               <Label layoutX="15.0" layoutY="53.0" text="Turn Phase:" />
                               <TextFlow layoutX="15.0" layoutY="89.0" prefHeight="23.0" prefWidth="260.0" />
+                              <ToggleButton fx:id="expertMode" layoutX="171.0" layoutY="7.0" mnemonicParsing="false" onMouseClicked="#switchCommandMode" text="use characters" />
                            </children>
                         </Pane>
                         <BorderPane fx:id="castlePane0" prefHeight="675.0" prefWidth="290.0" styleClass="castlePane">
@@ -166,32 +167,32 @@
                                  <children>
                                     <HBox fx:id="islandRow1" minWidth="-Infinity" prefHeight="200.0" prefWidth="1110.0">
                                        <children>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="1" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="2" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="3" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="4" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="5" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="6" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
@@ -282,32 +283,32 @@
                                     </StackPane>
                                     <HBox fx:id="islandRow2" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="200.0" prefWidth="1110.0">
                                        <children>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="7" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="8" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="9" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="10" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="11" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
                                           </Pane>
-                                          <Pane onMouseClicked="#moveStudentToIsland" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
                                              <children>
                                                 <FlowPane accessibleText="12" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
                                              </children>
@@ -320,7 +321,12 @@
                         </Pane>
                      </center>
                      <bottom>
-                        <FlowPane fx:id="cardsFlowPane" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                        <StackPane fx:id="bottomStackPane" BorderPane.alignment="CENTER">
+                           <children>
+                              <FlowPane fx:id="cardsFlowPane" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" />
+                              <FlowPane fx:id="charFlowPane" alignment="CENTER" hgap="40.0" prefHeight="200.0" prefWidth="200.0" />
+                           </children>
+                        </StackPane>
                      </bottom>
                   </BorderPane>
                </center>
@@ -870,29 +876,6 @@
                </children>
             </FlowPane>
          </content>
-      </Tab>
-      <Tab fx:id="characterTab" disable="true" text="Characters">
-        <content>
-            <FlowPane fx:id="characterPane" alignment="CENTER" hgap="50.0" prefHeight="800.0" prefWidth="1400.0">
-               <children>
-                  <Pane onMouseClicked="#payCharacter" prefHeight="400.0" prefWidth="222.0" styleClass="character">
-                     <children>
-                        <FlowPane alignment="CENTER" hgap="10.0" layoutY="100.0" prefHeight="200.0" prefWidth="222.0" />
-                     </children>
-                  </Pane>
-                  <Pane onMouseClicked="#payCharacter" prefHeight="400.0" prefWidth="222.0" styleClass="character">
-                     <children>
-                        <FlowPane alignment="CENTER" hgap="10.0" layoutY="100.0" prefHeight="200.0" prefWidth="222.0" />
-                     </children>
-                  </Pane>
-                  <Pane onMouseClicked="#payCharacter" prefHeight="400.0" prefWidth="222.0" styleClass="character">
-                     <children>
-                        <FlowPane alignment="CENTER" hgap="10.0" layoutY="100.0" prefHeight="200.0" prefWidth="222.0" />
-                     </children>
-                  </Pane>
-               </children>
-            </FlowPane>
-        </content>
       </Tab>
    </tabs>
    <stylesheets>

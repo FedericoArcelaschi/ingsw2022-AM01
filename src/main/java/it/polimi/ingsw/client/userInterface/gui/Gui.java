@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
@@ -83,7 +84,10 @@ public class Gui extends Application implements UserInterface {
             return createBoardData();
         }
         //System.out.println(bd);
-        return b.getData("Fede");
+        BoardData bd = b.getData("Fede");
+        if(!bd.characters().stream().map(CharacterData::getName).toList().contains("MONK"))
+            return createBoardData();
+        return bd;
     }
 
     /**

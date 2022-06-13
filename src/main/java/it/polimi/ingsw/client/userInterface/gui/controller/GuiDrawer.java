@@ -9,6 +9,7 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -19,10 +20,12 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Flow;
 
 public class GuiDrawer {
 
@@ -56,7 +59,41 @@ public class GuiDrawer {
         }
     }
 
-    public void drawCharacters(List<CharacterData> characters, FlowPane characterPane, Tab characterTab){
+    public void drawCharacter(List<CharacterData> characters, FlowPane charFlowPane, EventHandler<MouseEvent> payCharacter){
+        for (CharacterData character : characters) {
+            CharacterPane pane = new CharacterPane();
+            pane.setPrefSize(111, 200);
+            pane.getStyleClass().addAll(List.of("character", CharacterExplanation.getInstance(character.getName()).getCSS()));
+            pane.setOnMouseClicked(payCharacter);
+
+            FlowPane flowPane = new FlowPane();
+            flowPane.setPrefSize(111, 100);
+            flowPane.setHgap(5);
+            flowPane.setAlignment(Pos.CENTER);
+            flowPane.setLayoutY(50);
+            MultipleToggleGroup toggleGroup = new MultipleToggleGroup(character.getStudents().orElse(new ArrayList<>()).size());
+            pane.setMultipleToggleGroup(toggleGroup);
+
+            for (StudentColor studentColor: character.getStudents().orElse(new ArrayList<>())) {
+                ToggleButton toggleButton = createElementToggleButton("student", 25, 25, false);
+                toggleGroup.add(toggleButton);
+                setStudentButtonColor(toggleButton, studentColor);
+                flowPane.getChildren().add(toggleButton);
+            }
+
+            Tooltip tooltip = new Tooltip(character.getDescription());
+            Tooltip.install(pane, tooltip);
+            Tooltip.install(flowPane, tooltip);
+
+            pane.setAccessibleText(character.getName());
+            flowPane.setAccessibleText(character.getName());
+
+            pane.getChildren().add(flowPane);
+            charFlowPane.getChildren().add(pane);
+        }
+    }
+
+    /*public void drawCharacters(List<CharacterData> characters,FlowPane charFlowPane, FlowPane characterPane, Tab characterTab){
         if(characters.size() == 0)
             return;
         characterTab.setDisable(false);
@@ -77,7 +114,7 @@ public class GuiDrawer {
                 flowPane.getChildren().add(toggleButton);
             }
         }
-    }
+    }*/
 
     public void drawIslands(List<IslandData> islandList, int motherNaturePosition, HBox islandRow1, HBox islandRow2) {
         List<Pane> paneList = new ArrayList<>();
