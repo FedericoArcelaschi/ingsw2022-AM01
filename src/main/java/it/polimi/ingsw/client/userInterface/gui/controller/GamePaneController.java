@@ -6,7 +6,6 @@ import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -20,16 +19,19 @@ import java.util.function.Consumer;
 public class GamePaneController {
 
     @FXML public BorderPane castlePane0;
-    @FXML public FlowPane castleTabHBox, characterPane, cardsFlowPane;
+    @FXML public FlowPane castleTabHBox, cardsFlowPane, charFlowPane;
     @FXML public Pane turnPane;
+    public StackPane bottomStackPane;
     @FXML private Pane waitingRoomPane;
     @FXML private StackPane cloudStackPane;
     @FXML private HBox islandRow1, islandRow2;
     @FXML private Tab characterTab;
+    @FXML private ToggleButton expertMode;
     private MultipleToggleGroup waitingRoomToggleGroup;
     private Consumer<Command> send;
     private String username;
     private BoardData boardData;
+    private final List<String> parameters = new ArrayList<>();
 
     public void initialize(Consumer<Command> send) {
         this.send = send;
@@ -39,7 +41,6 @@ public class GamePaneController {
         for (Node node : children) {
             ToggleButton toggleButton = (ToggleButton) node;
             toggleGroup.add(toggleButton);
-            toggleButton.setOnMouseClicked(this::selectWaitingRoom);
         }
     }
 
@@ -55,19 +56,15 @@ public class GamePaneController {
         guiDrawer.drawClouds(boardData.cloudList(), cloudStackPane);
         guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
-        guiDrawer.drawCharacters(boardData.characters(), characterPane, characterTab);
+        guiDrawer.drawCharacter(boardData.characters(), charFlowPane, this::payCharacter);
         guiDrawer.drawTurn(boardData.turn(), turnPane);
+        switchCommandMode();
     }
 
     public void printError(String error){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setContentText(error);
         alert.show();
-    }
-
-    public void selectWaitingRoom(MouseEvent mouseEvent) {
-        ToggleButton toggleButton = (ToggleButton) mouseEvent.getTarget();
-        waitingRoomToggleGroup.select(toggleButton);
     }
 
     public void moveStudentToDiningRoom() {
@@ -84,28 +81,35 @@ public class GamePaneController {
         send.accept(command);
     }
 
-    public void moveStudentToIsland(MouseEvent mouseEvent) {
-        if (boardData.turn().currentPhase() == TurnPhase.STUDENTS) {
-            List<ToggleButton> selected = waitingRoomToggleGroup.getSelectedToggles();
-            if (selected.size() == 0)
-                return;
-            List<String> parameters = new ArrayList<>();
-            Pane island = (Pane) mouseEvent.getTarget();
-            parameters.add(island.getAccessibleText());
-            for (ToggleButton toggleButton: selected) {
-                StudentColor studentColor = StudentColor.getColor(toggleButton.getAccessibleText());
-                parameters.add(studentColor.name());
+    public void island(MouseEvent mouseEvent) {
+        Pane island = (Pane) mouseEvent.getTarget();
+        if(!expertMode.isSelected()){
+            if (boardData.turn().currentPhase() == TurnPhase.STUDENTS) {
+                List<ToggleButton> selected = waitingRoomToggleGroup.getSelectedToggles();
+                if (selected.size() == 0)
+                    return;
+                List<String> parameters = new ArrayList<>();
+                parameters.add(island.getAccessibleText());
+                for (ToggleButton toggleButton : selected) {
+                    StudentColor studentColor = StudentColor.getColor(toggleButton.getAccessibleText());
+                    parameters.add(studentColor.name());
+                }
+                Command command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
+                System.out.println(command);
+                send.accept(command);
+            } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
+                List<String> parameters = new ArrayList<>();
+                parameters.add(island.getAccessibleText());
+                Command command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
+                System.out.println(command);
+                send.accept(command);
             }
-            Command command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
-            System.out.println(command);
-            send.accept(command);
-        } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
-            Pane island = (Pane) mouseEvent.getTarget();
-            List<String> parameters = new ArrayList<>();
+        }
+        else if(!parameters.isEmpty()) {
             parameters.add(island.getAccessibleText());
-            Command command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
+            System.out.println(parameters);
+            Command command = new Command(username, CommandType.PAY_CHARACTER, parameters);
             System.out.println(command);
-            send.accept(command);
         }
     }
 
@@ -136,11 +140,22 @@ public class GamePaneController {
     }
 
     public void payCharacter(MouseEvent mouseEvent) {
-        Pane character = (Pane) mouseEvent.getTarget();
-        List<String> parameters = new ArrayList<>();
-        parameters.add(character.getAccessibleText());
-        Command command = new Command(username, CommandType.PAY_CHARACTER, parameters);
-        System.out.println(command);
+        parameters.clear();
+        CharacterPane pane = (CharacterPane) mouseEvent.getTarget();
+        parameters.add(pane.getAccessibleText());
+        parameters.addAll(pane.getMultipleToggleGroup().getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList());
+        /*Command command = new Command(username, CommandType.PAY_CHARACTER, parameters);
+        System.out.println(command);*/
     }
 
+    public void switchCommandMode() {
+        if(expertMode.isSelected()) {
+            cardsFlowPane.setVisible(false);
+            charFlowPane.setVisible(true);
+        }
+        else{
+            cardsFlowPane.setVisible(true);
+            charFlowPane.setVisible(false);
+        }
+    }
 }

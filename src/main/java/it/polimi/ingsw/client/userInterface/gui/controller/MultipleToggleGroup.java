@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,13 @@ public class MultipleToggleGroup {
     }
 
     public void add(ToggleButton button) {
+        button.setOnMouseClicked(this::selectWaitingRoom);
         if(!elements.contains(button))
             elements.add(button);
+    }
+    private void selectWaitingRoom(MouseEvent mouseEvent) {
+        ToggleButton toggleButton = (ToggleButton) mouseEvent.getTarget();
+        this.select(toggleButton);
     }
 
     public void add(List<ToggleButton> buttons) {

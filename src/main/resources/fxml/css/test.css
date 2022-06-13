@@ -10,7 +10,7 @@
     -fx-background-color: lightblue;
 }
 
-#cardsFlowPane{
+#cardsFlowPane, #charFlowPane{
     -fx-background-color: lightblue;
 }
 
@@ -67,13 +67,6 @@
     -fx-background-position: center;
     -fx-background-color: transparent;
     -fx-background-image: url("/motherNature/mother_nature.png");
-}
-
-.character{
-    -fx-background-size: 222, 400;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-background-color: transparent;
 }
 
 .coinBackground{
@@ -157,7 +150,7 @@
     -fx-background-image: url("/teachers/teacher_green.png");
 }
 
-.assistant{
+.assistant, .character{
     -fx-background-size: 111, 200;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
