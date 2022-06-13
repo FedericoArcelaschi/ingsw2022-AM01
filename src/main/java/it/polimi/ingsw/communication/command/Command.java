@@ -46,20 +46,25 @@ public class Command {
 
             case PAY_CHARACTER -> {
                 charId = CharacterUtility.getChar(attributes.get(0).strip()).getId();
-                if(isInteger(attributes.get(1)) && attributes.size()==2){  //If there is only a number as parameter and nothing else
+                if(attributes.size()==2){  //If there is only a number as parameter and nothing else
                     //then that number is where and the what is null.
-                    islandId = Integer.parseInt(attributes.get(1).strip())-1;
-                    students = new ArrayList<>();
-                }else {  //If neither the first parameter is a number and the list of parameters is exactly 2
+                    if(isInteger(attributes.get(1))) {
+                        islandId = Integer.parseInt(attributes.get(1).strip());
+                        students = new ArrayList<>();
+                    }
+                }else if (attributes.size()>2) {  //If neither the first parameter is a number and the list of parameters is exactly 2
                     //It means that there must be a list of students
-                    students = attributes.subList(1, attributes.size()-2).stream().map(StudentColor::getColor).toList();
+                    students = new ArrayList<>(attributes.subList(1, attributes.size()-1).stream().map(StudentColor::getColor).toList());
                     //If the last element is numeric it must be an island index
                     if (isInteger(attributes.get(attributes.size() - 1)))
-                        islandId = Integer.parseInt(attributes.get(attributes.size() - 1))-1;
+                        islandId = Integer.parseInt(attributes.get(attributes.size() - 1));
                     else {
                         //If it is not then the user only wrote a list of students with no student place.
                         students.add(StudentColor.getColor(attributes.get(attributes.size() - 1)));
                     }
+                } else {
+                    students = new ArrayList<>();
+                    islandId = 0;
                 }
             }
             //e.g.: payChar Monk Green 0
