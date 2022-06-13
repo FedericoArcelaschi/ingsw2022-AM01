@@ -72,7 +72,7 @@ public class TurnTest{
                         Map.of("fede", 1,
                     "lore", 2,
                     "gio", 2));
-        t.setNewRound(mapPlayersCard);
+        //t.setNewRound(mapPlayersCard);
         System.out.println(t.getActionOrder());
     }
 }
