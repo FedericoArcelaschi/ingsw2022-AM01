@@ -11,7 +11,8 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CastleTest {
 
@@ -87,6 +88,6 @@ public class CastleTest {
         Castle castle = new Castle(Team.WHITE, 1, expected);
         assertTrue(castle.isCardAvailable(1));
         castle.playCard(1);
-        assertFalse(castle.isCardAvailable(1));
+        assertEquals(false, castle.isCardAvailable(1));
     }
 }

@@ -51,6 +51,10 @@ public class Command {
                     if(isInteger(attributes.get(1))) {
                         islandId = Integer.parseInt(attributes.get(1).strip());
                         students = new ArrayList<>();
+                    } else {
+                        students = new ArrayList<>();
+                        students.add(StudentColor.getColor(attributes.get(1).strip()));
+                        islandId = 0;
                     }
                 }else if (attributes.size()>2) {  //If neither the first parameter is a number and the list of parameters is exactly 2
                     //It means that there must be a list of students
