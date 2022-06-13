@@ -67,12 +67,12 @@ public class TurnTest{
     void setNewRoundTest() {
         List<String> players = Arrays.asList("lore", "fede", "gio");
         Turn t = new Turn(players);
-        Map<String, Integer> mapPlayersCard
+        Map<String, Card> mapPlayersCard
                 = new HashMap<>(
-                        Map.of("fede", 1,
-                    "lore", 2,
-                    "gio", 2));
-        //t.setNewRound(mapPlayersCard);
+                        Map.of("fede", new Card(1),
+                    "lore", new Card(2),
+                    "gio", new Card(3)));
+        t.setNewRound(mapPlayersCard);
         System.out.println(t.getActionOrder());
     }
 }

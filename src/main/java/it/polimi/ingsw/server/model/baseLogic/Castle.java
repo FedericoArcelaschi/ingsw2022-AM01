@@ -110,7 +110,7 @@ public class Castle implements StudentPlaces {
         }
     }
 
-    public boolean isAvailableCard(int i) {
+    public boolean isCardAvailable(int i) {
         if (i < 1 || i > 10) throw new IllegalArgumentException("Illegal card number");
         return deck.get(i - 1).isAvailable();
     }
@@ -177,4 +177,5 @@ public class Castle implements StudentPlaces {
 
     protected void payCharacter(int price) throws CoinException, WrongGameModeException {
        throw new WrongGameModeException("method only available in ExpertCastle.");
-    }}
+    }
+}
