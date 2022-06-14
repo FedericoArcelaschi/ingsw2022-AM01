@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.Test;
 
+import java.text.ParseException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,36 +13,43 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CommandTest {
 
     @Test
-    void testMonk() {
-        Command command = Command.createCommand("fede", "paychar MONK blue 2");
+    void testMonk() throws ParseException {
+        Command command = new Command("fede", "paychar MONK 2 blue");
         assertEquals(CharacterUtility.MONK, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE), command.getStudents());
         assertEquals(2, command.getIslandId());
     }
 
     @Test
-    void testMailman() {
-        Command command = Command.createCommand("fede", "paychar MAILMAN");
+    void testMailman() throws ParseException {
+        Command command = new Command("fede", "paychar MAILMAN");
         assertEquals(CharacterUtility.MAILMAN, CharacterUtility.getChar(command.getCharId()));
     }
 
     @Test
-    void testJester() {
-        Command command = Command.createCommand("fede", "paychar JESTER blue red");
+    void testJester() throws ParseException {
+        Command command = new Command("fede", "paychar JESTER blue red");
         assertEquals(CharacterUtility.JESTER, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE, StudentColor.RED), command.getStudents());
     }
 
     @Test
-    void testStoryteller() {
-        Command command = Command.createCommand("fede", "paychar STORYTELLER blue red");
+    void testStoryteller() throws ParseException {
+        Command command = new Command("fede", "paychar STORYTELLER blue red");
         assertEquals(CharacterUtility.STORYTELLER, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE, StudentColor.RED), command.getStudents());
     }
 
     @Test
-    void testQueen() {
-        Command command = Command.createCommand("fede", "paychar QUEEN blue");
+    void testQueen() throws ParseException {
+        Command command = new Command("fede", "paychar QUEEN blue");
+        assertEquals(CharacterUtility.QUEEN, CharacterUtility.getChar(command.getCharId()));
+        assertEquals(List.of(StudentColor.BLUE), command.getStudents());
+    }
+
+    @Test
+    void createCommand() throws ParseException {
+        Command command = new Command("fede", "\npaychar QUEEN blue");
         assertEquals(CharacterUtility.QUEEN, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE), command.getStudents());
     }

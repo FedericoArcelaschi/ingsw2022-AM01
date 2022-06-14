@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -73,10 +74,18 @@ public class GamePaneController {
             return;
         List<String> parameters = new ArrayList<>();
         for (ToggleButton toggleButton: selected) {
-            StudentColor studentColor = StudentColor.getColor(toggleButton.getAccessibleText());
+            StudentColor studentColor = null;
+            try {
+                studentColor = StudentColor.parseColor(toggleButton.getAccessibleText());
+            } catch (ParseException e) {
+                System.err.println(e.getMessage());
+            }
             parameters.add(studentColor.name());
         }
-        Command command = new Command(username, CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
+        Command command = null;
+        try {
+            command = new Command(username, CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
+        } catch (ParseException ignored) {}
         System.out.println(command);
         send.accept(command);
     }
@@ -91,16 +100,29 @@ public class GamePaneController {
                 List<String> parameters = new ArrayList<>();
                 parameters.add(island.getAccessibleText());
                 for (ToggleButton toggleButton : selected) {
-                    StudentColor studentColor = StudentColor.getColor(toggleButton.getAccessibleText());
+                    StudentColor studentColor = null;
+                    try {
+                        studentColor = StudentColor.parseColor(toggleButton.getAccessibleText());
+                    } catch (ParseException e) {
+                        System.err.println(e.getMessage());
+                    }
                     parameters.add(studentColor.name());
                 }
-                Command command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
+                Command command = null;
+                try {
+                    command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
                 System.out.println(command);
                 send.accept(command);
             } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
                 List<String> parameters = new ArrayList<>();
                 parameters.add(island.getAccessibleText());
-                Command command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
+                Command command = null;
+                try {
+                    command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
+                } catch (ParseException ignored) {}
                 System.out.println(command);
                 send.accept(command);
             }
@@ -108,7 +130,10 @@ public class GamePaneController {
         else if(!parameters.isEmpty()) {
             parameters.add(island.getAccessibleText());
             System.out.println(parameters);
-            Command command = new Command(username, CommandType.PAY_CHARACTER, parameters);
+            Command command = null;
+            try {
+                command = new Command(username, CommandType.PAY_CHARACTER, parameters);
+            } catch (ParseException ignored) {}
             System.out.println(command);
         }
     }
@@ -120,7 +145,10 @@ public class GamePaneController {
         cloudId = Integer.parseInt(accessibleText.substring(accessibleText.length()-1));
         List<String> parameters = new ArrayList<>();
         parameters.add(String.valueOf(cloudId));
-        Command command = new Command(username, CommandType.CHOOSE_CLOUD, parameters);
+        Command command = null;
+        try {
+            command = new Command(username, CommandType.CHOOSE_CLOUD, parameters);
+        } catch (ParseException ignored) {}
         System.out.println(command);
         send.accept(command);
     }
@@ -134,7 +162,10 @@ public class GamePaneController {
         cardId = cardId == 0 ? 10 : cardId;
         List<String> parameters = new ArrayList<>();
         parameters.add(String.valueOf(cardId));
-        Command command = new Command(username, CommandType.PLAY_CARD, parameters);
+        Command command = null;
+        try {
+            command = new Command(username, CommandType.PLAY_CARD, parameters);
+        } catch (ParseException ignored) {}
         System.out.println(command);
         send.accept(command);
     }

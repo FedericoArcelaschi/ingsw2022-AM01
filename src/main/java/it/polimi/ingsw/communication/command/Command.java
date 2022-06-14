@@ -3,9 +3,9 @@ package it.polimi.ingsw.communication.command;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
+import java.text.ParseException;
 import java.util.*;
 
-import static it.polimi.ingsw.communication.command.CommandType.CHARINFO;
 import static it.polimi.ingsw.communication.command.CommandType.getCommandType;
 
 /**
@@ -18,63 +18,57 @@ public class Command {
     private int motherNaturePositionShift;
     private int cardId;
     private List<StudentColor> students = new ArrayList<>();
-    private int islandId = 0;
+    private int islandId;
     private int charId;
     private int cloudId;
 
-    public Command(String username, CommandType type, List<String> attributes) {
+    public Command(String username, CommandType type, List<String> attributes) throws ParseException {
         this.type = type;
         this.username = username;
-        switch (type) {
-            case PLAY_CARD -> cardId = Integer.parseInt(attributes.get(0).strip());
-            //e.g.: playcard 1
+        getParameters(attributes);
+    }
 
-            case MOVE_STUDENT_TO_CASTLE -> students = attributes.stream().map(StudentColor::getColor).toList();
-            //e.g.: moveStudentCastle Green, Blue, Pink
+    public Command(String username, String command) throws ParseException {
+        this.username = username;
+        command = command.strip();
+        List<String> commandAttributes = new ArrayList<>(Arrays.stream(command.split(" ")).toList()); // FIXME: more spaces break the command.
+        if (commandAttributes.size() < 2)
+            throw new IllegalArgumentException(commandAttributes + "put a valid command. help to get more information.");
+        type = getCommandType(commandAttributes.remove(0));
+        getParameters(commandAttributes);
+    }
 
-            case MOVE_STUDENT_TO_ISLAND -> {
-                islandId = Integer.parseInt(attributes.get(0).strip());
-                students = attributes.subList(1, attributes.size()).stream().map(StudentColor::getColor).toList();
-            }
-            //e.g.: moveStudentIsland 4, green, blue, pink
-
-            case MOVE_MOTHER_NATURE -> motherNaturePositionShift = Integer.parseInt(attributes.get(0).strip());
-            //e.g.: moveMotherNature 1
-
-            case CHOOSE_CLOUD -> cloudId = Integer.parseInt(attributes.get(0).strip());
-            //e.g.: cloud 1
-
-            case PAY_CHARACTER -> {
-                charId = CharacterUtility.getChar(attributes.get(0).strip()).getId();
-                List<String> parameters = new ArrayList<>(attributes.subList(1, attributes.size()));
-                for (String s : parameters) {
-                    //islandId and students are already initialized so no need to worry about that :)
-                    if (isInteger(s)) {
-                        islandId = Integer.parseInt(s);
-                    } else {
-                        students.add(StudentColor.getColor(s));
+    private void getParameters(List<String> attributes) throws ParseException {
+        try {
+            switch (type) {
+                case PLAY_CARD -> cardId = Integer.parseInt(attributes.get(0));
+                case MOVE_STUDENT_TO_CASTLE -> {
+                    for (String attribute : attributes)
+                        students.add(StudentColor.parseColor(attribute));
+                }
+                case MOVE_STUDENT_TO_ISLAND -> {
+                    islandId = Integer.parseInt(attributes.get(0).strip());
+                    attributes.remove(0);
+                    for (String attribute : attributes)
+                        students.add(StudentColor.parseColor(attribute));
+                }
+                case MOVE_MOTHER_NATURE -> motherNaturePositionShift = Integer.parseInt(attributes.get(0));
+                case CHOOSE_CLOUD -> cloudId = Integer.parseInt(attributes.get(0));
+                case PAY_CHARACTER -> {
+                    charId = CharacterUtility.getChar(attributes.remove(0)).getId();
+                    for (String s : attributes) {
+                        if (isInteger(s)) {
+                            islandId = Integer.parseInt(s);
+                        } else {
+                            students.add(StudentColor.parseColor(s));
+                        }
                     }
                 }
             }
-            //e.g.: payChar Monk Green 0
-            case CHARINFO -> charId = CharacterUtility.getChar(attributes.get(0).strip()).getId();
+        } catch (NumberFormatException e) {
+            throw new ParseException("'"+attributes.get(0)+"' is not a valid number. Please insert a number. Type help for further information.", 0);
         }
     }
-
-    public static Command createCommand(String username, String command) {
-        String[] splitCommand = command.split(" ");
-        CommandType commandType = getCommandType(splitCommand[0]);
-        List<String> commandAttributes = new ArrayList<>(Arrays.stream(splitCommand).toList());
-        commandAttributes.remove(0);
-        command = command.strip();
-        if (commandAttributes.size() < 1)
-            throw new IllegalArgumentException("put a valid command. help to get more information.");
-        return new Command(
-                username,
-                commandType,
-                commandAttributes);
-    }
-
 
     public String getUsername() {
         return username;

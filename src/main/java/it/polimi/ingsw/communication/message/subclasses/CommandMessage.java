@@ -4,13 +4,15 @@ import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.communication.command.Command;
 
+import java.text.ParseException;
+
 public class CommandMessage extends Message {
 
     private final Command command;
 
-    public CommandMessage(String username, String command) {
+    public CommandMessage(String username, String command) throws ParseException {
         super(MessageType.COMMAND);
-        this.command = Command.createCommand(username, command);
+        this.command = new Command(username, command);
     }
 
     public CommandMessage(Command command) {
