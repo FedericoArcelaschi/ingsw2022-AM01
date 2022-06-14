@@ -50,7 +50,7 @@ public class StandardCharacter {
      * @return the explanation and the cost (updated)
      */
     public String getExplanation() {
-        return explanation + this.getCost();
+        return explanation + "\nCost: " + this.getCost();
     }
     public String getName() {
         return character.name();
@@ -83,7 +83,7 @@ public class StandardCharacter {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCost(), getExplanation(), character);
+        return Objects.hash(character);
     }
 
 }
