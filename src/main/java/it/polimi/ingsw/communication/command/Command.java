@@ -35,7 +35,7 @@ public class Command {
         command = command.strip();
         List<String> commandAttributes = new ArrayList<>(Arrays.stream(command.split(" ")).toList()); // FIXME: more spaces break the command.
         if (commandAttributes.size() < 2)
-            throw new IllegalArgumentException(commandAttributes + "put a valid command. help to get more information.");
+            throw new ParseException(commandAttributes + "put a valid command. help to get more information.", 0);
         type = getCommandType(commandAttributes.remove(0));
         getParameters(commandAttributes);
     }
