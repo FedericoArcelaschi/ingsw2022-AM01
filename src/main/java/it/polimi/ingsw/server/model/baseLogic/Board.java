@@ -199,7 +199,7 @@ public class Board {
      * @param steps number of steps forward of mother nature
      */
     public void moveMotherNature(int steps) throws PhaseNotRightException {
-        possibleMovingSteps = turn.getPossibleMovingSteps();
+        possibleMovingSteps.add(turn.getPossibleMovingSteps());
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
             throw new PhaseNotRightException("You can't move mother nature in this stage of the game. Current phase is " + turn.getCurrentPhase().toString());
 
@@ -313,6 +313,7 @@ public class Board {
     protected void endOfTurn() {
         if(turn.isLastActionTurn())
             cloudRefill();
+        possibleMovingSteps.zero();
     }
 
     /**

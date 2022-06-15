@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.Affectable;
  */
 
 public class IntegerBoxing implements Affectable {
+
     private int i;
 
     public IntegerBoxing(int i) {
@@ -20,6 +21,14 @@ public class IntegerBoxing implements Affectable {
 
     public void setInt(int i) {
         this.i = i;
+    }
+
+    public void zero() {
+        i = 0;
+    }
+
+    public void add(IntegerBoxing possibleMovingSteps) {
+        i += possibleMovingSteps.i;
     }
 
     /**
