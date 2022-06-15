@@ -30,8 +30,9 @@ public class Cli implements UserInterface {
         // the Cli in the input/output to the terminal
         while(true) {
             try {
-                String input = br.readLine();
-                clientMain.runCommand(input);
+                String input = br.readLine().strip();
+                if(!input.isBlank())
+                    clientMain.runCommand(input);
             } catch (IOException | NoClassDefFoundError e) {
                 System.err.println(e.getMessage());
                 //throw new RuntimeException(e);
@@ -71,9 +72,9 @@ public class Cli implements UserInterface {
         try {
             do{
                 System.out.println(query);
-                username = br.readLine();
+                username = br.readLine().strip();
                 query = "Enter a valid username:";
-            } while (username == null);
+            } while (username == null || username.isBlank());
 
             query = "Enter the number of players:";
             do {
