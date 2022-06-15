@@ -58,6 +58,7 @@ public class ClientMain {
     }
 
     public void runCommand(String stringCommand) {
+        //TODO: add charInfo
         //TODO: switch (ClientState)
         if(stringCommand.strip().equalsIgnoreCase("help")) {
             System.out.println(Outputs.HELP);

@@ -54,10 +54,6 @@ public class ClientReceiver extends Receiver {
                 //IDEA: cm.setState(error.getState());
                 //IDEA: UserInterface.handleError(error.getMessage());
             }
-            case CHARINFO -> {
-                CharInfo info = (CharInfo) message;
-                System.out.println(info.getInfo());
-            }
         }
     }
 }

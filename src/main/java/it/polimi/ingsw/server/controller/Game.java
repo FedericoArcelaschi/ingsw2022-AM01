@@ -37,22 +37,7 @@ public class Game {
             case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
             case CHOOSE_CLOUD -> chooseCloudCommand(command);
             case PAY_CHARACTER -> payCharCommand(command);
-            case CHARINFO -> getCharInfo(command);
             };
-    }
-
-    private @NotNull MessageUsernameSet getCharInfo(Command command) {
-        String info;
-        try {
-            info = board.getAvailableCharacters().values().stream().map(StandardCharacter::toString).toList().contains(CharacterUtility.getChar(command.getCharId()).toString().toLowerCase())
-                    ? board.getCharInfo(command.getCharId())
-                    : "You found an Easter Egg!";
-        } catch (WrongGameModeException e) {
-            return errorMessage(e, command.getUsername());
-        }
-        MessageUsernameSet messageUsernameSet = new MessageUsernameSet();
-        messageUsernameSet.add(new CharInfo(MessageType.CHARINFO, info), command.getUsername());
-        return messageUsernameSet;
     }
 
     private @NotNull MessageUsernameSet playCardCommand(@NotNull Command command) {
