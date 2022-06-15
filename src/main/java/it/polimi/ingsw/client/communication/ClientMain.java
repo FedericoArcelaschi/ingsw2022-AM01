@@ -10,6 +10,7 @@ import it.polimi.ingsw.startUp.Outputs;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.text.ParseException;
 import java.util.concurrent.Executors;
 
 public class ClientMain {
@@ -57,6 +58,7 @@ public class ClientMain {
     }
 
     public void runCommand(String stringCommand) {
+        //TODO: add charInfo
         //TODO: switch (ClientState)
         if(stringCommand.strip().equalsIgnoreCase("help")) {
             System.out.println(Outputs.HELP);
@@ -70,7 +72,7 @@ public class ClientMain {
             CommandMessage commandMessage;
             try {
                 commandMessage = new CommandMessage(username, stringCommand);
-            } catch (IllegalArgumentException e) {
+            } catch (ParseException e) {
                 System.err.println(e.getMessage());
                 return;
             }

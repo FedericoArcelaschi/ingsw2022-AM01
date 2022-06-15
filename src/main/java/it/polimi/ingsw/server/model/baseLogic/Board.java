@@ -133,7 +133,7 @@ public class Board {
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
         Castle castle = castleMap.get(playerID);
         if(!turn.isAlreadyPlayed(cardID) || castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority())))
-            if(castle.isAvailableCard(cardID)) {
+            if(castle.isCardAvailable(cardID)) {
                 Card card = castle.playCard(cardID);
                 possibleMovingSteps.setInt(card.distance());
                 turn.addCard(playerID, card);
@@ -142,7 +142,7 @@ public class Board {
         throw new IllegalArgumentException("Card cannot be played. " +
                 (turn.isAlreadyPlayed(cardID) && !castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
                         ? "Card is already played & you have another card to play in your castle. " : " ") +
-                (castle.isAvailableCard(cardID) ? "" : "You don't have this card in the castle"));
+                (castle.isCardAvailable(cardID) ? "" : "You don't have this card in the castle"));
     }
 
 //methods for the action phase
@@ -199,7 +199,7 @@ public class Board {
      * @param steps number of steps forward of mother nature
      */
     public void moveMotherNature(int steps) throws PhaseNotRightException {
-        possibleMovingSteps = turn.getPossibleMovingSteps();
+        possibleMovingSteps.add(turn.getPossibleMovingSteps());
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
             throw new PhaseNotRightException("You can't move mother nature in this stage of the game. Current phase is " + turn.getCurrentPhase().toString());
 
@@ -313,6 +313,7 @@ public class Board {
     protected void endOfTurn() {
         if(turn.isLastActionTurn())
             cloudRefill();
+        possibleMovingSteps.zero();
     }
 
     /**
@@ -406,7 +407,7 @@ public class Board {
         return withMoreProfessors;
     }
 
-    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, WrongGameModeException, PhaseNotRightException {
+    public void playExpertCard (int idChar, int islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, WrongGameModeException, PhaseNotRightException {
         throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 
@@ -414,7 +415,7 @@ public class Board {
         throw new WrongGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
     }
 
-    public List<StandardCharacter> getAvailableCharacters() throws WrongGameModeException {
+    public Map<CharacterUtility, StandardCharacter> getAvailableCharacters() throws WrongGameModeException {
         throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 

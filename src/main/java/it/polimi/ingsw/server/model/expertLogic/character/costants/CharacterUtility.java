@@ -2,6 +2,8 @@ package it.polimi.ingsw.server.model.expertLogic.character.costants;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ApplyEffect;
 import org.jetbrains.annotations.Contract;
 
+import java.text.ParseException;
+
 public enum  CharacterUtility { //TODO: complete characters' explaination
     MONK(CharacterParametersType.STUDENT),
     FARMER(CharacterParametersType.INFLUENCE),
@@ -62,12 +64,12 @@ public enum  CharacterUtility { //TODO: complete characters' explaination
         return CharacterUtility.values()[charId - 1];
     }
 
-    public static CharacterUtility getChar(String charName) {
+    public static CharacterUtility getChar(String charName) throws  ParseException {
         for (CharacterUtility expertCharacter : CharacterUtility.values()) {
             if (charName.equalsIgnoreCase(expertCharacter.name()))
                 return expertCharacter;
         }
-        throw new IllegalArgumentException(charName + " is not a character name");
+        throw new ParseException(charName + " is not a character name", 0);
     }
 
 }

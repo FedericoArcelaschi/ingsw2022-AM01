@@ -3,6 +3,9 @@ package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 
+import java.text.ParseException;
+import java.util.Arrays;
+
 
 public enum StudentColor implements PossibleParameters {
 
@@ -31,10 +34,10 @@ public enum StudentColor implements PossibleParameters {
         return "teacherBackground" + name().substring(0, 1).toUpperCase() + name().substring(1).toLowerCase();
     }
 
-    public static StudentColor getColor(String s) {
+    public static StudentColor parseColor(String s) throws ParseException {
         for(StudentColor c : StudentColor.values())
             if(s.equalsIgnoreCase(c.name())) return c;
-        throw new IllegalArgumentException(s + " is not a valid colorCode name.");
+        throw new ParseException(s + " is not a valid colorCode name.", 0);
     }
 
     public String toStringColored() {

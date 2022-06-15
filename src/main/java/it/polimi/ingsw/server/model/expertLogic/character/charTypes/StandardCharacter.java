@@ -50,7 +50,7 @@ public class StandardCharacter {
      * @return the explanation and the cost (updated)
      */
     public String getExplanation() {
-        return explanation + this.getCost();
+        return explanation + "\nCost: " + this.getCost();
     }
     public String getName() {
         return character.name();
@@ -76,14 +76,13 @@ public class StandardCharacter {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof StandardCharacter)) return false;
-        StandardCharacter that = (StandardCharacter) o;
+        if (!(o instanceof StandardCharacter that)) return false;
         return getCost() == that.getCost() && Objects.equals(getExplanation(), that.getExplanation()) && character == that.character;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCost(), getExplanation(), character);
+        return Objects.hash(character);
     }
 
 }

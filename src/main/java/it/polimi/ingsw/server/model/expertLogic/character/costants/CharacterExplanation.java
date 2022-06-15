@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server.model.expertLogic.character.costants;
 
-import java.util.Locale;
-
 public enum CharacterExplanation{
     MONK("""
             Monk: this character offers the opportunity to add
@@ -56,7 +54,6 @@ public enum CharacterExplanation{
             of the chosen studentColor. If a player has less students, he/she must
             remove all students of that studentColor.
             call function: paychar TAXMAN: Color\s""");
-
 
     private final String explanation;
     CharacterExplanation(String explanation) {

@@ -32,15 +32,14 @@ public abstract class Receiver implements Runnable {
 
     @Override
     public void run() {
-        while(true) {//keeps reading the input
-            String read;
-            try {
-                read = in.readLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            messageSwitch(new Gson().fromJson(read, Message.class));
+        String read;
+        try {
+            read = in.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        messageSwitch(new Gson().fromJson(read, Message.class));
+        run();
     }
 
     protected abstract void messageSwitch(Message message);

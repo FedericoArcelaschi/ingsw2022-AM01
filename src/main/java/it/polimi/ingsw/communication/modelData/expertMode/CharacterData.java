@@ -15,9 +15,11 @@ public class CharacterData {
     private final int cost;
     private final List<StudentColor> students;
     private final String description;
+    private final CharacterUtility characterUtility;
 
-    public CharacterData(String name, int cost, Optional<List<StudentColor>> students, String description){
-        this.name = name;
+    public CharacterData(CharacterUtility characterUtility, int cost, Optional<List<StudentColor>> students, String description){
+        this.name = characterUtility.name();
+        this.characterUtility = characterUtility;
         this.cost = cost;
         this.students = students.orElse(null);
         this.description = description;
@@ -25,7 +27,7 @@ public class CharacterData {
 
     public String toString(@Nullable CharacterUtility characterUtility){
         StringBuilder output = new StringBuilder();
-        if(Objects.equals(characterUtility, CharacterUtility.getChar(name)))
+        if(Objects.equals(this.characterUtility, characterUtility))
             output  .append("\u0033[48;2;252;233;79m")
                     .append(name.charAt(0))
                     .append(name.substring(1).toLowerCase())
