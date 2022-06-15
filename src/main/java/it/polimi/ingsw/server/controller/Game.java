@@ -6,6 +6,7 @@ import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.communication.message.subclasses.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +44,7 @@ public class Game {
     private @NotNull MessageUsernameSet getCharInfo(Command command) {
         String info;
         try {
-            info = board.getAvailableCharacters().stream().map(Object::toString).toList().contains(CharacterUtility.getChar(command.getCharId()).toString().toLowerCase())
+            info = board.getAvailableCharacters().values().stream().map(StandardCharacter::toString).toList().contains(CharacterUtility.getChar(command.getCharId()).toString().toLowerCase())
                     ? board.getCharInfo(command.getCharId())
                     : "You found an Easter Egg!";
         } catch (WrongGameModeException e) {

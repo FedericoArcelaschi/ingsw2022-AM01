@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import java.util.List;
 import java.util.Objects;
 
-public final class CloudData {
+public class CloudData {
     private final List<StudentColor> studentList;
     private final boolean available;
 

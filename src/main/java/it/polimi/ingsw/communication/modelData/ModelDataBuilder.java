@@ -41,12 +41,12 @@ public abstract class ModelDataBuilder {
                         .map(key -> newExpertCastleData(key, board.getCastle(key), false, board.placedTowers(), board.getProfessorsMap()))
                         .toList(),
                 newTurnData(board.getTurn()),
-                board.getAvailableCharacters().stream().map(ModelDataBuilder::newCharacterData).toList(),
+                board.getAvailableCharacters().values().stream().map(ModelDataBuilder::newCharacterData).toList(),
                 board.getPlayedExpertChar()
         );
     }
 
-    private static CharacterData newCharacterData(StandardCharacter character){
+    private static CharacterData newCharacterData(StandardCharacter character) {
         return new CharacterData(character.getCharacterUtility(), character.getCost(), Optional.ofNullable(character.getAvailableStudents()), character.getExplanation());
     }
 

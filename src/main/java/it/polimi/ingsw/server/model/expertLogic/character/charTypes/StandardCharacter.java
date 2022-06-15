@@ -76,8 +76,7 @@ public class StandardCharacter {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof StandardCharacter)) return false;
-        StandardCharacter that = (StandardCharacter) o;
+        if (!(o instanceof StandardCharacter that)) return false;
         return getCost() == that.getCost() && Objects.equals(getExplanation(), that.getExplanation()) && character == that.character;
     }
 

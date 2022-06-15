@@ -406,7 +406,7 @@ public class Board {
         return withMoreProfessors;
     }
 
-    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, WrongGameModeException, PhaseNotRightException {
+    public void playExpertCard (int idChar, int islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, WrongGameModeException, PhaseNotRightException {
         throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 
@@ -414,7 +414,7 @@ public class Board {
         throw new WrongGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
     }
 
-    public List<StandardCharacter> getAvailableCharacters() throws WrongGameModeException {
+    public Map<CharacterUtility, StandardCharacter> getAvailableCharacters() throws WrongGameModeException {
         throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 

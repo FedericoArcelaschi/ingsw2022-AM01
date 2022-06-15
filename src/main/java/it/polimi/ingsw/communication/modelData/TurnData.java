@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import java.util.List;
 import java.util.Objects;
 
-public final class TurnData {
+public class TurnData {
     private final List<String> sittingOrder;
     private final List<String> actionOrder;
     private final TurnPhase currentPhase;
