@@ -139,7 +139,7 @@ public class ExpertBoard extends Board {
     private @NotNull ParametersForCharacter influenceParameters(List<StudentColor> studentsList) {
         ParametersForCharacter par = new ParametersForCharacter();
         par.setInfluence((ExpertInfluence) influence);
-        par.setRequestedStudent(studentsList.get(0));
+        if(!studentsList.isEmpty()) par.setRequestedStudent(studentsList.get(0));
         par.setCurrentTeam(getCurrentTeam());
         return par;
     }
