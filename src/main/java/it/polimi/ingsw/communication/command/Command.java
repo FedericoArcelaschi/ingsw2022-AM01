@@ -3,8 +3,10 @@ package it.polimi.ingsw.communication.command;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.*;
+import java.util.function.Supplier;
 
 import static it.polimi.ingsw.communication.command.CommandType.getCommandType;
 
@@ -102,14 +104,13 @@ public class Command {
         return cloudId;
     }
 
-    //There is no built-in way of doing this...
-    public static boolean isInteger(String s) {
+    private static boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
+            return true;
         } catch (NumberFormatException | NullPointerException e) {
             return false;
         }
-        return true;
     }
 
     @Override
