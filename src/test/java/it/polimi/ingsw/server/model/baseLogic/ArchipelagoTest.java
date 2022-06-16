@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ArchipelagoTest{
@@ -18,9 +19,9 @@ public class ArchipelagoTest{
         i1 = new Island(StudentColor.YELLOW);
         i2 = new Island(StudentColor.YELLOW);
         i3 = new Island(StudentColor.YELLOW);
-        a1 = new Archipelago(i1, i2);
-        a2 = new Archipelago(i1, i2, i3);
-        a3 = new Archipelago(a1, a2);
+        a1 = new Archipelago(List.of(i1, i2));
+        a2 = new Archipelago(List.of(i1, i2, i3));
+        a3 = new Archipelago(List.of(a1, a2));
 
         assertEquals(2, a1.getIslandNumber());
         assertEquals(3, a2.getIslandNumber());
@@ -33,9 +34,9 @@ public class ArchipelagoTest{
         i1 = new Island(StudentColor.YELLOW);
         i2 = new Island(StudentColor.YELLOW);
         i3 = new Island(StudentColor.YELLOW);
-        a1 = new Archipelago(i1, i2);
-        a2 = new Archipelago(i1, i2, i3);
-        a3 = new Archipelago(a1, a2);
+        a1 = new Archipelago(List.of(i1, i2));
+        a2 = new Archipelago(List.of(i1, i2, i3));
+        a3 = new Archipelago(List.of(a1, a2));
         Map<StudentColor, Integer> m1 = new HashMap<>();
         Map<StudentColor, Integer> m2 = new HashMap<>();
         Map<StudentColor, Integer> m3 = new HashMap<>();

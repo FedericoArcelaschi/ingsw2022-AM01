@@ -1,29 +1,20 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
+import java.util.List;
+
 public class Archipelago extends Island{
     int islandNumber;
 
     /**
-     * Contructor that bonds two islands
+     * Constructor that bonds 2 or 3 islands
      */
-    public Archipelago(Island island1, Island island2){
+    public Archipelago(List<Island> islandList) {
         super();
-        this.islandNumber = island1.getIslandNumber()+island2.getIslandNumber();
-        setOwnership(island1.getOwnership());
-        addStudent(island1.getStudents());
-        addStudent(island2.getStudents());
-    }
-
-    /**
-     * Contructor that bonds three islands
-     */
-    public Archipelago(Island island1, Island island2, Island island3){
-        super();
-        this.islandNumber = island1.getIslandNumber()+island2.getIslandNumber()+island3.getIslandNumber();
-        setOwnership(island1.getOwnership());
-        addStudent(island1.getStudents());
-        addStudent(island2.getStudents());
-        addStudent(island3.getStudents());
+        if(islandList.size() < 2 || islandList.size() > 3)
+            throw new IllegalArgumentException("not a valid number of islands");
+        setOwnership(islandList.get(0).getOwnership());
+        islandList.forEach(island -> islandNumber += island.getIslandNumber());
+        islandList.forEach(island -> this.addStudent(island.getStudents()));
     }
 
     /**

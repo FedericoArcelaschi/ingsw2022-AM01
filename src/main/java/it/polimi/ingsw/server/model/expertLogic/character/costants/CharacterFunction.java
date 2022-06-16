@@ -65,21 +65,20 @@ enum CharacterFunction {
             influence.decorateProfessors(function, currTeam);
             }
     ),
+        GUARD( //FIXME /*
+            (ParametersForCharacter par)
+            -> {
+                List<Island> islandList = par.getIslandList();
+                Influence influence = par.getInfluence();
+                int islandIndex = par.getIslandIndex();
+                Island island = islandList.get(islandIndex);
+                Team teamBeforeComputing = island.getOwnership();
+                Team t = GreaterTeam.findGreaterTeam(influence.getInfluenceMap(island));
+                if (t == null || t.equals(teamBeforeComputing))
+                    return; //no island is conquered.
+                island = island.setOwnership(t);
 
-    GUARD(
-        (ParametersForCharacter par)
-        -> {
-            List<Island> islandList = par.getIslandList();
-            Influence influence = par.getInfluence();
-            int islandIndex = par.getIslandIndex();
-            Island island = islandList.get(islandIndex);
-            Team teamBeforeComputing = island.getOwnership();
-            Team t = GreaterTeam.findGreaterTeam(influence.getInfluenceMap(island));
-            if (t == null || t.equals(teamBeforeComputing))
-                return; //no island is conquered.
-            island = island.setOwnership(t);
-            ExpertIsland previous, next;
-            //find next and previous with a stupid ArrayList.
+                ExpertIsland previous, next;
                 if (islandIndex == 0) {
                     previous = (ExpertIsland) islandList.get(islandList.size() - 1);
                     next = (ExpertIsland) islandList.get(1);
@@ -91,11 +90,14 @@ enum CharacterFunction {
                     next = (ExpertIsland) islandList.get(islandIndex + 1);
                 }
                 List<Island> neightbouringIsland = Arrays.asList(previous, island, next);
-            //checks the ownership
+
+                //checks the ownership
                 List<Island> islandToJoin = null;
                 if (neightbouringIsland.get(0).getOwnership() != null) {
-                    if (neightbouringIsland.get(0).getOwnership() == neightbouringIsland.get(1).getOwnership())
+                    if (neightbouringIsland.get(0).getOwnership() == neightbouringIsland.get(1).getOwnership()) {
                         islandToJoin = neightbouringIsland.subList(0, 2);
+                        islandIndex--;
+                    }
                     if (neightbouringIsland.get(1).getOwnership() == neightbouringIsland.get(2).getOwnership()) {
                         assert islandToJoin != null;
                         islandToJoin.add(neightbouringIsland.get(2));
@@ -105,28 +107,15 @@ enum CharacterFunction {
 
                 if (islandToJoin == null)
                     return; //another escape if the conquered island won't join with the neighbours
-            //islands are joined
-                int firstIslandIndex
-                        = islandList
-                        .indexOf(islandToJoin.get(0));
-                if (firstIslandIndex == -1)
-                    throw new IllegalArgumentException("island: " + islandToJoin.get(0).toString() + "not found!");
-                Archipelago newArchipelago = null;
-                if (islandToJoin.size() == 2) {
-                    if (islandList.removeAll(islandToJoin))
-                        newArchipelago = new Archipelago(islandToJoin.get(0), islandToJoin.get(1));
-                } else if (islandToJoin.size() == 3) {
-                    if (islandList.removeAll(islandToJoin))
-                        newArchipelago = new Archipelago(islandToJoin.get(0), islandToJoin.get(1), islandToJoin.get(2));
-                    else
-                        throw new IllegalStateException();
-                } else
-                    throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
-                assert newArchipelago != null;
-                ExpertIsland newExpIsland = new ExpertIsland(newArchipelago);
-                    islandList.add(firstIslandIndex, newExpIsland);
-        }
-    ),
+                //islands are joined
+                islandList
+                        .add(islandIndex,
+                                new ExpertIsland(
+                                        new Archipelago(islandToJoin)));
+                islandList.removeAll(islandToJoin);
+                par.getSteps().setInt(islandIndex);
+            }
+        ),
     MAILMAN(
         (ParametersForCharacter par)
         -> {
@@ -330,7 +319,12 @@ enum CharacterFunction {
         }
     );
 
+    /**
+     *
+     * @param idChar between 1 and 12
+     */
     public static ApplyEffect getCharFunction(int idChar){
+        if(idChar == 12) idChar--;
         return CharacterFunction.values()[idChar-1].function;
     }
 
