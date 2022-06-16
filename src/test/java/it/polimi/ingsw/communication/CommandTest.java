@@ -37,8 +37,6 @@ public class CommandTest {
     void testMailman() throws ParseException, WrongGameModeException {
         Command command = new Command("fede", "paychar MAILMAN");
         assertEquals(CharacterUtility.MAILMAN, CharacterUtility.getChar(command.getCharId()));
-        g.executeCommand(new Command("lore", "playcard 2"));
-        g.executeCommand(new Command("fede", "playcard 1"));
         g.executeCommand(command);
         assertEquals(3, g.getBoard().getPossibleMovingSteps());
     }
@@ -73,7 +71,12 @@ public class CommandTest {
 
     @Test
     void testTaxman() throws ParseException {
+        //RUN THIS COMMAND WITH SEED 5.
         Command command = new Command("lore", "paychar taxman blue");
+        System.out.println(g.getBoard().getCastle("lore").getWaitingRoom());
+        System.out.println(g.getBoard().getCastle("fede").getWaitingRoom());
+        System.out.println(g.getBoard().getCloudList().get(0).getStudentList());
+        System.out.println(g.getBoard().getCloudList().get(1).getStudentList());
         assertEquals(CharacterUtility.TAXMAN, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE), command.getStudents());
         try {
@@ -82,10 +85,26 @@ public class CommandTest {
             throw new RuntimeException(e);
         }
         assertEquals(3, g.getBoard().getCastle("fede").getDiningRoom().get(StudentColor.BLUE));
-        g.executeCommand(new Command("lore", "playcard 2"));
-        g.executeCommand(new Command("fede", "playcard 1"));
-        //I need to have 3 coins...
+        setupTaxman();
+        System.out.println(g.getBoard().getCastle("fede").getDiningRoom());
         g.executeCommand(command);
+        System.out.println(g.getBoard().getCastle("fede").getDiningRoom());
         assertEquals(0, g.getBoard().getCastle("fede").getDiningRoom().get(StudentColor.BLUE));
+    }
+
+    private void setupTaxman() throws ParseException {
+        System.out.println(g.getBoard().getCastle("lore").getWaitingRoom());
+        System.out.println(g.getBoard().getCastle("fede").getWaitingRoom());
+        g.executeCommand(new Command("lore", "playcard 1"));
+        g.executeCommand(new Command("fede", "playcard 2"));
+        g.executeCommand(new Command("lore", "movestudentcastle pink pink pink"));
+        g.executeCommand(new Command("lore", "movemothernature 1"));
+        g.executeCommand(new Command("lore", "choosecloud 2"));
+        g.executeCommand(new Command("fede", "movestudentcastle red red pink"));
+        g.executeCommand(new Command("fede", "movemothernature 1"));
+        g.executeCommand(new Command("fede", "choosecloud 1"));
+        g.executeCommand(new Command("lore", "playcard 3"));
+        g.executeCommand(new Command("fede", "playcard 4"));
+        g.executeCommand(new Command("lore", "movestudentcastle green green green"));
     }
 }
