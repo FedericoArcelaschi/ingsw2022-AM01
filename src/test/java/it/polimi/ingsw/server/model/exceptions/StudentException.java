@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.exceptions;
+package it.polimi.ingsw.server.model.exceptions;
 
 public class StudentException extends Exception {
     public StudentException(Throwable cause) {

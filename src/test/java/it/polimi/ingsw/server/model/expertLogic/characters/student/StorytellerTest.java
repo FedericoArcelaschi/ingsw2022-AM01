@@ -8,8 +8,6 @@ import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
-import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -22,28 +20,21 @@ public class StorytellerTest {// 10° character
     private CharacterExplanation characterExplanation = CharacterExplanation.STORYTELLER;
     private ExpertBoard expertBoard;
     private String player1 = "Piro", player2 = "Pinoli";
-    private StandardCharacter storyTeller;
-
-    @BeforeEach
-    void setUp() {
-        expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
-        //extracts a character until the Story Teller is present
-        StandardCharacter storyTeller = expertBoard.getAvailableCharacters().get(CharacterUtility.STORYTELLER);
-        if(storyTeller == null) setUp();
-
-        try {
-            expertBoard.playCard(player1, 2);
-            expertBoard.changePhase();
-            expertBoard.playCard(player2, 3);
-            expertBoard.changePhase();
-        } catch (NotYourTurnException | PhaseNotRightException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Test
     void playCharacterTest() {
+
+
+        //SetUp
+        expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
+        expertBoard.extract4CharacterTesting(10);
+
+        StandardCharacter storyTeller
+                = expertBoard.getAvailableCharacters().get(10);
+
+        //Castle to work on:
         ExpertCastle castle = (ExpertCastle) expertBoard.getCastle("Piro");
+        //ColorsToMove
         List<StudentColor> studentsToMove = castle.getWaitingRoom().subList(0, 2);
         List<StudentColor> studentsInWaitingRoom = castle.getWaitingRoom().subList(2, 7);
 
@@ -84,7 +75,14 @@ public class StorytellerTest {// 10° character
 
     @Test
     void applyEffectErrorTest() {
+        expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
+        expertBoard.extract4CharacterTesting(10);
+
+        StandardCharacter storyTeller
+                = expertBoard.getAvailableCharacters().get(10);
+        //Castle to work on:
         ExpertCastle castle = (ExpertCastle) expertBoard.getCastle("Piro");
+        //ColorsToMove
         List<StudentColor> studentsToMove = castle.getWaitingRoom();
 
         try {
@@ -99,7 +97,7 @@ public class StorytellerTest {// 10° character
         //first two students in dining room will be moved to the waiting room
 
         assertThrowsExactly(StudentException.class,
-                () -> expertBoard.playExpertCard(10, 0, studentsForCharacter),
+                ()->expertBoard.playExpertCard(10, 0, studentsForCharacter),
                 "there are no students in the Waiting room, therefore the NoSuchStudentException should be thrown!");
 
         try {

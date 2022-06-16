@@ -1,13 +1,12 @@
 package it.polimi.ingsw.server.model.expertLogic.characters.student;
 
-import it.polimi.ingsw.server.model.baseLogic.*;
+import it.polimi.ingsw.server.model.baseLogic.Castle;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.*;
-
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StudentCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
-import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -15,19 +14,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.random.RandomGenerator;
 
-import static it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility.QUEEN;
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 public class QueenTest { //11° character
     private CharacterExplanation characterExplanation = CharacterExplanation.QUEEN;
-    private final String player1 = "Laura";
-    private String player2 = "Niccolò";
+    private String player1 = "Laura", player2 = "Niccolò";
 
     @Test
     void playCharacterTest() {
         ExpertBoard expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player2, player1)), RandomGenerator.getDefault().nextLong());
         assertEquals(player2, expertBoard.getCurrentPlayer());
+        expertBoard.extract4CharacterTesting(11);
         Castle currentPlayerCastle = expertBoard.getCastle(expertBoard.getCurrentPlayer());
 
         try {
@@ -36,38 +34,35 @@ public class QueenTest { //11° character
             throw new RuntimeException(e);
         }
         Map<StudentColor, Integer> diningRoom = new HashMap<>(currentPlayerCastle.getDiningRoom());
-        List<StandardCharacter> standardCharacters = expertBoard.getAvailableCharacters().values().stream().toList();
+        StudentCharacter studentCharacter = (StudentCharacter) expertBoard.getAvailableCharacters().get(11);
         int indexStudentToMove = 0;
-        if(standardCharacters.stream().noneMatch(s->s.getCharacterUtility() == QUEEN)) {
-            playCharacterTest();
-            return;
-        }
-        StudentCharacter studentCharacter = (StudentCharacter) standardCharacters.stream().filter(s->s.getCharacterUtility() == QUEEN).findAny().get();
-        StudentColor studentToMove = studentCharacter.getAvailableStudents().get(0);
+        StudentColor studentToMove = studentCharacter.getAvailableStudents().get(indexStudentToMove);
+
         try {
             expertBoard.playExpertCard(11, 0, List.of(studentToMove));
-        } catch (CoinException | PhaseNotRightException e) {
+        } catch (CoinException e) {
             playCharacterTest();
             return;
-        } catch (StudentException e) {
+        } catch (StudentException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
-        diningRoom.put(studentToMove, diningRoom.get(studentToMove) + 1);
+        diningRoom.put(studentToMove, diningRoom.get(studentToMove)+1);
         assertEquals(diningRoom, currentPlayerCastle.getDiningRoom());
     }
 
-    void playCharacterTestError() throws StudentException, WrongGameModeException {
+    void playCharacterTestError() throws StudentException {
         ExpertBoard expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player2, player1)), RandomGenerator.getDefault().nextLong());
         assertEquals(player2, expertBoard.getCurrentPlayer());
+        expertBoard.extract4CharacterTesting(11);
         Castle currentPlayerCastle = expertBoard.getCastle(expertBoard.getCurrentPlayer());
 
         try {
             expertBoard.moveStudentsToDiningRoom(player2, currentPlayerCastle.getWaitingRoom());
         } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
-            fail(e.getCause());
+            throw new RuntimeException(e);
         }
         Map<StudentColor, Integer> diningRoom = new HashMap<>(currentPlayerCastle.getDiningRoom());
-        StudentCharacter studentCharacter = (StudentCharacter) expertBoard.getAvailableCharacters().get(QUEEN);
+        StudentCharacter studentCharacter = (StudentCharacter) expertBoard.getAvailableCharacters().get(11);
         int indexStudentToMove = 0;
         List<StudentColor> availableStudents = studentCharacter.getAvailableStudents();
         StudentColor studentToMove = StudentColor.YELLOW;
@@ -75,14 +70,17 @@ public class QueenTest { //11° character
             if(!availableStudents.contains(c))
                 studentToMove = c; //this isn't available!
         try {
-            expertBoard.playExpertCard(11, 0, List.of(studentToMove));
+            StudentColor finalStudentToMove = studentToMove;
+            expertBoard.playExpertCard(11, 0, List.of(finalStudentToMove));
         } catch (CoinException e) {
             playCharacterTestError();
             return;
         } catch (NoSuchStudentException e) {
             throw new NoSuchStudentException(e.getMessage());
-        } catch (StudentException | PhaseNotRightException e) {
+        } catch (StudentException e) {
             throw new StudentException(e);
+        } catch (PhaseNotRightException e) {
+            throw new RuntimeException(e);
         }
         diningRoom.put(studentToMove, diningRoom.get(studentToMove)+1);
         assertEquals(diningRoom, currentPlayerCastle.getDiningRoom());
@@ -91,7 +89,7 @@ public class QueenTest { //11° character
     @Test
     void weirdTestEncapsulation() {
         assertThrowsExactly(StudentException.class,
-                this::playCharacterTestError,
+                () -> playCharacterTestError(),
                 "Queen doesn't have the color i asked for.");
     }
 }

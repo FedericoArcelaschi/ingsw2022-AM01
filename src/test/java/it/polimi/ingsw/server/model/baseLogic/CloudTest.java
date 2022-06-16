@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.baseLogic;
+package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.Bag;
 import it.polimi.ingsw.server.model.baseLogic.Cloud;

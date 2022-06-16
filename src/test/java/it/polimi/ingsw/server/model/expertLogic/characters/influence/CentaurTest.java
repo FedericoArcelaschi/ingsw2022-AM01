@@ -1,8 +1,7 @@
 package it.polimi.ingsw.server.model.expertLogic.characters.influence;
 
+import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
-import it.polimi.ingsw.server.model.exceptions.StudentException;
-import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;

@@ -1,14 +1,15 @@
 package it.polimi.ingsw.server.model.expertLogic;
 
-import it.polimi.ingsw.server.model.baseLogic.Island;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
-import it.polimi.ingsw.server.model.baseLogic.Team;
+import it.polimi.ingsw.server.model.baseLogic.interfaces.InterfaceAdapter;
+import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
+import it.polimi.ingsw.server.model.expertLogic.influence.InfluenceComputingExpert;
 import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
 import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
-import it.polimi.ingsw.server.model.baseLogic.influence.functionalInterfaces.InfluenceComputing;
-import it.polimi.ingsw.server.model.baseLogic.interfaces.InterfaceAdapter;
-import it.polimi.ingsw.server.model.expertLogic.influence.InfluenceComputingExpert;
 import it.polimi.ingsw.server.model.expertLogic.influence.InfluenceComputingFunction;
+import it.polimi.ingsw.server.model.baseLogic.Island;
+import it.polimi.ingsw.server.model.baseLogic.Team;
+import it.polimi.ingsw.server.model.baseLogic.influence.functionalInterfaces.InfluenceComputing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ class ExpertIslandTest {
     private ExpertIsland island;
     private final InfluenceComputing defaultFunction =
         (Island island, Map<StudentColor, Team> professorsMap) -> {
-            Map<Team, Integer> influenceMap = new HashMap<>();
+            Map< Team, Integer> influenceMap = new HashMap<>();
             //counts the students
             for (Team t : Team.values()) {
                 int influence = 0;
@@ -66,13 +67,11 @@ class ExpertIslandTest {
                         Map.of(StudentColor.YELLOW, Team.WHITE, //piero's team
                                 StudentColor.GREEN, Team.BLACK));//angela's team
         island.setOwnership(Team.WHITE);
-        island.addStudent(
-                new EnumMap<>(
-                        Map.of(
-                        StudentColor.YELLOW, 2,
-                        StudentColor.GREEN, 3,
-                        StudentColor.RED, 10
-                )));
+        EnumMap<StudentColor, Integer> students = new EnumMap<>(StudentColor.class);
+        students.put(StudentColor.YELLOW, 2);
+        students.put(StudentColor.GREEN, 3);
+        students.put(StudentColor.RED, 10);
+        island.addStudent(students);
         InfluenceComputingExpert<?> influenceFunction = InterfaceAdapter.adaptExpertInfluence(defaultFunction);
         Map<Team, Integer> influence = influenceFunction.computeInfluenceMap(island, professorsMap, null);
 

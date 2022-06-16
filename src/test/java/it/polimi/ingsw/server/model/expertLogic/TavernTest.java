@@ -1,14 +1,11 @@
 package it.polimi.ingsw.server.model.expertLogic;
 
-
 import it.polimi.ingsw.server.model.baseLogic.Bag;
+import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
-import it.polimi.ingsw.server.model.baseLogic.Board;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StudentCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.Tavern;
+import it.polimi.ingsw.server.model.expertLogic.character.charTypes.*;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,21 +26,21 @@ public class TavernTest{
     @BeforeAll
     static void beforeAll() {
         t = new Turn(Arrays.asList("a","b"));
-        board = BoardFactory.getBoard(List.of("a","b"), true, RandomGenerator.getDefault().nextLong());
+        board = BoardFactory.getBoard(Arrays.asList("a","b"), true);
         tavern = new Tavern(new Bag(20, 1));
     }
 
     @Test
     public void testExtraction() {
-        Map<CharacterUtility, StandardCharacter> expCardMap;
-        expCardMap = tavern.extract();
-        List<StandardCharacter> expCards = expCardMap.values().stream().toList();
-        assertEquals(3, expCards.size());
-        assertTrue(expCards.contains(new StudentCharacter(1, new Bag(1,1)))
-                || expCards.contains(new StudentCharacter(7, new Bag(1,1)))
+        List<StandardCharacter> expCards;
+        expCards = tavern.extract().values().stream().toList();
+        board.getBag().extract();
+        assertEquals(13, expCards.size());
+        assertTrue(expCards.contains(new StudentCharacter(1, board.getBag()))
+                || expCards.contains(new StudentCharacter(7, board.getBag()))
                 || expCards.contains(new StudentCharacter(10))
                 || expCards.contains(new StudentCharacter(12))
-                || expCards.contains(new StudentCharacter(11,new Bag(1,1)))
+                || expCards.contains(new StudentCharacter(11, board.getBag()))
                 || expCards.contains(new StandardCharacter(2))
                 || expCards.contains(new StandardCharacter(6))
                 || expCards.contains(new StandardCharacter(8))

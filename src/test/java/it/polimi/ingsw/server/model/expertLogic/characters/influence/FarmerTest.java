@@ -4,18 +4,15 @@ import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,33 +60,20 @@ class FarmerTest { //2° character
     void playExpertCharacterTest() {
         //SetUp
         ExpertBoard expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
-        if(expertBoard.getAvailableCharacters().values()
-                        .stream().map(StandardCharacter::getName)
-                        .noneMatch(Predicate.isEqual("FARMER"))) {
-            //if isn't present-> tries again to extract
-            playExpertCharacterTest();
-            return;
-        }
+        expertBoard.extract4CharacterTesting( 2 );
 
         try {
-            expertBoard.playCard(player1, 3);
-            expertBoard.playCard(player2, 3);
-        } catch (PhaseNotRightException | NotYourTurnException e) {
-            fail(e.getCause());
-        }
-        try
-        {
             expertBoard.moveStudentsToDiningRoom(player1, expertBoard.getCastle(player1).getWaitingRoom());
         } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
-            fail(e.getCause());
+            throw new RuntimeException(e);
         }
         try {
-            expertBoard.playExpertCard( 2, 0, List.of(StudentColor.values()));
-        } catch (StudentException | CoinException ignored) {
+            expertBoard.playExpertCard( 2, 0, List.of(StudentColor.values()) );
+        } catch (StudentException | PhaseNotRightException e) {
+            throw new RuntimeException(e);
+        } catch (CoinException ignored) {
             playExpertCharacterTest();
             return;
-        } catch (PhaseNotRightException e) {
-            fail(e.getCause());
         }
 
         for (StudentColor c: StudentColor.values()) {
