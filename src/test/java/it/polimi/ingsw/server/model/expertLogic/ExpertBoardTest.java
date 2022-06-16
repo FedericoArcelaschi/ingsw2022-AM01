@@ -38,14 +38,14 @@ public class ExpertBoardTest{
     //TODO: test exceptions
     @Test
     public void testPlayExpertCard() {
-        if (expertBoard.getAvailableCharacters().get(4) == null) {
+        if (expertBoard.getAvailableCharacters().get(CharacterUtility.MAILMAN) == null) {
             assertThrows(IllegalArgumentException.class, () -> expertBoard.playExpertCard(4, null, null),
                     "Mailman not in extracted");
             expertBoard.extract4CharacterTesting(4);
         }
         int expectedPossibleMovingSteps = expertBoard.getPossibleMovingSteps() + 2;
         try {
-            expertBoard.playExpertCard(4, null, null);
+            expertBoard.playExpertCard(4, 0, null);
         } catch (Exception e) {
             e.printStackTrace();
             fail(" playExpertCard() method throw exception " + e);

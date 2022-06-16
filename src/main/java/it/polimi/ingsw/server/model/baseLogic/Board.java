@@ -407,7 +407,7 @@ public class Board {
         return withMoreProfessors;
     }
 
-    public void playExpertCard (int idChar, int islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, WrongGameModeException, PhaseNotRightException {
+    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, WrongGameModeException, PhaseNotRightException {
         throw new WrongGameModeException("You can't use this command in this game mode!");
     }
 
