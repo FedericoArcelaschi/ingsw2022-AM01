@@ -21,7 +21,8 @@ public class CommandTest {
 
     @BeforeEach
     void setup() {
-        g = new Game(GameType.EXPERT_2_PLAYER, List.of("lore", "fede"));
+        //SEED 5: Taxman gets extracted
+        g = new Game(GameType.EXPERT_2_PLAYER, List.of("lore", "fede"), 5);
     }
 
     @Test
@@ -83,6 +84,7 @@ public class CommandTest {
         assertEquals(3, g.getBoard().getCastle("fede").getDiningRoom().get(StudentColor.BLUE));
         g.executeCommand(new Command("lore", "playcard 2"));
         g.executeCommand(new Command("fede", "playcard 1"));
+        //I need to have 3 coins...
         g.executeCommand(command);
         assertEquals(0, g.getBoard().getCastle("fede").getDiningRoom().get(StudentColor.BLUE));
     }

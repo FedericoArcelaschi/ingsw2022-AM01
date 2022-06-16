@@ -31,6 +31,12 @@ public class Game {
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
 
+    public Game(GameType gameType, List<String> usernames, long seed) {
+        this.board = BoardFactory.getBoard(usernames, gameType.expertMode, seed);
+        this.turn  = board.getTurn();
+        MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
+    }
+
     public @NotNull MessageUsernameSet executeCommand(@NotNull Command command) {
         return switch (command.getType()) {
             case PLAY_CARD -> playCardCommand(command);
