@@ -231,4 +231,9 @@ public class ExpertBoard extends Board {
     public CharacterUtility getPlayedExpertChar() {
         return playedExpertChar;
     }
+
+    public StandardCharacter extract4CharacterTesting(int idChar) {
+        Tavern tavern = new Tavern(bag);
+        return tavern.extract4testing(idChar);
+    };
 }

@@ -180,4 +180,11 @@ public class Game {
         return MessageUsernameSet.of(new Error(error.getMessage()), addressee);
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
+    public Turn getTurn() {
+        return turn;
+    }
 }

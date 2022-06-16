@@ -467,4 +467,8 @@ public class Board {
     public int getPossibleMovingSteps() {
         return possibleMovingSteps.getInt();
     }
+
+    public Bag getBag() {
+        return bag;
+    }
 }
