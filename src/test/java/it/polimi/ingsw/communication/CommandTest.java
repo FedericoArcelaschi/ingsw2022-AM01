@@ -73,10 +73,6 @@ public class CommandTest {
     void testTaxman() throws ParseException {
         //RUN THIS COMMAND WITH SEED 5.
         Command command = new Command("lore", "paychar taxman blue");
-        System.out.println(g.getBoard().getCastle("lore").getWaitingRoom());
-        System.out.println(g.getBoard().getCastle("fede").getWaitingRoom());
-        System.out.println(g.getBoard().getCloudList().get(0).getStudentList());
-        System.out.println(g.getBoard().getCloudList().get(1).getStudentList());
         assertEquals(CharacterUtility.TAXMAN, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE), command.getStudents());
         try {
@@ -93,8 +89,6 @@ public class CommandTest {
     }
 
     private void setupTaxman() throws ParseException {
-        System.out.println(g.getBoard().getCastle("lore").getWaitingRoom());
-        System.out.println(g.getBoard().getCastle("fede").getWaitingRoom());
         g.executeCommand(new Command("lore", "playcard 1"));
         g.executeCommand(new Command("fede", "playcard 2"));
         g.executeCommand(new Command("lore", "movestudentcastle pink pink pink"));

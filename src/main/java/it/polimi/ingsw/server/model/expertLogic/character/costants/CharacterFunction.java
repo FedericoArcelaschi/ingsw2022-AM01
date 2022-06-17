@@ -324,7 +324,6 @@ enum CharacterFunction {
      * @param idChar between 1 and 12
      */
     public static ApplyEffect getCharFunction(int idChar){
-        if(idChar == 12) idChar--;
         return CharacterFunction.values()[idChar-1].function;
     }
 

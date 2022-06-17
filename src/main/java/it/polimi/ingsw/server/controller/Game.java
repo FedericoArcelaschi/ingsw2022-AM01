@@ -61,17 +61,18 @@ public class Game {
 
     private @NotNull MessageUsernameSet moveStudentToDiningRoomCommand(@NotNull Command command) {
         List<StudentColor> students = command.getStudents();
+        String playerID = command.getUsername();
         movedStudents += students.size();
         if (movedStudents > MAX_STUDENTS_TO_MOVE) {
             movedStudents -= students.size();
-            return MessageUsernameSet.of(new Error("You are trying to move too many students"), command.getUsername());
+            return MessageUsernameSet.of(new Error("You are trying to move too many students"), playerID);
         }
         try {
-            board.moveStudentsToDiningRoom(command.getUsername(), command.getStudents());
+            board.moveStudentsToDiningRoom(playerID, students);
         } catch (NoSuchStudentException | TooManyStudentsException | NotYourTurnException | PhaseNotRightException e) {
             logger.info(e);
             movedStudents -= students.size();
-            return errorMessage(e, command.getUsername());
+            return errorMessage(e, playerID);
         }
         if (movedStudents == MAX_STUDENTS_TO_MOVE) {
             movedStudents = 0;

@@ -51,7 +51,9 @@ public class TurnTest{
             assertEquals("fede", t.getCurrentPlayer());
             assertEquals(TurnPhase.STUDENTS, t.getCurrentPhase());
             t.changePhase();
+            //fedeMMN
             t.changePhase();
+            //fedeCloud
             t.changePhase();
             assertEquals(TurnPhase.PLANNING, t.getCurrentPhase());
             assertEquals("gio", t.getCurrentPlayer());
@@ -79,5 +81,29 @@ public class TurnTest{
                     "gio", new Card(3)));
         //t.setNewRound(mapPlayersCard);
         System.out.println(t.getActionOrder());
+    }
+
+    @Test
+    void nextTestPlanning() {
+        TurnPhase current = TurnPhase.PLANNING;
+        assertEquals(TurnPhase.STUDENTS, current.next());
+    }
+
+    @Test
+    void nextTestStudent() {
+        TurnPhase current = TurnPhase.STUDENTS;
+        assertEquals(TurnPhase.MOTHERNATURE, current.next());
+    }
+
+    @Test
+    void nextTestMotherNature() {
+        TurnPhase current = TurnPhase.MOTHERNATURE;
+        assertEquals(TurnPhase.CLOUD, current.next());
+    }
+
+    @Test
+    void nextTestCloud() {
+        TurnPhase current = TurnPhase.CLOUD;
+        assertEquals(null, current.next());
     }
 }
