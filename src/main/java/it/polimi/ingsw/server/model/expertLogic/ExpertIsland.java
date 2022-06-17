@@ -72,5 +72,5 @@ public class ExpertIsland extends Island implements StudentPlaces {
     public String toString() {
         return island.toString();
     }
-    
+
 }

@@ -52,15 +52,14 @@ public class Turn {
             }
             default -> currentPhase = currentPhase.next();  //We can move on to the next phase as normal and the turn player stays the same
             case CLOUD -> {
-                if (actionOrder.indexOf(currentPlayer) < N_PLAYERS - 1) {          //If there are other players that need to play
-                    currentPlayer = next(actionOrder, currentPlayer);
+                if (actionOrder.indexOf(currentPlayer) < N_PLAYERS - 1) {       //If there are other players that need to play
                     currentPhase = TurnPhase.STUDENTS;                          //and set the phase to students
                 } else {                                                        //If we're done throughout the turn
-                    currentPlayer = next(actionOrder, currentPlayer);
                     currentPhase = TurnPhase.PLANNING;                          //and we go back to planning
                     planningCounter = FIRST_PLANNING_TURN;
                     playedCards.clear();
                 }
+                currentPlayer = next(actionOrder, currentPlayer);
             }
         }
     }

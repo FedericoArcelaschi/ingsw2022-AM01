@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -82,9 +83,7 @@ public class CommandTest {
         }
         assertEquals(3, g.getBoard().getCastle("fede").getDiningRoom().get(StudentColor.BLUE));
         setupTaxman();
-        System.out.println(g.getBoard().getCastle("fede").getDiningRoom());
         g.executeCommand(command);
-        System.out.println(g.getBoard().getCastle("fede").getDiningRoom());
         assertEquals(0, g.getBoard().getCastle("fede").getDiningRoom().get(StudentColor.BLUE));
     }
 
