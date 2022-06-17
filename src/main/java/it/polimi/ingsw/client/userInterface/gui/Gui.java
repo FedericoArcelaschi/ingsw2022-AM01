@@ -68,21 +68,21 @@ public class Gui extends Application implements UserInterface {
             }
 //            b.playCard("pippo", 8);
 //            b.changePhase();
-            List<StudentColor> studentColorList = b.getCastle("Fede").getWaitingRoom().subList(0,1);
-            b.moveStudentsToDiningRoom("Fede", studentColorList);
-            b.moveStudentToIsland("Fede", 1, studentColorList);
-            b.moveStudentsToDiningRoom("Fede", b.getCastle("Fede").getWaitingRoom().subList(0,1));
-            b.changePhase();
-            b.moveMotherNature(1);
-            b.changePhase();
+//            List<StudentColor> studentColorList = b.getCastle("Fede").getWaitingRoom().subList(0,1);
+//            b.moveStudentsToDiningRoom("Fede", studentColorList);
+//            b.moveStudentToIsland("Fede", 1, studentColorList);
+//            b.moveStudentsToDiningRoom("Fede", b.getCastle("Fede").getWaitingRoom().subList(0,1));
+//            b.changePhase();
+//            b.moveMotherNature(1);
+//            b.changePhase();
 //            b.chooseCloud("Fede", 1);
 //            b.changePhase();
 
-        } catch (PhaseNotRightException | NotYourTurnException | TooManyStudentsException e) {
+        } catch (PhaseNotRightException | NotYourTurnException /*| TooManyStudentsException*/ e) {
             throw new RuntimeException(e);
-        } catch (NoSuchStudentException e) {
+        }/* catch (NoSuchStudentException e) {
             return createBoardData();
-        }
+        }*/
         //System.out.println(bd);
         BoardData bd = b.getData("Fede");
         if(!bd.characters().stream().map(CharacterData::getName).toList().contains("MONK"))

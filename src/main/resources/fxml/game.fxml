@@ -165,40 +165,7 @@
                            <children>
                               <VBox prefHeight="600.0" prefWidth="910.0">
                                  <children>
-                                    <HBox fx:id="islandRow1" minWidth="-Infinity" prefHeight="200.0" prefWidth="1110.0">
-                                       <children>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="1" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="2" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="3" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="4" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="5" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="6" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                       </children>
-                                    </HBox>
+                                    <FlowPane fx:id="islandRow1" alignment="CENTER" minWidth="-Infinity" prefHeight="200.0" prefWidth="1110.0" />
                                     <StackPane fx:id="cloudStackPane">
                                        <children>
                                           <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" visible="false">
@@ -281,40 +248,7 @@
                                           </FlowPane>
                                        </children>
                                     </StackPane>
-                                    <HBox fx:id="islandRow2" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="200.0" prefWidth="1110.0">
-                                       <children>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="7" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="8" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="9" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="10" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="11" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="12" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                       </children>
-                                    </HBox>
+                                    <FlowPane fx:id="islandRow2" alignment="CENTER" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="200.0" prefWidth="1110.0" />
                                  </children>
                               </VBox>
                            </children>

@@ -25,7 +25,7 @@ public class GamePaneController {
     public StackPane bottomStackPane;
     @FXML private Pane waitingRoomPane;
     @FXML private StackPane cloudStackPane;
-    @FXML private HBox islandRow1, islandRow2;
+    @FXML private FlowPane islandRow1, islandRow2;
     @FXML private Tab characterTab;
     @FXML private ToggleButton expertMode;
     private MultipleToggleGroup waitingRoomToggleGroup;
@@ -55,7 +55,7 @@ public class GamePaneController {
         GuiDrawer guiDrawer = new GuiDrawer();
         guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
         guiDrawer.drawClouds(boardData.cloudList(), cloudStackPane);
-        guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2);
+        guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2, this::island);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
         guiDrawer.drawCharacter(boardData.characters(), charFlowPane, this::payCharacter);
         guiDrawer.drawTurn(boardData.turn(), turnPane);

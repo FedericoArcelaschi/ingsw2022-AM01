@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.modelData.CloudData;
 import it.polimi.ingsw.communication.modelData.IslandData;
 import it.polimi.ingsw.communication.modelData.TurnData;
 import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
+import it.polimi.ingsw.server.model.baseLogic.Island;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
@@ -116,41 +117,19 @@ public class GuiDrawer {
         }
     }*/
 
-    public void drawIslands(List<IslandData> islandList, int motherNaturePosition, HBox islandRow1, HBox islandRow2) {
-        List<Pane> paneList = new ArrayList<>();
-        for (Node n : islandRow1.getChildren()) {
-            paneList.add((Pane) n);
-        }
-        for (Node n : islandRow2.getChildren()) {
-            paneList.add((Pane) n);
-        }
-
-        for (int i = 0; i < islandList.size(); i++) {
+    public void drawIslands(List<IslandData> islandList, int motherNaturePosition, FlowPane islandRow1, FlowPane islandRow2, EventHandler<MouseEvent> onClick) {
+        List<Pane> islandPaneList = new ArrayList<>();
+        int i, j=0;
+        for (i = 0; i < islandList.size(); i++) {
             IslandData islandData = islandList.get(i);
-            Pane pane = paneList.get(i);
-            //Adding students
-            for (StudentColor color : islandData.students().keySet()) {
-                for (int j = 0; j < islandData.students().get(color); j++) {
-                    ToggleButton toggleButton = createElementToggleButton("student", 25, 25, true);
-                    setStudentButtonColor(toggleButton, color);
-                    FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
-                    flowPane.getChildren().add(toggleButton);
-                }
-            }
-            //adding mother nature
-            if (motherNaturePosition == i) {
-                ToggleButton toggleButton = createElementToggleButton("motherNature", 35, 35, true);
-                FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
-                flowPane.getChildren().add(toggleButton);
-            }
-            //Adding towers
-            for (int j = 0; j < islandData.getIslandSize() && islandData.getOwnership() != null; j++) {
-                ToggleButton toggleButton = createElementToggleButton("tower", 35, 50, true);
-                setTowerButtonColor(toggleButton, islandData.getOwnership());
-                FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
-                flowPane.getChildren().add(toggleButton);
-            }
+            islandPaneList.add(drawIsland(islandData, i, motherNaturePosition, onClick));
         }
+        //add in top row
+        for (; j < (islandPaneList.size()+1)/2; j++)
+            islandRow1.getChildren().add(islandPaneList.get(j));
+        //add in bottom row
+        for (; j < islandPaneList.size(); j++)
+            islandRow2.getChildren().add(islandPaneList.get(j));
     }
 
     public void drawClouds(List<CloudData> cloudList, StackPane cloudStackPane){
@@ -188,6 +167,41 @@ public class GuiDrawer {
                 text.setStyle("-fx-font-size: 16px");
             playerOrderLabel.getChildren().add(text);
         }
+    }
+
+    private Pane drawIsland(IslandData islandData, int index, int motherNaturePosition, EventHandler<MouseEvent> onClick){
+        Pane islandPane = new Pane();
+        islandPane.setPrefSize(185, 200);
+        islandPane.getStyleClass().add("island");
+        islandPane.setOnMouseClicked(onClick);
+        islandPane.setAccessibleText(String.valueOf(index));
+        FlowPane islandFlowPane = new FlowPane();
+        islandFlowPane.setPrefSize(145, 160);
+        islandFlowPane.setLayoutX(20);
+        islandFlowPane.setLayoutY(20);
+        islandFlowPane.setAlignment(Pos.CENTER);
+        islandFlowPane.setAccessibleText(String.valueOf(index));
+        //Adding students
+        for (StudentColor color : islandData.students().keySet()) {
+            for (int j = 0; j < islandData.students().get(color); j++) {
+                ToggleButton toggleButton = createElementToggleButton("student", 25, 25, true);
+                setStudentButtonColor(toggleButton, color);
+                islandFlowPane.getChildren().add(toggleButton);
+            }
+        }
+        //adding mother nature
+        if (motherNaturePosition == index) {
+            ToggleButton toggleButton = createElementToggleButton("motherNature", 35, 35, true);
+            islandFlowPane.getChildren().add(toggleButton);
+        }
+        //Adding towers
+        for (int j = 0; j < islandData.getIslandSize() && islandData.getOwnership() != null; j++) {
+            ToggleButton toggleButton = createElementToggleButton("tower", 35, 50, true);
+            setTowerButtonColor(toggleButton, islandData.getOwnership());
+            islandFlowPane.getChildren().add(toggleButton);
+        }
+        islandPane.getChildren().add(islandFlowPane);
+        return islandPane;
     }
 
     private void drawCastle(CastleData castleData, BorderPane castle, Label nameLabel, boolean disabled) {
