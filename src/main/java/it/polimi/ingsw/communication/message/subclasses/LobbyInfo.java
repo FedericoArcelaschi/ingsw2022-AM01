@@ -4,9 +4,7 @@ import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.server.controller.GameType;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * NEWER version of lobby info contains all the lobby.
@@ -14,20 +12,23 @@ import java.util.Set;
  */
 public class LobbyInfo extends Message {
     private final Map<GameType, Integer> activeGames;
-    private final Map<GameType, Set<String>> playerInLobbyMap;
+    private final List<Lobby> playerInLobbyMap;
 
     public LobbyInfo(Map<GameType, Set<String>> clientsInLobbyMap, Map<GameType, Integer> activeGames) {
         super(MessageType.LOBBYINFO);
         this.activeGames = activeGames;
-        playerInLobbyMap = clientsInLobbyMap;
+        playerInLobbyMap = new ArrayList<>();
+        for (GameType gt: clientsInLobbyMap.keySet()) {
+            playerInLobbyMap.add(new Lobby(gt, clientsInLobbyMap.get(gt)));
+        }
     }
 
     public Map<GameType, Integer> getActiveGames() {
         return activeGames;
     }
 
-    public Map<GameType, Set<String>> getPlayerInLobbyMap() {
-        return playerInLobbyMap;
+    public List<Lobby> getPlayerInLobbyMap() {
+        return new ArrayList<>(playerInLobbyMap);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class LobbyInfo extends Message {
             builder.append("|               |  ")
                     .append(gameType.expertMode ? "expert" : "normal")
                     .append(" mode  ||");
-            playerInLobbyMap.computeIfAbsent(gameType, k -> new HashSet<String>());
+            /*playerInLobbyMap.computeIfAbsent(gameType, k -> new HashSet<String>());
             for (String player : (playerInLobbyMap.get(gameType).stream().toList())) {
                 numberOfDrawnPlayers++;
                 if (player.length() > 10) {
@@ -59,7 +60,7 @@ public class LobbyInfo extends Message {
                             .append(' ')
                             .append('|');
                 }
-            }
+            }*/
             for (; numberOfDrawnPlayers < gameType.nPlayer; numberOfDrawnPlayers++) { //padding for empty lobbys
                 builder.append(' ')
                         .append(" ".repeat(10))
@@ -92,5 +93,22 @@ public class LobbyInfo extends Message {
         return builder.toString();
     }
 
+    public static class Lobby {
+        private final GameType gameType;
+        private final Set<String> connectedPlayers;
+
+        public Lobby(GameType gameType, Set<String> connectedPlayers) {
+            this.gameType = gameType;
+            this.connectedPlayers = connectedPlayers;
+        }
+
+        public GameType getGameType() {
+            return gameType;
+        }
+
+        public Set<String> getConnectedPlayers() {
+            return connectedPlayers;
+        }
+    }
 }
 

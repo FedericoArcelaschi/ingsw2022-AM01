@@ -53,7 +53,7 @@ public class Gui extends Application implements UserInterface {
         stage.show();
         loginPaneController.initialize(this::connect);
         //FIXME: for testing.
-        draw(createBoardData());
+        //draw(createBoardData());
     }
 
     private BoardData createBoardData(){
@@ -121,7 +121,7 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void printLobby(LobbyInfo lobbyInfo) {
-        //TODO:
+        Platform.runLater(()->loginPaneController.drawLobbyInfo(lobbyInfo));
     }
 
     @Override

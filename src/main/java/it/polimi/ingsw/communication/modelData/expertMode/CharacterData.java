@@ -1,7 +1,6 @@
 package it.polimi.ingsw.communication.modelData.expertMode;
 
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +20,7 @@ public class CharacterData {
         this.name = characterUtility.name();
         this.characterUtility = characterUtility;
         this.cost = cost;
-        this.students = students.orElse(null);
+        this.students = students.orElse(new ArrayList<>());
         this.description = description;
     }
 
