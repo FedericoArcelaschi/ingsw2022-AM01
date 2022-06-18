@@ -43,10 +43,6 @@ public class ClientMain {
         System.out.println("User on " + port + ":  connected");
 
         clientSender = new ClientSender(socket);
-
-        //sends player preferences to the server;
-        //clientSender.send(new Preferences(username, preferenceNPlayer, preferenceExpertMode));
-
         //runs the ClientReceiver
         clientReceiver = new ClientReceiver(this, socket, userInterface);
         Runnable runnable = () -> Executors.newCachedThreadPool().submit(clientReceiver);
