@@ -1,7 +1,12 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
+import it.polimi.ingsw.server.model.baseLogic.Board;
+import it.polimi.ingsw.server.model.baseLogic.Card;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
+import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,7 +31,7 @@ public class TurnTest{
             t.changePhase();
             List<String> order = Arrays.asList("gio", "lore", "fede");
             assertEquals(order, t.getActionOrder());
-            assertEquals(TurnPhase.STUDENTS, t.getCurrentPhase());
+            Assertions.assertEquals(TurnPhase.STUDENTS, t.getCurrentPhase());
             assertEquals("gio", t.getCurrentPlayer());
             t.changePhase();
             assertEquals(TurnPhase.MOTHERNATURE, t.getCurrentPhase());
@@ -46,7 +51,9 @@ public class TurnTest{
             assertEquals("fede", t.getCurrentPlayer());
             assertEquals(TurnPhase.STUDENTS, t.getCurrentPhase());
             t.changePhase();
+            //fedeMMN
             t.changePhase();
+            //fedeCloud
             t.changePhase();
             assertEquals(TurnPhase.PLANNING, t.getCurrentPhase());
             assertEquals("gio", t.getCurrentPlayer());
@@ -72,7 +79,31 @@ public class TurnTest{
                         Map.of("fede", new Card(1),
                     "lore", new Card(2),
                     "gio", new Card(3)));
-        t.setNewRound(mapPlayersCard);
+        //t.setNewRound(mapPlayersCard);
         System.out.println(t.getActionOrder());
+    }
+
+    @Test
+    void nextTestPlanning() {
+        TurnPhase current = TurnPhase.PLANNING;
+        assertEquals(TurnPhase.STUDENTS, current.next());
+    }
+
+    @Test
+    void nextTestStudent() {
+        TurnPhase current = TurnPhase.STUDENTS;
+        assertEquals(TurnPhase.MOTHERNATURE, current.next());
+    }
+
+    @Test
+    void nextTestMotherNature() {
+        TurnPhase current = TurnPhase.MOTHERNATURE;
+        assertEquals(TurnPhase.CLOUD, current.next());
+    }
+
+    @Test
+    void nextTestCloud() {
+        TurnPhase current = TurnPhase.CLOUD;
+        assertEquals(null, current.next());
     }
 }

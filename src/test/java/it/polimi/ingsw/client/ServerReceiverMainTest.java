@@ -20,8 +20,8 @@ class ServerReceiverMainTest {
     void beforeEach() throws IllegalAccessException {
         ExecutorService executorService = Executors.newCachedThreadPool();
         s = new ServerMain(1234);
-        c1 = new ClientMain("127.0.0.1", 1234, new Preferences("Fede",2,false));
-        c2 = new ClientMain("127.0.0.1", 1234, new Preferences("Lore",2,false));
+        //c1 = new ClientMain("127.0.0.1", 1234, new Preferences("Fede",2,false));
+        //c2 = new ClientMain("127.0.0.1", 1234, new Preferences("Lore",2,false));
         executorService.submit(s);
     }
 

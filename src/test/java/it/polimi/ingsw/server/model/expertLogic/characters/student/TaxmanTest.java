@@ -1,17 +1,19 @@
 package it.polimi.ingsw.server.model.expertLogic.characters.student;
-import it.polimi.ingsw.server.model.baseLogic.*;
+
+import it.polimi.ingsw.server.model.baseLogic.Castle;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.MapToList;
-import it.polimi.ingsw.server.model.exceptions.StudentException;
-import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
-
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StudentCharacter;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -45,11 +47,11 @@ public class TaxmanTest {
             fail(e.getMessage());
         }
 
-        assertEquals(List.of(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.PINK, StudentColor.RED).stream().sorted().toList(),
+        assertEquals(Stream.of(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.PINK, StudentColor.RED).sorted().toList(),
                 MapToList.apply(c1.getDiningRoom()).stream().sorted().toList());
-        assertEquals(List.of(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.GREEN, StudentColor.BLUE).stream().sorted().toList(),
+        assertEquals(Stream.of(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.GREEN, StudentColor.BLUE).sorted().toList(),
                 MapToList.apply(c2.getDiningRoom()).stream().sorted().toList());
-        assertEquals(List.of(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.BLUE, StudentColor.PINK).stream().sorted().toList(),
+        assertEquals(Stream.of(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.BLUE, StudentColor.PINK).sorted().toList(),
                 MapToList.apply(c3.getDiningRoom()).stream().sorted().toList());
     }
 }

@@ -18,16 +18,16 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class LoginPaneController {
-    @FXML public TableView lobbyTable;
-    @FXML Pane networkPane;
+    @FXML TableView lobbyTable;
+    @FXML Pane networkPane, preferencesPane, waitingForGamePane;
     @FXML TextField usernameTextField, ipTextField, portTextField;
     @FXML RadioButton player2RadioButton, player3RadioButton, player4RadioButton;
     @FXML CheckBox expertModeButton;
     @FXML Button submitButton;
     ToggleGroup nPlayer;
-    Consumer<LoginPreferences> connect;
+    Consumer<LoginPreferences> connect, sendPreferences;
 
-    public void initialize(Consumer<LoginPreferences> connect) {
+    public void initialize(Consumer<LoginPreferences> connect, Consumer<LoginPreferences> sendPreferences) {
         nPlayer = new ToggleGroup();
         player2RadioButton.setToggleGroup(nPlayer);
         player3RadioButton.setToggleGroup(nPlayer);
@@ -35,10 +35,20 @@ public class LoginPaneController {
         player2RadioButton.setSelected(true);
         expertModeButton.setSelected(false);
         this.connect = connect;
+        this.sendPreferences = sendPreferences;
+        drawTable();
+    }
+
+    public void connect(ActionEvent actionEvent) {
+        connect.accept(getPreferences());
+        submitButton.setDisable(false);
     }
 
     public void submitPreferences(ActionEvent actionEvent) {
-        connect.accept(getPreferences());
+        sendPreferences.accept(getPreferences());
+        submitButton.setDisable(true);
+        preferencesPane.setVisible(false);
+        waitingForGamePane.setVisible(true);
     }
 
     private LoginPreferences getPreferences() {
@@ -60,16 +70,18 @@ public class LoginPaneController {
     public void drawLobbyInfo(LobbyInfo lobbyInfo) {
         lobbyTable.setVisible(true);
         networkPane.setVisible(false);
-        submitButton.setDisable(false);
+        lobbyTable.getItems().clear();
+        for(LobbyInfo.Lobby lobby: lobbyInfo.getPlayerInLobbyMap()) {
+            lobbyTable.getItems().add(lobby);
+        }
+    }
+
+    private void drawTable() {
         TableColumn<LobbyInfo.Lobby, GameType> gameTypeColumn = new TableColumn<>("Game Type");
         gameTypeColumn.setCellValueFactory(new PropertyValueFactory<>("gameType"));
         TableColumn<LobbyInfo.Lobby, Set<String>> playerColumn = new TableColumn<>("Connected Players");
         playerColumn.setCellValueFactory(new PropertyValueFactory<>("connectedPlayers"));
         lobbyTable.getColumns().add(gameTypeColumn);
         lobbyTable.getColumns().add(playerColumn);
-
-        for(LobbyInfo.Lobby lobby: lobbyInfo.getPlayerInLobbyMap()) {
-            lobbyTable.getItems().add(lobby);
-        }
     }
 }

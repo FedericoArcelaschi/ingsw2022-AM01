@@ -82,13 +82,4 @@ public class Island implements StudentPlaces {
                 + "}\n";
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(this == obj) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (Island) obj;
-        return this.students.equals(that.students) &&
-                this.ownership == that.ownership &&
-                this.getIslandNumber() == that.getIslandNumber();
-    }
 }

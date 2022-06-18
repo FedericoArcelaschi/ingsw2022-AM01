@@ -12,7 +12,7 @@ import java.util.*;
 public class Tavern {
     private long seed;
     private static Bag bag;
-    private final int numberOfCharacters = CharacterUtility.values().length; //final = 12
+    private final int numberOfCharacters = CharacterUtility.values().length+1; //final = 12
     private final int numberOfPlayableCharacter = 3;
 
     /**

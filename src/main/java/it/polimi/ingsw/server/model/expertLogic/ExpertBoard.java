@@ -67,11 +67,6 @@ public class ExpertBoard extends Board {
         expertCharactersCards = tavern.extract();
     }
 
-    @Override
-    public String getCharInfo(int idChar) {
-        return CharacterExplanation.getInstance(idChar).getDescription();
-    }
-
     /**
      * Pays for the card and then calls applyEffect with the right parameters
      * @param idChar      character id corresponding to CharacterList's position
@@ -81,7 +76,7 @@ public class ExpertBoard extends Board {
      * @throws CoinException if the player doesn't have the needed coins to pay
      */
     @Override
-    public void playExpertCard (int idChar, int islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, PhaseNotRightException {
+    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, PhaseNotRightException {
         if(turn.getCurrentPhase() == TurnPhase.PLANNING)
             throw new PhaseNotRightException("You can't use this command in this stage of the game.");
         StandardCharacter ec = checkLegalExpertCard(idChar);
@@ -183,21 +178,12 @@ public class ExpertBoard extends Board {
      */
     protected void joinIslands(@NotNull List<Integer> islandsToJoin) {
         int firstIslandIndex = islandsToJoin.get(0);
-        int secondIslandIndex = islandsToJoin.get(1);
-        Island newIsland;
-        if ( islandsToJoin.size() == 2 )
-            newIsland = new ExpertIsland(new Archipelago(islandList.get(firstIslandIndex), islandList.get(secondIslandIndex)));
-        else if(islandsToJoin.size()==3) {
-            int thirdIslandIndex = islandsToJoin.get(2);
-            newIsland
-                    = new ExpertIsland(new Archipelago(  islandList.get(firstIslandIndex),
-                    islandList.get(secondIslandIndex),
-                    islandList.get(thirdIslandIndex)));
-        } else
-            throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
-        for (int index : islandsToJoin)
-            this.islandList.remove(index);
-        this.islandList.add(firstIslandIndex, newIsland);
+        List<Island> islandList = new ArrayList<>();
+        islandsToJoin.forEach(index -> islandList.add(this.islandList.get(index)));
+        this.islandList
+                .add(firstIslandIndex,
+                new ExpertIsland(
+                        new Archipelago(islandList)));
         motherNaturePosition = firstIslandIndex;
     }
 
@@ -206,7 +192,6 @@ public class ExpertBoard extends Board {
         super.endOfTurn();
         playedExpertChar = null;
         influence.reset();
-        movedStudents = 0;
     }
 
     public List<String> getAvailableCharactersName() {
@@ -231,4 +216,9 @@ public class ExpertBoard extends Board {
     public CharacterUtility getPlayedExpertChar() {
         return playedExpertChar;
     }
+
+    public StandardCharacter extract4CharacterTesting(int idChar) {
+        Tavern tavern = new Tavern(bag);
+        return tavern.extract4testing(idChar);
+    };
 }

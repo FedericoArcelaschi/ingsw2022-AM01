@@ -27,8 +27,8 @@ public class StudentCharacter extends StandardCharacter {
         super(idChar);
         this.bag = bag;
         switch (idChar) { //TODO: più funzionale
-            case 1, 11 -> numberOfAvailableStudents = 4;
-            case 7 -> numberOfAvailableStudents = 6;
+            case 1, 11 ->   numberOfAvailableStudents = 4;
+            case 7 ->       numberOfAvailableStudents = 6;
             default -> throw new IllegalArgumentException("Wrong character-id: can only be 1, 7, 11. Actual: " + idChar);
         }
         availableStudents.addAll(bag.multipleExtract(numberOfAvailableStudents));

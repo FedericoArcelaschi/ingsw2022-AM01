@@ -1,20 +1,47 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
+import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
+import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.*;
 
 public class CastleTest {
+
+    @Test
+    public void testNoSuchStudentException(){
+        Bag b = new Bag(24);
+        Castle c = new Castle(Team.BLACK, 1, b.multipleExtract(9));
+        List<StudentColor> students = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            students.add(StudentColor.YELLOW);
+        }
+        assertThrows(NoSuchStudentException.class, () -> c.removeStudentsFromWaitingRoom(students),
+                "10 yellow students can't be present in the waitingroom. (size=9)");
+        // FIXME: org.opentest4j.AssertionFailedError: 10 yellow students can't be present in the waitingroom.
+        // (size=9) ==> Unexpected exception charTypes thrown ==>
+        // expected: <it.polimi.ingsw.model.exceptions.NoSuchStudentException>
+        // but was: <it.polimi.ingsw.model.exceptions.TooManyStudentsException>
+    }
+
+    @Test
+    public void testTooManyStudentException(){
+        Bag b = new Bag(24);
+        Castle c = new Castle(Team.BLACK, 2, b.multipleExtract(9));
+        //test adding student in a full waiting room
+        List<StudentColor> newStudents = new ArrayList<>();
+        newStudents.add(StudentColor.BLUE);
+        newStudents.add(StudentColor.GREEN);
+        newStudents.add(StudentColor.RED);
+        assertThrows(TooManyStudentsException.class, () -> c.addStudentsInWaitingRoom(newStudents), "");
+
+
+    }
 
     @BeforeEach
     void setup() {

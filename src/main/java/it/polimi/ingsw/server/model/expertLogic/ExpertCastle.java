@@ -64,7 +64,7 @@ public class ExpertCastle extends Castle implements StudentPlaces {
     /**
      * Removes the cost of coins from the castle
      */
-    protected void payCharacter(int price) throws CoinException {
+    public void payCharacter(int price) throws CoinException {
         if(this.coins >= price)
             this.coins -= price;
         else

@@ -51,7 +51,7 @@ public class Gui extends Application implements UserInterface {
         stage.setTitle("Eriantys");
         stage.setScene(new Scene(loginFXML));
         stage.show();
-        loginPaneController.initialize(this::connect);
+        loginPaneController.initialize(this::connect, this::sendPreferences);
         //FIXME: for testing.
         //draw(createBoardData());
     }
@@ -130,13 +130,16 @@ public class Gui extends Application implements UserInterface {
     }
 
     public void connect(LoginPreferences loginPreferences) {
-        Preferences preferences = loginPreferences.preferences();
-        clientMain = new ClientMain(loginPreferences.IP(), loginPreferences.port(), preferences);
+        clientMain = new ClientMain(loginPreferences.IP(), loginPreferences.port());
         try {
             clientMain.connect(this);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void sendPreferences(LoginPreferences loginPreferences) {
+        clientMain.sendPreferences(loginPreferences.preferences());
     }
 
     public void send(Command command) {

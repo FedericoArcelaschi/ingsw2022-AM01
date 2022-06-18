@@ -1,13 +1,12 @@
 package it.polimi.ingsw.server.model.expertLogic.characters;
 
-import it.polimi.ingsw.server.model.baseLogic.*;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.CoinException;
 import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
-
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -24,19 +23,18 @@ public class MailmanTest { //4° character
     private ExpertBoard expertBoard;
 
     @Test
-    void playExpertCardTest() throws PhaseNotRightException, NotYourTurnException {
+    void playExpertCardTest() {
         expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
-        expertBoard.playCard(player1, 1);
-        expertBoard.playCard(player1, 1);
+        expertBoard.extract4CharacterTesting(4);
         try {
             expertBoard.playCard(player1, 5);
         } catch (NotYourTurnException | PhaseNotRightException e) {
-            playExpertCardTest();
+            fail(e.getCause());
         }
 
         try {
-            expertBoard.playExpertCard(4, 0, List.of());
-        } catch (StudentException | CoinException e) {
+            expertBoard.playExpertCard(4, null, List.of());
+        } catch (StudentException | CoinException | PhaseNotRightException e) {
             fail(e.getCause());
         }
 

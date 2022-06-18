@@ -1,8 +1,10 @@
 package it.polimi.ingsw.server.model.expertLogic;
 
-import it.polimi.ingsw.server.model.baseLogic.*;
+import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
+import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.*;
-
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
+import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,16 +20,16 @@ public class ExpertBoardTest{
     private static ExpertBoard expertBoard;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         Turn t = new Turn(Arrays.asList("Lorenzo", "Federico", "Giovanni"));
-        expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("Lorenzo", "Federico", "Giovanni"), true, RandomGenerator.getDefault().nextLong());
-        try {
-            expertBoard.playCard("Lorenzo", 3);
-            expertBoard.playCard("Federico",2);
-            expertBoard.playCard("Giovanni",6);
-        } catch (NotYourTurnException | PhaseNotRightException e) {
-            throw new RuntimeException(e);
-        }
+        expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList("Lorenzo", "Federico", "Giovanni"), true);
+        expertBoard.playCard("Lorenzo", 3);
+    }
+
+    @Test
+    public void testSetup4CharacterTesting() {
+        expertBoard.extract4CharacterTesting(1);
+        assertNotNull(expertBoard.getAvailableCharacters().get(1));
     }
 
     /**
@@ -35,11 +37,11 @@ public class ExpertBoardTest{
      */
     //TODO: test exceptions
     @Test
-    public void testPlayExpertCard() throws WrongGameModeException {
-        if (expertBoard.getAvailableCharacters().containsKey(CharacterUtility.MAILMAN)) {
-            assertThrows(IllegalArgumentException.class, () -> expertBoard.playExpertCard(4, 0, null),
+    public void testPlayExpertCard() {
+        if (expertBoard.getAvailableCharacters().get(CharacterUtility.MAILMAN) == null) {
+            assertThrows(IllegalArgumentException.class, () -> expertBoard.playExpertCard(4, null, null),
                     "Mailman not in extracted");
-            setUp(); testPlayExpertCard(); return;
+            expertBoard.extract4CharacterTesting(4);
         }
         int expectedPossibleMovingSteps = expertBoard.getPossibleMovingSteps() + 2;
         try {
@@ -49,21 +51,23 @@ public class ExpertBoardTest{
             fail(" playExpertCard() method throw exception " + e);
         }
         assertEquals(expectedPossibleMovingSteps, expertBoard.getPossibleMovingSteps());
-        assertTrue(expertBoard.getAvailableCharacters().containsKey(CharacterUtility.MAILMAN));
+        assertEquals(CharacterUtility.MAILMAN.name(), expertBoard.getAvailableCharacters().get(4).getName());
     }
 
     @Test
     void testPlayExpertCardException1(){
+
+        expertBoard.extract4CharacterTesting(4);
+
         try{
-            expertBoard.playExpertCard(4, 0, null);
-        } catch (Exception error) {
-            testPlayExpertCardException1();
+            expertBoard.playExpertCard(4, null, null);
+        } catch (Exception error){
             System.out.println(error.getMessage());
-            return;
+            fail();
         }
 
         try{
-            expertBoard.playExpertCard(4, 0, null);
+            expertBoard.playExpertCard(4, null, null);
         } catch (IllegalStateException e) {
             assertEquals("MAILMAN is already active in this turn.",
                     e.getMessage());
@@ -77,21 +81,19 @@ public class ExpertBoardTest{
     void testPlayExpertCardException2() {
         int i;
         try {
-            expertBoard.playExpertCard(4, 0, null);
+            expertBoard.extract4CharacterTesting(4);
+            expertBoard.playExpertCard(4, null, null);
         } catch (StudentException | CoinException | PhaseNotRightException e) {
             throw new RuntimeException(e);
-        } catch (IllegalArgumentException e) {
-            testPlayExpertCardException2();
-            return;
         }
         for (i = 1; i < 13; i++) {
-            if (!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.values()[i-1]))
+            if (expertBoard.getAvailableCharacters().get(i) == null)
+                expertBoard.extract4CharacterTesting(i);
             try {
-                expertBoard.playExpertCard(i, 0, null);
+                expertBoard.playExpertCard(i, null, null);
             } catch (IllegalStateException ignored) {
 
             } catch (IllegalArgumentException e) {
-                testPlayExpertCardException2();
                 System.out.println(e.getMessage());
                 fail("only the first exception should be called.");
             } catch (Exception others) {
@@ -103,9 +105,10 @@ public class ExpertBoardTest{
 
     @Test
     @SuppressWarnings("empty")
-    void testPlayExpertCardException3() throws WrongGameModeException {
+    void testPlayExpertCardException3() {
+        expertBoard.extract4CharacterTesting(4);
         try {
-            expertBoard.playExpertCard(4, 0, null);
+            expertBoard.playExpertCard(4, null, null);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             fail();
@@ -113,7 +116,7 @@ public class ExpertBoardTest{
 
 
         try {
-            expertBoard.playExpertCard(4, 0, null);
+            expertBoard.playExpertCard(4, null, null);
         } catch (IllegalStateException e) {
             assertEquals("MAILMAN is already active in this turn.", e.getMessage());
         } catch (Exception e) {
@@ -122,15 +125,14 @@ public class ExpertBoardTest{
 
         for (int i = 1; i < 13; i++) {
             if (i == 4) i++;//skipping the MailMan
-            if (!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.values()[i-1])) {
-                try {
-                    expertBoard.playExpertCard(i, 0, null);
-                } catch (IllegalStateException | PhaseNotRightException e) {
-                    assertEquals("Not possible to play " + CharacterUtility.getChar(i) + " card. During this turn MAILMAN is already active.",
-                            /*actual*/e.getMessage());
-                } catch (CoinException | StudentException e) {
-                    fail();
-                }
+            if (expertBoard.getAvailableCharacters().get(i) == null) ;
+            try {
+                expertBoard.playExpertCard(i, null, null);
+            } catch (IllegalStateException e) {
+                assertEquals("Not possible to play " + CharacterUtility.getChar(i) + " card. During this turn MAILMAN is already active.",
+                        /*actual*/e.getMessage());
+            } catch (CoinException | StudentException | PhaseNotRightException e) {
+                fail();
             }
         }
     }
@@ -143,22 +145,24 @@ public class ExpertBoardTest{
         } catch (CoinException e) {
             fail(e.getMessage());
         }
+        expertBoard.extract4CharacterTesting(4);
         assertThrowsExactly(CoinException.class,
-                () -> expertBoard.playExpertCard(4, 0, null)
+                () -> expertBoard.playExpertCard(4, null, null)
         );
+        expertBoard.extract4CharacterTesting(5);
         assertEquals(
                 "You had only 0 coins, while 2 coins were needed.",
                 assertThrowsExactly(CoinException.class,
-                    () -> expertBoard.playExpertCard(5, 0, null),
+                    () -> expertBoard.playExpertCard(5, null, null),
                     "expected CoinException, actual: ").getMessage()
         );
     }
 
     @Test
-    void testPlayExpertCardException5() throws WrongGameModeException {
-        if(!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.MAILMAN)){ setUp(); testPlayExpertCardException5(); return; }
+    void testPlayExpertCardException5() {
+        expertBoard.extract4CharacterTesting(3);
         assertThrowsExactly(CoinException.class,
-                () -> expertBoard.playExpertCard(3, 0, null),
+                () -> expertBoard.playExpertCard(3, null, null),
                 "Not enough coins simulations");
     }
 }

@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.CoinException;
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
+import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,8 +40,12 @@ public class ExpertCastleTest{
         assertEquals(0, expertCastle.getCoins(),
                 "There are no more coins in the castle");
             //add another coin
-        expertCastle.addStudentsInDiningRoom(yellows_3);
-            //one coin --> first payment okay, second payment failed
+        try {
+            expertCastle.addStudentsInDiningRoom(yellows_3);
+        } catch (it.polimi.ingsw.server.model.exceptions.TooManyStudentsException e) {
+            throw new RuntimeException(e);
+        }
+        //one coin --> first payment okay, second payment failed
         assertEquals(1, expertCastle.getCoins(),
                 "There is a coin in the castle");
         try {
@@ -54,8 +59,13 @@ public class ExpertCastleTest{
 
     @Test
     public void testRemoveStudentFromDiningRoom() throws TooManyStudentsException, NoSuchStudentException {
-        expertCastle.addStudentsInDiningRoom(Arrays.asList(StudentColor.YELLOW, StudentColor.YELLOW));
-        expertCastle.removeStudentFromDiningRoom(StudentColor.YELLOW);
+        try {
+            expertCastle.addStudentsInDiningRoom(Arrays.asList(StudentColor.YELLOW, StudentColor.YELLOW));
+        } catch (it.polimi.ingsw.server.model.exceptions.TooManyStudentsException e) {
+            throw new RuntimeException(e);
+        }
+        //TODO: THIS METHOD IS PROTECTED. DO WE MAKE IT PUBLIC OR DO WE FIND ANOTHER WAY OF TESTING IT?
+        //expertCastle.removeStudentFromDiningRoom(StudentColor.YELLOW);
         int numberOfYellows = expertCastle.getDiningRoom().get(StudentColor.YELLOW);
         assertEquals(1, numberOfYellows);
     }
@@ -72,15 +82,27 @@ public class ExpertCastleTest{
     //test adding coins
     public void testTruePayChar() throws TooManyStudentsException {
         for (int i = 0; i < 3; i++) {                          //add 3 students to give pippo a coin
-            expertCastle.addStudentInDiningRoom(StudentColor.YELLOW);
-            expertCastle.addStudentInDiningRoom(StudentColor.BLUE);
+            try {
+                expertCastle.addStudentInDiningRoom(StudentColor.YELLOW);
+            } catch (it.polimi.ingsw.server.model.exceptions.TooManyStudentsException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                expertCastle.addStudentInDiningRoom(StudentColor.BLUE);
+            } catch (it.polimi.ingsw.server.model.exceptions.TooManyStudentsException e) {
+                throw new RuntimeException(e);
+            }
         }
         assertEquals(3, expertCastle.getCoins());
     }
     @Test
     public void testAddStudentInDiningRoom() throws TooManyStudentsException {
         for (int i = 0; i < 3; i++) {                          //add 3 students to give pippo a coin
-            expertCastle.addStudentInDiningRoom(StudentColor.YELLOW);
+            try {
+                expertCastle.addStudentInDiningRoom(StudentColor.YELLOW);
+            } catch (it.polimi.ingsw.server.model.exceptions.TooManyStudentsException e) {
+                throw new RuntimeException(e);
+            }
         }
         //one at the beginning of the game and 1 coin because of the three students
         assertEquals(2, expertCastle.getCoins());

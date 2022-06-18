@@ -93,18 +93,10 @@ public class Board {
         MAX_STUDENTS_TO_MOVE = ( nPlayer==3 ? 4 : 3);
     }
 
-
-    /**
-     * Generates the clouds based on the nPlayer
-     */
     protected void setupClouds(){
         int cloudSize = (nPlayer == 3) ? CLOUD_SIZE_3_PLAYERS : CLOUD_SIZE_2_4_PLAYERS;
         for (int i = 0; i < nPlayer; i++) cloudList.add(new Cloud(bag, cloudSize));
     }
-
-    /**
-     * Generates the islands.
-     */
 
     private void setupIslands() {
         List<StudentColor> s = bag.extractForIslandSetup();
@@ -119,7 +111,6 @@ public class Board {
     }
 
 //methods for the PLANNING PHASE
-
     /**
      * @param playerID the id of the player that asks for this move.
      * @param cardID   the number of the card the user wants to play.
@@ -135,7 +126,6 @@ public class Board {
         if(!turn.isAlreadyPlayed(cardID) || castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority())))
             if(castle.isCardAvailable(cardID)) {
                 Card card = castle.playCard(cardID);
-                possibleMovingSteps.setInt(card.distance());
                 turn.addCard(playerID, card);
                 return;
             }
@@ -161,35 +151,27 @@ public class Board {
             throw new NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. "+ playerID +" can't play.");
         if(turn.getCurrentPhase() != TurnPhase.STUDENTS)
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
-        Castle castle = castleMap.get(playerID);
-        castle.removeStudentsFromWaitingRoom(students);
-        castle.addStudentsInDiningRoom(students);
+        castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
+        castleMap.get(playerID).addStudentsInDiningRoom(students);
         influence.updateProfessors();
     }
 
     /**
-     * Moves the students in the list <code>students</code> from <code>Player</code> 's waiting room
+     * Moves the students in the list <code>students</code> from <code>Player</code>'s waiting room
      * to the island n°<code>islandNumber</code>.
-     *
      * @param playerID     the id of the player that ask for this move
      * @param islandNumber the number of the island where you want to move the students
      * @param students     a list of students you want to move
      */
     public void moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students)
             throws NoSuchStudentException, NotYourTurnException, PhaseNotRightException {
-
         if (!turn.getCurrentPlayer().equals(playerID))
             throw new NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. " + playerID + " can't play.");
-
         if (turn.getCurrentPhase() != TurnPhase.STUDENTS)
             throw new PhaseNotRightException("You can't use this command in this phase of the game.");
-
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
-
-        students.forEach(color->islandList.get(islandNumber).addStudent(color));
-
+        students.forEach(islandList.get(islandNumber)::addStudent);
     }
-
 
     /**
      * Calculates the influence and sets a new owner
@@ -202,10 +184,8 @@ public class Board {
         possibleMovingSteps.add(turn.getPossibleMovingSteps());
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
             throw new PhaseNotRightException("You can't move mother nature in this stage of the game. Current phase is " + turn.getCurrentPhase().toString());
-
         if (steps > possibleMovingSteps.getInt() || steps < 1)
             throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.getInt());
-
         if ((motherNaturePosition + steps) >= (islandList.size()))
             motherNaturePosition += steps - islandList.size();
         else
@@ -267,21 +247,10 @@ public class Board {
      */
     protected void joinIslands(@NotNull List<Integer> islandsToJoin) {
         int firstIslandIndex = islandsToJoin.get(0);
-        int secondIslandIndex = islandsToJoin.get(1);
-        Island newIsland;
-        if (islandsToJoin.size() == 2)
-            newIsland = new Archipelago(islandList.get(firstIslandIndex), islandList.get(secondIslandIndex));
-        else if(islandsToJoin.size() == 3) {
-            int thirdIslandIndex = islandsToJoin.get(2);
-            newIsland = new Archipelago(    islandList.get(firstIslandIndex),
-                                            islandList.get(secondIslandIndex),
-                                            islandList.get(thirdIslandIndex));
-        } else
-            throw new IllegalArgumentException("wrong number of islands in the given list: " + islandList);
-        for (int i = 0; i < islandsToJoin.size(); i++) {
-            this.islandList.remove(firstIslandIndex);
-        }
-        this.islandList.add(firstIslandIndex, newIsland);
+        List<Island> islandList = new ArrayList<>();
+        islandsToJoin.forEach(index -> islandList.add(this.islandList.get(index)));
+        this.islandList.add(firstIslandIndex, new Archipelago(islandList));
+        this.islandList.removeAll(islandList);
         motherNaturePosition = firstIslandIndex;
     }
 
@@ -407,12 +376,8 @@ public class Board {
         return withMoreProfessors;
     }
 
-    public void playExpertCard (int idChar, int islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, WrongGameModeException, PhaseNotRightException {
+    public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, WrongGameModeException, PhaseNotRightException {
         throw new WrongGameModeException("You can't use this command in this game mode!");
-    }
-
-    public String getCharInfo (int idChar) throws WrongGameModeException {
-        throw new WrongGameModeException("You can't use this command in this game mode!"); //TODO: make a static WRONG_GAME_MODE constant.
     }
 
     public Map<CharacterUtility, StandardCharacter> getAvailableCharacters() throws WrongGameModeException {
@@ -466,5 +431,9 @@ public class Board {
 
     public int getPossibleMovingSteps() {
         return possibleMovingSteps.getInt();
+    }
+
+    public Bag getBag() {
+        return bag;
     }
 }

@@ -19,20 +19,37 @@
          </font>
       </Label>
 
-      <Pane fx:id="preferencesPane" layoutX="100.0" layoutY="140.0" prefHeight="310.0" prefWidth="383.0">
+      <Pane layoutX="100.0" layoutY="140.0" prefHeight="310.0" prefWidth="383.0">
          <children>
-            <Text fx:id="preferencesLabel" strokeType="OUTSIDE" strokeWidth="0" text="Preferences">
-               <font>
-                  <Font size="18" />
-               </font>
-            </Text>
-            <Label fx:id="usernameLabel" layoutY="50.0" text="Username:" />
-            <TextField fx:id="usernameTextField" layoutX="90.0" layoutY="45.0" />
-            <Label fx:id="gameLabel" layoutY="100.0" text="Game type:" />
-            <RadioButton fx:id="player2RadioButton" layoutX="90.0" layoutY="100.0" mnemonicParsing="false" text="2 Players" />
-            <RadioButton fx:id="player3RadioButton" layoutX="200.0" layoutY="100.0" mnemonicParsing="false" text="3 Players" />
-            <RadioButton fx:id="player4RadioButton" layoutX="310.0" layoutY="100.0" mnemonicParsing="false" text="4 Players" />
-            <CheckBox fx:id="expertModeButton" layoutX="90.0" layoutY="135.0" mnemonicParsing="false" text="Expert" />
+            <StackPane>
+               <children>
+                  <Pane fx:id="preferencesPane">
+                     <children>
+                        <Text fx:id="preferencesLabel" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0" text="Preferences">
+                           <font>
+                              <Font size="18" />
+                           </font>
+                        </Text>
+                        <Label fx:id="usernameLabel" layoutY="47.40234375" text="Username:" />
+                        <TextField fx:id="usernameTextField" layoutX="90.0" layoutY="42.40234375" />
+                        <Label fx:id="gameLabel" layoutY="97.40234375" text="Game type:" />
+                        <RadioButton fx:id="player2RadioButton" layoutX="90.0" layoutY="97.40234375" mnemonicParsing="false" text="2 Players" />
+                        <RadioButton fx:id="player3RadioButton" layoutX="200.0" layoutY="97.40234375" mnemonicParsing="false" text="3 Players" />
+                        <RadioButton fx:id="player4RadioButton" layoutX="310.0" layoutY="97.40234375" mnemonicParsing="false" text="4 Players" />
+                        <CheckBox fx:id="expertModeButton" layoutX="90.0" layoutY="132.40234375" mnemonicParsing="false" text="Expert" />
+                     </children>
+                  </Pane>
+                  <Pane fx:id="waitingForGamePane" layoutX="10.0" layoutY="10.0" visible="false">
+                     <children>
+                        <Label layoutX="90.0" layoutY="66.0" text="Waiting for other players to join...">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </children>
+            </StackPane>
             <StackPane layoutY="180.0" prefHeight="130.0" prefWidth="383.0">
                <children>
                   <Pane fx:id="networkPane">
@@ -42,7 +59,7 @@
                         <TextField fx:id="ipTextField" layoutX="90.0" layoutY="15.0" promptText="127.0.0.1" />
                         <Label fx:id="portLabel" layoutX="88.0" layoutY="50.0" text="Port:" />
                         <TextField fx:id="portTextField" layoutX="90.0" layoutY="65.0" promptText="12345" />
-                        <Button layoutX="292.0" layoutY="66.0" mnemonicParsing="false" onAction="#submitPreferences" text="Connect" />
+                        <Button layoutX="292.0" layoutY="66.0" mnemonicParsing="false" onAction="#connect" text="Connect" />
                      </children>
                   </Pane>
                   <TableView fx:id="lobbyTable" prefHeight="165.0" prefWidth="383.0" visible="false">

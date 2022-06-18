@@ -1,9 +1,12 @@
 package it.polimi.ingsw.server.model.expertLogic;
 
-import it.polimi.ingsw.server.model.baseLogic.*;
+import it.polimi.ingsw.server.model.baseLogic.Island;
+import it.polimi.ingsw.server.model.baseLogic.Team;
+import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
-
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
+import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
+import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

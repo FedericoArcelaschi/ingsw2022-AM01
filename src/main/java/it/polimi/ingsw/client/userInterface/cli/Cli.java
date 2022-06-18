@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.userInterface.cli;
 
 import it.polimi.ingsw.client.communication.ClientMain;
+import it.polimi.ingsw.client.communication.ClientState;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
@@ -19,14 +20,16 @@ public class Cli implements UserInterface {
     public Cli() {
         ClientMain clientMain = new ClientMain(
                 "localhost",
-                12345,
-                getValidPreferences());
+                12345);
         try {
             clientMain.connect(this);
         } catch (IllegalAccessException e) {
             System.err.println(e.getMessage());
             new Cli();
         }
+
+        clientMain.sendPreferences(getValidPreferences());
+
         // the Cli in the input/output to the terminal
         while(true) {
             try {

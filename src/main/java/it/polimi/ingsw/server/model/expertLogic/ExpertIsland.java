@@ -73,12 +73,4 @@ public class ExpertIsland extends Island implements StudentPlaces {
         return island.toString();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ExpertIsland) obj;
-        return this.island.equals(that.island) &&
-                this.isBlocked() == that.isBlocked();
-    }
 }
