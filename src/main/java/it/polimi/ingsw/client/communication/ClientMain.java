@@ -12,27 +12,27 @@ import java.text.ParseException;
 import java.util.concurrent.Executors;
 
 public class ClientMain {
-    private final String username;
-    private final int preferenceNPlayer;
-    private final boolean preferenceExpertMode;
+    private String username;
+    private int preferenceNPlayer;
+    private boolean preferenceExpertMode;
     private final String IP;
     private final int port;
-
     private Socket socket = null;
     private ClientSender clientSender;
     private ClientReceiver clientReceiver;
     private ClientState state = ClientState.NOT_CONNECTED;
 
-    public ClientMain(String IP, int port, Preferences preferences) {
+    public ClientMain(String IP, int port) {
         this.IP = IP;
         this.port = port;
-        this.username = preferences.username();
-        this.preferenceNPlayer = preferences.nPlayer();
-        this.preferenceExpertMode = preferences.expertMode();
+        //this.username = preferences.username();
+        //this.preferenceNPlayer = preferences.nPlayer();
+        //this.preferenceExpertMode = preferences.expertMode();
     }
 
+    //This only connects to server.
     public void connect(UserInterface userInterface) throws IllegalAccessException {
-        System.out.println(username + ":  attempting connection");
+        System.out.println("User on " + port + ":  attempting connection");
         try {
             this.socket = new Socket(IP, port);
         } catch (IOException e) {
@@ -40,19 +40,26 @@ public class ClientMain {
             System.exit(1);
             //TODO: implement better exception handling
         }
-        System.out.println(username + ":  connected");
+        System.out.println("User on " + port + ":  connected");
 
         clientSender = new ClientSender(socket);
 
         //sends player preferences to the server;
-        clientSender.send(new Preferences(username, preferenceNPlayer, preferenceExpertMode));
+        //clientSender.send(new Preferences(username, preferenceNPlayer, preferenceExpertMode));
 
         //runs the ClientReceiver
         clientReceiver = new ClientReceiver(this, socket, userInterface);
         Runnable runnable = () -> Executors.newCachedThreadPool().submit(clientReceiver);
         runnable.run();
 
-        state = ClientState.WAITING_ROOM;
+        state = ClientState.OUTSIDE_LOBBY;
+    }
+
+    public void sendPreferences(Preferences preferences) {
+        this.username = preferences.username();
+        this.preferenceNPlayer = preferences.nPlayer();
+        this.preferenceExpertMode = preferences.expertMode();
+        clientSender.send(preferences);
     }
 
     public void runCommand(String stringCommand) {

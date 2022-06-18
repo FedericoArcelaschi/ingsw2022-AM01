@@ -87,7 +87,7 @@ public class LobbyManager {
         }
     }
 
-    private void sendLobbyInfo(Socket socket) {
+    public void sendLobbyInfo(Socket socket) {
         PrintWriter out;
         try {
             out = new PrintWriter(socket.getOutputStream(), true);

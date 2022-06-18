@@ -131,7 +131,7 @@ public class Gui extends Application implements UserInterface {
 
     public void connect(LoginPreferences loginPreferences) {
         Preferences preferences = loginPreferences.preferences();
-        clientMain = new ClientMain(loginPreferences.IP(), loginPreferences.port(), preferences);
+        clientMain = new ClientMain(loginPreferences.IP(), loginPreferences.port());
         try {
             clientMain.connect(this);
         } catch (IllegalAccessException e) {

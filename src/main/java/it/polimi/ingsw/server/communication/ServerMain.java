@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.controller.GameType;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +19,7 @@ public class ServerMain implements Runnable {
     private int port;
     private final int DEFAULT_PORT = 12345;
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    private @NotNull ServerSocket serverSocket;
+    private ServerSocket serverSocket;
     private HeartBeatServer heartBeatServer;
     private final LobbyManager lobbyManager = new LobbyManager();
     private int gameId = 0;
@@ -69,6 +70,7 @@ public class ServerMain implements Runnable {
                 break; // Would get here if server socket was to be closed.
             }
             logger.info("player connected on port " + socket.getPort());
+            lobbyManager.sendLobbyInfo(socket);
             Client client = new Client(socket);
             //those methods needs to be splitted because of future changes
             client.setup(heartBeatServer, lobbyManager, executor);

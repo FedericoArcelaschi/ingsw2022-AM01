@@ -19,14 +19,15 @@ public class Cli implements UserInterface {
     public Cli() {
         ClientMain clientMain = new ClientMain(
                 "localhost",
-                12345,
-                getValidPreferences());
+                12345);
         try {
             clientMain.connect(this);
         } catch (IllegalAccessException e) {
             System.err.println(e.getMessage());
             new Cli();
         }
+        clientMain.sendPreferences(getValidPreferences());
+
         // the Cli in the input/output to the terminal
         while(true) {
             try {
