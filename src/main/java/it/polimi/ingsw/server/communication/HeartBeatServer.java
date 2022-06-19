@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.communication;
 
+import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.Ping;
 import org.apache.logging.log4j.*;
 
@@ -37,7 +38,7 @@ public class HeartBeatServer implements Runnable {
         // logger.info("client @ port " + socket.getPort() + "sent a ping validation.");
         if (heartBeats.contains(socket)) {
             heartBeats.remove(socket);
-            logger.info("Ping received. Pinging back...");
+            logger.info("Ping received from port: " + socket.getPort() + ". Pinging back...");
         }
         else
             logger.info("client in port: " + socket.getLocalPort() + " shouldn't be connected");
@@ -80,10 +81,22 @@ public class HeartBeatServer implements Runnable {
     }
 
     private void removeClient(Socket client) {
+        endClientConnection();
         clients.remove(client); //FIXME: clients not in the list should be removed from the server
         heartBeats.remove(client);
-        //Executors.newSingleThreadExecutor().submit(this::endClientConnection);
         logger.info("User on port " + client.getPort() + " disconnected.");
     }
 
+    private void endClientConnection() {
+        for (Socket s : clients) {
+            PrintWriter out;
+            try {
+                out = new PrintWriter(s.getOutputStream(), true);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            String endGameMessage = new EndGame("A player disconnected. The game is now over.").toJson();
+            out.println(endGameMessage);
+        }
+    }
 }
