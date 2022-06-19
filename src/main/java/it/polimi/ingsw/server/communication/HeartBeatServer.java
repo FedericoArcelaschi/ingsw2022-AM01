@@ -81,12 +81,9 @@ public class HeartBeatServer implements Runnable {
     }
 
     private void removeClient(Socket client) {
-        for (Client c : clients) {
-            if (c.clientsSocket() == client){
-                sendEndGameMsg(c);
-                clients.remove(c); //FIXME: clients not in the list should be removed from the server
-            }
-        }
+        Client c = clients.stream().filter(x -> client.equals(x.clientsSocket())).findFirst().orElse(null);
+        sendEndGameMsg(c);
+        clients.remove(c);
         heartBeats.remove(client);
         logger.info("User on port " + client.getPort() + " disconnected.");
     }
@@ -100,7 +97,7 @@ public class HeartBeatServer implements Runnable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            String endGameMessage = new EndGame("A player disconnected. The game is now over.").toJson();
+            String endGameMessage = new EndGame("Player " + client.username() + " disconnected. The game is now over.").toJson();
             out.println(endGameMessage);
         }
     }
