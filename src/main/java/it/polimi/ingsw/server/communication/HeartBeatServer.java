@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.communication;
 
+import it.polimi.ingsw.client.userInterface.cli.Cli;
 import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.Ping;
 import org.apache.logging.log4j.*;
@@ -19,16 +20,15 @@ public class HeartBeatServer implements Runnable {
     private final static Logger logger = LogManager.getLogger(HeartBeatServer.class);
 
     private final int TIMEOUT = 5000; // [ms]
-    private final Set<Socket> clients = new HashSet<>();
+    private final Set<Client> clients = new HashSet<>();
     private final Set<Socket> heartBeats = new HashSet<>();
 
     /**
      * Adds a client to the connected clients list and starts the heartbeat on him as well
      */
     public void addClient(Client newClient) {
-        Socket newClientSocket = newClient.clientsSocket();
+        clients.add(newClient);
         logger.info("Added client");
-        clients.add(newClientSocket);
     }
 
     /**Validate the connection with the client for another 5 seconds.
@@ -58,7 +58,7 @@ public class HeartBeatServer implements Runnable {
     }
 
     private void sendsPing() {
-        for (Socket client : clients) {
+        for (Socket client : clients.stream().map(Client::clientsSocket).toList()) {
             PrintWriter out;
             try {
                 out = new PrintWriter(client.getOutputStream(), true);
@@ -81,14 +81,19 @@ public class HeartBeatServer implements Runnable {
     }
 
     private void removeClient(Socket client) {
-        endClientConnection();
-        clients.remove(client); //FIXME: clients not in the list should be removed from the server
+        for (Client c : clients) {
+            if (c.clientsSocket() == client){
+                sendEndGameMsg(c);
+                clients.remove(c); //FIXME: clients not in the list should be removed from the server
+            }
+        }
         heartBeats.remove(client);
         logger.info("User on port " + client.getPort() + " disconnected.");
     }
 
-    private void endClientConnection() {
-        for (Socket s : clients) {
+    private void sendEndGameMsg(Client client) {
+        List<Socket> playersInGame = new ArrayList<>(client.getGameInterface().getClients().getClients().stream().map(Client::clientsSocket).toList());
+        for (Socket s : playersInGame) {
             PrintWriter out;
             try {
                 out = new PrintWriter(s.getOutputStream(), true);
