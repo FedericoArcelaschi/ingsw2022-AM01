@@ -12,14 +12,14 @@ import java.util.*;
  */
 public class LobbyInfo extends Message {
     private final Map<GameType, Integer> activeGames;
-    private final List<Lobby> playerInLobbyMap;
+    private final List<Lobby> lobbies;
 
     public LobbyInfo(Map<GameType, Set<String>> clientsInLobbyMap, Map<GameType, Integer> activeGames) {
         super(MessageType.LOBBYINFO);
         this.activeGames = activeGames;
-        playerInLobbyMap = new ArrayList<>();
+        lobbies = new ArrayList<>();
         for (GameType gt: clientsInLobbyMap.keySet()) {
-            playerInLobbyMap.add(new Lobby(gt, clientsInLobbyMap.get(gt)));
+            lobbies.add(new Lobby(gt, clientsInLobbyMap.get(gt)));
         }
     }
 
@@ -27,8 +27,8 @@ public class LobbyInfo extends Message {
         return activeGames;
     }
 
-    public List<Lobby> getPlayerInLobbyMap() {
-        return new ArrayList<>(playerInLobbyMap);
+    public List<Lobby> getLobbies() {
+        return new ArrayList<>(lobbies);
     }
 
     @Override
@@ -39,13 +39,14 @@ public class LobbyInfo extends Message {
         builder .append("-".repeat(SIZE - 2))
                 .append("||")
                 .append("ACTIVE GAMES:||\n");
-        for (GameType gameType : GameType.values()) {
+        for (int i = 0; i< GameType.values().length; i++) {
+            GameType gameType = GameType.values()[i];
             int numberOfDrawnPlayers = 0;
             builder.append("|               |  ")
                     .append(gameType.expertMode ? "expert" : "normal")
                     .append(" mode  ||");
-            /*playerInLobbyMap.computeIfAbsent(gameType, k -> new HashSet<String>());
-            for (String player : (playerInLobbyMap.get(gameType).stream().toList())) {
+            //lobbies.computeIfAbsent(gameType, k -> new HashSet<String>());
+            for (String player : lobbies.get(i).getConnectedPlayers()) {
                 numberOfDrawnPlayers++;
                 if (player.length() > 10) {
                     builder.append(" ")
@@ -60,7 +61,7 @@ public class LobbyInfo extends Message {
                             .append(' ')
                             .append('|');
                 }
-            }*/
+            }
             for (; numberOfDrawnPlayers < gameType.nPlayer; numberOfDrawnPlayers++) { //padding for empty lobbys
                 builder.append(' ')
                         .append(" ".repeat(10))
@@ -96,10 +97,12 @@ public class LobbyInfo extends Message {
     public static class Lobby {
         private final GameType gameType;
         private final Set<String> connectedPlayers;
+        private final String formattedPlayers;
 
         public Lobby(GameType gameType, Set<String> connectedPlayers) {
             this.gameType = gameType;
             this.connectedPlayers = connectedPlayers;
+            this.formattedPlayers = connectedPlayers.toString().replace("[", "").replace("]", "");
         }
 
         public GameType getGameType() {
@@ -108,6 +111,10 @@ public class LobbyInfo extends Message {
 
         public Set<String> getConnectedPlayers() {
             return connectedPlayers;
+        }
+
+        public String getFormattedPlayers() {
+            return formattedPlayers;
         }
     }
 }

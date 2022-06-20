@@ -4,16 +4,12 @@ import it.polimi.ingsw.client.userInterface.gui.LoginPreferences;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.GameType;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
-import javafx.util.Callback;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -71,7 +67,7 @@ public class LoginPaneController {
         lobbyTable.setVisible(true);
         networkPane.setVisible(false);
         lobbyTable.getItems().clear();
-        for(LobbyInfo.Lobby lobby: lobbyInfo.getPlayerInLobbyMap()) {
+        for(LobbyInfo.Lobby lobby: lobbyInfo.getLobbies()) {
             lobbyTable.getItems().add(lobby);
         }
     }
@@ -79,8 +75,8 @@ public class LoginPaneController {
     private void drawTable() {
         TableColumn<LobbyInfo.Lobby, GameType> gameTypeColumn = new TableColumn<>("Game Type");
         gameTypeColumn.setCellValueFactory(new PropertyValueFactory<>("gameType"));
-        TableColumn<LobbyInfo.Lobby, Set<String>> playerColumn = new TableColumn<>("Connected Players");
-        playerColumn.setCellValueFactory(new PropertyValueFactory<>("connectedPlayers"));
+        TableColumn<LobbyInfo.Lobby, String> playerColumn = new TableColumn<>("Connected Players");
+        playerColumn.setCellValueFactory(new PropertyValueFactory<>("formattedPlayers"));
         lobbyTable.getColumns().add(gameTypeColumn);
         lobbyTable.getColumns().add(playerColumn);
     }
