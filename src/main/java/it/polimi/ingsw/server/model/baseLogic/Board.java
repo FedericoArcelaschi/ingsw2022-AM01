@@ -36,9 +36,6 @@ public class Board {
     private final int TOWERS_TO_PLACE_TO_WIN = 8;
     private final int CLOUD_SIZE_2_4_PLAYERS = 3;
     private final int CLOUD_SIZE_3_PLAYERS = 4;
-    private int MAX_STUDENTS_TO_MOVE; //Effectively final, TODO
-    protected int movedStudents;
-
 
     public Board(String playerID1, String playerID2, Turn turn, long seed) {
         nPlayer = 2;
@@ -90,7 +87,6 @@ public class Board {
     private void construct() {
         setupClouds();
         setupIslands();
-        MAX_STUDENTS_TO_MOVE = ( nPlayer==3 ? 4 : 3);
     }
 
     protected void setupClouds(){
@@ -117,11 +113,10 @@ public class Board {
      * @throws IllegalArgumentException the card is not available
      *                                  the card is already played and the player has another card he can play
      */
-    public void playCard(String playerID, int cardID) throws NotYourTurnException, PhaseNotRightException {
-        if (!turn.getCurrentPlayer().equals(playerID))
-            throw new NotYourTurnException("You can't play, It's " + getCurrentPlayer() + "'s turn.");
+    public void playCard(String playerID, int cardID) throws PhaseNotRightException {
         if (turn.getCurrentPhase() != TurnPhase.PLANNING)
-            throw new PhaseNotRightException("You can't use this command in this phase of the game.");
+            throw new PhaseNotRightException("You can't play a card in this phase of the game. " +
+                    "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         Castle castle = castleMap.get(playerID);
         if(!turn.isAlreadyPlayed(cardID) || castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority())))
             if(castle.isCardAvailable(cardID)) {
@@ -130,30 +125,25 @@ public class Board {
                 possibleMovingSteps = null;
                 return;
             }
-        throw new IllegalArgumentException("" +
-                "Card cannot be played. " +
-                    (turn.isAlreadyPlayed(cardID)
-                    && !castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
+        throw new IllegalArgumentException("Card cannot be played. " +
+                (turn.isAlreadyPlayed(cardID) && !castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
                         ? "Card is already played and you have another card to play in your castle. " : "") +
                 (!castle.isCardAvailable(cardID) ? "You don't have this card in the castle." : "" ));
     }
 
-//methods for the action phase
-
+//methods for the Action phase:
     /**
      * Moves students from the waiting room to the dining room.
      * @param playerID the id of the player that ask for this move
      * @param students a list of students you want to move
      * @throws NoSuchStudentException if the student is not in the Waiting Room of the current player
-     * @throws NotYourTurnException if the player in the argument is not the current player
      * @throws TooManyStudentsException if the castle dining room already contains 9 students
      */
     public void moveStudentsToDiningRoom(String playerID, List<StudentColor> students)
-            throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
-        if(!turn.getCurrentPlayer().equals(playerID))
-            throw new NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. "+ playerID +" can't play.");
+            throws NoSuchStudentException, TooManyStudentsException, PhaseNotRightException {
         if(turn.getCurrentPhase() != TurnPhase.STUDENTS)
-            throw new PhaseNotRightException("You can't use this command in this phase of the game.");
+            throw new PhaseNotRightException("You can't move students in this phase of the game. " +
+                    "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
         castleMap.get(playerID).addStudentsInDiningRoom(students);
         influence.updateProfessors();
@@ -167,11 +157,10 @@ public class Board {
      * @param students     a list of students you want to move
      */
     public void moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students)
-            throws NoSuchStudentException, NotYourTurnException, PhaseNotRightException {
-        if (!turn.getCurrentPlayer().equals(playerID))
-            throw new NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. " + playerID + " can't play.");
+            throws NoSuchStudentException, PhaseNotRightException {
         if (turn.getCurrentPhase() != TurnPhase.STUDENTS)
-            throw new PhaseNotRightException("You can't use this command in this phase of the game.");
+            throw new PhaseNotRightException("You can't move students in this phase of the game. " +
+                    "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
         students.forEach(islandList.get(islandNumber)::addStudent);
     }
@@ -185,7 +174,8 @@ public class Board {
      */
     public void moveMotherNature(int steps) throws PhaseNotRightException {
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
-            throw new PhaseNotRightException("You can't move mother nature in this stage of the game. Current phase is " + turn.getCurrentPhase().toString());
+            throw new PhaseNotRightException("You can't move mother nature in this stage of the game. " +
+                    "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         if(possibleMovingSteps == null)
             possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps());
         if (steps > possibleMovingSteps.getInt() || steps < 1)
@@ -263,11 +253,9 @@ public class Board {
      * @param PlayerID the id of the player that ask for this move
      * @param cloudID  0<=cloudID<nPlayers
      */
-    public void chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
+    public void chooseCloud(String PlayerID, int cloudID) throws TooManyStudentsException, PhaseNotRightException {
         if(turn.getCurrentPhase() != TurnPhase.CLOUD)
             throw new PhaseNotRightException("You can't use this command in this stage of the game.");
-        if(!turn.getCurrentPlayer().equals(PlayerID))
-            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. You can't choose a cloud.");
         if(cloudID < 0 || cloudID >= nPlayer)
             throw new IllegalArgumentException("Illegal cloudId number. Please, insert a number between 1 and " + nPlayer);
         Castle castle = castleMap.get(PlayerID);
@@ -300,7 +288,7 @@ public class Board {
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
     private int remainingCards(){
-        Castle currPlayerCastle = getCastle(getCurrentPlayer());
+        Castle currPlayerCastle = getCastle(turn.getCurrentPlayer());
         int cardsLeft = (int) currPlayerCastle.getDeck().stream().filter(Card::isAvailable).count();
         return cardsLeft;
     }
@@ -388,10 +376,6 @@ public class Board {
         turn.changePhase();
     }
     //Getters
-    public String getCurrentPlayer() {
-        return turn.getCurrentPlayer();
-    }
-
     public List<Cloud> getCloudList() {
         return new ArrayList<>(cloudList);
     }
@@ -427,10 +411,6 @@ public class Board {
 
     public CharacterUtility getPlayedExpertChar() throws WrongGameModeException {
         throw new WrongGameModeException("You can't use this command in this gamemode.");
-    }
-
-    public int getPossibleMovingSteps() {
-        return possibleMovingSteps.getInt();
     }
 
     public Bag getBag() {

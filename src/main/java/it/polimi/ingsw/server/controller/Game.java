@@ -38,6 +38,8 @@ public class Game {
     }
 
     public @NotNull MessageUsernameSet executeCommand(@NotNull Command command) {
+        if(!command.getUsername().equals(turn.getCurrentPlayer()))
+            return errorMessage(new Exception("You can't play! It's " + turn.getCurrentPlayer() + "'s turn"), command.getUsername());
         return switch (command.getType()) {
             case PLAY_CARD -> playCardCommand(command);
             case MOVE_STUDENT_TO_CASTLE -> moveStudentToDiningRoomCommand(command);
@@ -51,7 +53,7 @@ public class Game {
     private @NotNull MessageUsernameSet playCardCommand(@NotNull Command command) {
         try {
             board.playCard(command.getUsername(), command.getCardId());
-        } catch (NotYourTurnException | IllegalArgumentException | PhaseNotRightException e) {
+        } catch (IllegalArgumentException | PhaseNotRightException e) {
             logger.info(e);
             return errorMessage(e, command.getUsername());
         }
@@ -69,7 +71,7 @@ public class Game {
         }
         try {
             board.moveStudentsToDiningRoom(playerID, students);
-        } catch (NoSuchStudentException | TooManyStudentsException | NotYourTurnException | PhaseNotRightException e) {
+        } catch (NoSuchStudentException | TooManyStudentsException | PhaseNotRightException e) {
             logger.info(e);
             movedStudents -= students.size();
             return errorMessage(e, playerID);
@@ -89,7 +91,7 @@ public class Game {
         }
         try {
             board.moveStudentToIsland(command.getUsername(), command.getIslandId() - 1, command.getStudents());
-        } catch (NoSuchStudentException | NotYourTurnException | PhaseNotRightException e) {
+        } catch (NoSuchStudentException | PhaseNotRightException e) {
             logger.info(e);
             return errorMessage(e, command.getUsername());
         }
@@ -125,7 +127,7 @@ public class Game {
         try {
             board.chooseCloud(command.getUsername(), command.getCloudId() - 1);
             logger.info(board.getData(command.getUsername()));
-        } catch (NotYourTurnException | TooManyStudentsException | PhaseNotRightException | IllegalArgumentException e) {
+        } catch (TooManyStudentsException | PhaseNotRightException | IllegalArgumentException e) {
             logger.info(e);
             return errorMessage(e, command.getUsername());
         }
