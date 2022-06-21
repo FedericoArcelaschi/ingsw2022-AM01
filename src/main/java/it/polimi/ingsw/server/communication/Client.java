@@ -65,4 +65,7 @@ public final class Client {
         return username;
     }
 
+    public GameInterface getGameInterface() {
+        return gameInterface;
+    }
 }
