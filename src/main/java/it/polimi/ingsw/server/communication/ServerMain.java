@@ -72,7 +72,7 @@ public class ServerMain implements Runnable {
             logger.info("player connected on port " + socket.getPort());
             lobbyManager.addPlayerNoPreferences(socket);
             Client client = new Client(socket);
-            //those methods needs to be splitted because of future changes
+            //those methods need to be split because of future changes
             client.setup(heartBeatServer, lobbyManager, executor);
             connectedPlayer++;
         }

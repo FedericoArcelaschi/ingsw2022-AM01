@@ -84,24 +84,10 @@ public class HeartBeatServer implements Runnable {
         Client c = clients.stream()
                 .filter(x -> client.equals(x.clientsSocket()))
                 .findFirst().orElse(null);
-        sendEndGameMsg(c);
-        c.getGameInterface().endGame();
+        c.getGameInterface().endGame(c);
         clients.remove(c);
         heartBeats.remove(client);
         logger.info("User on port " + client.getPort() + " disconnected.");
     }
 
-    private void sendEndGameMsg(Client client) {
-        List<Socket> playersInGame = new ArrayList<>(client.getGameInterface().getClients().getClients().stream().map(Client::clientsSocket).toList());
-        for (Socket s : playersInGame) {
-            PrintWriter out;
-            try {
-                out = new PrintWriter(s.getOutputStream(), true);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            String endGameMessage = new EndGame("Player " + client.username() + " disconnected. The game is now over.").toJson();
-            out.println(endGameMessage);
-        }
-    }
 }

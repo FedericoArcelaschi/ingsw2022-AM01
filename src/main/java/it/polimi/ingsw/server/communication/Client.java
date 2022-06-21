@@ -26,7 +26,7 @@ public final class Client {
     }
 
     public void setup(HeartBeatServer heartBeatServer, LobbyManager lobbyManager, ExecutorService executor) {
-        heartBeatServer.addClient(this.clientsSocket);
+        heartBeatServer.addClient(this);
         ServerReceiver serverReceiver = new ServerReceiver(this, heartBeatServer, lobbyManager);
         executor.submit(serverReceiver);
     }
@@ -68,4 +68,6 @@ public final class Client {
     public GameInterface getGameInterface() {
         return gameInterface;
     }
+
+
 }

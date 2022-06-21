@@ -15,4 +15,8 @@ public class WinUpdate extends Update {
     public String toString() { //TODO: implement a better toString()
         return super.toString() + winner;
     }
+
+    public String getWinner() {
+        return winner;
+    }
 }

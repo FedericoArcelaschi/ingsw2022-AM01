@@ -6,6 +6,7 @@ import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
+import it.polimi.ingsw.communication.message.subclasses.Update;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.startUp.Outputs;
 import org.jetbrains.annotations.NotNull;
@@ -48,10 +49,10 @@ public class Cli implements UserInterface {
      * decided to wait to "start" the command parsing because of problems with concurrent preferences & command-parsing.
      */
     @Override
-    public void draw(BoardData boardData) {
+    public void draw(BoardData update) {
         clientMain.setState(ClientState.GAME);
-        clientMain.setBoardData(boardData);
-        System.out.println(boardData.toString());
+        clientMain.setBoardData(update);
+        System.out.println(update.toString());
         executor.submit(this::readBuffer);
     }
 
@@ -94,6 +95,7 @@ public class Cli implements UserInterface {
     @Override
     public void endCurrentGame(EndGame endGameMessage) {
         clientMain.setState(ClientState.GAME_ENDED);
+        System.out.println(endGameMessage.getCause());
         // -> OUSIDE_LOBBY
         //FIXME
     }

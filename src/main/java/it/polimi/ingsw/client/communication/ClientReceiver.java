@@ -35,6 +35,9 @@ public class ClientReceiver extends Receiver {
                 System.out.println(CLEAR_SCREEN);
                 Update update = (Update) message;
                 userInterface.draw(update.getBoardData());
+                if (update instanceof WinUpdate) {
+                    System.out.println(((WinUpdate) update).getWinner());
+                }
             }
             case LOBBYINFO -> {
                 System.out.println(CLEAR_SCREEN);

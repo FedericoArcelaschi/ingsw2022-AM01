@@ -30,6 +30,10 @@ public class ClientList {
         return new HashSet<>(clients);
     }
 
+    public int size() {
+        return clients.size();
+    }
+
     public void clear() {
         clients.clear();
     }
