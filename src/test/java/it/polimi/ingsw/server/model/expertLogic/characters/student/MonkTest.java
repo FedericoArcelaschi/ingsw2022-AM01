@@ -8,6 +8,8 @@ import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StudentCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,10 +24,16 @@ public class MonkTest { //1° character
     private String player1 = "lorenza", player2 = "federica";
     private ExpertBoard expertBoard;
 
+    @BeforeEach
+    void setUp() {
+        expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
+        if(!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.MONK))
+            setUp();
+    }
+
     boolean playExpertCharacterTest(int islandIndex) {
         //SetUp
-        expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
-        expertBoard.extract4CharacterTesting(1);
+        //expertBoard.extract4CharacterTesting(1);
         //Monk setUp
         StudentCharacter monk
                 = (StudentCharacter) expertBoard.getAvailableCharacters().get(1);

@@ -14,7 +14,6 @@ import it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController;
 import it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import javafx.application.Application;

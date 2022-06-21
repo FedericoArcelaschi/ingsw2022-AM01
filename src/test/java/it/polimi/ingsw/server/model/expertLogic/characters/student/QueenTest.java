@@ -30,7 +30,7 @@ public class QueenTest { //11° character
 
         try {
             expertBoard.moveStudentsToDiningRoom(player2, currentPlayerCastle.getWaitingRoom());
-        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
+        } catch (NoSuchStudentException | TooManyStudentsException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
         Map<StudentColor, Integer> diningRoom = new HashMap<>(currentPlayerCastle.getDiningRoom());
@@ -58,7 +58,7 @@ public class QueenTest { //11° character
 
         try {
             expertBoard.moveStudentsToDiningRoom(player2, currentPlayerCastle.getWaitingRoom());
-        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
+        } catch (NoSuchStudentException | TooManyStudentsException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
         Map<StudentColor, Integer> diningRoom = new HashMap<>(currentPlayerCastle.getDiningRoom());

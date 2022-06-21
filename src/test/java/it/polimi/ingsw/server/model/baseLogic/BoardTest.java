@@ -32,7 +32,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testGetAvailableCard() throws NotYourTurnException, PhaseNotRightException {
+    public void testGetAvailableCard() throws PhaseNotRightException {
         assertEquals(10, b.getCastle(player1).getDeck().stream().filter(card -> card.isAvailable()).count());
         b.playCard(player1, 1);
         b.playCard(player1, 2);
@@ -49,7 +49,6 @@ public class BoardTest {
 
     @Test
     public void testNotYourTurnException(){
-        assertThrowsExactly(NotYourTurnException.class, () -> b.playCard(player2,1), "player can't move because it's not his turn");
         assertDoesNotThrow(() -> b.playCard(player1,1), "player should be able to move because it's his turn");
     }
 
@@ -92,7 +91,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testChooseCloud() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
+    public void testChooseCloud() throws NoSuchStudentException, TooManyStudentsException {
         List<StudentColor> cl = new ArrayList<>();
         //move 4 element to DR to free space for new students coming from cloud
         for(int i=0; i<4;i++){
@@ -115,7 +114,7 @@ public class BoardTest {
         }
     }
     @Test
-    public void testMoveStudentToIsland() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException {
+    public void testMoveStudentToIsland() throws NoSuchStudentException {
         List<StudentColor> studentColorList =  new ArrayList<>();
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(1));
@@ -143,7 +142,7 @@ public class BoardTest {
         assertEquals(students, studentsOnIsland);
     }
     @Test
-    public void testPlayCard() throws NotYourTurnException, PhaseNotRightException {
+    public void testPlayCard() throws PhaseNotRightException {
         //check if the card is not used at the beginning
         assertTrue(b.getCastleMap().get(player1).getDeck().get(0).isAvailable());
         //check if the card is played correctly
@@ -162,7 +161,7 @@ public class BoardTest {
                 thrown.getMessage());
     }
     @Test
-    public void testUpdateProfessor() throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
+    public void testUpdateProfessor() throws NoSuchStudentException, TooManyStudentsException, PhaseNotRightException {
         List<StudentColor> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
         b.moveStudentsToDiningRoom(player1, students);
 
@@ -184,7 +183,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testMoveMotherNature() throws NotYourTurnException, PhaseNotRightException {
+    public void testMoveMotherNature() throws PhaseNotRightException {
         final Turn turn = new Turn(List.of("prova", "qwerty"));
         final Board board = new Board("prova", "qwerty", turn, RandomGenerator.getDefault().nextLong());
         board.playCard("prova", 3);
