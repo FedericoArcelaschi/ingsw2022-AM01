@@ -31,6 +31,10 @@ public class Cli implements UserInterface {
         clientMain.sendPreferences(getValidPreferences());
 
         // the Cli in the input/output to the terminal
+        parseCommands(clientMain);
+    }
+
+    public void parseCommands(ClientMain clientMain) {
         while(true) {
             try {
                 String input = br.readLine().strip();
