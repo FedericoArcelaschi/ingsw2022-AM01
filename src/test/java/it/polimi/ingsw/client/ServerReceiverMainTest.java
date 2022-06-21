@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.communication.ServerMain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -30,7 +31,7 @@ class ServerReceiverMainTest {
         int i;
         int n2 = 100, n3 = 90, n4=100;
         for (i = 1; i <= n2; i++) {
-            //new ClientMain("Lore2-"+i,2,false, "127.0.0.1", 1234).connect();
+            new ClientMain(null).connect(new InetSocketAddress("127.0.0.1", 1234));
         }
         for (i = 1; i <= n3; i++) {
             //new ClientMain("Lore3-"+i,3,false, "127.0.0.1", 1234).connect();

@@ -29,14 +29,30 @@ public class MonkTest { //1° character
         expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
         if(!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.MONK))
             setUp();
+        else
+            try {
+                expertBoard.playCard(player1, 5);
+                expertBoard.changePhase();
+                expertBoard.playCard(player2, 7);
+                expertBoard.changePhase();
+            } catch (PhaseNotRightException e) {
+                e.printStackTrace();
+                fail();
+            }
+    }
+
+    @Test
+    void playExpertCharacterOnEachIsland() {
+        for (int i = 1; i < 6; i++){
+            setUp();
+            assertTrue(playExpertCharacterTest(i));
+        }
     }
 
     boolean playExpertCharacterTest(int islandIndex) {
-        //SetUp
-        //expertBoard.extract4CharacterTesting(1);
         //Monk setUp
         StudentCharacter monk
-                = (StudentCharacter) expertBoard.getAvailableCharacters().get(1);
+                = (StudentCharacter) expertBoard.getAvailableCharacters().get(CharacterUtility.MONK);
         StudentColor firstAvailableStudent
                 = monk.getAvailableStudents().get(0);
 
@@ -58,19 +74,14 @@ public class MonkTest { //1° character
         try {
             expertBoard.playExpertCard(1, islandIndex, List.of(firstAvailableStudent));
         } catch (StudentException | CoinException | PhaseNotRightException e) {
-            fail(e.getCause());
+            e.printStackTrace();
+            fail();
         }
 
 
         ExpertIsland islandForComparison = new ExpertIsland(new Island(firstAvailableStudent));
         islandForComparison.addStudent(studentOnThatIsland);
-        assertEquals(islandForComparison, expertBoard.getIslandList().get(islandIndex));
+        assertEquals(islandForComparison.getStudents(), expertBoard.getIslandList().get(islandIndex).getStudents());
         return true;
-    }
-
-    @Test
-    void playExpertCharacterOnEachIsland() {
-        for (int i = 1; i < 6; i++)
-            assertTrue(playExpertCharacterTest(i));
     }
 }
