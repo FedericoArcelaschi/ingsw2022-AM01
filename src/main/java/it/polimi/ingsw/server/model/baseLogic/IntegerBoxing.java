@@ -9,26 +9,26 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.Affectable;
 
 public class IntegerBoxing implements Affectable {
 
-    private int i;
+    private int anInt;
 
     public IntegerBoxing(int i) {
-        this.i = i;
+        this.anInt = i;
     }
 
     public int getInt() {
-        return i;
+        return anInt;
     }
 
     public void setInt(int i) {
-        this.i = i;
+        this.anInt = i;
     }
 
     public void zero() {
-        i = 0;
+        anInt = 0;
     }
 
-    public void add(IntegerBoxing possibleMovingSteps) {
-        i += possibleMovingSteps.i;
+    public void add(int i) {
+        anInt += i;
     }
 
     /**
@@ -38,12 +38,12 @@ public class IntegerBoxing implements Affectable {
      */
     @Override
     public void affect(int increase) {
-        i += increase;
+        anInt += increase;
     }
 
     @Override
     public String toString() {
-        return Integer.toString(i);
+        return Integer.toString(anInt);
     }
 }
 

@@ -124,9 +124,9 @@ public class ExpertBoard extends Board {
 
     private @NotNull ParametersForCharacter getParameters(CharacterParametersType characterParametersType, List<StudentColor> studentsList, Integer islandIndex) {
         return switch (characterParametersType) {
+            case STANDARD ->    standardParameters();
             case STUDENT ->     studentParameters(studentsList, islandIndex);
             case ISLAND ->      islandParameters(islandIndex);
-            case STANDARD ->    standardParameters();
             case INFLUENCE ->   influenceParameters(studentsList);
         };
     }
@@ -141,7 +141,9 @@ public class ExpertBoard extends Board {
 
     private @NotNull ParametersForCharacter standardParameters() {
         ParametersForCharacter par = new ParametersForCharacter();
-        par.setSteps(possibleMovingSteps);
+        par.setSteps(   possibleMovingSteps == null ?
+                        possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps()) :
+                        possibleMovingSteps);
         return par;
     }
 
