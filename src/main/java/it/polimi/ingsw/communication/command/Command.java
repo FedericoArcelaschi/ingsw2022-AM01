@@ -20,6 +20,7 @@ public class Command {
     private int motherNaturePositionShift;
     private int cardId;
     private List<StudentColor> students = new ArrayList<>();
+
     private int islandId;
     private int charId;
     private int cloudId;
@@ -34,9 +35,10 @@ public class Command {
         this.username = username;
         command = command.strip();
         List<String> commandAttributes = new ArrayList<>(Arrays.stream(command.split(" ")).toList()); // FIXME: more spaces break the command.
-        if (commandAttributes.size() < 2)
-            throw new ParseException(commandAttributes + " put a valid command. help to get more information.", 0);
         type = getCommandType(commandAttributes.remove(0));
+        if (commandAttributes.size() < 1)
+
+            throw new ParseException("'" + command + "' isn't a valid command. Type 'help' to get more information.", 0);
         getParameters(commandAttributes);
     }
 
@@ -92,6 +94,9 @@ public class Command {
         return students;
     }
 
+    /**
+     * @return islandId between 1 and 12
+     */
     public int getIslandId() {
         return islandId;
     }

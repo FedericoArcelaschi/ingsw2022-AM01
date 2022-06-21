@@ -91,7 +91,7 @@ public class ExpertBoard extends Board {
             e.printStackTrace();
         }
         playedExpertChar = CharacterUtility.getChar(idChar);
-        ((ExpertCastle) getCastle(getCurrentPlayer())).payCharacter(actualCost);
+        ((ExpertCastle) getCastle(turn.getCurrentPlayer())).payCharacter(actualCost);
     }
 
     private @NotNull StandardCharacter checkLegalExpertCard(int idChar) throws CoinException {
@@ -114,7 +114,7 @@ public class ExpertBoard extends Board {
         int availableCoins = 0;
         try {
             availableCoins = castleMap
-                    .get(getCurrentPlayer())
+                    .get(turn.getCurrentPlayer())
                     .getCoins();
         } catch (WrongGameModeException ignored) {}
         if(availableCoins < ec.getCost())
@@ -124,9 +124,9 @@ public class ExpertBoard extends Board {
 
     private @NotNull ParametersForCharacter getParameters(CharacterParametersType characterParametersType, List<StudentColor> studentsList, Integer islandIndex) {
         return switch (characterParametersType) {
+            case STANDARD ->    standardParameters();
             case STUDENT ->     studentParameters(studentsList, islandIndex);
             case ISLAND ->      islandParameters(islandIndex);
-            case STANDARD ->    standardParameters();
             case INFLUENCE ->   influenceParameters(studentsList);
         };
     }
@@ -141,7 +141,9 @@ public class ExpertBoard extends Board {
 
     private @NotNull ParametersForCharacter standardParameters() {
         ParametersForCharacter par = new ParametersForCharacter();
-        par.setSteps(possibleMovingSteps);
+        par.setSteps(   possibleMovingSteps == null ?
+                        possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps()) :
+                        possibleMovingSteps);
         return par;
     }
 
@@ -152,11 +154,11 @@ public class ExpertBoard extends Board {
         par.setIslandIndex(islandIndex);
         par.setNumberOfPlayers(castleMap.size());
         List<StudentPlaces> places = new ArrayList<>();
-        places.add(castleMap.get(getCurrentPlayer())); //index 0.
+        places.add(castleMap.get(turn.getCurrentPlayer())); //index 0.
         places.addAll(castleMap
                 .keySet()
                 .stream()
-                .filter(key -> !key.equals(getCurrentPlayer()))
+                .filter(key -> !key.equals(turn.getCurrentPlayer()))
                 .map(castleMap::get)
                 .toList()); //All castles but currentPlayer's.
         places.addAll(islandList); //index numberOfPlayer - 1
@@ -194,17 +196,13 @@ public class ExpertBoard extends Board {
         influence.reset();
     }
 
-    public List<String> getAvailableCharactersName() {
-        return expertCharactersCards.values().stream().map(StandardCharacter::getName).toList();
-    }
-
     @Override
     public Map<CharacterUtility, StandardCharacter> getAvailableCharacters() {
         return expertCharactersCards;
     }
 
     public Team getCurrentTeam() {
-        return castleMap.get(getCurrentPlayer()).getTeam();
+        return castleMap.get(turn.getCurrentPlayer()).getTeam();
     }
 
     //FOR VIEW:

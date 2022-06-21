@@ -68,7 +68,7 @@ public class Bag {
      */
     public List<StudentColor> extractForIslandSetup(){
         List<StudentColor> extractedList = new ArrayList<>();
-        for(int i=0; i<2; i++){
+        for(int i = 0; i < 2; i++) {
             for(StudentColor c : StudentColor.values()) {
                 extractedList.add(c);
                 students.replace(c, students.get(c) - 1);

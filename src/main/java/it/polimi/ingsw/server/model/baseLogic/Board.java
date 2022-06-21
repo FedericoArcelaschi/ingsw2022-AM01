@@ -36,9 +36,6 @@ public class Board {
     private final int TOWERS_TO_PLACE_TO_WIN = 8;
     private final int CLOUD_SIZE_2_4_PLAYERS = 3;
     private final int CLOUD_SIZE_3_PLAYERS = 4;
-    private int MAX_STUDENTS_TO_MOVE; //Effectively final, TODO
-    protected int movedStudents;
-
 
     public Board(String playerID1, String playerID2, Turn turn, long seed) {
         nPlayer = 2;
@@ -76,7 +73,7 @@ public class Board {
     /**
      * Constructor for ExpertBoard: doesn't generate the castles.
      */
-    protected Board(Turn turn, long seed, int nPlayer){
+    protected Board(Turn turn, long seed, int nPlayer) {
         this.turn = turn;
         this.seed = seed;
         this.bag = new Bag(numOfStudentsPerColor, seed);
@@ -87,10 +84,9 @@ public class Board {
     /**
      * Cleans the constructor implementation
      */
-    private void construct(){
+    private void construct() {
         setupClouds();
         setupIslands();
-        MAX_STUDENTS_TO_MOVE = ( nPlayer==3 ? 4 : 3);
     }
 
     protected void setupClouds(){
@@ -117,40 +113,37 @@ public class Board {
      * @throws IllegalArgumentException the card is not available
      *                                  the card is already played and the player has another card he can play
      */
-    public void playCard(String playerID, int cardID) throws NotYourTurnException, PhaseNotRightException {
-        if (!turn.getCurrentPlayer().equals(playerID))
-            throw new NotYourTurnException("You can't play, It's " + getCurrentPlayer() + "'s turn.");
+    public void playCard(String playerID, int cardID) throws PhaseNotRightException {
         if (turn.getCurrentPhase() != TurnPhase.PLANNING)
-            throw new PhaseNotRightException("You can't use this command in this phase of the game.");
+            throw new PhaseNotRightException("You can't play a card in this phase of the game. " +
+                    "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         Castle castle = castleMap.get(playerID);
         if(!turn.isAlreadyPlayed(cardID) || castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority())))
             if(castle.isCardAvailable(cardID)) {
                 Card card = castle.playCard(cardID);
                 turn.addCard(playerID, card);
+                possibleMovingSteps = null;
                 return;
             }
         throw new IllegalArgumentException("Card cannot be played. " +
                 (turn.isAlreadyPlayed(cardID) && !castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
-                        ? "Card is already played & you have another card to play in your castle. " : " ") +
-                (castle.isCardAvailable(cardID) ? "" : "You don't have this card in the castle"));
+                        ? "Card is already played and you have another card to play in your castle. " : "") +
+                (!castle.isCardAvailable(cardID) ? "You don't have this card in the castle." : "" ));
     }
 
-//methods for the action phase
-
+//methods for the Action phase:
     /**
      * Moves students from the waiting room to the dining room.
      * @param playerID the id of the player that ask for this move
      * @param students a list of students you want to move
      * @throws NoSuchStudentException if the student is not in the Waiting Room of the current player
-     * @throws NotYourTurnException if the player in the argument is not the current player
      * @throws TooManyStudentsException if the castle dining room already contains 9 students
      */
     public void moveStudentsToDiningRoom(String playerID, List<StudentColor> students)
-            throws NoSuchStudentException, NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
-        if(!turn.getCurrentPlayer().equals(playerID))
-            throw new NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. "+ playerID +" can't play.");
+            throws NoSuchStudentException, TooManyStudentsException, PhaseNotRightException {
         if(turn.getCurrentPhase() != TurnPhase.STUDENTS)
-            throw new PhaseNotRightException("You can't use this command in this phase of the game.");
+            throw new PhaseNotRightException("You can't move students in this phase of the game. " +
+                    "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
         castleMap.get(playerID).addStudentsInDiningRoom(students);
         influence.updateProfessors();
@@ -164,26 +157,27 @@ public class Board {
      * @param students     a list of students you want to move
      */
     public void moveStudentToIsland(String playerID, int islandNumber, List<StudentColor> students)
-            throws NoSuchStudentException, NotYourTurnException, PhaseNotRightException {
-        if (!turn.getCurrentPlayer().equals(playerID))
-            throw new NotYourTurnException("It's " + getCurrentPlayer() + "'s turn. " + playerID + " can't play.");
+            throws NoSuchStudentException, PhaseNotRightException {
         if (turn.getCurrentPhase() != TurnPhase.STUDENTS)
-            throw new PhaseNotRightException("You can't use this command in this phase of the game.");
+            throw new PhaseNotRightException("You can't move students in this phase of the game. " +
+                    "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
         students.forEach(islandList.get(islandNumber)::addStudent);
     }
 
     /**
-     * Calculates the influence and sets a new owner
-     * on the current island mother nature lands on.
+     * MovesMotherNature and computes the influence and sets a new owner
+     * on the island mother nature lands on.
      * Checks if nearby islands have the same owner and possibly joins them.
      * Checks if someone won the game after an island is conquered
      * @param steps number of steps forward of mother nature
      */
     public void moveMotherNature(int steps) throws PhaseNotRightException {
-        possibleMovingSteps.add(turn.getPossibleMovingSteps());
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
-            throw new PhaseNotRightException("You can't move mother nature in this stage of the game. Current phase is " + turn.getCurrentPhase().toString());
+            throw new PhaseNotRightException("You can't move mother nature in this stage of the game. " +
+                    "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
+        if(possibleMovingSteps == null)
+            possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps());
         if (steps > possibleMovingSteps.getInt() || steps < 1)
             throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.getInt());
         if ((motherNaturePosition + steps) >= (islandList.size()))
@@ -194,7 +188,7 @@ public class Board {
     }
 
     /**
-     * Calculates influence on given island and sets a new owner if possible.
+     * Computes influence on given island and sets a new owner if possible.
      * @param islandIndex the current island mother nature is on
      */
     protected void conquerIsland(int islandIndex) {
@@ -254,22 +248,16 @@ public class Board {
         motherNaturePosition = firstIslandIndex;
     }
 
-
-
     /**
      * Moves students from the selected cloud to the waiting room of the current player.
      * @param PlayerID the id of the player that ask for this move
      * @param cloudID  0<=cloudID<nPlayers
      */
-    public void chooseCloud(String PlayerID, int cloudID) throws NotYourTurnException, TooManyStudentsException, PhaseNotRightException {
+    public void chooseCloud(String PlayerID, int cloudID) throws TooManyStudentsException, PhaseNotRightException {
         if(turn.getCurrentPhase() != TurnPhase.CLOUD)
             throw new PhaseNotRightException("You can't use this command in this stage of the game.");
-        if(!turn.getCurrentPlayer().equals(PlayerID))
-            throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. You can't choose a cloud.");
         if(cloudID < 0 || cloudID >= nPlayer)
             throw new IllegalArgumentException("Illegal cloudId number. Please, insert a number between 1 and " + nPlayer);
-        if(!cloudList.get(cloudID).isAvailable())
-            throw new IllegalArgumentException("This cloud is no longer available.");
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
         castle.addStudentsInWaitingRoom(cloud.choose());
@@ -282,11 +270,11 @@ public class Board {
     protected void endOfTurn() {
         if(turn.isLastActionTurn())
             cloudRefill();
-        possibleMovingSteps.zero();
+        possibleMovingSteps.setInt(turn.getNextPossibleMovingSteps());
     }
 
     /**
-     * after a whole
+     * after a whole turn
      */
     public void cloudRefill() {
         cloudList.forEach(Cloud::refill);
@@ -300,7 +288,7 @@ public class Board {
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
     private int remainingCards(){
-        Castle currPlayerCastle = getCastle(getCurrentPlayer());
+        Castle currPlayerCastle = getCastle(turn.getCurrentPlayer());
         int cardsLeft = (int) currPlayerCastle.getDeck().stream().filter(Card::isAvailable).count();
         return cardsLeft;
     }
@@ -388,10 +376,6 @@ public class Board {
         turn.changePhase();
     }
     //Getters
-    public String getCurrentPlayer() {
-        return turn.getCurrentPlayer();
-    }
-
     public List<Cloud> getCloudList() {
         return new ArrayList<>(cloudList);
     }
@@ -427,10 +411,6 @@ public class Board {
 
     public CharacterUtility getPlayedExpertChar() throws WrongGameModeException {
         throw new WrongGameModeException("You can't use this command in this gamemode.");
-    }
-
-    public int getPossibleMovingSteps() {
-        return possibleMovingSteps.getInt();
     }
 
     public Bag getBag() {
