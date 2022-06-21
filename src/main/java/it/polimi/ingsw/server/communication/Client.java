@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 public final class Client {
 
     private final static Logger logger = LogManager.getLogger(Client.class);
-
     private String username;
     private final Socket clientsSocket;
     private GameInterface gameInterface;
@@ -27,11 +26,9 @@ public final class Client {
     }
 
     public void setup(HeartBeatServer heartBeatServer, LobbyManager lobbyManager, ExecutorService executor) {
-        heartBeatServer.addClient(this);
+        heartBeatServer.addClient(this.clientsSocket);
         ServerReceiver serverReceiver = new ServerReceiver(this, heartBeatServer, lobbyManager);
         executor.submit(serverReceiver);
-        //FIXME needs to be moved
-        //lobbyManager.addPlayerNoPreferences(this.clientsSocket);
     }
 
     public void executeCommand(Command command, Socket socket) {

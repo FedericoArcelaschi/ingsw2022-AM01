@@ -20,7 +20,6 @@ public class Main {
             case CLI -> new Cli();
             case GUI -> Application.launch(Gui.class);
         }
-
     }
 
     private static UserType getUserType(String[] args) {

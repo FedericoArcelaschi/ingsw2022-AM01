@@ -1,13 +1,15 @@
 package it.polimi.ingsw.server.communication;
 
 import it.polimi.ingsw.communication.message.subclasses.Ping;
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.*;
-import java.util.concurrent.Executors;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class that implements the heart-beat protocol.
@@ -17,17 +19,16 @@ public class HeartBeatServer implements Runnable {
 
     private final static Logger logger = LogManager.getLogger(HeartBeatServer.class);
 
-    private final int TIMEOUT = 5000; // [ms]
+    private final int TIMEOUT = 3000; // [ms]
     private final Set<Socket> clients = new HashSet<>();
     private final Set<Socket> heartBeats = new HashSet<>();
 
     /**
      * Adds a client to the connected clients list and starts the heartbeat on him as well
      */
-    public void addClient(Client newClient) {
-        Socket newClientSocket = newClient.clientsSocket();
+    public void addClient(Socket newClient) {
         logger.info("Added client");
-        clients.add(newClientSocket);
+        clients.add(newClient);
     }
 
     /**Validate the connection with the client for another 5 seconds.
@@ -48,7 +49,7 @@ public class HeartBeatServer implements Runnable {
      */
     public void run() {
         long previousTime = new Date().getTime();
-        sendsPing();
+        clients.forEach(this::sendsPing);
         waits(previousTime);
         synchronized (heartBeats) {
             heartBeats.forEach(this::removeClient);
@@ -56,19 +57,16 @@ public class HeartBeatServer implements Runnable {
         run();
     }
 
-    private void sendsPing() {
-        for (Socket client : clients) {
-            PrintWriter out;
-            try {
-                out = new PrintWriter(client.getOutputStream(), true);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            String pingMessage = new Ping().toJson();
-            out.println(pingMessage);
-            heartBeats.add(client);
-            //FIXME -> here the idea is to put the PING UUID associated to each client's ping. Not needed. Not implemented.
+    private void sendsPing(Socket client) {
+        PrintWriter out;
+        try {
+            out = new PrintWriter(client.getOutputStream(), true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        String pingMessage = new Ping().toJson();
+        out.println(pingMessage);
+        heartBeats.add(client);
     }
 
     private void waits(long previousTime) {

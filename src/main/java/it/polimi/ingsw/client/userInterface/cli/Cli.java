@@ -3,59 +3,87 @@ package it.polimi.ingsw.client.userInterface.cli;
 import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.client.communication.ClientState;
 import it.polimi.ingsw.client.userInterface.UserInterface;
+import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
-import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.startUp.Outputs;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Cli implements UserInterface {
 
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private final ClientMain clientMain;
+    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public Cli() {
-        ClientMain clientMain = new ClientMain(
-                "localhost",
-                12345);
-        try {
-            clientMain.connect(this);
-        } catch (IllegalAccessException e) {
-            System.err.println(e.getMessage());
-            new Cli();
-        }
-
-        clientMain.sendPreferences(getValidPreferences());
-
-        // the Cli in the input/output to the terminal
-        while(true) {
-            try {
-                String input = br.readLine().strip();
-                if(!input.isBlank())
-                    clientMain.runCommand(input);
-            } catch (IOException | NoClassDefFoundError e) {
-                System.err.println(e.getMessage());
-                //throw new RuntimeException(e);
-            }
-        }
-    }
-
-    @Override
-    public void draw (BoardData boardData) {
-        System.out.println("\r");
-        System.out.println(boardData.toString());
+        clientMain = new ClientMain(this);
+        SocketAddress defaultSocket = new InetSocketAddress("localhost", 12345);
+        connect(defaultSocket);
     }
 
     /**
-     * Method to handle the LobbyInfoMessages.
+     * Recursive method that connects the client.
+     * Keeps asking for the Network Preferences until the client connects to the server.
+     * @param address may be null if there is a problem in the input parsing/reading
+     */
+    private void connect(@Nullable SocketAddress address) {
+        if(address != null)
+            clientMain.connect(address);
+        if(!clientMain.isConnected()) connect(getNetworkPreferences());
+    }
+
+    /**
+     * decided to wait to "start" the command parsing because of problems with concurrent preferences & command-parsing.
      */
     @Override
+    public void draw(BoardData boardData) {
+        clientMain.setState(ClientState.GAME);
+        clientMain.setBoardData(boardData);
+        System.out.println(boardData.toString());
+        executor.submit(this::readBuffer);
+    }
+
+    /**
+     * Input managing and Command generation.
+     * Is a recursive function: will end only in case of a system shutdown.
+     */
+    private void readBuffer() {
+        String input = "";
+        try {
+            input = br.readLine().strip();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        if(!input.isBlank())
+            clientMain.runCommand(input);
+        readBuffer();
+    }
+
+    @Override
     public void printLobby(LobbyInfo lobbyInfo) {
-        System.out.println("\r");
         System.out.println(lobbyInfo);
+        executor.submit(
+            () -> {
+                if (clientMain.getState() == ClientState.OUTSIDE_LOBBY) {
+                    synchronized (System.out) {
+                        clientMain.sendPreferences(this.getValidPreferences());
+                    }
+                    clientMain.setState(ClientState.INSIDE_LOBBY);
+                }
+            }
+        );
     }
 
     @Override
@@ -63,10 +91,32 @@ public class Cli implements UserInterface {
         System.err.println(error);
     }
 
+    @Override
+    public void endCurrentGame(EndGame endGameMessage) {
+        clientMain.setState(ClientState.GAME_ENDED);
+        // -> OUSIDE_LOBBY
+        //FIXME
+    }
+
+    /**
+     * method that is called iff !clientMain.isConnected()
+     * Re-connects the client to the server.
+     * The newly connected client will be in the lobby.
+     */
+    @Override
+    public void disconnected() {
+        clientMain.setState(ClientState.NOT_CONNECTED);
+        System.err.println("connection lost: you left the game.");
+        System.err.flush();
+        this.connect(getNetworkPreferences());
+    }
+
+
+//SUPPORT METHODS:
     /**
      * Before opening the connection with the server the client requires to insert the preferences.
      */
-    private Preferences getValidPreferences() {
+    private @NotNull Preferences getValidPreferences() {
         int nPlayer;
         Boolean expertMode;
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -91,11 +141,11 @@ public class Cli implements UserInterface {
             query = "Expert mode? (Y/n)";
             do {
                 System.out.println(query);
-                expertMode = getBoolean(br.readLine());
+                expertMode = getBoolean(br.readLine().strip());
             } while (expertMode == null);
 
         } catch (IOException e) {
-            System.err.println("input error:\n" + e.getMessage());
+            System.err.println("input error:\n\t" + e.getMessage());
             return getValidPreferences();
         }
         try {
@@ -107,11 +157,48 @@ public class Cli implements UserInterface {
         }
     }
 
-    private Boolean getBoolean(String s) {
-        if(s.equalsIgnoreCase("y"))
+    private @Nullable Boolean getBoolean(String s) {
+        if(s.equalsIgnoreCase("y") || s.equalsIgnoreCase("yes"))
             return true;
-        if(s.equalsIgnoreCase("n"))
+        if(s.equalsIgnoreCase("n") || s.equalsIgnoreCase("no"))
             return false;
         return null;
+    }
+
+    private SocketAddress getNetworkPreferences() {
+        String hostName;
+        int port = 0;
+        InetAddress address = null;
+
+        synchronized (System.out) {
+            while (address == null) {
+                try {
+                    System.out.println("\ninsert the host IP:");
+                    hostName = br.readLine().strip();
+                    address = Inet4Address.getAllByName(hostName)[0];
+                } catch (IOException e) {
+                    System.out.println("\u001b[31m" + e.getMessage() + "\u001b[0m");
+                }
+            }
+            while (port == 0) {
+                try {
+                    System.out.println("\ninsert the port:");
+                    port = Integer.parseInt(br.readLine().strip());
+                } catch (NumberFormatException e) {
+                    System.out.println("\u001b[31mNot a valid number.\u001b[0m");
+                    System.err.flush();
+                } catch (IOException e) {
+                    System.err.println(e.getMessage());
+                    System.err.flush();
+                }
+            }
+        }
+        try {
+            return new InetSocketAddress(address, port);
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+            System.err.flush();
+            return getNetworkPreferences();
+        }
     }
 }

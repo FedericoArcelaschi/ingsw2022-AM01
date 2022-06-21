@@ -17,11 +17,9 @@ public abstract class Receiver implements Runnable {
     protected final Socket socket;
     protected final BufferedReader in;
     protected final PrintWriter out;
-    protected final ClientMain cm;
 
-    public Receiver(ClientMain cm, Socket socket) {
+    public Receiver(Socket socket) {
         this.socket = socket;
-        this.cm = cm;
         try {
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.out = new PrintWriter(socket.getOutputStream(), true);

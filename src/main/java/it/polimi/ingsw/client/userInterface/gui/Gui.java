@@ -2,8 +2,8 @@ package it.polimi.ingsw.client.userInterface.gui;
 
 import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.communication.command.Command;
+import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
-import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 import it.polimi.ingsw.server.model.baseLogic.Board;
@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
+import java.net.SocketAddress;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -78,7 +79,7 @@ public class Gui extends Application implements UserInterface {
 //            b.chooseCloud("Fede", 1);
 //            b.changePhase();
 
-        } catch (PhaseNotRightException | NotYourTurnException | TooManyStudentsException e) {
+        } catch (PhaseNotRightException | TooManyStudentsException e) {
             throw new RuntimeException(e);
         } catch (NoSuchStudentException e) {
             return createBoardData();
@@ -129,17 +130,29 @@ public class Gui extends Application implements UserInterface {
         if(gamePaneController != null) gamePaneController.printError(error);
     }
 
+    @Override
+    public void endCurrentGame(EndGame endGameMessage) {
+        //TODO
+    }
+
+    @Override
+    public void disconnected() {
+        //TODO:
+    }
+
     public void connect(LoginPreferences loginPreferences) {
-        Preferences preferences = loginPreferences.preferences();
-        clientMain = new ClientMain(loginPreferences.IP(), loginPreferences.port());
-        try {
-            clientMain.connect(this);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        clientMain = new ClientMain(this);
+        //FIXME: first needs the network preferences and then the others.
+        //FIXME:
+        clientMain.connect(getNetworkPreferences());
     }
 
     public void send(Command command) {
         clientMain.runCommand(command);
+    }
+
+    private SocketAddress getNetworkPreferences() {
+        //TODO:
+        return null;
     }
 }
