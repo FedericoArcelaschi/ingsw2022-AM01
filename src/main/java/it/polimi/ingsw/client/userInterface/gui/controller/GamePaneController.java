@@ -106,7 +106,8 @@ public class GamePaneController {
                 send.accept(command);
             } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
                 List<String> parameters = new ArrayList<>();
-                parameters.add(island.getAccessibleText());
+                int moveDistance = Integer.parseInt(island.getAccessibleText()) - boardData.motherNaturePosition();
+                parameters.add(String.valueOf(moveDistance));
                 Command command = null;
                 try {
                     command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
@@ -115,12 +116,12 @@ public class GamePaneController {
                 send.accept(command);
             }
         }
-        else if(!parameters.isEmpty()) {
+        else {
             parameters.add(island.getAccessibleText());
             System.out.println(parameters);
             Command command = null;
             try {
-                command = new Command(username, CommandType.PAY_CHARACTER, parameters);
+                command = new Command(username, CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
             } catch (ParseException ignored) {}
             System.out.println(command);
         }
@@ -164,8 +165,14 @@ public class GamePaneController {
         CharacterPane pane = (CharacterPane) mouseEvent.getTarget();
         parameters.add(pane.getAccessibleText());
         parameters.addAll(pane.getMultipleToggleGroup().getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList());
-        /*Command command = new Command(username, CommandType.PAY_CHARACTER, parameters);
-        System.out.println(command);*/
+        System.out.println(parameters);
+        Command command = null;
+        try {
+            command = new Command(username, CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(command);
     }
 
     public void switchCommandMode() {
