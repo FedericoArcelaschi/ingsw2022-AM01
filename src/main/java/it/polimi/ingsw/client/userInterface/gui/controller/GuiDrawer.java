@@ -94,42 +94,25 @@ public class GuiDrawer {
         }
     }
 
-    /*public void drawCharacters(List<CharacterData> characters,FlowPane charFlowPane, FlowPane characterPane, Tab characterTab){
-        if(characters.size() == 0)
-            return;
-        characterTab.setDisable(false);
-        for (int i = 0; i < characters.size(); i++) {
-            Pane pane = (Pane) characterPane.getChildren().get(i);
-            pane.getStyleClass().add(CharacterExplanation.getInstance(characters.get(i).getName()).getCSS());
-            pane.setAccessibleText(characters.get(i).getName());
-            Tooltip tooltip = new Tooltip(characters.get(i).getDescription());
-            FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
-            Tooltip.install(pane, tooltip);
-            Tooltip.install(flowPane, tooltip);
-            flowPane.setAccessibleText(characters.get(i).getName());
-            for (StudentColor studentColor: characters.get(i).getStudents().orElse(new ArrayList<>())) {
-                ToggleButton toggleButton = new ToggleButton();
-                toggleButton.getStyleClass().add("student");
-                toggleButton.setPrefSize(25, 25);
-                setStudentButtonColor(toggleButton, studentColor);
-                flowPane.getChildren().add(toggleButton);
-            }
-        }
-    }*/
-
-    public void drawIslands(List<IslandData> islandList, int motherNaturePosition, FlowPane islandRow1, FlowPane islandRow2, EventHandler<MouseEvent> onClick) {
+    public void drawIslands(List<IslandData> islandList, int motherNaturePosition, Pane left, Pane right, FlowPane topRow, FlowPane botRow, EventHandler<MouseEvent> onClick) {
         List<Pane> islandPaneList = new ArrayList<>();
         int i, j=0;
         for (i = 0; i < islandList.size(); i++) {
             IslandData islandData = islandList.get(i);
             islandPaneList.add(drawIsland(islandData, i, motherNaturePosition, onClick));
         }
+        //add left
+        FlowPane fp = (FlowPane) islandPaneList.get(j).getChildren().get(0);
+        System.out.println(fp.getChildren());
+        left.getChildren().add(islandPaneList.get(j++));
         //add in top row
         for (; j < (islandPaneList.size()+1)/2; j++)
-            islandRow1.getChildren().add(islandPaneList.get(j));
+            topRow.getChildren().add(islandPaneList.get(j));
+        //add right
+        right.getChildren().add(islandPaneList.get(j++));
         //add in bottom row
         for (; j < islandPaneList.size(); j++)
-            islandRow2.getChildren().add(islandPaneList.get(j));
+            botRow.getChildren().add(islandPaneList.get(j));
     }
 
     public void drawClouds(List<CloudData> cloudList, StackPane cloudStackPane){
@@ -174,13 +157,13 @@ public class GuiDrawer {
         islandPane.setPrefSize(185, 200);
         islandPane.getStyleClass().add("island");
         islandPane.setOnMouseClicked(onClick);
-        islandPane.setAccessibleText(String.valueOf(index));
+        islandPane.setAccessibleText(String.valueOf(index+1));
         FlowPane islandFlowPane = new FlowPane();
         islandFlowPane.setPrefSize(145, 160);
         islandFlowPane.setLayoutX(20);
         islandFlowPane.setLayoutY(20);
         islandFlowPane.setAlignment(Pos.CENTER);
-        islandFlowPane.setAccessibleText(String.valueOf(index));
+        islandFlowPane.setAccessibleText(String.valueOf(index+1));
         //Adding students
         for (StudentColor color : islandData.students().keySet()) {
             for (int j = 0; j < islandData.students().get(color); j++) {

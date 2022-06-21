@@ -23,10 +23,9 @@ public class GamePaneController {
     @FXML public FlowPane castleTabHBox, cardsFlowPane, charFlowPane;
     @FXML public Pane turnPane;
     public StackPane bottomStackPane;
-    @FXML private Pane waitingRoomPane;
+    @FXML private Pane waitingRoomPane, islandLeftPane, islandRightPane;
     @FXML private StackPane cloudStackPane;
-    @FXML private FlowPane islandRow1, islandRow2;
-    @FXML private Tab characterTab;
+    @FXML private FlowPane islandsTopRow, islandsBotRow;
     @FXML private ToggleButton expertMode;
     private MultipleToggleGroup waitingRoomToggleGroup;
     private Consumer<Command> send;
@@ -55,7 +54,7 @@ public class GamePaneController {
         GuiDrawer guiDrawer = new GuiDrawer();
         guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
         guiDrawer.drawClouds(boardData.cloudList(), cloudStackPane);
-        guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2, this::island);
+        guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandLeftPane, islandRightPane, islandsTopRow, islandsBotRow, this::island);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
         guiDrawer.drawCharacter(boardData.characters(), charFlowPane, this::payCharacter);
         guiDrawer.drawTurn(boardData.turn(), turnPane);
@@ -106,7 +105,8 @@ public class GamePaneController {
                 send.accept(command);
             } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
                 List<String> parameters = new ArrayList<>();
-                int moveDistance = Integer.parseInt(island.getAccessibleText()) - boardData.motherNaturePosition();
+                //FIXME: problem returning in low index islands from high index islans
+                int moveDistance = Integer.parseInt(island.getAccessibleText()) - (boardData.motherNaturePosition() + 1);
                 parameters.add(String.valueOf(moveDistance));
                 Command command = null;
                 try {
