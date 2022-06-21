@@ -76,7 +76,7 @@ public class Board {
     /**
      * Constructor for ExpertBoard: doesn't generate the castles.
      */
-    protected Board(Turn turn, long seed, int nPlayer){
+    protected Board(Turn turn, long seed, int nPlayer) {
         this.turn = turn;
         this.seed = seed;
         this.bag = new Bag(numOfStudentsPerColor, seed);
@@ -87,7 +87,7 @@ public class Board {
     /**
      * Cleans the constructor implementation
      */
-    private void construct(){
+    private void construct() {
         setupClouds();
         setupIslands();
         MAX_STUDENTS_TO_MOVE = ( nPlayer==3 ? 4 : 3);
@@ -127,12 +127,15 @@ public class Board {
             if(castle.isCardAvailable(cardID)) {
                 Card card = castle.playCard(cardID);
                 turn.addCard(playerID, card);
+                possibleMovingSteps = null;
                 return;
             }
-        throw new IllegalArgumentException("Card cannot be played. " +
-                (turn.isAlreadyPlayed(cardID) && !castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
-                        ? "Card is already played & you have another card to play in your castle. " : " ") +
-                (castle.isCardAvailable(cardID) ? "" : "You don't have this card in the castle"));
+        throw new IllegalArgumentException("" +
+                "Card cannot be played. " +
+                    (turn.isAlreadyPlayed(cardID)
+                    && !castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority()))
+                        ? "Card is already played and you have another card to play in your castle. " : "") +
+                (!castle.isCardAvailable(cardID) ? "You don't have this card in the castle." : "" ));
     }
 
 //methods for the action phase
@@ -174,16 +177,17 @@ public class Board {
     }
 
     /**
-     * Calculates the influence and sets a new owner
-     * on the current island mother nature lands on.
+     * MovesMotherNature and computes the influence and sets a new owner
+     * on the island mother nature lands on.
      * Checks if nearby islands have the same owner and possibly joins them.
      * Checks if someone won the game after an island is conquered
      * @param steps number of steps forward of mother nature
      */
     public void moveMotherNature(int steps) throws PhaseNotRightException {
-        possibleMovingSteps.add(turn.getPossibleMovingSteps());
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
             throw new PhaseNotRightException("You can't move mother nature in this stage of the game. Current phase is " + turn.getCurrentPhase().toString());
+        if(possibleMovingSteps == null)
+            possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps());
         if (steps > possibleMovingSteps.getInt() || steps < 1)
             throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.getInt());
         if ((motherNaturePosition + steps) >= (islandList.size()))
@@ -194,7 +198,7 @@ public class Board {
     }
 
     /**
-     * Calculates influence on given island and sets a new owner if possible.
+     * Computes influence on given island and sets a new owner if possible.
      * @param islandIndex the current island mother nature is on
      */
     protected void conquerIsland(int islandIndex) {
@@ -254,8 +258,6 @@ public class Board {
         motherNaturePosition = firstIslandIndex;
     }
 
-
-
     /**
      * Moves students from the selected cloud to the waiting room of the current player.
      * @param PlayerID the id of the player that ask for this move
@@ -268,8 +270,6 @@ public class Board {
             throw new NotYourTurnException("It's " + turn.getCurrentPlayer() + "'s turn. You can't choose a cloud.");
         if(cloudID < 0 || cloudID >= nPlayer)
             throw new IllegalArgumentException("Illegal cloudId number. Please, insert a number between 1 and " + nPlayer);
-        if(!cloudList.get(cloudID).isAvailable())
-            throw new IllegalArgumentException("This cloud is no longer available.");
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
         castle.addStudentsInWaitingRoom(cloud.choose());
@@ -282,11 +282,11 @@ public class Board {
     protected void endOfTurn() {
         if(turn.isLastActionTurn())
             cloudRefill();
-        possibleMovingSteps.zero();
+        possibleMovingSteps.setInt(turn.getNextPossibleMovingSteps());
     }
 
     /**
-     * after a whole
+     * after a whole turn
      */
     public void cloudRefill() {
         cloudList.forEach(Cloud::refill);

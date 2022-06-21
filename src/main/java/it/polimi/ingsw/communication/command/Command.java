@@ -20,6 +20,7 @@ public class Command {
     private int motherNaturePositionShift;
     private int cardId;
     private List<StudentColor> students = new ArrayList<>();
+
     private int islandId;
     private int charId;
     private int cloudId;
@@ -92,6 +93,9 @@ public class Command {
         return students;
     }
 
+    /**
+     * @return islandId between 1 and 12
+     */
     public int getIslandId() {
         return islandId;
     }

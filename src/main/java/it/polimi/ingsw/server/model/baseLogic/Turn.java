@@ -18,7 +18,7 @@ public class Turn {
     private String currentPlayer;
     private TurnPhase currentPhase;
     /**
-     * Current hands played card.
+     * Current hands played card in planning-phase order.
      */
     private final Map<String, Card> playedCards;
     private final int N_PLAYERS;
@@ -45,7 +45,7 @@ public class Turn {
         switch (currentPhase) {
             case PLANNING -> {
                 if (planningCounter < N_PLAYERS ) {
-                    currentPlayer = nextPlayerPlanning();   //we don't change phase, and we change the player that needs to play the card
+                    nextPlayerPlanning();   //we don't change phase, and we change the player that needs to play the card
                     planningCounter++;
                 } else                                      //If we're done all the way through the planning phase we can switch phase and set the new order
                     setNewRound(playedCards);               //Method that sets the new order for the turn and switches turn player to the new one
@@ -101,8 +101,8 @@ public class Turn {
      * @requires planningCounter < numberOfPlayers && currentPhase == PLANNING
      */
     @Contract(pure = true)
-    private String nextPlayerPlanning() {
-        return currentPlayer = next(sittingOrder, currentPlayer);
+    private void nextPlayerPlanning() {
+        currentPlayer = next(sittingOrder, currentPlayer);
     }
 
     @Contract(pure = true)
@@ -111,7 +111,7 @@ public class Turn {
         int index = list.indexOf(element);
         if(index == dim - 1)
             return list.get(0);
-        else return list.get(index +1);
+        else return list.get(index + 1);
     }
 
     @Contract(pure = true)
@@ -124,8 +124,12 @@ public class Turn {
         return playedCards.containsValue(new Card(card));
     }
 
-    public IntegerBoxing getPossibleMovingSteps() {
-        return new IntegerBoxing(playedCards.get(currentPlayer).distance());
+    public int getPossibleMovingSteps() {
+        return playedCards.get(currentPlayer).distance();
+    }
+
+    public int getNextPossibleMovingSteps() {
+        return playedCards.get(next(actionOrder, currentPlayer)).distance();
     }
 
     @Contract(pure = true)
