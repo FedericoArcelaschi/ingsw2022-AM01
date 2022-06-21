@@ -63,4 +63,8 @@ public class GameInterface {
     public ClientList getClients() {
         return clients;
     }
+
+    public void endGame() {
+
+    }
 }
