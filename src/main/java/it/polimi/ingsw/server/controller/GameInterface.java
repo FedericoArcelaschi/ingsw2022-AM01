@@ -60,4 +60,11 @@ public class GameInterface {
         return gameType;
     }
 
+    public ClientList getClients() {
+        return clients;
+    }
+
+    public void endGame() {
+
+    }
 }

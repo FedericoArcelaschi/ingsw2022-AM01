@@ -1,15 +1,15 @@
 package it.polimi.ingsw.server.communication;
 
+import it.polimi.ingsw.client.userInterface.cli.Cli;
+import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.Ping;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.Executors;
 
 /**
  * Class that implements the heart-beat protocol.
@@ -19,16 +19,16 @@ public class HeartBeatServer implements Runnable {
 
     private final static Logger logger = LogManager.getLogger(HeartBeatServer.class);
 
-    private final int TIMEOUT = 3000; // [ms]
-    private final Set<Socket> clients = new HashSet<>();
+    private final int TIMEOUT = 5000; // [ms]
+    private final Set<Client> clients = new HashSet<>();
     private final Set<Socket> heartBeats = new HashSet<>();
 
     /**
      * Adds a client to the connected clients list and starts the heartbeat on him as well
      */
-    public void addClient(Socket newClient) {
-        logger.info("Added client");
+    public void addClient(Client newClient) {
         clients.add(newClient);
+        logger.info("Added client");
     }
 
     /**Validate the connection with the client for another 5 seconds.
@@ -38,7 +38,7 @@ public class HeartBeatServer implements Runnable {
         // logger.info("client @ port " + socket.getPort() + "sent a ping validation.");
         if (heartBeats.contains(socket)) {
             heartBeats.remove(socket);
-            logger.info("Ping received. Pinging back...");
+            logger.info("Ping received from port: " + socket.getPort() + ". Pinging back...");
         }
         else
             logger.info("client in port: " + socket.getLocalPort() + " shouldn't be connected");
@@ -49,7 +49,7 @@ public class HeartBeatServer implements Runnable {
      */
     public void run() {
         long previousTime = new Date().getTime();
-        clients.forEach(this::sendsPing);
+        sendsPing();
         waits(previousTime);
         synchronized (heartBeats) {
             heartBeats.forEach(this::removeClient);
@@ -57,16 +57,19 @@ public class HeartBeatServer implements Runnable {
         run();
     }
 
-    private void sendsPing(Socket client) {
-        PrintWriter out;
-        try {
-            out = new PrintWriter(client.getOutputStream(), true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private void sendsPing() {
+        for (Socket client : clients.stream().map(Client::clientsSocket).toList()) {
+            PrintWriter out;
+            try {
+                out = new PrintWriter(client.getOutputStream(), true);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            String pingMessage = new Ping().toJson();
+            out.println(pingMessage);
+            heartBeats.add(client);
+            //FIXME -> here the idea is to put the PING UUID associated to each client's ping. Not needed. Not implemented.
         }
-        String pingMessage = new Ping().toJson();
-        out.println(pingMessage);
-        heartBeats.add(client);
     }
 
     private void waits(long previousTime) {
@@ -78,10 +81,27 @@ public class HeartBeatServer implements Runnable {
     }
 
     private void removeClient(Socket client) {
-        clients.remove(client); //FIXME: clients not in the list should be removed from the server
+        Client c = clients.stream()
+                .filter(x -> client.equals(x.clientsSocket()))
+                .findFirst().orElse(null);
+        sendEndGameMsg(c);
+        c.getGameInterface().endGame();
+        clients.remove(c);
         heartBeats.remove(client);
-        //Executors.newSingleThreadExecutor().submit(this::endClientConnection);
         logger.info("User on port " + client.getPort() + " disconnected.");
     }
 
+    private void sendEndGameMsg(Client client) {
+        List<Socket> playersInGame = new ArrayList<>(client.getGameInterface().getClients().getClients().stream().map(Client::clientsSocket).toList());
+        for (Socket s : playersInGame) {
+            PrintWriter out;
+            try {
+                out = new PrintWriter(s.getOutputStream(), true);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            String endGameMessage = new EndGame("Player " + client.username() + " disconnected. The game is now over.").toJson();
+            out.println(endGameMessage);
+        }
+    }
 }
