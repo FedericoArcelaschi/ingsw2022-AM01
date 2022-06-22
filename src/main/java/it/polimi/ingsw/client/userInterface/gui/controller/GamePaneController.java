@@ -107,7 +107,7 @@ public class GamePaneController {
                 List<String> parameters = new ArrayList<>();
                 //FIXME: problem returning in low index islands from high index islans
                 int moveDistance = Integer.parseInt(island.getAccessibleText()) - (boardData.motherNaturePosition() + 1);
-                parameters.add(String.valueOf(moveDistance));
+                parameters.add(String.valueOf(moveDistance > 0 ? moveDistance : moveDistance+12));
                 Command command = null;
                 try {
                     command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
