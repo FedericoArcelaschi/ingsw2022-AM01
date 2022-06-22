@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.communication;
 
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.Message;
-import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.server.controller.GameInterface;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,10 +30,6 @@ public final class Client {
         executor.submit(serverReceiver);
     }
 
-    public void executeCommand(Command command, Socket socket) {
-        gameInterface.executeCommand(command, socket);
-    }
-
     public void send(Message message) {
         logger.info("client " + username + " sending data. (" + message.getType() + ").");
         OutputStream outputStream;
@@ -48,26 +43,28 @@ public final class Client {
         out.println(message.toJson());
     }
 
+    public void executeCommand(Command command, Socket socket) {
+        gameInterface.executeCommand(command, socket);
+    }
+
+
+    public void endGame() {
+        gameInterface.endGame(this);
+    }
 
     public void setGameInterface(GameInterface gameInterface) {
         this.gameInterface = gameInterface;
-    }
-
-    public Socket clientsSocket() {
-        return clientsSocket;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
+    public Socket clientsSocket() {
+        return clientsSocket;
+    }
+
     public String username() {
         return username;
     }
-
-    public GameInterface getGameInterface() {
-        return gameInterface;
-    }
-
-
 }
