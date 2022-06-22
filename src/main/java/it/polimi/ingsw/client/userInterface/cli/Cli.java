@@ -91,9 +91,9 @@ public class Cli implements UserInterface {
 
     @Override
     public void printLobby(LobbyInfo lobbyInfo) {
-        System.out.println(lobbyInfo);
         executor.submit(
                 () -> {
+                    System.out.println(lobbyInfo);
                     if (clientMain.getState() == ClientState.OUTSIDE_LOBBY) {
                         synchronized (System.out) {
                             clientMain.sendPreferences(this.getValidPreferences());
