@@ -1,16 +1,11 @@
 package it.polimi.ingsw.communication.modelData;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.communication.message.subclasses.Update;
-import it.polimi.ingsw.communication.modelData.expertMode.ExpertBoardData;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
-import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
@@ -23,7 +18,7 @@ import java.util.random.RandomGenerator;
 
 class BoardDataTest {
     @Test
-    void toStringTest() throws PhaseNotRightException, NotYourTurnException, NoSuchStudentException, TooManyStudentsException {
+    void toStringTest() throws PhaseNotRightException, NoSuchStudentException, TooManyStudentsException {
         BoardData bd;
         Board b = BoardFactory.getBoard(Arrays.asList("fede","gio", "pippo"), false);
         b.playCard("fede", 2);

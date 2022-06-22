@@ -3,6 +3,7 @@ package it.polimi.ingsw.communication.message.subclasses;
 import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.server.controller.GameType;
+import it.polimi.ingsw.startUp.Outputs;
 
 import java.util.*;
 
@@ -36,7 +37,8 @@ public class LobbyInfo extends Message {
         final int SIZE = 87;
         StringBuilder builder = new StringBuilder();
 
-        builder .append("-".repeat(SIZE - 2))
+        builder .append(Outputs.CLEAR_SCREEN)
+                .append("-".repeat(SIZE - 2))
                 .append("||")
                 .append("ACTIVE GAMES:||\n");
         for (int i = 0; i< GameType.values().length; i++) {

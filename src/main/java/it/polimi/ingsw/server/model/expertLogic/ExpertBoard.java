@@ -215,8 +215,9 @@ public class ExpertBoard extends Board {
         return playedExpertChar;
     }
 
+    @Deprecated
     public StandardCharacter extract4CharacterTesting(int idChar) {
         Tavern tavern = new Tavern(bag);
         return tavern.extract4testing(idChar);
-    };
+    }
 }

@@ -416,4 +416,8 @@ public class Board {
     public Bag getBag() {
         return bag;
     }
+
+    public String getCurrentPlayer() {
+        return turn.getCurrentPlayer();
+    }
 }

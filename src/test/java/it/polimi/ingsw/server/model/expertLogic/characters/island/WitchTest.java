@@ -28,7 +28,7 @@ public class WitchTest { //5° character
 
         try {
             expertBoard.playCard(player1, 5);
-        } catch (NotYourTurnException | PhaseNotRightException e) { fail(e.getCause()); }
+        } catch (PhaseNotRightException e) { fail(e.getCause()); }
 
         try {
             expertBoard.moveStudentsToDiningRoom(player1, expertBoard.getCastle(player1).getWaitingRoom());

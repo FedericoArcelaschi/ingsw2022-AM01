@@ -115,6 +115,7 @@ public class LobbyManager {
                 (int) gameClientsMap.values().stream()
                         .map(ClientList::getClients)
                         .flatMap(Collection::stream)
-                        .filter(Objects::nonNull).count();
+                        .filter(Objects::nonNull)
+                        .count();
     }
 }

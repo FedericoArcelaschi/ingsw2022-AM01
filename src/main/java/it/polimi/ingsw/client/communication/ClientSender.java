@@ -9,17 +9,18 @@ import java.net.Socket;
 
 public class ClientSender {
 
-    private final PrintWriter out;
+    private PrintWriter out;
 
     public ClientSender(@NotNull Socket socket) {
         try {
             this.out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
-    public void send(Message message){
+    public void send(@NotNull Message message){
         out.println(message.toJson());
+        System.out.println("command sent");
     }
 }

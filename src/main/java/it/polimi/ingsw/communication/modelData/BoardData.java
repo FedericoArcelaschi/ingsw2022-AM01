@@ -4,6 +4,7 @@ import com.google.gson.annotations.JsonAdapter;
 
 import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
+import it.polimi.ingsw.startUp.Outputs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,13 +41,15 @@ public class BoardData {
     public String toString() {
         StringBuilder s = new StringBuilder();
         //print island
-        s.append("Islands: ");
+        s   .append(Outputs.CLEAR_SCREEN)
+            .append("Islands: ");
         for (int i = 0; i < islandList.size(); i++) {
-            s.append("\n\tIsland ")
-                    .append(i + 1)
-                    .append(": ")
-                    .append(islandList.get(i));
-            if (i == motherNaturePosition) s.append(", mother nature is Here!");
+            s   .append("\n\tIsland ")
+                .append(i + 1)
+                .append(": ")
+                .append(islandList.get(i));
+            if (i == motherNaturePosition)
+                s.append(", mother nature is Here!");
         }
         //Print cloud
         s.append("\n\nClouds: ");
@@ -54,7 +57,7 @@ public class BoardData {
              s  .append("\n\tCloud ")
                 .append(i + 1)
                 .append(" contains: ")
-                .append(cloudList.get(i));
+                .append(cloudList.get(i)); //students and availability
         //Print other castles
         s.append("\n\nOther Player castles:");
         for (CastleData otherCastle : otherCastles)

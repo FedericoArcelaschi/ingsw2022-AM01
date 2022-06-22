@@ -77,7 +77,6 @@ public class CentaurTest { //6° character
                 = influence.getInfluenceMap(island);
         int influenceForBlack = influenceMap.get(Team.BLACK);
         assertEquals(11, influenceForBlack);
-
         ParametersForCharacter par4C = new ParametersForCharacter();
         par4C.setInfluence(influence);
         try {

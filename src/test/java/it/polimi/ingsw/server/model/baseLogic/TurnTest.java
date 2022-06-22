@@ -1,10 +1,5 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
-import it.polimi.ingsw.server.model.baseLogic.Board;
-import it.polimi.ingsw.server.model.baseLogic.Card;
-import it.polimi.ingsw.server.model.baseLogic.Turn;
-import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
-import it.polimi.ingsw.server.model.exceptions.NotYourTurnException;
 import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -65,7 +60,7 @@ public class TurnTest{
             t.changePhase();
             List<String> newOrder = Arrays.asList("lore", "fede", "gio");
             assertEquals(newOrder, t.getActionOrder());
-        } catch (NotYourTurnException | PhaseNotRightException e) {
+        } catch (PhaseNotRightException e) {
             e.printStackTrace();
         }
     }

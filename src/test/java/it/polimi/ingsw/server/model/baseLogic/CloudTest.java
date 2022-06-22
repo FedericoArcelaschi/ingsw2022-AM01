@@ -26,6 +26,6 @@ public class CloudTest{
         Bag b = new Bag(24,1);
         Cloud c = new Cloud(b,4);
         c.choose();
-        assertNull(c.choose());
+        assertThrowsExactly(IllegalArgumentException.class, c::choose, "second call will throw an exception");
     }
 }

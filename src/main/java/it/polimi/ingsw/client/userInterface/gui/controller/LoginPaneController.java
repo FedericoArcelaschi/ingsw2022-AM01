@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
+import java.net.InetSocketAddress;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -21,9 +22,10 @@ public class LoginPaneController {
     @FXML CheckBox expertModeButton;
     @FXML Button submitButton;
     ToggleGroup nPlayer;
-    Consumer<LoginPreferences> connect, sendPreferences;
+    Consumer<InetSocketAddress> connect;
+    Consumer<Preferences> sendPreferences;
 
-    public void initialize(Consumer<LoginPreferences> connect, Consumer<LoginPreferences> sendPreferences) {
+    public void initialize(Consumer<InetSocketAddress> connect, Consumer<Preferences> sendPreferences) {
         nPlayer = new ToggleGroup();
         player2RadioButton.setToggleGroup(nPlayer);
         player3RadioButton.setToggleGroup(nPlayer);
@@ -36,7 +38,7 @@ public class LoginPaneController {
     }
 
     public void connect(ActionEvent actionEvent) {
-        connect.accept(getPreferences());
+        connect.accept(getAddress());
         submitButton.setDisable(false);
     }
 
@@ -47,15 +49,19 @@ public class LoginPaneController {
         waitingForGamePane.setVisible(true);
     }
 
-    private LoginPreferences getPreferences() {
+    private InetSocketAddress getAddress() {
+        String ip = ipTextField.getText().equals("") ? ipTextField.getPromptText() : ipTextField.getText();
+        int port = Integer.parseInt(portTextField.getText().equals("") ? portTextField.getPromptText() : portTextField.getText());
+        return new InetSocketAddress(ip, port);
+    }
+
+    private Preferences getPreferences() {
         String username = usernameTextField.getText();
         RadioButton selectedNPlayer = (RadioButton) nPlayer.getSelectedToggle();
         int nPlayers = Integer.parseInt(selectedNPlayer.getText().substring(0, 1));
         boolean expertMode = expertModeButton.selectedProperty().get();
-        String ip = ipTextField.getText().equals("") ? ipTextField.getPromptText() : ipTextField.getText();
-        int port = Integer.parseInt(portTextField.getText().equals("") ? portTextField.getPromptText() : portTextField.getText());
         try {
-            return new LoginPreferences(ip, port, new Preferences(username, nPlayers, expertMode));
+            return new Preferences(username, nPlayers, expertMode);
         } catch (IllegalAccessException e) {
             System.err.println(e.getMessage());
             getPreferences();

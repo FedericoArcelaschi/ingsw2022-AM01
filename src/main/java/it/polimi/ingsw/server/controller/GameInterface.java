@@ -2,13 +2,20 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.MessageType;
+import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.Error;
+import it.polimi.ingsw.communication.message.subclasses.WinUpdate;
 import it.polimi.ingsw.server.communication.Client;
 import it.polimi.ingsw.server.communication.ClientList;
+import it.polimi.ingsw.server.model.baseLogic.Team;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -60,4 +67,24 @@ public class GameInterface {
         return gameType;
     }
 
+    public ClientList getClients() {
+        return clients;
+    }
+
+    public void endGame(Client client) {
+        sendEndGameMsg(client);
+    }
+
+    private void sendEndGameMsg(Client client) {
+        boolean draw = game.getBoard().placedTowers().values().size() != clients.size();
+        Team winner = game.getBoard().placedTowers().entrySet().stream()
+                .max((team1, team2) -> team1.getValue() > team2.getValue() ? 1 : 0)
+                .get()
+                .getKey();
+        for(Client c : clients.getClients()) {
+            c.send(new EndGame("Player " + client.username() + " disconnected. The game is over."));
+            c.send(new EndGame(
+                    draw ? "The game ended in a draw." : "The winner is: " + winner.toString()));
+        }
+    }
 }

@@ -64,7 +64,7 @@ class FarmerTest { //2° character
 
         try {
             expertBoard.moveStudentsToDiningRoom(player1, expertBoard.getCastle(player1).getWaitingRoom());
-        } catch (NoSuchStudentException | NotYourTurnException | TooManyStudentsException | PhaseNotRightException e) {
+        } catch (NoSuchStudentException | TooManyStudentsException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
         try {

@@ -21,7 +21,7 @@ public class ServerReceiver extends Receiver {
     private final LobbyManager lobbyManager;
 
     public ServerReceiver(Client client, HeartBeatServer hbs, LobbyManager lobbyManager) {
-        super(null, client.clientsSocket());
+        super(client.clientsSocket());
         this.client = client;
         this.hbs = hbs;
         this.lobbyManager = lobbyManager;
@@ -45,5 +45,4 @@ public class ServerReceiver extends Receiver {
             case PREFERENCES -> lobbyManager.addPlayer(client, (Preferences) message);
         }
     }
-
 }
