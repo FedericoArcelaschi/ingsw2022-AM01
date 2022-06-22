@@ -82,8 +82,8 @@ public class ServerMain implements Runnable {
     public int getGamesNumber(GameType type){
         return lobbyManager.countGames(type); //FIXME gamesNumber.get(type);
     }
+
     public int getConnectedPlayer() {
         return connectedPlayer; //FIXME: could use a map SOCKET-> game / state
     }
-
 }
