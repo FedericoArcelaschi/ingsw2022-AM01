@@ -51,7 +51,8 @@ public class Cli implements UserInterface {
     }
 
     /**
-     * decided to wait to "start" the command parsing because of problems with concurrent preferences & command-parsing.
+     * @implNote    Decided to wait to "start" the command parsing because
+     *              of problems with concurrent preferences & command parsing.
      */
     @Override
     public void draw(BoardData update) {
