@@ -204,10 +204,14 @@ public class GuiDrawer {
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom, Pane waitingRoomPane, boolean disabled) {
-        for (int i = 0; i < waitingRoom.size(); i++) {
+        for (int i = 0; i < waitingRoomPane.getChildren().size(); i++) {
             ToggleButton toggleButton = (ToggleButton) waitingRoomPane.getChildren().get(i);
-            setStudentButtonColor(toggleButton, waitingRoom.get(i));
-            toggleButton.setDisable(disabled);
+            if(i < waitingRoom.size()) {
+                setStudentButtonColor(toggleButton, waitingRoom.get(i));
+                toggleButton.setDisable(disabled);
+            }
+            else
+                toggleButton.setDisable(true);
         }
     }
 
