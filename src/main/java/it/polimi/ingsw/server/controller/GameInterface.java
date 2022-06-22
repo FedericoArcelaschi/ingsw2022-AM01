@@ -1,21 +1,16 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.command.Command;
-import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.Error;
-import it.polimi.ingsw.communication.message.subclasses.WinUpdate;
 import it.polimi.ingsw.server.communication.Client;
 import it.polimi.ingsw.server.communication.ClientList;
 import it.polimi.ingsw.server.model.baseLogic.Team;
+import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -24,10 +19,10 @@ import java.util.stream.Collectors;
 public class GameInterface {
 
     private static final Logger logger = LogManager.getLogger(GameInterface.class);
-
     private final Game game;
     private final ClientList clients;
     private final GameType gameType;
+    private boolean active;
 
     public GameInterface(GameType gameType, ClientList clients) {
         logger.info(this + ": creating a new instance with players: " + clients.getClients().stream().map(Client::username).toList());
@@ -36,6 +31,7 @@ public class GameInterface {
         this.game       = new Game(gameType, clients.getClients().stream().map(Client::username).toList());
         this.clients    = new ClientList(clients);
         this.gameType   = gameType;
+        this.active   = true;
         send(game.updateAll());
     }
 
@@ -73,18 +69,25 @@ public class GameInterface {
 
     public void endGame(Client client) {
         sendEndGameMsg(client);
+        active = false;
     }
 
     private void sendEndGameMsg(Client client) {
-        boolean draw = game.getBoard().placedTowers().values().size() != clients.size();
+        boolean draw = game.getBoard().placedTowers().values().stream().distinct().toList().size() != clients.size();
         Team winner = game.getBoard().placedTowers().entrySet().stream()
                 .max((team1, team2) -> team1.getValue() > team2.getValue() ? 1 : 0)
                 .get()
                 .getKey();
+        //TODO: error disconnessione, information per win.
         for(Client c : clients.getClients()) {
-            c.send(new EndGame("Player " + client.username() + " disconnected. The game is over."));
+            c.send(new EndGame("Player " + client.username() + " disconnected. The game is over.", Alert.AlertType.ERROR, client.username(), winner));
             c.send(new EndGame(
-                    draw ? "The game ended in a draw." : "The winner is: " + winner.toString()));
+                    draw ? "The game ended in a draw." : "The winner is: " + winner.toString() +
+                    "\nDo you want to play another game? (y/n)", Alert.AlertType.INFORMATION, client.username(), winner));
         }
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

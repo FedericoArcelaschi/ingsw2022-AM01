@@ -39,7 +39,17 @@ public class LobbyManager {
 
     public void addPlayerNoPreferences(Socket socket) {
         logger.info("new client added with no preferences. connected clients in lobby: " + getSumClientsInLobby());
-        clientsToInform.add(socket); //FIXME
+        Client c;
+        clientsToInform.add(socket);
+        for (GameType g : gameClientsMap.keySet()) {
+            if (gameClientsMap.get(g).getClients().stream().map(Client::clientsSocket).toList().contains(socket)) {
+                c = gameClientsMap.get(g).getClients().stream()
+                        .filter(client -> socket.equals(client.clientsSocket()))
+                        .findFirst()
+                        .orElse(null);
+                gameClientsMap.get(g).getClients().remove(c);
+            }
+        }
         sendLobbyInfo(socket);
     }
 

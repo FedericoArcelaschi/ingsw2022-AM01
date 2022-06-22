@@ -1,13 +1,11 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.command.Command;
-import it.polimi.ingsw.communication.message.MessageType;
 import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.communication.message.subclasses.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
+import javafx.scene.control.Alert;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -177,9 +175,13 @@ public class Game {
         MessageUsernameSet messageUsernameSet = new MessageUsernameSet();
                 board.getCastleMap()
                         .forEach((key, value) -> {
-                            if (value.getTeam() == winner)
-                                messageUsernameSet.add(new WinUpdate(board.getData(key), "HEY"), key);
-                            messageUsernameSet.add(new Ping(), "PIPPO"); //FIXME
+                            if (value.getTeam() == winner) {
+                                board   .getCastleMap()
+                                        .keySet()
+                                        .forEach(i->messageUsernameSet.add(new Update(board.getData(i)), i));
+                                messageUsernameSet.add(new EndGame("The game is over. Winner: " + key +
+                                        "\nDo you want to play another game? (y/n)", Alert.AlertType.INFORMATION, key, value.getTeam()), key);
+                            }
                         });
         return messageUsernameSet;
     }

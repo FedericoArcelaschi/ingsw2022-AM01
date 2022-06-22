@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class GameManager {
 
-    private static Logger logger = LogManager.getLogger(GameManager.class); //.getName?
+    private static Logger logger = LogManager.getLogger(GameManager.class);
     List<GameInterface> gameList;
 
     public GameManager() {
@@ -33,7 +33,10 @@ public class GameManager {
 
     public Map<GameType, Integer> getActiveGames() {
         Map<GameType, Integer> activeGames = new HashMap<>();
+        for (GameType g : GameType.values()) {
+            activeGames.put(g, gameList.stream().filter(x->x.getGameType().equals(g) && x.isActive()).toList().size());
+        }
         //return gameList.stream().flatMap(gameInterface -> activeGames.computeIfPresent(gameInterface.getGameType(), (g,i)->i++). ); FIXME
-        return Map.of();
+        return activeGames;
     }
 }

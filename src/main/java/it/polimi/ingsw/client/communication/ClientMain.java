@@ -43,7 +43,6 @@ public class ClientMain {
             System.out.println("\u001b[31m" + e.getMessage() + ": failed connection\u001b[0m");
             return;
         }
-        System.out.println("connected!");
         clientSender = new ClientSender(socket);
         Executors.newSingleThreadExecutor().submit(new ClientReceiver(socket, userInterface));
         state = ClientState.OUTSIDE_LOBBY;
@@ -62,8 +61,10 @@ public class ClientMain {
      * @param stringCommand the unformatted user input
      */
     public void runCommand(String stringCommand) {
-        if (socket.isClosed())
+        if (socket.isClosed()) {
+            System.out.println("called in runcommand");
             userInterface.disconnected();
+        }
         switch (state) {
             case NOT_CONNECTED -> {
             }

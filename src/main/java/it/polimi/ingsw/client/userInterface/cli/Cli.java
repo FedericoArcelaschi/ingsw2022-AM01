@@ -19,14 +19,18 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Date;
+import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 public class Cli implements UserInterface {
 
     private final ClientMain clientMain;
     private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final long READ_TIME = 50;
+    private String input = "";
+
 
     public Cli() {
         clientMain = new ClientMain(this);
@@ -37,12 +41,13 @@ public class Cli implements UserInterface {
     /**
      * Recursive method that connects the client.
      * Keeps asking for the Network Preferences until the client connects to the server.
+     *
      * @param address may be null if there is a problem in the input parsing/reading
      */
     private void connect(@Nullable SocketAddress address) {
-        if(address != null)
+        if (address != null)
             clientMain.connect(address);
-        if(!clientMain.isConnected()) connect(getNetworkPreferences());
+        if (!clientMain.isConnected()) connect(getNetworkPreferences());
     }
 
     /**
@@ -61,29 +66,40 @@ public class Cli implements UserInterface {
      * Is a recursive function: will end only in case of a system shutdown.
      */
     private void readBuffer() {
-        String input = "";
+        while (clientMain.getState() == ClientState.GAME) {
+            ExecutorService e = Executors.newSingleThreadExecutor();
+            e.submit(this::input);
+            try {
+                e.awaitTermination(READ_TIME, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (!input.isBlank())
+                clientMain.runCommand(input);
+        }
+    }
+
+    private void input() {
+        input = "";
         try {
             input = br.readLine().strip();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
         }
-        if(!input.isBlank())
-            clientMain.runCommand(input);
-        readBuffer();
     }
 
     @Override
     public void printLobby(LobbyInfo lobbyInfo) {
         System.out.println(lobbyInfo);
         executor.submit(
-            () -> {
-                if (clientMain.getState() == ClientState.OUTSIDE_LOBBY) {
-                    synchronized (System.out) {
-                        clientMain.sendPreferences(this.getValidPreferences());
+                () -> {
+                    if (clientMain.getState() == ClientState.OUTSIDE_LOBBY) {
+                        synchronized (System.out) {
+                            clientMain.sendPreferences(this.getValidPreferences());
+                        }
+                        clientMain.setState(ClientState.INSIDE_LOBBY);
                     }
-                    clientMain.setState(ClientState.INSIDE_LOBBY);
                 }
-            }
         );
     }
 
@@ -96,8 +112,18 @@ public class Cli implements UserInterface {
     public void endCurrentGame(EndGame endGameMessage) {
         clientMain.setState(ClientState.GAME_ENDED);
         System.out.println(endGameMessage.getCause());
-        // -> OUSIDE_LOBBY
-        //FIXME
+        executor.submit(
+                () -> {
+                    if (requestNewGame()) {
+                        clientMain.setState(ClientState.OUTSIDE_LOBBY);
+                        clientMain.sendPreferences(this.getValidPreferences());
+                        clientMain.setState(ClientState.INSIDE_LOBBY);
+                    } else {
+                        System.out.println("Disconnecting from endCurrentGame...");
+                        disconnected();
+                    }
+                }
+        );
     }
 
     /**
@@ -115,6 +141,7 @@ public class Cli implements UserInterface {
 
 
 //SUPPORT METHODS:
+
     /**
      * Before opening the connection with the server the client requires to insert the preferences.
      */
@@ -125,7 +152,7 @@ public class Cli implements UserInterface {
         String query = "Enter username:";
         String username;
         try {
-            do{
+            do {
                 System.out.println(query);
                 username = br.readLine().strip();
                 query = "Enter a valid username:";
@@ -136,7 +163,9 @@ public class Cli implements UserInterface {
                 System.out.println(query);
                 try {
                     nPlayer = Integer.parseInt(br.readLine());
-                } catch (NumberFormatException ignored) {nPlayer = 0;}
+                } catch (NumberFormatException ignored) {
+                    nPlayer = 0;
+                }
                 query = "Enter a valid number of players: (between 2 and 4)";
             } while (nPlayer < 2 || nPlayer > 4);
 
@@ -159,10 +188,25 @@ public class Cli implements UserInterface {
         }
     }
 
+    private boolean requestNewGame() {
+        String query = "Do you want to play a new game? (y/n)";
+        Boolean answer;
+        do {
+            System.out.println(query);
+            try {
+                answer = getBoolean(br.readLine().strip());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            query = "Please answer with yes or no.";
+        } while (answer == null);
+        return answer;
+    }
+
     private @Nullable Boolean getBoolean(String s) {
-        if(s.equalsIgnoreCase("y") || s.equalsIgnoreCase("yes"))
+        if (s.equalsIgnoreCase("y") || s.equalsIgnoreCase("yes"))
             return true;
-        if(s.equalsIgnoreCase("n") || s.equalsIgnoreCase("no"))
+        if (s.equalsIgnoreCase("n") || s.equalsIgnoreCase("no"))
             return false;
         return null;
     }

@@ -35,9 +35,6 @@ public class ClientReceiver extends Receiver {
                 System.out.println(CLEAR_SCREEN);
                 Update update = (Update) message;
                 userInterface.draw(update.getBoardData());
-                if (update instanceof WinUpdate) {
-                    System.out.println(((WinUpdate) update).getWinner());
-                }
             }
             case LOBBYINFO -> {
                 System.out.println(CLEAR_SCREEN);
@@ -58,7 +55,7 @@ public class ClientReceiver extends Receiver {
 
 class HeartBeatClient implements Runnable {
     private final UserInterface userInterface;
-    private final int TIMEOUT = 5000;
+    private final int TIMEOUT = 7000;
     private boolean connected = true;
 
     public HeartBeatClient(UserInterface userInterface) {
@@ -74,6 +71,7 @@ class HeartBeatClient implements Runnable {
             System.err.println(e.getMessage());
         }
         if (!connected) {
+            System.out.println("Called in heartbeatclient");
             userInterface.disconnected();
         }
         run();
