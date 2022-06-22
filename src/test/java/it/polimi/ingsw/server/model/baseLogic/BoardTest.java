@@ -25,6 +25,27 @@ public class BoardTest {
         b =  BoardFactory.getBoard(listOfPlayer, false);
     }
 
+    void turnSetUpStudents() throws PhaseNotRightException {
+        b.playCard(player1, 1);
+        b.getTurn().addCard(player1, new Card(1));
+        b.getTurn().changePhase();
+        b.playCard(player2, 2);
+        b.getTurn().addCard(player2, new Card(2));
+        b.getTurn().changePhase();
+        //got through planning phase for two players
+    }
+
+    void turnSetUpMN() throws PhaseNotRightException {
+        b.playCard(player1, 1);
+        b.getTurn().addCard(player1, new Card(1));
+        b.getTurn().changePhase();
+        b.playCard(player2, 2);
+        b.getTurn().addCard(player2, new Card(2));
+        b.getTurn().changePhase();
+        //got through planning phase for two players
+        b.getTurn().changePhase();
+        //here turnphase is MOTHERNATURE
+    }
     @Test
     public void testBoardIslandNumber() {
 
@@ -157,11 +178,12 @@ public class BoardTest {
                     b.playCard(player1, 1);
                 }, "IllegalArgumentException was expected");
 
-        assertEquals("Card cannot be played. Card is already played & you have another card to play in your castle. You don't have this card in the castle",
+        assertEquals("Card cannot be played. Card is already played and you have another card to play in your castle. You don't have this card in the castle.",
                 thrown.getMessage());
     }
     @Test
     public void testUpdateProfessor() throws NoSuchStudentException, TooManyStudentsException, PhaseNotRightException {
+        turnSetUpStudents();
         List<StudentColor> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
         b.moveStudentsToDiningRoom(player1, students);
 
@@ -179,7 +201,7 @@ public class BoardTest {
 
     @Test
     public void testIsNotWonByResources() {
-        assertNull(b.isWonByResources());
+        assertFalse(b.isWonByResources());
     }
 
     @Test
@@ -210,7 +232,7 @@ public class BoardTest {
         Island islandB = b.getIslandList().get(2);
         Island islandC = b.getIslandList().get(3);
         //TODO: this method is protected. Either we make it public or we find another way to test it.
-        //b.joinIslands(List.of(1, 2, 3));
+        b.joinIslands(List.of(1, 2, 3));
         assertEquals(oldList.get(0), b.getIslandList().get(0),
                 "The first island should stay untouched");
         assertEquals(10, b.getIslandList().size(),
