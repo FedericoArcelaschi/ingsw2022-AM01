@@ -22,7 +22,7 @@ public class GamePaneController {
     @FXML public BorderPane castlePane0;
     @FXML public FlowPane castleTabHBox, cardsFlowPane, charFlowPane;
     @FXML public Pane turnPane;
-    public StackPane bottomStackPane;
+    @FXML public StackPane bottomStackPane;
     @FXML private Pane waitingRoomPane, islandLeftPane, islandRightPane;
     @FXML private StackPane cloudStackPane;
     @FXML private FlowPane islandsTopRow, islandsBotRow;
@@ -50,6 +50,7 @@ public class GamePaneController {
 
         waitingRoomToggleGroup = new MultipleToggleGroup(boardData.nPlayer() == 3 ? 4 : 3);
         setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
+        expertMode.setVisible(boardData.characters().size() == 3);
 
         GuiDrawer guiDrawer = new GuiDrawer();
         guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
@@ -61,8 +62,9 @@ public class GamePaneController {
         switchCommandMode();
     }
 
-    public void printError(String error){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    public void printError(String error) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText(null);
         alert.setContentText(error);
         alert.show();
     }
@@ -105,7 +107,7 @@ public class GamePaneController {
                 send.accept(command);
             } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
                 List<String> parameters = new ArrayList<>();
-                //FIXME: problem returning in low index islands from high index islans
+                //FIXME: problem returning in low index islands from high index islands
                 int moveDistance = Integer.parseInt(island.getAccessibleText()) - (boardData.motherNaturePosition() + 1);
                 parameters.add(String.valueOf(moveDistance > 0 ? moveDistance : moveDistance+12));
                 Command command = null;

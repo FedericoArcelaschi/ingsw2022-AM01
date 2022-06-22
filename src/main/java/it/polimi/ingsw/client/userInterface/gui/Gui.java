@@ -74,6 +74,7 @@ public class Gui extends Application implements UserInterface {
         gamePaneController = gameLoader.getController();
         gamePaneController.initialize(this::send);
         gamePaneController.draw(boardData);
+        stage.setTitle(boardData.username());
         stage.setScene(new Scene(loginFXML));
         stage.centerOnScreen();
     }

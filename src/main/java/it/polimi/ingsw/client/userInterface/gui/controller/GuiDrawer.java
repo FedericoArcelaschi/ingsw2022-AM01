@@ -5,7 +5,6 @@ import it.polimi.ingsw.communication.modelData.CloudData;
 import it.polimi.ingsw.communication.modelData.IslandData;
 import it.polimi.ingsw.communication.modelData.TurnData;
 import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
-import it.polimi.ingsw.server.model.baseLogic.Island;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
@@ -13,7 +12,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
@@ -21,12 +19,10 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Flow;
 
 public class GuiDrawer {
 
@@ -127,7 +123,7 @@ public class GuiDrawer {
         }
     }
 
-    public void drawTurn(TurnData turnData, Pane turnPane){
+    public void drawTurn(TurnData turnData, Pane turnPane) {
         Label phaseLabel = (Label) turnPane.getChildren().get(1);
         TextFlow playerOrderLabel = (TextFlow) turnPane.getChildren().get(2);
         int i=0;
