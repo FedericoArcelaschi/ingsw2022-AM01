@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
-import it.polimi.ingsw.server.communication.ClientList;
+import it.polimi.ingsw.server.communication.Client;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,18 +18,15 @@ public class GameManager {
         this.gameList = new ArrayList<>();
     }
 
-    public void createGame(GameType type, ClientList clients) {
+    public void createGame(GameType type, Set<Client> clients) {
         GameInterface gameInterface = new GameInterface(type, clients);
         gameList.add(gameInterface);
-        clients.getClients().forEach(client->client.setGameInterface(gameInterface));
+        clients.forEach(client->client.setGameInterface(gameInterface));
     }
 
     public int countGames(GameType type) {
-        return (int) gameList.stream().filter(i -> i.getGameType()==type).count(); //TODO: maybe implement a map with games/player and add the option to only view  a game
+        return (int) gameList.stream().filter(gameInterface -> gameInterface.getGameType() == type).count(); //TODO: maybe implement a map with games/player and add the option to only view  a game
     }
-
-    private final Map<GameType, Integer> activeGames = new EnumMap<>(GameType.class);
-
 
     public Map<GameType, Integer> getActiveGames() {
         Map<GameType, Integer> activeGames = new HashMap<>();

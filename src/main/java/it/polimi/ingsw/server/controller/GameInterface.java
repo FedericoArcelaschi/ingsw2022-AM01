@@ -1,16 +1,19 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.command.Command;
+import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.server.communication.Client;
-import it.polimi.ingsw.server.communication.ClientList;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 import javafx.scene.control.Alert.AlertType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.Socket;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -20,15 +23,15 @@ public class GameInterface {
 
     private static final Logger logger = LogManager.getLogger(GameInterface.class);
     private final Game game;
-    private final ClientList clients;
+    private final Set<Client> clients;
     private final GameType gameType;
     private boolean active;
 
-    public GameInterface(GameType gameType, ClientList clients) {
-        logger.info(this + ": creating a new instance with players: " + clients.getClients().stream().map(Client::username).toList());
-        logger.info("sockets are: " + clients.getClients().stream().map(Client::clientsSocket).toList());
-        this.game       = new Game(gameType, clients.getClients().stream().map(Client::username).toList());
-        this.clients    = new ClientList(clients);
+    public GameInterface(GameType gameType, Set<Client> clients) {
+        logger.info(this + ": creating a new instance with players: " + clients.stream().map(Client::username).toList());
+        logger.info("sockets are: " + clients.stream().map(Client::clientsSocket).toList());
+        this.game       = new Game(gameType, clients.stream().map(Client::username).toList());
+        this.clients    = new HashSet<>(clients);
         this.gameType   = gameType;
         this.active     = true;
         send(game.updateAll());
@@ -37,7 +40,7 @@ public class GameInterface {
     public void executeCommand(Command command, Socket socket) {
         logger.info(this + " is executing command: "+ command);
         try {
-            if (clients.getClients().stream().anyMatch(i -> (i.clientsSocket().equals(socket)) && (i.username().equals(command.getUsername())))) {
+            if (clients.stream().anyMatch(i -> (i.clientsSocket().equals(socket)) && (i.username().equals(command.getUsername())))) {
                 send(game.executeCommand(command));
             } else
                 new Client(socket).send(new Error("you are in the wrong game. userID-socket don't match. Quit."));
@@ -46,16 +49,15 @@ public class GameInterface {
         }
     }
 
-    private void send(MessageUsernameSet messageUsernameSet) {
+    private void send(Map<String, Message> usernameMessageMap) {
         logger.info(this + " is sending an update to the client(s).");
-        logger.info("clients: " + clients.getClients().stream().map(Client::clientsSocket).collect(Collectors.toSet()));
-        messageUsernameSet.values()
-                .forEach(
-                    messageUsername ->
-                        {clients.getClients().stream()
-                         .filter(i -> i.username().equals(messageUsername.addressee()))
-                         .forEach(client -> client.send(messageUsername.message()));}
-                );
+        logger.info("clients: " + clients.stream().map(Client::clientsSocket).collect(Collectors.toSet()));
+        usernameMessageMap.forEach(
+                (key, value) -> clients.stream()
+                .filter(i -> i.username().equals(key))
+                .findFirst()
+                .ifPresentOrElse(client -> client.send(value),
+                        () -> logger.info("client not in game")));
     }
 
     public void endGame(Client client) {
@@ -79,7 +81,7 @@ public class GameInterface {
 //                .getKey();
 //        TODO: error disconnessione, information per win.
 //        for(Client c : clients.getClients()) {
-            clients.getClients().forEach(cl -> cl.send(
+            clients.forEach(cl -> cl.send(
                     new EndGame("Player " + client.username() + " disconnected. The game is over.",
                             AlertType.ERROR,
                             "",

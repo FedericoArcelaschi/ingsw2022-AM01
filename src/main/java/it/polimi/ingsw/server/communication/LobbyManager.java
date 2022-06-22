@@ -24,7 +24,7 @@ public class LobbyManager {
     /**
      * Map that contains the players waiting in the queue to play
      */
-    private final Map<GameType, ClientList> gameClientsMap = new EnumMap<>(GameType.class);
+    private final Map<GameType, Set<Client>> gameClientsMap = new EnumMap<>(GameType.class);
     /**
      * List of players that didn't specify their preferences. Are updated with the lobby-infos.
      */
@@ -33,7 +33,7 @@ public class LobbyManager {
     public LobbyManager() {
         logger.info("waiting room started");
         for(GameType g : GameType.values()) {
-            gameClientsMap.put(g, new ClientList());
+            gameClientsMap.put(g, new HashSet<>());
         }
     }
 
@@ -42,12 +42,12 @@ public class LobbyManager {
         Client c;
         clientsToInform.add(socket);
         for (GameType g : gameClientsMap.keySet()) {
-            if (gameClientsMap.get(g).getClients().stream().map(Client::clientsSocket).toList().contains(socket)) {
-                c = gameClientsMap.get(g).getClients().stream()
+            if (gameClientsMap.get(g).stream().map(Client::clientsSocket).toList().contains(socket)) {
+                c = gameClientsMap.get(g).stream()
                         .filter(client -> socket.equals(client.clientsSocket()))
                         .findFirst()
-                        .orElse(null);
-                gameClientsMap.get(g).getClients().remove(c);
+                        .orElseThrow(RuntimeException::new);
+                gameClientsMap.get(g).remove(c);
             }
         }
         sendLobbyInfo(socket);
@@ -62,10 +62,11 @@ public class LobbyManager {
         logger.info("client on port" + socket.getPort());
         logger.info("\t" + preferences.username() + " << joined the lobby. connected clients in lobby: " + getSumClientsInLobby());
         clientsToInform.remove(socket);
-        ClientList oldClientList = gameClientsMap.get(preferences.getGameType());
+        Set<Client> oldClientList = gameClientsMap.get(preferences.getGameType());
+        oldClientList.add(client);
         gameClientsMap.replace(
                 preferences.getGameType(),
-                oldClientList.add(client));
+                oldClientList);
         submitGame(preferences.getGameType());
         informPlayers();
     }
@@ -79,7 +80,7 @@ public class LobbyManager {
      */
     private void informPlayers() {
        gameClientsMap.values().stream()
-                .flatMap(clientList -> clientList.getClients().stream())
+                .flatMap(Collection::stream)
                 .map(Client::clientsSocket)
                 .forEach(this::sendLobbyInfo);
        clientsToInform.forEach(this::sendLobbyInfo);
@@ -90,8 +91,8 @@ public class LobbyManager {
      * Returns null otherwise.
      */
     private void submitGame(@NotNull GameType type) {
-        if(gameClientsMap.get(type).getClients().size() == type.nPlayer) {
-            logger.info("Server: created " + (type.expertMode ? "expert" : "normal") + " game " + gameManager.countGames(type) + " with players: " + gameClientsMap.get(type).getClients().stream().map(Client::username).toList());
+        if(gameClientsMap.get(type).size() == type.nPlayer) {
+            logger.info("Server: created " + (type.expertMode ? "expert" : "normal") + " game " + gameManager.countGames(type) + " with players: " + gameClientsMap.get(type).stream().map(Client::username).toList());
             gameManager.createGame(type, gameClientsMap.get(type));
             gameClientsMap.get(type).clear();
         }
@@ -112,7 +113,7 @@ public class LobbyManager {
         Set<String> clients; //FIXME: implement con uno stream? sarebbe bello
         Map<GameType, Set<String>> gameTypeUsernameMap = new EnumMap<>(GameType.class);
         for (GameType g : GameType.values()) {
-            clients = gameClientsMap.get(g).getClients().stream()
+            clients = gameClientsMap.get(g).stream()
                     .map(Client::username)
                     .collect(Collectors.toSet());
             gameTypeUsernameMap.put(g, clients);
@@ -122,8 +123,7 @@ public class LobbyManager {
 
     private int getSumClientsInLobby() {
         return clientsToInform.size() +
-                (int) gameClientsMap.values().stream()
-                        .map(ClientList::getClients)
+                (int)   gameClientsMap.values().stream()
                         .flatMap(Collection::stream)
                         .filter(Objects::nonNull)
                         .count();
