@@ -28,16 +28,15 @@ public class ClientReceiver extends Receiver {
     protected synchronized void messageSwitch(Message message) {
         switch (message.getType()) {
             case PING -> {
-                out.println(new Ping().toJson());
+                System.err.println("PONG");
                 heartBeatClient.validate();
+                out.println(new Ping().toJson());
             }
             case UPDATE -> {
-                System.out.println(CLEAR_SCREEN);
                 Update update = (Update) message;
                 userInterface.draw(update.getBoardData());
             }
             case LOBBYINFO -> {
-                System.out.println(CLEAR_SCREEN);
                 LobbyInfo lobbyInfoMessage = (LobbyInfo) message;
                 userInterface.printLobby(lobbyInfoMessage);
             }
@@ -71,7 +70,6 @@ class HeartBeatClient implements Runnable {
             System.err.println(e.getMessage());
         }
         if (!connected) {
-            System.out.println("Called in heartbeatclient");
             userInterface.disconnected();
         }
         run();

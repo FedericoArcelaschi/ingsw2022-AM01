@@ -23,6 +23,8 @@ import java.util.Date;
 import java.util.concurrent.*;
 import java.util.function.Supplier;
 
+import static it.polimi.ingsw.startUp.Outputs.CLEAR_SCREEN;
+
 public class Cli implements UserInterface {
 
     private final ClientMain clientMain;
@@ -48,6 +50,7 @@ public class Cli implements UserInterface {
         if (address != null)
             clientMain.connect(address);
         if (!clientMain.isConnected()) connect(getNetworkPreferences());
+        System.out.println("connected!");
     }
 
     /**
@@ -56,6 +59,7 @@ public class Cli implements UserInterface {
      */
     @Override
     public void draw(BoardData update) {
+        System.out.println(CLEAR_SCREEN);
         clientMain.setState(ClientState.GAME);
         clientMain.setBoardData(update);
         System.out.println(update.toString());
@@ -93,6 +97,7 @@ public class Cli implements UserInterface {
     public void printLobby(LobbyInfo lobbyInfo) {
         executor.submit(
                 () -> {
+                    System.out.println(CLEAR_SCREEN);
                     System.out.println(lobbyInfo);
                     if (clientMain.getState() == ClientState.OUTSIDE_LOBBY) {
                         synchronized (System.out) {
@@ -112,9 +117,9 @@ public class Cli implements UserInterface {
     @Override
     public void endCurrentGame(EndGame endGameMessage) {
         clientMain.setState(ClientState.GAME_ENDED);
-        System.out.println(endGameMessage.getCause());
         executor.submit(
                 () -> {
+                    System.out.println(endGameMessage.getCause());
                     if (requestNewGame()) {
                         clientMain.setState(ClientState.OUTSIDE_LOBBY);
                         clientMain.sendPreferences(this.getValidPreferences());
