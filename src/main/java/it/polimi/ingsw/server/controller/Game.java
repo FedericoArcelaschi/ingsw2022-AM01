@@ -157,7 +157,7 @@ public class Game {
         //TAXMAN
         try {
             board.playExpertCard(command.getCharId(), command.getIslandId() - 1, command.getStudents());
-        } catch (WrongGameModeException | CoinException | StudentException | PhaseNotRightException e) {
+        } catch (WrongGameModeException | CoinException | StudentException | PhaseNotRightException | IllegalStateException e) {
             logger.info(e);
             return errorMessage(command.username(), e);
         }

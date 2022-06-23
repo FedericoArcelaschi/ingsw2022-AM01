@@ -15,6 +15,7 @@ import java.net.SocketAddress;
 import java.nio.channels.IllegalBlockingModeException;
 import java.text.ParseException;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class ClientMain {
 
@@ -62,7 +63,6 @@ public class ClientMain {
      */
     public void runCommand(String stringCommand) {
         if (socket.isClosed()) {
-            System.out.println("called in runcommand");
             userInterface.disconnected();
         }
         switch (state) {
@@ -79,7 +79,7 @@ public class ClientMain {
                 if (stringCommand.strip().equalsIgnoreCase("help"))
                     System.out.println(Outputs.HELP);
                 else if(stringCommand.strip().equalsIgnoreCase("charinfo"))
-                    System.out.println(boardData.characters().stream().map(CharacterData::getDescription)); //fixme
+                    System.out.println(boardData.characters().stream().map(CharacterData::getDescription).collect(Collectors.toList())); //fixme
                 else {
                     try {
                         CommandMessage commandMessage = new CommandMessage(username, stringCommand);

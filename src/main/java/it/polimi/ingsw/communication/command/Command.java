@@ -1,8 +1,10 @@
 package it.polimi.ingsw.communication.command;
 
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterInputs;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.util.*;
 
@@ -69,13 +71,25 @@ public class Command {
                 case CHOOSE_CLOUD -> cloudId = Integer.parseInt(attributes.get(0));
                 case PAY_CHARACTER -> {
                     charId = CharacterUtility.getChar(attributes.remove(0)).getId();
+                    Set<Integer> studentsToGet = CharacterInputs.getChar(charId).getNumberOfStudent();
+                    Set<Type> inputToGet = CharacterInputs.getChar(charId).getTypes();
+                    Set<Type> inputs = new HashSet<>();
                     for (String s : attributes) {
                         if (isInteger(s)) {
                             islandId = Integer.parseInt(s);
+                            inputs.add(Integer.class);
                         } else {
                             students.add(StudentColor.parseColor(s));
+                            inputs.add(StudentColor.class);
                         }
                     }
+                    if(!inputs.containsAll(inputToGet) || !inputToGet.containsAll(inputs))
+                        throw new IllegalArgumentException("not the right parameters. Required: " +
+                                (inputToGet.isEmpty() ? "none" :
+                                inputToGet.toString().replace("[", "").replace("]", "")));
+                    if(studentsToGet != null)
+                        if(!studentsToGet.contains(students.size()))
+                            throw new IllegalArgumentException("not the right number of students. Required: " + studentsToGet.toString().replace("[", "").replace("]", ""));
                 }
             }
         } catch (NumberFormatException e) {
