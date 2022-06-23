@@ -1,14 +1,11 @@
 package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.command.Command;
-import it.polimi.ingsw.communication.command.CommandType;
 import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.server.communication.Client;
 import it.polimi.ingsw.server.communication.ClientList;
-import org.junit.jupiter.api.Test;
 
 import java.net.Socket;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
@@ -29,7 +26,7 @@ public class GameInterfaceTest {
         public void executeCommand(Command command, Socket socket) {
             System.out.println("executing command: " + command.getType().name().toLowerCase());
             if (clients.getClients().stream()
-                    .anyMatch(i -> (i.clientsSocket() == socket) && (i.username().equals(command.getUsername())))) {
+                    .anyMatch(i -> (i.clientsSocket() == socket) && (i.username().equals(command.username())))) {
                 System.out.println(game.executeCommand(command).values().stream().map(MessageUsername::message).toList());
             } else
                 throw new IllegalCallerException("wrong username-socket match. Deleted command.");

@@ -21,7 +21,7 @@ public class CommandMessage extends Message {
     }
 
     public String getUsername() {
-        return command.getUsername();
+        return command.username();
     }
 
     public Command getCommand() {
@@ -30,7 +30,7 @@ public class CommandMessage extends Message {
 
     @Override
     public String toString() {
-        return  "player: " + command.getUsername() +
+        return  "player: " + command.username() +
                 "command: " + command;
     }
 }

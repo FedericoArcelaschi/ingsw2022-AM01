@@ -37,7 +37,7 @@ public class ServerReceiver extends Receiver {
             case COMMAND -> {
                     CommandMessage commandMessage = (CommandMessage) message;
                     Command command = commandMessage.getCommand();
-                    client.executeCommand(command, socket);
+                    client.executeCommand(command, client);
             }
             case END -> {
                 /*TODO: the serverReceiver received the end message from the server and sent back an acknowledgment.*/

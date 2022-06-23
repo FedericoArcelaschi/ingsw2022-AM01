@@ -37,8 +37,8 @@ public class Game {
     }
 
     public @NotNull Map<String, Message> executeCommand(@NotNull Command command) {
-        if(!command.getUsername().equals(turn.getCurrentPlayer()))
-            return errorMessage(command.getUsername(), new Exception("You can't play! It's " + turn.getCurrentPlayer() + "'s turn"));
+        if(!command.username().equals(turn.getCurrentPlayer()))
+            return errorMessage(command.username(), new Exception("You can't play! It's " + turn.getCurrentPlayer() + "'s turn"));
         return switch (command.getType()) {
             case PLAY_CARD -> playCardCommand(command);
             case MOVE_STUDENT_TO_CASTLE -> moveStudentToDiningRoomCommand(command);
@@ -51,10 +51,10 @@ public class Game {
 
     private @NotNull Map<String, Message> playCardCommand(@NotNull Command command) {
         try {
-            board.playCard(command.getUsername(), command.getCardId());
+            board.playCard(command.username(), command.getCardId());
         } catch (IllegalArgumentException | PhaseNotRightException e) {
             logger.info(e);
-            return errorMessage(command.getUsername(), e);
+            return errorMessage(command.username(), e);
         }
         turn.changePhase();
         return updateAll();
@@ -62,7 +62,7 @@ public class Game {
 
     private @NotNull Map<String, Message> moveStudentToDiningRoomCommand(@NotNull Command command) {
         List<StudentColor> students = command.getStudents();
-        String playerID = command.getUsername();
+        String playerID = command.username();
         movedStudents += students.size();
         if (movedStudents > MAX_STUDENTS_TO_MOVE) {
             movedStudents -= students.size();
@@ -86,13 +86,13 @@ public class Game {
         List<StudentColor> students = command.getStudents();
         movedStudents += students.size();
         if (movedStudents > MAX_STUDENTS_TO_MOVE) {
-            return Map.of(command.getUsername(), new Error("you are trying to move too many students"));
+            return Map.of(command.username(), new Error("you are trying to move too many students"));
         }
         try {
-            board.moveStudentToIsland(command.getUsername(), command.getIslandId() - 1, command.getStudents());
+            board.moveStudentToIsland(command.username(), command.getIslandId() - 1, command.getStudents());
         } catch (NoSuchStudentException | PhaseNotRightException e) {
             logger.info(e);
-            return errorMessage(command.getUsername(), e);
+            return errorMessage(command.username(), e);
         }
         if (movedStudents == MAX_STUDENTS_TO_MOVE) {
             movedStudents = 0;
@@ -106,14 +106,14 @@ public class Game {
             board.moveMotherNature(command.getMotherNaturePositionShift());
         } catch (PhaseNotRightException | IllegalArgumentException e) {
             logger.info(e);
-            return errorMessage(command.getUsername(), e);
+            return errorMessage(command.username(), e);
         }
         if (board.isWinningState()) {
             try {
                 winUpdate(board.getWinner());
             } catch (DrawException e) {
                 logger.info(e);
-                return errorMessage(command.getUsername(), e);
+                return errorMessage(command.username(), e);
                 //FIXME: handle game-end.
                 //parità?
             }
@@ -124,11 +124,11 @@ public class Game {
 
     private @NotNull Map<String, Message> chooseCloudCommand(@NotNull Command command) {
         try {
-            board.chooseCloud(command.getUsername(), command.getCloudId() - 1);
-            logger.info(board.getData(command.getUsername()));
+            board.chooseCloud(command.username(), command.getCloudId() - 1);
+            logger.info(board.getData(command.username()));
         } catch (TooManyStudentsException | PhaseNotRightException | IllegalArgumentException e) {
             logger.info(e);
-            return errorMessage(command.getUsername(), e);
+            return errorMessage(command.username(), e);
         }
         if (board.isWonByResources()) {
             logger.info("the game is ending!!");
@@ -159,7 +159,7 @@ public class Game {
             board.playExpertCard(command.getCharId(), command.getIslandId() - 1, command.getStudents());
         } catch (WrongGameModeException | CoinException | StudentException | PhaseNotRightException e) {
             logger.info(e);
-            return errorMessage(command.getUsername(), e);
+            return errorMessage(command.username(), e);
         }
         return updateAll();
     }

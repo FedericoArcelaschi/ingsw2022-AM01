@@ -39,7 +39,6 @@ public class LobbyManager {
 
     public void addPlayerNoPreferences(Socket socket) {
         logger.info("new client added with no preferences. connected clients in lobby: " + getSumClientsInLobby());
-        Client c;
         clientsToInform.add(socket);
         sendLobbyInfo(socket);
     }

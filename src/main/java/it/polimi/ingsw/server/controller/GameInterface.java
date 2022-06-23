@@ -10,7 +10,6 @@ import javafx.scene.control.Alert.AlertType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.Socket;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -37,13 +36,16 @@ public class GameInterface {
         send(game.updateAll());
     }
 
-    public void executeCommand(Command command, Socket socket) {
+    public void executeCommand(Command command, Client client) {
         logger.info(this + " is executing command: "+ command);
         try {
-            if (clients.stream().anyMatch(i -> (i.clientsSocket().equals(socket)) && (i.username().equals(command.getUsername())))) {
+            if (clients.stream()
+                    .anyMatch(clientInGame ->
+                                    clientInGame.equals(client) &&
+                                    clientInGame.username().equals(command.username())))
                 send(game.executeCommand(command));
-            } else
-                new Client(socket).send(new Error("you are in the wrong game. userID-socket don't match. Quit."));
+            else
+                client.send(new Error("you are in the wrong game. userID-socket don't match. Quit."));
         } catch (Exception e) {
             logger.info("exception during a Game move:\n\t", e); //should be a WARNING
         }

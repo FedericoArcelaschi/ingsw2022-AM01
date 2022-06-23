@@ -67,8 +67,8 @@ public class HeartBeatServer implements Runnable {
 
     private void removeClient(Client client) {
         client.endGame();
-        clients.remove(client);
-        heartBeats.remove(client);
+        this.clients.remove(client);
+        this.heartBeats.remove(client);
         logger.info("User on port " + client.username() + " disconnected.");
     }
 

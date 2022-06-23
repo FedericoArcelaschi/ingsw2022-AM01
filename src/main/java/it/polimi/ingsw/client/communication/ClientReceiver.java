@@ -21,7 +21,7 @@ public class ClientReceiver extends Receiver {
     public ClientReceiver(Socket socket, UserInterface userInterface) {
         super(socket);
         this.userInterface = userInterface;
-        heartBeatClient = new HeartBeatClient(userInterface);
+        this.heartBeatClient = new HeartBeatClient(userInterface);
         Executors.newSingleThreadExecutor().submit(heartBeatClient);
     }
 

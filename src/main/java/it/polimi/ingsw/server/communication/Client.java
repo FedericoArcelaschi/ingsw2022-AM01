@@ -15,8 +15,8 @@ import java.util.concurrent.ExecutorService;
 public final class Client {
 
     private final static Logger logger = LogManager.getLogger(Client.class);
-    private String username;
     private final Socket clientsSocket;
+    private String username;
     private GameInterface gameInterface;
 
     public Client(Socket clientsSocket) {
@@ -43,13 +43,14 @@ public final class Client {
         out.println(message.toJson());
     }
 
-    public void executeCommand(Command command, Socket socket) {
-        gameInterface.executeCommand(command, socket);
+    public void executeCommand(Command command, Client client) {
+        gameInterface.executeCommand(command, client);
     }
 
 
     public void endGame() {
         gameInterface.endGame(this);
+
     }
 
     public void setGameInterface(GameInterface gameInterface) {
