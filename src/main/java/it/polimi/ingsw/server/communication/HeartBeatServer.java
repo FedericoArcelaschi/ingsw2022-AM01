@@ -59,7 +59,7 @@ public class HeartBeatServer implements Runnable {
 
     private void waits(long previousTime) {
         try {
-            Thread.sleep(TIMEOUT + previousTime - new Date().getTime());
+            Thread.sleep(TIMEOUT - new Date().getTime() + previousTime);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
