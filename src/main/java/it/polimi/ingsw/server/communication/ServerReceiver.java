@@ -17,13 +17,13 @@ public class ServerReceiver extends Receiver {
     private static Logger logger = LogManager.getLogger(ServerReceiver.class);
 
     private final Client client;
-    private final HeartBeatServer hbs;
+    private final HeartBeatServer heartBeatServer;
     private final LobbyManager lobbyManager;
 
-    public ServerReceiver(Client client, HeartBeatServer hbs, LobbyManager lobbyManager) {
+    public ServerReceiver(Client client, HeartBeatServer heartBeatServer, LobbyManager lobbyManager) {
         super(client.clientsSocket());
         this.client = client;
-        this.hbs = hbs;
+        this.heartBeatServer = heartBeatServer;
         this.lobbyManager = lobbyManager;
     }
 
@@ -33,15 +33,18 @@ public class ServerReceiver extends Receiver {
             logger.info("Server received message: " + message.getType() + " - from port: " + socket.getPort());
         switch (message.getType()) {
             case PING ->
-                    hbs.validateResponse(client);
+                    heartBeatServer.validateResponse(client);
             case COMMAND -> {
                     CommandMessage commandMessage = (CommandMessage) message;
-                    System.out.println(commandMessage);
                     Command command = commandMessage.getCommand();
                     client.executeCommand(command, socket);
             }
-            case END -> {/*TODO: the serverReceiver received the end message from the server and sent back an acknowledgment.*/}
-            case ERROR -> {/*TODO: the serverReceiver received the error message from the server and sent back an acknowledgment.*/}
+            case END -> {
+                /*TODO: the serverReceiver received the end message from the server and sent back an acknowledgment.*/
+            }
+            case ERROR -> {
+                /*TODO: the serverReceiver received the error message from the server and sent back an acknowledgment.*/
+            }
             case PREFERENCES -> lobbyManager.addPlayer(client, (Preferences) message);
         }
     }

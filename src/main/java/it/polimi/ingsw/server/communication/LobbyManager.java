@@ -41,15 +41,6 @@ public class LobbyManager {
         logger.info("new client added with no preferences. connected clients in lobby: " + getSumClientsInLobby());
         Client c;
         clientsToInform.add(socket);
-        for (GameType g : gameClientsMap.keySet()) {
-            if (gameClientsMap.get(g).stream().map(Client::clientsSocket).toList().contains(socket)) {
-                c = gameClientsMap.get(g).stream()
-                        .filter(client -> socket.equals(client.clientsSocket()))
-                        .findFirst()
-                        .orElseThrow(RuntimeException::new);
-                gameClientsMap.get(g).remove(c);
-            }
-        }
         sendLobbyInfo(socket);
     }
 
@@ -58,7 +49,8 @@ public class LobbyManager {
      */
     public void addPlayer(Client client, Preferences preferences) {
         Socket socket = client.clientsSocket();
-        client.setUsername(preferences.username());
+        String username = validUsername(preferences.username());
+        client.setUsername(username);
         logger.info("client on port" + socket.getPort());
         logger.info("\t" + preferences.username() + " << joined the lobby. connected clients in lobby: " + getSumClientsInLobby());
         clientsToInform.remove(socket);
@@ -69,6 +61,18 @@ public class LobbyManager {
                 oldClientList);
         submitGame(preferences.getGameType());
         informPlayers();
+    }
+
+    private String validUsername(@NotNull String username) {
+        @NotNull String finalUsername = username;
+        boolean isPresentName
+                = gameClientsMap.values().stream()
+                .flatMap(Collection::stream)
+                .map(Client::username)
+                .anyMatch(name -> Objects.equals(name, finalUsername));
+        if(isPresentName)
+            return validUsername(username + "*");
+        return username;
     }
 
     public int countGames(GameType type) {
@@ -107,6 +111,7 @@ public class LobbyManager {
             return;
         }
         out.println(getLobbyInfo().toJson());
+        logger.info("sent lobby info to client " + socket);
     }
 
     private LobbyInfo getLobbyInfo() {

@@ -13,7 +13,7 @@ public class HeartBeatServer implements Runnable {
 
     private final static Logger logger = LogManager.getLogger(HeartBeatServer.class);
 
-    private final int TIMEOUT = 7000; // [ms]
+    private final int TIMEOUT = 5000; // [ms]
     private final Set<Client> clients = new HashSet<>();
     private final Set<Client> heartBeats = new HashSet<>();
 

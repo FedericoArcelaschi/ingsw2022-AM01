@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ServerMain implements Runnable {
 
-    private static Logger logger = LogManager.getLogger(ServerMain.class); //.getName?
+    private static Logger logger = LogManager.getLogger(ServerMain.class);
 
     private int port;
     private final int DEFAULT_PORT = 12345;
@@ -22,10 +22,6 @@ public class ServerMain implements Runnable {
     private ServerSocket serverSocket;
     private HeartBeatServer heartBeatServer;
     private final LobbyManager lobbyManager = new LobbyManager();
-    private int gameId = 0;
-    private int connectedPlayer = 0;
-
-
 
     public ServerMain() {
         this.port = DEFAULT_PORT;
@@ -45,7 +41,7 @@ public class ServerMain implements Runnable {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            logger.fatal(e.getMessage() + "address already in use");
+            logger.error(e.getMessage() + "address already in use");
             e.printStackTrace();
             port++;
             startServer();
@@ -62,7 +58,7 @@ public class ServerMain implements Runnable {
     public void acceptPlayers() {
         Socket socket;
         while (true) {
-            System.out.println("Server: waiting for player to connect");
+            logger.info("Server: waiting for player to connect");
             try{
                 socket = serverSocket.accept();
             } catch(IOException e) {
@@ -74,16 +70,11 @@ public class ServerMain implements Runnable {
             Client client = new Client(socket);
             //those methods need to be split because of future changes
             client.setup(heartBeatServer, lobbyManager, executor);
-            connectedPlayer++;
         }
         executor.shutdown();
     }
 
     public int getGamesNumber(GameType type){
         return lobbyManager.countGames(type); //FIXME gamesNumber.get(type);
-    }
-
-    public int getConnectedPlayer() {
-        return connectedPlayer; //FIXME: could use a map SOCKET-> game / state
     }
 }
