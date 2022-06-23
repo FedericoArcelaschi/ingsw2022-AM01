@@ -15,29 +15,30 @@ public class MultipleToggleGroup {
 
     public MultipleToggleGroup(int maxSelected) {
         this.maxSelected = maxSelected;
-        elements = new ArrayList<>();
-        selectedElements = new ArrayList<>();
+        this.elements = new ArrayList<>();
+        this.selectedElements = new ArrayList<>();
+    }
+
+    public void add(List<ToggleButton> buttons) {
+        for (ToggleButton button: buttons) {
+            this.add(button);
+        }
     }
 
     public void add(ToggleButton button) {
         button.setOnMouseClicked(this::selectWaitingRoom);
         if(!elements.contains(button))
-            elements.add(button);
+            this.elements.add(button);
     }
+
     private void selectWaitingRoom(MouseEvent mouseEvent) {
         ToggleButton toggleButton = (ToggleButton) mouseEvent.getTarget();
         this.select(toggleButton);
     }
 
-    public void add(List<ToggleButton> buttons) {
-        for (ToggleButton button: buttons) {
-            add(button);
-        }
-    }
-
     public void select(ToggleButton button) {
         if(selectedElements.contains(button)){
-            deselect(button);
+            this.deselect(button);
         }
         else if(elements.contains(button)) {
             if (selectedElements.size() == maxSelected) {
@@ -52,15 +53,13 @@ public class MultipleToggleGroup {
     }
 
     private void deselect(ToggleButton button) {
-        if(elements.contains(button)) {
-            button.setSelected(false);
-            selectedElements.remove(button);
-        }
-        else
+        if(!elements.contains(button))
             throw new IllegalArgumentException("no such button in toggle group");
+        button.setSelected(false);
+        selectedElements.remove(button);
     }
 
     public List<ToggleButton> getSelectedToggles() {
-        return new ArrayList<ToggleButton>(selectedElements);
+        return new ArrayList<>(selectedElements);
     }
 }

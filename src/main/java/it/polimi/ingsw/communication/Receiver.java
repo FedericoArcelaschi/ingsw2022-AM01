@@ -16,13 +16,11 @@ import java.net.Socket;
 public abstract class Receiver implements Runnable {
     protected final Socket socket;
     protected final BufferedReader in;
-    protected final PrintWriter out;
 
     public Receiver(Socket socket) {
         this.socket = socket;
         try {
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

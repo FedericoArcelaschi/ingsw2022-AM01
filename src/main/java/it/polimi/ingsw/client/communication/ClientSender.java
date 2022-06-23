@@ -19,8 +19,8 @@ public class ClientSender {
         }
     }
 
-    public void send(@NotNull Message message){
+    public void send(@NotNull Message message) {
         out.println(message.toJson());
-        System.out.println("command sent");
+        System.out.println("command sent!");
     }
 }

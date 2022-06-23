@@ -67,6 +67,7 @@ public class ClientMain {
         }
         switch (state) {
             case NOT_CONNECTED -> {
+
             }
             case OUTSIDE_LOBBY -> {
 
@@ -74,7 +75,7 @@ public class ClientMain {
             case INSIDE_LOBBY -> {
 
             }
-            case GAME -> {
+            case IN_GAME -> {
                 if (stringCommand.strip().equalsIgnoreCase("help"))
                     System.out.println(Outputs.HELP);
                 else if(stringCommand.strip().equalsIgnoreCase("charinfo"))
@@ -113,6 +114,5 @@ public class ClientMain {
     public void setBoardData(BoardData boardData) {
         this.boardData = boardData;
     }
-
 
 }

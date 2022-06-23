@@ -6,6 +6,8 @@ import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.communication.message.subclasses.*;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.Executors;
 
@@ -17,9 +19,13 @@ import static it.polimi.ingsw.startUp.Outputs.CLEAR_SCREEN;
 public class ClientReceiver extends Receiver {
     private final UserInterface userInterface;
     private final HeartBeatClient heartBeatClient;
+    private PrintWriter out;
 
     public ClientReceiver(Socket socket, UserInterface userInterface) {
         super(socket);
+        try {
+            this.out = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {userInterface.printError(e.getMessage());}
         this.userInterface = userInterface;
         this.heartBeatClient = new HeartBeatClient(userInterface);
         Executors.newSingleThreadExecutor().submit(heartBeatClient);

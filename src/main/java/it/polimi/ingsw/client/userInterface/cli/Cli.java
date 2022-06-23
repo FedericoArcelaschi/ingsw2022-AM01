@@ -6,7 +6,6 @@ import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
-import it.polimi.ingsw.communication.message.subclasses.Update;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.startUp.Outputs;
 import org.jetbrains.annotations.NotNull;
@@ -19,9 +18,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.Date;
 import java.util.concurrent.*;
-import java.util.function.Supplier;
 
 import static it.polimi.ingsw.startUp.Outputs.CLEAR_SCREEN;
 
@@ -32,6 +29,7 @@ public class Cli implements UserInterface {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final long READ_TIME = 50;
     private String input = "";
+    private final StringBuffer stringBufferForInput = new StringBuffer();
 
 
     public Cli() {
@@ -60,7 +58,7 @@ public class Cli implements UserInterface {
     @Override
     public void draw(BoardData update) {
         System.out.println(CLEAR_SCREEN);
-        clientMain.setState(ClientState.GAME);
+        clientMain.setState(ClientState.IN_GAME);
         clientMain.setBoardData(update);
         System.out.println(update.toString());
         executor.submit(this::readBuffer);
@@ -71,7 +69,7 @@ public class Cli implements UserInterface {
      * Is a recursive function: will end only in case of a system shutdown.
      */
     private void readBuffer() {
-        while (clientMain.getState() == ClientState.GAME) {
+        while (clientMain.getState() == ClientState.IN_GAME) {
             ExecutorService e = Executors.newSingleThreadExecutor();
             e.submit(this::input);
             try {
@@ -114,6 +112,11 @@ public class Cli implements UserInterface {
         System.err.println(error);
     }
 
+    /**
+     * Ends the game and prompts the client if he wants to play another one.
+     * If he wants to play another game he will be redirected to the Lobby
+     * @param endGameMessage contains relevant information about the end of the game. A winner if present.
+     */
     @Override
     public void endCurrentGame(EndGame endGameMessage) {
         clientMain.setState(ClientState.GAME_ENDED);
@@ -133,7 +136,6 @@ public class Cli implements UserInterface {
     }
 
     /**
-     * method that is called iff !clientMain.isConnected()
      * Re-connects the client to the server.
      * The newly connected client will be in the lobby.
      */
@@ -219,7 +221,7 @@ public class Cli implements UserInterface {
         return null;
     }
 
-    private SocketAddress getNetworkPreferences() {
+    private @NotNull SocketAddress getNetworkPreferences() {
         String hostName;
         int port = 0;
         InetAddress address = null;

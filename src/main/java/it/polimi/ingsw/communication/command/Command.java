@@ -15,18 +15,29 @@ public class Command {
     //all numbers should be passed as they are showed on the view
     private final CommandType type;
     private final String username;
+    private final List<StudentColor> students = new ArrayList<>();
     private int motherNaturePositionShift;
+    /**
+     * cardId between 1 and 10
+     */
     private int cardId;
-    private List<StudentColor> students = new ArrayList<>();
-
+    /**
+     * islandId between 1 and 12
+     */
     private int islandId;
+    /**
+     * islandId between 1 and 12
+     */
     private int charId;
+    /**
+     * islandId between 1 and nPlayers
+     */
     private int cloudId;
 
     public Command(String username, CommandType type, List<String> attributes) throws ParseException {
         this.type = type;
         this.username = username;
-        getParameters(attributes);
+        parseParameters(attributes);
     }
 
     public Command(String username, String command) throws ParseException {
@@ -37,10 +48,10 @@ public class Command {
         if (commandAttributes.size() < 1)
 
             throw new ParseException("'" + command + "' isn't a valid command. Type 'help' to get more information.", 0);
-        getParameters(commandAttributes);
+        parseParameters(commandAttributes);
     }
 
-    private void getParameters(List<String> attributes) throws ParseException {
+    private void parseParameters(List<String> attributes) throws ParseException {
         try {
             switch (type) {
                 case PLAY_CARD -> cardId = Integer.parseInt(attributes.get(0));
@@ -49,7 +60,7 @@ public class Command {
                         students.add(StudentColor.parseColor(attribute));
                 }
                 case MOVE_STUDENT_TO_ISLAND -> {
-                    islandId = Integer.parseInt(attributes.get(0).strip());
+                    islandId = Integer.parseInt(attributes.get(0));
                     attributes.remove(0);
                     for (String attribute : attributes)
                         students.add(StudentColor.parseColor(attribute));
@@ -92,9 +103,6 @@ public class Command {
         return students;
     }
 
-    /**
-     * @return islandId between 1 and 12
-     */
     public int getIslandId() {
         return islandId;
     }

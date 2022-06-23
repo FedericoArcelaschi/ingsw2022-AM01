@@ -22,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.SocketAddress;
@@ -139,6 +140,10 @@ public class Gui extends Application implements UserInterface {
         //TODO:
     }
 
+    public void send(Command command) {
+        clientMain.runCommand(command);
+    }
+
     public void connect(LoginPreferences loginPreferences) {
         clientMain = new ClientMain(this);
         //FIXME: first needs the network preferences and then the others.
@@ -146,11 +151,7 @@ public class Gui extends Application implements UserInterface {
         clientMain.connect(getNetworkPreferences());
     }
 
-    public void send(Command command) {
-        clientMain.runCommand(command);
-    }
-
-    private SocketAddress getNetworkPreferences() {
+    private @NotNull SocketAddress getNetworkPreferences() {
         //TODO:
         return null;
     }

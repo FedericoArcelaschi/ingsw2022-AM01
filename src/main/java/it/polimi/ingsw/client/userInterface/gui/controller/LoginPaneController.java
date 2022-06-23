@@ -21,9 +21,9 @@ public class LoginPaneController {
     public void initialize(Consumer<LoginPreferences> connect) {
         nPlayer = new ToggleGroup();
         player2RadioButton.setToggleGroup(nPlayer);
+        player2RadioButton.setSelected(true);
         player3RadioButton.setToggleGroup(nPlayer);
         player4RadioButton.setToggleGroup(nPlayer);
-        player2RadioButton.setSelected(true);
         expertModeButton.setSelected(false);
         this.connect = connect;
     }
