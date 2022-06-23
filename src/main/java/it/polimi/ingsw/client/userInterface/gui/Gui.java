@@ -106,7 +106,7 @@ public class Gui extends Application implements UserInterface {
 
     public void connect(InetSocketAddress address) {
         clientMain = new ClientMain(this);
-        Boolean connected = clientMain.connect(address);
+        clientMain.connect(address);
         //TODO: Handle connected conditions
     }
 
