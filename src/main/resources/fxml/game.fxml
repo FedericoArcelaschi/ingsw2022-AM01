@@ -165,156 +165,96 @@
                            <children>
                               <VBox prefHeight="600.0" prefWidth="910.0">
                                  <children>
-                                    <HBox fx:id="islandRow1" minWidth="-Infinity" prefHeight="200.0" prefWidth="1110.0">
+                                    <FlowPane fx:id="islandsTopRow" alignment="CENTER" minWidth="-Infinity" prefHeight="200.0" prefWidth="1110.0" />
+                                    <HBox prefHeight="200.0" prefWidth="1110.0">
                                        <children>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
+                                          <Pane fx:id="islandLeftPane" prefHeight="200.0" prefWidth="185.0" />
+                                          <StackPane fx:id="cloudStackPane" prefHeight="200.0" prefWidth="740.0">
                                              <children>
-                                                <FlowPane accessibleText="1" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
+                                                <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" visible="false">
+                                                   <children>
+                                                      <Pane accessibleText="cloud1" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                         <children>
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                         </children>
+                                                      </Pane>
+                                                      <Pane accessibleText="cloud2" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                         <children>
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                         </children>
+                                                      </Pane>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" visible="false">
+                                                   <children>
+                                                      <Pane accessibleText="cloud1" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                         <children>
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                         </children>
+                                                      </Pane>
+                                                      <Pane accessibleText="cloud2" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                         <children>
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                         </children>
+                                                      </Pane>
+                                                      <Pane accessibleText="cloud3" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                         <children>
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                         </children>
+                                                      </Pane>
+                                                   </children>
+                                                </FlowPane>
+                                                <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" visible="false">
+                                                   <children>
+                                                      <Pane accessibleText="cloud1" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                         <children>
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                         </children>
+                                                      </Pane>
+                                                      <Pane accessibleText="cloud2" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                         <children>
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                         </children>
+                                                      </Pane>
+                                                      <Pane accessibleText="cloud3" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                         <children>
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                         </children>
+                                                      </Pane>
+                                                      <Pane accessibleText="cloud4" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
+                                                         <children>
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                            <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
+                                                         </children>
+                                                      </Pane>
+                                                   </children>
+                                                </FlowPane>
                                              </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="2" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="3" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="4" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="5" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="6" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
+                                          </StackPane>
+                                          <Pane fx:id="islandRightPane" prefHeight="200.0" prefWidth="185.0" />
                                        </children>
                                     </HBox>
-                                    <StackPane fx:id="cloudStackPane">
-                                       <children>
-                                          <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" visible="false">
-                                             <children>
-                                                <Pane accessibleText="cloud1" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
-                                                   <children>
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane accessibleText="cloud2" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
-                                                   <children>
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                   </children>
-                                                </Pane>
-                                             </children>
-                                          </FlowPane>
-                                          <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" visible="false">
-                                             <children>
-                                                <Pane accessibleText="cloud1" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
-                                                   <children>
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane accessibleText="cloud2" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
-                                                   <children>
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane accessibleText="cloud3" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
-                                                   <children>
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                   </children>
-                                                </Pane>
-                                             </children>
-                                          </FlowPane>
-                                          <FlowPane alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" visible="false">
-                                             <children>
-                                                <Pane accessibleText="cloud1" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
-                                                   <children>
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane accessibleText="cloud2" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
-                                                   <children>
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane accessibleText="cloud3" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
-                                                   <children>
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                   </children>
-                                                </Pane>
-                                                <Pane accessibleText="cloud4" onMouseClicked="#chooseCloud" prefHeight="200.0" prefWidth="185.0" styleClass="cloud">
-                                                   <children>
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="100.0" layoutY="87.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                      <ToggleButton disable="true" layoutX="60.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="student" />
-                                                   </children>
-                                                </Pane>
-                                             </children>
-                                          </FlowPane>
-                                       </children>
-                                    </StackPane>
-                                    <HBox fx:id="islandRow2" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="200.0" prefWidth="1110.0">
-                                       <children>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="7" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="8" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="9" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="10" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="11" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                          <Pane onMouseClicked="#island" prefHeight="200.0" prefWidth="185.0" styleClass="island">
-                                             <children>
-                                                <FlowPane accessibleText="12" alignment="CENTER" layoutX="20.0" layoutY="20.0" prefHeight="160.0" prefWidth="145.0" />
-                                             </children>
-                                          </Pane>
-                                       </children>
-                                    </HBox>
+                                    <FlowPane fx:id="islandsBotRow" alignment="CENTER" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="200.0" prefWidth="1110.0" />
                                  </children>
                               </VBox>
                            </children>

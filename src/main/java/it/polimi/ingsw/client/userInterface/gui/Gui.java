@@ -4,16 +4,15 @@ import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
+import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
-import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController;
 import it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
-import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import javafx.application.Application;
@@ -22,9 +21,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Arrays;
 import java.util.List;
@@ -52,43 +51,7 @@ public class Gui extends Application implements UserInterface {
         stage.setTitle("Eriantys");
         stage.setScene(new Scene(loginFXML));
         stage.show();
-        loginPaneController.initialize(this::connect);
-        //FIXME: for testing.
-        draw(createBoardData());
-    }
-
-    private BoardData createBoardData(){
-        //FIXME: for testing.
-        Board b =  BoardFactory.getBoard(Arrays.asList("Fede", "Gio"/*, "pippo"*/), true);
-        Turn t = b.getTurn();
-        try{
-            for (String player: t.getSittingOrder()) {
-                int cardId = player.equals("Fede") ? 1 : 10;
-                b.playCard(player, cardId);
-                b.changePhase();
-            }
-//            b.playCard("pippo", 8);
-//            b.changePhase();
-            List<StudentColor> studentColorList = b.getCastle("Fede").getWaitingRoom().subList(0,1);
-            b.moveStudentsToDiningRoom("Fede", studentColorList);
-            b.moveStudentToIsland("Fede", 1, studentColorList);
-            b.moveStudentsToDiningRoom("Fede", b.getCastle("Fede").getWaitingRoom().subList(0,1));
-            b.changePhase();
-            b.moveMotherNature(1);
-            b.changePhase();
-//            b.chooseCloud("Fede", 1);
-//            b.changePhase();
-
-        } catch (PhaseNotRightException | TooManyStudentsException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchStudentException e) {
-            return createBoardData();
-        }
-        //System.out.println(bd);
-        BoardData bd = b.getData("Fede");
-        if(!bd.characters().stream().map(CharacterData::getName).toList().contains("MONK"))
-            return createBoardData();
-        return bd;
+        loginPaneController.initialize(this::connect, this::sendPreferences);
     }
 
     /**
@@ -116,18 +79,19 @@ public class Gui extends Application implements UserInterface {
         gamePaneController = gameLoader.getController();
         gamePaneController.initialize(this::send);
         gamePaneController.draw(boardData);
+        stage.setTitle(boardData.username());
         stage.setScene(new Scene(loginFXML));
         stage.centerOnScreen();
     }
 
     @Override
     public void printLobby(LobbyInfo lobbyInfo) {
-        //TODO:
+        Platform.runLater(()->loginPaneController.drawLobbyInfo(lobbyInfo));
     }
 
     @Override
     public void printError(String error) {
-        if(gamePaneController != null) gamePaneController.printError(error);
+        if(gamePaneController != null) Platform.runLater(()->gamePaneController.printError(error));
     }
 
     @Override
@@ -140,19 +104,17 @@ public class Gui extends Application implements UserInterface {
         //TODO:
     }
 
+    public void connect(InetSocketAddress address) {
+        clientMain = new ClientMain(this);
+        Boolean connected = clientMain.connect(address);
+        //TODO: Handle connected conditions
+    }
+
+    public void sendPreferences(Preferences preferences) {
+        clientMain.sendPreferences(preferences);
+    }
+
     public void send(Command command) {
         clientMain.runCommand(command);
-    }
-
-    public void connect(LoginPreferences loginPreferences) {
-        clientMain = new ClientMain(this);
-        //FIXME: first needs the network preferences and then the others.
-        //FIXME:
-        clientMain.connect(getNetworkPreferences());
-    }
-
-    private @NotNull SocketAddress getNetworkPreferences() {
-        //TODO:
-        return null;
     }
 }

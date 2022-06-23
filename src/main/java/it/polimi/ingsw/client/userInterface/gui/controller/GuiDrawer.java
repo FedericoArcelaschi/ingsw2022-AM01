@@ -12,7 +12,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
@@ -20,12 +19,10 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Flow;
 
 public class GuiDrawer {
 
@@ -93,64 +90,25 @@ public class GuiDrawer {
         }
     }
 
-    /*public void drawCharacters(List<CharacterData> characters,FlowPane charFlowPane, FlowPane characterPane, Tab characterTab){
-        if(characters.size() == 0)
-            return;
-        characterTab.setDisable(false);
-        for (int i = 0; i < characters.size(); i++) {
-            Pane pane = (Pane) characterPane.getChildren().get(i);
-            pane.getStyleClass().add(CharacterExplanation.getInstance(characters.get(i).getName()).getCSS());
-            pane.setAccessibleText(characters.get(i).getName());
-            Tooltip tooltip = new Tooltip(characters.get(i).getDescription());
-            FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
-            Tooltip.install(pane, tooltip);
-            Tooltip.install(flowPane, tooltip);
-            flowPane.setAccessibleText(characters.get(i).getName());
-            for (StudentColor studentColor: characters.get(i).getStudents().orElse(new ArrayList<>())) {
-                ToggleButton toggleButton = new ToggleButton();
-                toggleButton.getStyleClass().add("student");
-                toggleButton.setPrefSize(25, 25);
-                setStudentButtonColor(toggleButton, studentColor);
-                flowPane.getChildren().add(toggleButton);
-            }
-        }
-    }*/
-
-    public void drawIslands(List<IslandData> islandList, int motherNaturePosition, HBox islandRow1, HBox islandRow2) {
-        List<Pane> paneList = new ArrayList<>();
-        for (Node n : islandRow1.getChildren()) {
-            paneList.add((Pane) n);
-        }
-        for (Node n : islandRow2.getChildren()) {
-            paneList.add((Pane) n);
-        }
-
-        for (int i = 0; i < islandList.size(); i++) {
+    public void drawIslands(List<IslandData> islandList, int motherNaturePosition, Pane left, Pane right, FlowPane topRow, FlowPane botRow, EventHandler<MouseEvent> onClick) {
+        List<Pane> islandPaneList = new ArrayList<>();
+        int i, j=0;
+        for (i = 0; i < islandList.size(); i++) {
             IslandData islandData = islandList.get(i);
-            Pane pane = paneList.get(i);
-            //Adding students
-            for (StudentColor color : islandData.students().keySet()) {
-                for (int j = 0; j < islandData.students().get(color); j++) {
-                    ToggleButton toggleButton = createElementToggleButton("student", 25, 25, true);
-                    setStudentButtonColor(toggleButton, color);
-                    FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
-                    flowPane.getChildren().add(toggleButton);
-                }
-            }
-            //adding mother nature
-            if (motherNaturePosition == i) {
-                ToggleButton toggleButton = createElementToggleButton("motherNature", 35, 35, true);
-                FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
-                flowPane.getChildren().add(toggleButton);
-            }
-            //Adding towers
-            for (int j = 0; j < islandData.getIslandSize() && islandData.getOwnership() != null; j++) {
-                ToggleButton toggleButton = createElementToggleButton("tower", 35, 50, true);
-                setTowerButtonColor(toggleButton, islandData.getOwnership());
-                FlowPane flowPane = (FlowPane) pane.getChildren().get(0);
-                flowPane.getChildren().add(toggleButton);
-            }
+            islandPaneList.add(drawIsland(islandData, i, motherNaturePosition, onClick));
         }
+        //add left
+        FlowPane fp = (FlowPane) islandPaneList.get(j).getChildren().get(0);
+        System.out.println(fp.getChildren());
+        left.getChildren().add(islandPaneList.get(j++));
+        //add in top row
+        for (; j < (islandPaneList.size()+1)/2; j++)
+            topRow.getChildren().add(islandPaneList.get(j));
+        //add right
+        right.getChildren().add(islandPaneList.get(j++));
+        //add in bottom row
+        for (; j < islandPaneList.size(); j++)
+            botRow.getChildren().add(islandPaneList.get(j));
     }
 
     public void drawClouds(List<CloudData> cloudList, StackPane cloudStackPane){
@@ -165,7 +123,7 @@ public class GuiDrawer {
         }
     }
 
-    public void drawTurn(TurnData turnData, Pane turnPane){
+    public void drawTurn(TurnData turnData, Pane turnPane) {
         Label phaseLabel = (Label) turnPane.getChildren().get(1);
         TextFlow playerOrderLabel = (TextFlow) turnPane.getChildren().get(2);
         int i=0;
@@ -190,6 +148,41 @@ public class GuiDrawer {
         }
     }
 
+    private Pane drawIsland(IslandData islandData, int index, int motherNaturePosition, EventHandler<MouseEvent> onClick){
+        Pane islandPane = new Pane();
+        islandPane.setPrefSize(185, 200);
+        islandPane.getStyleClass().add("island");
+        islandPane.setOnMouseClicked(onClick);
+        islandPane.setAccessibleText(String.valueOf(index+1));
+        FlowPane islandFlowPane = new FlowPane();
+        islandFlowPane.setPrefSize(145, 160);
+        islandFlowPane.setLayoutX(20);
+        islandFlowPane.setLayoutY(20);
+        islandFlowPane.setAlignment(Pos.CENTER);
+        islandFlowPane.setAccessibleText(String.valueOf(index+1));
+        //Adding students
+        for (StudentColor color : islandData.students().keySet()) {
+            for (int j = 0; j < islandData.students().get(color); j++) {
+                ToggleButton toggleButton = createElementToggleButton("student", 25, 25, true);
+                setStudentButtonColor(toggleButton, color);
+                islandFlowPane.getChildren().add(toggleButton);
+            }
+        }
+        //adding mother nature
+        if (motherNaturePosition == index) {
+            ToggleButton toggleButton = createElementToggleButton("motherNature", 35, 35, true);
+            islandFlowPane.getChildren().add(toggleButton);
+        }
+        //Adding towers
+        for (int j = 0; j < islandData.getIslandSize() && islandData.getOwnership() != null; j++) {
+            ToggleButton toggleButton = createElementToggleButton("tower", 35, 50, true);
+            setTowerButtonColor(toggleButton, islandData.getOwnership());
+            islandFlowPane.getChildren().add(toggleButton);
+        }
+        islandPane.getChildren().add(islandFlowPane);
+        return islandPane;
+    }
+
     private void drawCastle(CastleData castleData, BorderPane castle, Label nameLabel, boolean disabled) {
         Pane waitingRoomPane = (Pane) castle.getBottom();
         Pane towerPane = (Pane) castle.getTop();
@@ -207,10 +200,14 @@ public class GuiDrawer {
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom, Pane waitingRoomPane, boolean disabled) {
-        for (int i = 0; i < waitingRoom.size(); i++) {
+        for (int i = 0; i < waitingRoomPane.getChildren().size(); i++) {
             ToggleButton toggleButton = (ToggleButton) waitingRoomPane.getChildren().get(i);
-            setStudentButtonColor(toggleButton, waitingRoom.get(i));
-            toggleButton.setDisable(disabled);
+            if(i < waitingRoom.size()) {
+                setStudentButtonColor(toggleButton, waitingRoom.get(i));
+                toggleButton.setDisable(disabled);
+            }
+            else
+                toggleButton.setDisable(true);
         }
     }
 

@@ -22,11 +22,10 @@ public class GamePaneController {
     @FXML public BorderPane castlePane0;
     @FXML public FlowPane castleTabHBox, cardsFlowPane, charFlowPane;
     @FXML public Pane turnPane;
-    public StackPane bottomStackPane;
-    @FXML private Pane waitingRoomPane;
+    @FXML public StackPane bottomStackPane;
+    @FXML private Pane waitingRoomPane, islandLeftPane, islandRightPane;
     @FXML private StackPane cloudStackPane;
-    @FXML private HBox islandRow1, islandRow2;
-    @FXML private Tab characterTab;
+    @FXML private FlowPane islandsTopRow, islandsBotRow;
     @FXML private ToggleButton expertMode;
     private MultipleToggleGroup waitingRoomToggleGroup;
     private Consumer<Command> send;
@@ -51,19 +50,21 @@ public class GamePaneController {
 
         waitingRoomToggleGroup = new MultipleToggleGroup(boardData.nPlayer() == 3 ? 4 : 3);
         setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
+        expertMode.setVisible(boardData.characters().size() == 3);
 
         GuiDrawer guiDrawer = new GuiDrawer();
         guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
         guiDrawer.drawClouds(boardData.cloudList(), cloudStackPane);
-        guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandRow1, islandRow2);
+        guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandLeftPane, islandRightPane, islandsTopRow, islandsBotRow, this::island);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
         guiDrawer.drawCharacter(boardData.characters(), charFlowPane, this::payCharacter);
         guiDrawer.drawTurn(boardData.turn(), turnPane);
         switchCommandMode();
     }
 
-    public void printError(String error){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    public void printError(String error) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setHeaderText(null);
         alert.setContentText(error);
         alert.show();
     }
@@ -106,7 +107,9 @@ public class GamePaneController {
                 send.accept(command);
             } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
                 List<String> parameters = new ArrayList<>();
-                parameters.add(island.getAccessibleText());
+                //FIXME: problem returning in low index islands from high index islands
+                int moveDistance = Integer.parseInt(island.getAccessibleText()) - (boardData.motherNaturePosition() + 1);
+                parameters.add(String.valueOf(moveDistance > 0 ? moveDistance : moveDistance+12));
                 Command command = null;
                 try {
                     command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
@@ -115,12 +118,12 @@ public class GamePaneController {
                 send.accept(command);
             }
         }
-        else if(!parameters.isEmpty()) {
+        else {
             parameters.add(island.getAccessibleText());
             System.out.println(parameters);
             Command command = null;
             try {
-                command = new Command(username, CommandType.PAY_CHARACTER, parameters);
+                command = new Command(username, CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
             } catch (ParseException ignored) {}
             System.out.println(command);
         }
@@ -164,8 +167,14 @@ public class GamePaneController {
         CharacterPane pane = (CharacterPane) mouseEvent.getTarget();
         parameters.add(pane.getAccessibleText());
         parameters.addAll(pane.getMultipleToggleGroup().getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList());
-        /*Command command = new Command(username, CommandType.PAY_CHARACTER, parameters);
-        System.out.println(command);*/
+        System.out.println(parameters);
+        Command command = null;
+        try {
+            command = new Command(username, CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(command);
     }
 
     public void switchCommandMode() {
