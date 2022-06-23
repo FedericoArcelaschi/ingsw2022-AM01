@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
+import it.polimi.ingsw.client.userInterface.gui.graphicObjects.CharacterPane;
+import it.polimi.ingsw.client.userInterface.gui.graphicObjects.MultipleToggleGroup;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.command.CommandType;
 import it.polimi.ingsw.communication.modelData.BoardData;
@@ -24,14 +26,15 @@ public class GamePaneController {
     @FXML public Pane turnPane;
     @FXML public StackPane bottomStackPane;
     @FXML private Pane waitingRoomPane, islandLeftPane, islandRightPane;
-    @FXML private StackPane cloudStackPane;
-    @FXML private FlowPane islandsTopRow, islandsBotRow;
+    @FXML private FlowPane islandsTopRow, islandsBotRow, cloudFlowPane;
     @FXML private ToggleButton expertMode;
     private MultipleToggleGroup waitingRoomToggleGroup;
     private Consumer<Command> send;
     private String username;
     private BoardData boardData;
     private final List<String> parameters = new ArrayList<>();
+
+    GuiDrawer guiDrawer = new GuiDrawer();
 
     public void initialize(Consumer<Command> send) {
         this.send = send;
@@ -44,6 +47,14 @@ public class GamePaneController {
         }
     }
 
+    public void clean() {
+        guiDrawer.cleanCards(cardsFlowPane);
+        guiDrawer.cleanCharacters(charFlowPane);
+        guiDrawer.cleanIslands(islandLeftPane, islandRightPane, islandsTopRow, islandsBotRow);
+        guiDrawer.cleanClouds(cloudFlowPane);
+        guiDrawer.cleanTurn(turnPane);
+    }
+
     public void draw(BoardData boardData) {
         this.username = boardData.username();
         this.boardData = boardData;
@@ -52,21 +63,28 @@ public class GamePaneController {
         setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
         expertMode.setVisible(boardData.characters().size() == 3);
 
-        GuiDrawer guiDrawer = new GuiDrawer();
         guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
-        guiDrawer.drawClouds(boardData.cloudList(), cloudStackPane);
+        guiDrawer.drawClouds(boardData.cloudList(), cloudFlowPane);
         guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandLeftPane, islandRightPane, islandsTopRow, islandsBotRow, this::island);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
-        guiDrawer.drawCharacter(boardData.characters(), charFlowPane, this::payCharacter);
+        guiDrawer.drawCharacters(boardData.characters(), charFlowPane, this::payCharacter);
         guiDrawer.drawTurn(boardData.turn(), turnPane);
         switchCommandMode();
     }
 
-    public void printError(String error) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+    public void printMessage(Alert.AlertType type, String message) {
+        Alert alert = new Alert(type);
         alert.setHeaderText(null);
-        alert.setContentText(error);
-        alert.show();
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public boolean newGameMessage(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to play again?");
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(ButtonType.NO, ButtonType.YES);
+        alert.setHeaderText(null);
+        return alert.showAndWait().orElse(ButtonType.NO) == ButtonType.YES;
     }
 
     public void moveStudentToDiningRoom() throws ParseException {

@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class LoginPaneController {
-    @FXML TableView lobbyTable;
+    @FXML TableView<LobbyInfo.Lobby> lobbyTable;
     @FXML Pane networkPane, preferencesPane, waitingForGamePane;
     @FXML TextField usernameTextField, ipTextField, portTextField;
     @FXML RadioButton player2RadioButton, player3RadioButton, player4RadioButton;
@@ -24,6 +24,7 @@ public class LoginPaneController {
     ToggleGroup nPlayer;
     Consumer<InetSocketAddress> connect;
     Consumer<Preferences> sendPreferences;
+    boolean table = false;
 
     public void initialize(Consumer<InetSocketAddress> connect, Consumer<Preferences> sendPreferences) {
         nPlayer = new ToggleGroup();
@@ -34,7 +35,12 @@ public class LoginPaneController {
         expertModeButton.setSelected(false);
         this.connect = connect;
         this.sendPreferences = sendPreferences;
-        drawTable();
+        preferencesPane.setVisible(true);
+        waitingForGamePane.setVisible(false);
+        if(!table)
+            drawTable();
+        else
+            submitButton.setDisable(false);
     }
 
     public void connect(ActionEvent actionEvent) {
@@ -79,6 +85,7 @@ public class LoginPaneController {
     }
 
     private void drawTable() {
+        table = true;
         TableColumn<LobbyInfo.Lobby, GameType> gameTypeColumn = new TableColumn<>("Game Type");
         gameTypeColumn.setCellValueFactory(new PropertyValueFactory<>("gameType"));
         TableColumn<LobbyInfo.Lobby, String> playerColumn = new TableColumn<>("Connected Players");

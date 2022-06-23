@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
+import it.polimi.ingsw.client.userInterface.gui.graphicObjects.*;
 import it.polimi.ingsw.communication.modelData.CastleData;
 import it.polimi.ingsw.communication.modelData.CloudData;
 import it.polimi.ingsw.communication.modelData.IslandData;
@@ -56,7 +57,11 @@ public class GuiDrawer {
         }
     }
 
-    public void drawCharacter(List<CharacterData> characters, FlowPane charFlowPane, EventHandler<MouseEvent> payCharacter){
+    public void cleanCards(FlowPane cardsFlowPane) {
+        cardsFlowPane.getChildren().clear();
+    }
+
+    public void drawCharacters(List<CharacterData> characters, FlowPane charFlowPane, EventHandler<MouseEvent> payCharacter){
         for (CharacterData character : characters) {
             CharacterPane pane = new CharacterPane();
             pane.setPrefSize(111, 200);
@@ -72,9 +77,8 @@ public class GuiDrawer {
             pane.setMultipleToggleGroup(toggleGroup);
 
             for (StudentColor studentColor: character.getStudents().orElse(new ArrayList<>())) {
-                ToggleButton toggleButton = createElementToggleButton("student", 25, 25, false);
+                ToggleButton toggleButton = new GraphicStudent(studentColor, false);
                 toggleGroup.add(toggleButton);
-                setStudentButtonColor(toggleButton, studentColor);
                 flowPane.getChildren().add(toggleButton);
             }
 
@@ -88,6 +92,10 @@ public class GuiDrawer {
             pane.getChildren().add(flowPane);
             charFlowPane.getChildren().add(pane);
         }
+    }
+
+    public void cleanCharacters(FlowPane charFlowPane) {
+        charFlowPane.getChildren().clear();
     }
 
     public void drawIslands(List<IslandData> islandList, int motherNaturePosition, Pane left, Pane right, FlowPane topRow, FlowPane botRow, EventHandler<MouseEvent> onClick) {
@@ -111,16 +119,21 @@ public class GuiDrawer {
             botRow.getChildren().add(islandPaneList.get(j));
     }
 
-    public void drawClouds(List<CloudData> cloudList, StackPane cloudStackPane){
-        FlowPane cloudFlowPane = (FlowPane) cloudStackPane.getChildren().get(cloudList.size()-2);
-        cloudFlowPane.setVisible(true);
-        for (int i=0; i<cloudList.size(); ++i) {
-            CloudData cloud = cloudList.get(i);
-            Pane pane = (Pane) cloudFlowPane.getChildren().get(i);
-            for (int j = 0; j < cloud.studentList().size(); j++)  {
-                setStudentButtonColor((ToggleButton)pane.getChildren().get(j) , cloud.studentList().get(j));
-            }
+    public void cleanIslands(Pane left, Pane right, FlowPane topRow, FlowPane botRow){
+        left.getChildren().clear();
+        right.getChildren().clear();
+        topRow.getChildren().clear();
+        botRow.getChildren().clear();
+    }
+
+    public void drawClouds(List<CloudData> cloudList, FlowPane cloudFlowPane){
+        for (CloudData cloud : cloudList) {
+            cloudFlowPane.getChildren().add(new GraphicCloud(cloud.studentList()));
         }
+    }
+
+    public void cleanClouds(FlowPane cloudFlowPane){
+        cloudFlowPane.getChildren().clear();
     }
 
     public void drawTurn(TurnData turnData, Pane turnPane) {
@@ -148,39 +161,18 @@ public class GuiDrawer {
         }
     }
 
+    public void cleanTurn(Pane turnPane) {
+        Label phaseLabel = (Label) turnPane.getChildren().get(1);
+        TextFlow playerOrderLabel = (TextFlow) turnPane.getChildren().get(2);
+
+        phaseLabel.setText("");
+        playerOrderLabel.getChildren().clear();
+    }
+
     private Pane drawIsland(IslandData islandData, int index, int motherNaturePosition, EventHandler<MouseEvent> onClick){
-        Pane islandPane = new Pane();
-        islandPane.setPrefSize(185, 200);
-        islandPane.getStyleClass().add("island");
-        islandPane.setOnMouseClicked(onClick);
-        islandPane.setAccessibleText(String.valueOf(index+1));
-        FlowPane islandFlowPane = new FlowPane();
-        islandFlowPane.setPrefSize(145, 160);
-        islandFlowPane.setLayoutX(20);
-        islandFlowPane.setLayoutY(20);
-        islandFlowPane.setAlignment(Pos.CENTER);
-        islandFlowPane.setAccessibleText(String.valueOf(index+1));
-        //Adding students
-        for (StudentColor color : islandData.students().keySet()) {
-            for (int j = 0; j < islandData.students().get(color); j++) {
-                ToggleButton toggleButton = createElementToggleButton("student", 25, 25, true);
-                setStudentButtonColor(toggleButton, color);
-                islandFlowPane.getChildren().add(toggleButton);
-            }
-        }
-        //adding mother nature
-        if (motherNaturePosition == index) {
-            ToggleButton toggleButton = createElementToggleButton("motherNature", 35, 35, true);
-            islandFlowPane.getChildren().add(toggleButton);
-        }
-        //Adding towers
-        for (int j = 0; j < islandData.getIslandSize() && islandData.getOwnership() != null; j++) {
-            ToggleButton toggleButton = createElementToggleButton("tower", 35, 50, true);
-            setTowerButtonColor(toggleButton, islandData.getOwnership());
-            islandFlowPane.getChildren().add(toggleButton);
-        }
-        islandPane.getChildren().add(islandFlowPane);
-        return islandPane;
+        GraphicIsland island = new GraphicIsland(islandData.getStudents(), islandData.getIslandSize(), islandData.getOwnership(), index, motherNaturePosition == index);
+        island.setOnMouseClicked(onClick);
+        return island;
     }
 
     private void drawCastle(CastleData castleData, BorderPane castle, Label nameLabel, boolean disabled) {
@@ -238,19 +230,11 @@ public class GuiDrawer {
         }
     }
 
-    private void drawCoin(int nCoin, ToggleButton coinButton){
+    private void drawCoin(int nCoin, ToggleButton coinButton) {
         if(nCoin > 0) {
             coinButton.getStyleClass().add("coinBackground");
             coinButton.setText(String.valueOf(nCoin));
         }
-    }
-
-    public ToggleButton createElementToggleButton(String style, int width, int height, boolean disabled){
-        ToggleButton toggleButton = new ToggleButton();
-        toggleButton.getStyleClass().add(style);
-        toggleButton.setDisable(disabled);
-        toggleButton.setPrefSize(width, height);
-        return toggleButton;
     }
 
     private void setStudentButtonColor(ToggleButton button, StudentColor studentColor) {

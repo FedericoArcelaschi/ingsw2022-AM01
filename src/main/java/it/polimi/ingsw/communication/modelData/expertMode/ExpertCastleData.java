@@ -33,4 +33,8 @@ public class ExpertCastleData extends CastleData {
         return s.toString();
     }
 
+    @Override
+    public int coins() {
+        return coins;
+    }
 }

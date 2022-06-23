@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.userInterface.gui.controller;
+package it.polimi.ingsw.client.userInterface.gui.graphicObjects;
 
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
