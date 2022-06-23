@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.communication.ClientMain;
-import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.GameType;
 import it.polimi.ingsw.server.communication.ServerMain;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,15 +14,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ServerReceiverMainTest {
     ClientMain c1,c2;
-    ServerMain s;
+    ServerMain serverMain;
 
     @BeforeEach
     void beforeEach() throws IllegalAccessException {
         ExecutorService executorService = Executors.newCachedThreadPool();
-        s = new ServerMain(1234);
+        serverMain = new ServerMain(1234);
         //c1 = new ClientMain("127.0.0.1", 1234, new Preferences("Fede",2,false));
         //c2 = new ClientMain("127.0.0.1", 1234, new Preferences("Lore",2,false));
-        executorService.submit(s);
+        executorService.submit(serverMain);
     }
 
     @Test
@@ -40,13 +39,12 @@ class ServerReceiverMainTest {
             //new ClientMain("Lore4-"+i,4,false, "127.0.0.1", 1234).connect();
         }
         Thread.sleep(1000);
-        assertEquals(n2+n3+n4, s.getConnectedPlayer(), "n players should be connected");
-        assertEquals(50, s.getGamesNumber(GameType.NORMAL_2_PLAYER));
-        assertEquals(30, s.getGamesNumber(GameType.NORMAL_3_PLAYER));
-        assertEquals(25, s.getGamesNumber(GameType.NORMAL_4_PLAYER));
-        assertEquals(0, s.getGamesNumber(GameType.EXPERT_2_PLAYER));
-        assertEquals(0, s.getGamesNumber(GameType.EXPERT_3_PLAYER));
-        assertEquals(0, s.getGamesNumber(GameType.EXPERT_4_PLAYER));
+        assertEquals(50, serverMain.getGamesNumber(GameType.NORMAL_2_PLAYER));
+        assertEquals(30, serverMain.getGamesNumber(GameType.NORMAL_3_PLAYER));
+        assertEquals(25, serverMain.getGamesNumber(GameType.NORMAL_4_PLAYER));
+        assertEquals(0, serverMain.getGamesNumber(GameType.EXPERT_2_PLAYER));
+        assertEquals(0, serverMain.getGamesNumber(GameType.EXPERT_3_PLAYER));
+        assertEquals(0, serverMain.getGamesNumber(GameType.EXPERT_4_PLAYER));
     }
 
     @Test

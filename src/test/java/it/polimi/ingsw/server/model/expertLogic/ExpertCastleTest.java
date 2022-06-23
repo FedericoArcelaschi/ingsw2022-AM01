@@ -64,8 +64,7 @@ public class ExpertCastleTest{
         } catch (it.polimi.ingsw.server.model.exceptions.TooManyStudentsException e) {
             throw new RuntimeException(e);
         }
-        //TODO: THIS METHOD IS PROTECTED. DO WE MAKE IT PUBLIC OR DO WE FIND ANOTHER WAY OF TESTING IT?
-        //expertCastle.removeStudentFromDiningRoom(StudentColor.YELLOW);
+        expertCastle.removeStudentFromDiningRoom(StudentColor.YELLOW);
         int numberOfYellows = expertCastle.getDiningRoom().get(StudentColor.YELLOW);
         assertEquals(1, numberOfYellows);
     }

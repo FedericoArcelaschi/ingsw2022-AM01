@@ -67,6 +67,7 @@ public class ExpertBoard extends Board {
         expertCharactersCards = tavern.extract();
     }
 
+    @Deprecated
     /**
      * Pays for the card and then calls applyEffect with the right parameters
      * @param idChar      character id corresponding to CharacterList's position
@@ -84,11 +85,9 @@ public class ExpertBoard extends Board {
         int actualCost = ec.getCost();
         try{
             ec.applyEffect(par);
-        } catch (StudentException e) {
+        } catch (StudentException | IllegalAccessException e) {
             System.err.println(e.getMessage());
             throw new StudentException(e);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         playedExpertChar = CharacterUtility.getChar(idChar);
         ((ExpertCastle) getCastle(turn.getCurrentPlayer())).payCharacter(actualCost);

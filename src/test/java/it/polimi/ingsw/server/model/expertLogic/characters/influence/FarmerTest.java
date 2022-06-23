@@ -39,6 +39,10 @@ class FarmerTest { //2° character
             castle1.addStudentInDiningRoom(StudentColor.YELLOW);
             professorsMap.updateProfessorsAssigning();
             castle2.addStudentInDiningRoom(StudentColor.YELLOW);
+        } catch (TooManyStudentsException e) {
+            e.printStackTrace();
+            fail();
+        }
             professorsMap.updateProfessorsAssigning();
 
             assertEquals(castle1.getTeam(), professorsMap.getProfessorsAssigning().get(StudentColor.YELLOW),
@@ -46,21 +50,41 @@ class FarmerTest { //2° character
             ParametersForCharacter parFC = new ParametersForCharacter();
             parFC.setInfluence(influence);
             parFC.setCurrentTeam(Team.WHITE);
-            CharacterUtility.FARMER
-                    .getFunction()
-                    .applyEffect(parFC);
-            assertEquals(castle2.getTeam(), professorsMap.getProfessorsAssigning().get(StudentColor.YELLOW),
+            try {
+                CharacterUtility.FARMER
+                        .getFunction()
+                        .applyEffect(parFC);
+            } catch (StudentException | IllegalAccessException e) {
+                e.printStackTrace();
+                fail();
+            }
+        assertEquals(castle2.getTeam(), professorsMap.getProfessorsAssigning().get(StudentColor.YELLOW),
                     "Federica payed (she's the current player) for the FARMER effect -> she has the Yellow professor now.");
-        }catch (Throwable e) {
-            e.printStackTrace();
+
+    }
+
+    void playPlanningPhaseFirstPlayer1(ExpertBoard expertBoard) {
+        try {
+            expertBoard.playCard(player1, 5);
+            expertBoard.changePhase();
+            expertBoard.playCard(player2, 8);
+        } catch (PhaseNotRightException e) {
+            throw new RuntimeException(e);
         }
+        expertBoard.getTurn().addCard(player1, new Card(5));
+        expertBoard.getTurn().addCard(player2, new Card(8));
+        expertBoard.getTurn().changePhase();
     }
 
     @Test
     void playExpertCharacterTest() {
         //SetUp
         ExpertBoard expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
-        expertBoard.extract4CharacterTesting( 2 );
+        if(!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.FARMER)) {
+            playExpertCharacterTest();
+            return;
+        }
+        playPlanningPhaseFirstPlayer1(expertBoard);
 
         try {
             expertBoard.moveStudentsToDiningRoom(player1, expertBoard.getCastle(player1).getWaitingRoom());
@@ -68,7 +92,7 @@ class FarmerTest { //2° character
             throw new RuntimeException(e);
         }
         try {
-            expertBoard.playExpertCard( 2, 0, List.of(StudentColor.values()) );
+            expertBoard.playExpertCard(2, 0, List.of(StudentColor.values()));
         } catch (StudentException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         } catch (CoinException ignored) {
@@ -78,7 +102,7 @@ class FarmerTest { //2° character
 
         for (StudentColor c: StudentColor.values()) {
             assertEquals(expertBoard.getCurrentTeam(), expertBoard.getProfessorsMap().get(c),
-                    "Every player has zero students in the dining room, therefore every professor should go to Lorenza");
+                "Every player has zero students in the dining room, therefore every professor should go to Lorenza");
         }
     }
 

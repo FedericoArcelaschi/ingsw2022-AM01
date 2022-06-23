@@ -35,7 +35,7 @@ public class TavernTest{
         List<StandardCharacter> expCards;
         expCards = tavern.extract().values().stream().toList();
         board.getBag().extract();
-        assertEquals(13, expCards.size());
+        assertEquals(3, expCards.size());
         assertTrue(expCards.contains(new StudentCharacter(1, board.getBag()))
                 || expCards.contains(new StudentCharacter(7, board.getBag()))
                 || expCards.contains(new StudentCharacter(10))
@@ -47,9 +47,7 @@ public class TavernTest{
                 || expCards.contains(new StandardCharacter(9))
                 || expCards.contains(new StandardCharacter(3))
                 || expCards.contains(new StandardCharacter(4))
-                || expCards.contains(new BlockCharacter(5)
-                )
-        );
+                || expCards.contains(new BlockCharacter(5)));
         int i = 0;
         for (StandardCharacter a : expCards) {
             if (a != null)

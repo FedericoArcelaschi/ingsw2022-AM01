@@ -1,7 +1,10 @@
 package it.polimi.ingsw.server.model.expertLogic.characters;
 
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility.getChar;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,4 +38,11 @@ class CharactersInfoTest {
         assertEquals(CharacterUtility.CENTAUR, getChar(6));
     }
 
+    @Test
+    void nothing() {
+        Arrays.stream(CharacterExplanation.values())
+                .toList().stream()
+                .map(CharacterExplanation::getDescription)
+                .forEach(System.out::println);
+    }
 }

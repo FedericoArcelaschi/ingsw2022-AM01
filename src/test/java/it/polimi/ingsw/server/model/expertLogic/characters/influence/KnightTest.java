@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class KnightTest { //8° character
 
     CharacterExplanation explanation = CharacterExplanation.KNIGHT;
-    private ExpertProfessors professorsMap;
     private ExpertInfluence influence;
     private Castle castle1, castle2;
     private String player1 = "Guido", player2 = "Benz";
@@ -31,9 +30,7 @@ public class KnightTest { //8° character
     void applyEffectTest() {
         castle1 = new ExpertCastle(Team.WHITE, 2, Bag.extractMany(7));
         castle2 = new ExpertCastle(Team.BLACK, 2, Bag.extractMany(7));
-        influence = new ExpertInfluence(
-                professorsMap
-                        = new ExpertProfessors(
+        influence = new ExpertInfluence( new ExpertProfessors(
                                 Map.of(player1, castle1, player2, castle2)));
 
         Island island = new ExpertIsland(new Island());
@@ -51,7 +48,6 @@ public class KnightTest { //8° character
         } catch (StudentException | IllegalAccessException e) {
             fail(e.getMessage());
         }
-
         assertEquals(2, influence.getInfluenceMap(island).get(Team.WHITE));
     }
 }

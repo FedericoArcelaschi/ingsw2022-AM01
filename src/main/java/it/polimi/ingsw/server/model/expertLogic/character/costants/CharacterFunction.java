@@ -329,7 +329,7 @@ enum CharacterFunction {
 
     private final ApplyEffect function;
 
-    <A, B, C> CharacterFunction(ApplyEffect function) {
+    CharacterFunction(ApplyEffect function) {
         this.function = function;
     }
 
