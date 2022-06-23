@@ -28,7 +28,6 @@ public class ClientReceiver extends Receiver {
     protected synchronized void messageSwitch(Message message) {
         switch (message.getType()) {
             case PING -> {
-                System.err.println("PONG");
                 heartBeatClient.validate();
                 out.println(new Ping().toJson());
             }

@@ -62,14 +62,14 @@ public class ServerMain implements Runnable {
             try{
                 socket = serverSocket.accept();
             } catch(IOException e) {
-                System.err.println(e.getMessage());
-                break; // Would get here if server socket was to be closed.
+                logger.error(e);
+                break;
             }
             logger.info("player connected on port " + socket.getPort());
-            lobbyManager.addPlayerNoPreferences(socket);
             Client client = new Client(socket);
-            //those methods need to be split because of future changes
             client.setup(heartBeatServer, lobbyManager, executor);
+            lobbyManager.addPlayerNoPreferences(client);
+            //those methods need to be split because of future changes
         }
         executor.shutdown();
     }

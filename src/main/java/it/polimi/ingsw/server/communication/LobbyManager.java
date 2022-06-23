@@ -28,7 +28,7 @@ public class LobbyManager {
     /**
      * List of players that didn't specify their preferences. Are updated with the lobby-infos.
      */
-    private final Set<Socket> clientsToInform = new HashSet<>();
+    private final Set<Client> clientsToInform = new HashSet<>();
 
     public LobbyManager() {
         logger.info("waiting room started");
@@ -37,10 +37,10 @@ public class LobbyManager {
         }
     }
 
-    public void addPlayerNoPreferences(Socket socket) {
+    public void addPlayerNoPreferences(Client client) {
         logger.info("new client added with no preferences. connected clients in lobby: " + getSumClientsInLobby());
-        clientsToInform.add(socket);
-        sendLobbyInfo(socket);
+        clientsToInform.add(client);
+        sendLobbyInfo(client);
     }
 
     /**
@@ -84,7 +84,6 @@ public class LobbyManager {
     private void informPlayers() {
        gameClientsMap.values().stream()
                 .flatMap(Collection::stream)
-                .map(Client::clientsSocket)
                 .forEach(this::sendLobbyInfo);
        clientsToInform.forEach(this::sendLobbyInfo);
     }
@@ -101,16 +100,9 @@ public class LobbyManager {
         }
     }
 
-    private void sendLobbyInfo(Socket socket) {
-        PrintWriter out;
-        try {
-            out = new PrintWriter(socket.getOutputStream(), true);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        out.println(getLobbyInfo().toJson());
-        logger.info("sent lobby info to client " + socket);
+    private void sendLobbyInfo(Client client) {
+        client.send(getLobbyInfo());
+        logger.info("sent lobby info to client " + client.username() + " on port. " + client.clientsSocket().getPort());
     }
 
     private LobbyInfo getLobbyInfo() {

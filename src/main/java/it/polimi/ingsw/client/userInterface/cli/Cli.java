@@ -197,6 +197,8 @@ public class Cli implements UserInterface {
     private boolean requestNewGame() {
         String query = "Do you want to play a new game? (y/n)";
         Boolean answer;
+        executor.shutdownNow();
+        //FIXME
         do {
             System.out.println(query);
             try {
