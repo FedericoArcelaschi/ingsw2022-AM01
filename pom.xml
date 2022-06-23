@@ -117,12 +117,12 @@
             <configuration>
               <archive>
                 <manifest>
-                  <packageName>it.polimi.ingsw.ERYANTIS</packageName>
+                  <packageName> it.polimi.ingsw.ERYANTIS </packageName>
+                  <mainClass> it.polimi.ingsw.startUp.Main </mainClass>
                 </manifest>
                 <manifestEntries>
-                  <Created-By>AM01</Created-By>
+                  <Created-By> AM01 - Giovanni Arriciati, Federico Arcelaschi, Lorenzo Aicardi </Created-By>
                 </manifestEntries>
-                <!--FIXME: complete the manifest-->
               </archive>
             </configuration>
         </plugin>
