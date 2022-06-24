@@ -7,15 +7,9 @@ import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.communication.modelData.BoardData;
-import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
-import it.polimi.ingsw.server.model.baseLogic.Board;
-import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.client.userInterface.UserInterface;
 import it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController;
 import it.polimi.ingsw.client.userInterface.gui.controller.LoginPaneController;
-import it.polimi.ingsw.server.model.baseLogic.Turn;
-import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
-import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -26,9 +20,6 @@ import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class Gui extends Application implements UserInterface {
@@ -54,6 +45,7 @@ public class Gui extends Application implements UserInterface {
         login = new Scene(loginFXML);
         stage.setScene(login);
         stage.show();
+        stage.setOnCloseRequest(event -> System.exit(0));
         loginPaneController.initialize(this::connect, this::sendPreferences);
     }
 

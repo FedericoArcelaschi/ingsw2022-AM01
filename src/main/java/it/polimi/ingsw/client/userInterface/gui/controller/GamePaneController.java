@@ -64,7 +64,7 @@ public class GamePaneController {
         expertMode.setVisible(boardData.characters().size() == 3);
 
         guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
-        guiDrawer.drawClouds(boardData.cloudList(), cloudFlowPane);
+        guiDrawer.drawClouds(boardData.cloudList(), cloudFlowPane, this::chooseCloud);
         guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandLeftPane, islandRightPane, islandsTopRow, islandsBotRow, this::island);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
         guiDrawer.drawCharacters(boardData.characters(), charFlowPane, this::payCharacter);

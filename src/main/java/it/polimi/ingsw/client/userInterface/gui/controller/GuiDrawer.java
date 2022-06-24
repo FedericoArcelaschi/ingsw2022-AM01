@@ -126,9 +126,12 @@ public class GuiDrawer {
         botRow.getChildren().clear();
     }
 
-    public void drawClouds(List<CloudData> cloudList, FlowPane cloudFlowPane){
+    public void drawClouds(List<CloudData> cloudList, FlowPane cloudFlowPane, EventHandler<MouseEvent> cloudClick) {
+        int i=0;
         for (CloudData cloud : cloudList) {
-            cloudFlowPane.getChildren().add(new GraphicCloud(cloud.studentList()));
+            GraphicCloud graphicCloud = new GraphicCloud(cloud.studentList(), i++);
+            graphicCloud.setOnMouseClicked(cloudClick);
+            cloudFlowPane.getChildren().add(graphicCloud);
         }
     }
 

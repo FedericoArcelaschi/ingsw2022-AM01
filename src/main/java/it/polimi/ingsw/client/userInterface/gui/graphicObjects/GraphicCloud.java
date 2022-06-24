@@ -10,14 +10,15 @@ import java.util.List;
 
 public class GraphicCloud extends Pane {
 
-    public GraphicCloud(List<StudentColor> students){
+    public GraphicCloud(List<StudentColor> students, int index){
         List<GraphicStudent> studentButtons = new ArrayList<>();
         for (StudentColor key : students) {
-            studentButtons.add(new GraphicStudent(key));
+            studentButtons.add(new GraphicStudent(key, true));
         }
         setStudentPosition(studentButtons);
         this.getStyleClass().add("cloud");
         this.setPrefSize(185,200);
+        this.setAccessibleText(String.valueOf(index+1));
     }
 
     private void setStudentPosition(List<GraphicStudent> students){
