@@ -85,7 +85,6 @@ public class ClientMain {
                     return false;
             }
         }
-        //return true;
     }
 
     public void runCommand(Command command) {

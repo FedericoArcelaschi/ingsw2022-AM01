@@ -115,7 +115,6 @@ public class Cli implements UserInterface {
     @Override
     public void endCurrentGame(EndGame endGameMessage) {
         clientMain.setState(ClientState.GAME_ENDED);
-        var e = Executors.newSingleThreadExecutor();
         System.out.println(endGameMessage.getCause());
         executor.submit(
                 () -> {
@@ -124,8 +123,8 @@ public class Cli implements UserInterface {
                         clientMain.sendPreferences(this.getValidPreferences());
                         clientMain.setState(ClientState.INSIDE_LOBBY);
                     } else {
-                        System.out.println("Gets in else");
-                        disconnected();
+                        System.out.println("Goodbye!");
+                        System.exit(0);
                     }
                 }
         );
