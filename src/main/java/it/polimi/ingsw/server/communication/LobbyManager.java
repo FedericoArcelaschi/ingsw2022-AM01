@@ -47,12 +47,11 @@ public class LobbyManager {
      * Adds a player to the requested waiting room. Informs all the players  of the same lobby that the state of the lobby changed.
      */
     public void addPlayer(Client client, Preferences preferences) {
-        Socket socket = client.clientsSocket();
         String username = validUsername(preferences.username());
         client.setUsername(username);
-        logger.info("client on port" + socket.getPort());
+        logger.info("client on port" + client.clientsSocket().getPort());
         logger.info("\t" + preferences.username() + " << joined the lobby. connected clients in lobby: " + getSumClientsInLobby());
-        clientsToInform.remove(socket);
+        clientsToInform.remove(client);
         Set<Client> oldClientList = gameClientsMap.get(preferences.getGameType());
         oldClientList.add(client);
         gameClientsMap.replace(
