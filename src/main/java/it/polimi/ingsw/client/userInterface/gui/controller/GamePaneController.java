@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.CharacterPane;
+import it.polimi.ingsw.client.userInterface.gui.graphicObjects.GraphicCharacter;
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.MultipleToggleGroup;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.command.CommandType;
@@ -87,18 +88,27 @@ public class GamePaneController {
         return alert.showAndWait().orElse(ButtonType.NO) == ButtonType.YES;
     }
 
-    public void moveStudentToDiningRoom() throws ParseException {
+    public void moveStudentToDiningRoom() {
         List<ToggleButton> selected = waitingRoomToggleGroup.getSelectedToggles();
         if (selected.size() == 0)
             return;
         List<String> parameters = new ArrayList<>();
         for (ToggleButton toggleButton: selected) {
-            StudentColor studentColor = StudentColor.parseColor(toggleButton.getAccessibleText());
+            StudentColor studentColor = null;
+            try {
+                studentColor = StudentColor.parseColor(toggleButton.getAccessibleText());
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
             parameters.add(studentColor.name());
         }
-        Command command = new Command(username, CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
-        System.out.println(command);
-        send.accept(command);
+        Command command;
+        try {
+            command = new Command(username, CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
+            send.accept(command);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void island(MouseEvent mouseEvent) {
@@ -117,33 +127,31 @@ public class GamePaneController {
                     } catch (ParseException ignored) {}
                     parameters.add(studentColor.name());
                 }
-                Command command = null;
+                Command command;
                 try {
                     command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
+                    send.accept(command);
                 } catch (ParseException ignored) {}
-                System.out.println(command);
-                send.accept(command);
             } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
                 List<String> parameters = new ArrayList<>();
                 //FIXME: problem returning in low index islands from high index islands
                 int moveDistance = Integer.parseInt(island.getAccessibleText()) - (boardData.motherNaturePosition() + 1);
                 parameters.add(String.valueOf(moveDistance > 0 ? moveDistance : moveDistance+12));
-                Command command = null;
+                Command command;
                 try {
                     command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
+                    send.accept(command);
                 } catch (ParseException ignored) {}
-                System.out.println(command);
-                send.accept(command);
             }
         }
         else {
             parameters.add(island.getAccessibleText());
             System.out.println(parameters);
-            Command command = null;
+            Command command;
             try {
                 command = new Command(username, CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
-            } catch (ParseException ignored) {}
-            System.out.println(command);
+                send.accept(command);
+            } catch (IllegalArgumentException | ParseException ignored) {}
         }
     }
 
@@ -154,13 +162,12 @@ public class GamePaneController {
         cloudId = Integer.parseInt(accessibleText.substring(accessibleText.length()-1));
         List<String> parameters = new ArrayList<>();
         parameters.add(String.valueOf(cloudId));
-        Command command = null;
+        Command command;
         try {
             command = new Command(username, CommandType.CHOOSE_CLOUD, parameters);
+            send.accept(command);
         } catch (ParseException ignored) {
         }
-        System.out.println(command);
-        send.accept(command);
     }
 
     public void playCard(MouseEvent mouseEvent) {
@@ -176,23 +183,25 @@ public class GamePaneController {
         try {
             command = new Command(username, CommandType.PLAY_CARD, parameters);
         } catch (ParseException ignored) {}
-        System.out.println(command);
         send.accept(command);
     }
 
     public void payCharacter(MouseEvent mouseEvent) {
         parameters.clear();
-        CharacterPane pane = (CharacterPane) mouseEvent.getTarget();
-        parameters.add(pane.getAccessibleText());
-        parameters.addAll(pane.getMultipleToggleGroup().getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList());
-        System.out.println(parameters);
-        Command command = null;
+        GraphicCharacter character;
+        try {
+            character = (GraphicCharacter) mouseEvent.getTarget();
+        } catch (ClassCastException e) {
+            FlowPane flowPane = (FlowPane) mouseEvent.getTarget();
+            character = (GraphicCharacter) flowPane.getParent();
+        }
+        parameters.add(character.getAccessibleText());
+        parameters.addAll(character.getMultipleToggleGroup().getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList());
+        Command command;
         try {
             command = new Command(username, CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(command);
+            send.accept(command);
+        } catch (IllegalArgumentException | ParseException ignored) {}
     }
 
     public void switchCommandMode() {
