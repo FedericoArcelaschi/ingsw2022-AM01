@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class LobbyManager {
 
-    private static Logger logger = LogManager.getLogger(LobbyManager.class); //.getName?
+    private static final Logger logger = LogManager.getLogger(LobbyManager.class); //.getName?
 
     /**
      * Game handler. Keeps all the live game information.
@@ -122,5 +122,14 @@ public class LobbyManager {
                         .flatMap(Collection::stream)
                         .filter(Objects::nonNull)
                         .count();
+    }
+
+    public void remove(Client client) {
+        if(!clientsToInform.remove(client))
+            gameClientsMap.forEach((key, value) -> value.remove(client));
+        clientsToInform.forEach(this::sendLobbyInfo);
+        gameClientsMap.forEach(
+                (key, value) ->
+                value.forEach(this::sendLobbyInfo));
     }
 }

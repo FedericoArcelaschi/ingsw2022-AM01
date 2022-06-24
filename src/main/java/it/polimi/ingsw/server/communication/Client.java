@@ -16,18 +16,20 @@ public final class Client {
 
     private final static Logger logger = LogManager.getLogger(Client.class);
     private final Socket clientsSocket;
-    private String username;
+    private final LobbyManager lobbyManager;
     private GameInterface gameInterface;
+    private String username;
 
-    public Client(Socket clientsSocket) {
-        logger.debug("New Client created @port: " +clientsSocket.getPort());
+    public Client(Socket clientsSocket, HeartBeatServer heartBeatServer, LobbyManager lobbyManager, ExecutorService executor) {
+        heartBeatServer.addClient(this);
         this.clientsSocket = clientsSocket;
+        this.lobbyManager = lobbyManager;
+        executor.submit(new ServerReceiver(this, heartBeatServer, lobbyManager));
+        logger.debug("New Client created @port: " +clientsSocket.getPort());
     }
 
-    public void setup(HeartBeatServer heartBeatServer, LobbyManager lobbyManager, ExecutorService executor) {
-        heartBeatServer.addClient(this);
-        ServerReceiver serverReceiver = new ServerReceiver(this, heartBeatServer, lobbyManager);
-        executor.submit(serverReceiver);
+    public void setup() {
+
     }
 
     public void send(Message message) {
@@ -48,9 +50,20 @@ public final class Client {
     }
 
 
-    public void endGame() {
-        gameInterface.endGame(this);
+    public void endConnection() {
+        if (gameInterface == null) {
+            this.lobbyManager.remove(this);
+        } else {
+            gameInterface.endGame(this);
+        }
+    }
 
+    /**
+     * Transfer a player from the game to outside the lobby.
+     */
+    public void putInLobby() {
+        gameInterface = null;
+        lobbyManager.addPlayerNoPreferences(this);
     }
 
     public void setGameInterface(GameInterface gameInterface) {

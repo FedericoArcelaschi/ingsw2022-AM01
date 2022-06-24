@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ServerMain implements Runnable {
 
-    private static Logger logger = LogManager.getLogger(ServerMain.class);
+    private static final Logger logger = LogManager.getLogger(ServerMain.class);
 
     private int port;
     private final int DEFAULT_PORT = 12345;
@@ -66,8 +66,7 @@ public class ServerMain implements Runnable {
                 break;
             }
             logger.info("player connected on port " + socket.getPort());
-            Client client = new Client(socket);
-            client.setup(heartBeatServer, lobbyManager, executor);
+            Client client = new Client(socket, heartBeatServer, lobbyManager, executor);
             lobbyManager.addPlayerNoPreferences(client);
             //those methods need to be split because of future changes
         }

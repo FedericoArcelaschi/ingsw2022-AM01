@@ -45,7 +45,9 @@ public class ServerReceiver extends Receiver {
             case ERROR -> {
                 /*TODO: the serverReceiver received the error message from the server and sent back an acknowledgment.*/
             }
-            case PREFERENCES -> lobbyManager.addPlayer(client, (Preferences) message);
+            case PREFERENCES ->
+                    lobbyManager.addPlayer(client, (Preferences) message);
         }
     }
+
 }
