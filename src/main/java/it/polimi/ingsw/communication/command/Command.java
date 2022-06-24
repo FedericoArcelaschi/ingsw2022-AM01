@@ -16,7 +16,7 @@ import static it.polimi.ingsw.communication.command.CommandType.getCommandType;
 public class Command {
     //all numbers should be passed as they are showed on the view
     private final CommandType type;
-    private final String username;
+    private String username;
     private final List<StudentColor> students = new ArrayList<>();
     private int motherNaturePositionShift;
     /**
@@ -36,14 +36,12 @@ public class Command {
      */
     private int cloudId;
 
-    public Command(String username, CommandType type, List<String> attributes) throws ParseException {
+    public Command(CommandType type, List<String> attributes) throws ParseException {
         this.type = type;
-        this.username = username;
         parseParameters(attributes);
     }
 
-    public Command(String username, String command) throws ParseException {
-        this.username = username;
+    public Command(String command) throws ParseException {
         command = command.strip();
         List<String> commandAttributes = new ArrayList<>(Arrays.stream(command.split(" ")).toList()); // FIXME: more spaces break the command.
         type = getCommandType(commandAttributes.remove(0));
@@ -95,6 +93,10 @@ public class Command {
         } catch (NumberFormatException e) {
             throw new ParseException("'"+attributes.get(0)+"' is not a valid number. Please insert a number. Type help for further information.", 0);
         }
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String username() {

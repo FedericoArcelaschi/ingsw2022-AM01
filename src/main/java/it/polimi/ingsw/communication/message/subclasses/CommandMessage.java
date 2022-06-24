@@ -10,9 +10,9 @@ public class CommandMessage extends Message {
 
     private final Command command;
 
-    public CommandMessage(String username, String command) throws ParseException {
+    public CommandMessage(String command) throws ParseException {
         super(MessageType.COMMAND);
-        this.command = new Command(username, command);
+        this.command = new Command(command);
     }
 
     public CommandMessage(Command command) {

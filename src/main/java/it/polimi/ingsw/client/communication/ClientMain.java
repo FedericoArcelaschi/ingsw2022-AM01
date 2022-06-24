@@ -21,7 +21,6 @@ public class ClientMain {
 
     private final UserInterface userInterface;
     private Socket socket;
-    private String username;
     private ClientSender clientSender;
     private ClientState state = ClientState.NOT_CONNECTED;
     private BoardData boardData;
@@ -53,7 +52,6 @@ public class ClientMain {
      * From Lobby information pulls the username and then sends them to the server
      */
     public void sendPreferences(Preferences preferences) {
-        this.username = preferences.username();
         clientSender.send(preferences);
     }
 
@@ -73,7 +71,7 @@ public class ClientMain {
                     System.out.println(boardData.characters().stream().map(CharacterData::getDescription).collect(Collectors.toList())); //fixme
                 else {
                     try {
-                        CommandMessage commandMessage = new CommandMessage(username, stringCommand);
+                        CommandMessage commandMessage = new CommandMessage(stringCommand);
                         clientSender.send(commandMessage);
                     } catch (ParseException e) {
                         userInterface.printError(e.getMessage());
