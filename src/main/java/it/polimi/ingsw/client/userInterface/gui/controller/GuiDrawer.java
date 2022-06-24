@@ -47,12 +47,9 @@ public class GuiDrawer {
         for (int i=1; i<=10; ++i) {
             String s = "[" + i + ", " + (i+1)/2 + "]";
             if(assistants.contains(s)) {
-                Pane pane = new Pane();
-                pane.setPrefSize(111, 200);
-                pane.setOnMouseClicked(playCard);
-                pane.setAccessibleText("card"+i);
-                pane.getStyleClass().addAll("cardAssistant" + (i), "assistant");
-                cardsFlowPane.getChildren().add(pane);
+                GraphicAssistant assistant = new GraphicAssistant(i);
+                assistant.setOnMouseClicked(playCard);
+                cardsFlowPane.getChildren().add(assistant);
             }
         }
     }
@@ -63,34 +60,9 @@ public class GuiDrawer {
 
     public void drawCharacters(List<CharacterData> characters, FlowPane charFlowPane, EventHandler<MouseEvent> payCharacter){
         for (CharacterData character : characters) {
-            CharacterPane pane = new CharacterPane();
-            pane.setPrefSize(111, 200);
-            pane.getStyleClass().addAll(List.of("character", CharacterExplanation.getInstance(character.getName()).getCSS()));
-            pane.setOnMouseClicked(payCharacter);
-
-            FlowPane flowPane = new FlowPane();
-            flowPane.setPrefSize(111, 100);
-            flowPane.setHgap(5);
-            flowPane.setAlignment(Pos.CENTER);
-            flowPane.setLayoutY(50);
-            MultipleToggleGroup toggleGroup = new MultipleToggleGroup(character.getStudents().orElse(new ArrayList<>()).size());
-            pane.setMultipleToggleGroup(toggleGroup);
-
-            for (StudentColor studentColor: character.getStudents().orElse(new ArrayList<>())) {
-                ToggleButton toggleButton = new GraphicStudent(studentColor, false);
-                toggleGroup.add(toggleButton);
-                flowPane.getChildren().add(toggleButton);
-            }
-
-            Tooltip tooltip = new Tooltip(character.getDescription());
-            Tooltip.install(pane, tooltip);
-            Tooltip.install(flowPane, tooltip);
-
-            pane.setAccessibleText(character.getName());
-            flowPane.setAccessibleText(character.getName());
-
-            pane.getChildren().add(flowPane);
-            charFlowPane.getChildren().add(pane);
+            GraphicCharacter graphicCharacter = new GraphicCharacter(character.getName(), character.getStudents().orElse(new ArrayList<>()), character.getDescription());
+            graphicCharacter.setOnMouseClicked(payCharacter);
+            charFlowPane.getChildren().add(graphicCharacter);
         }
     }
 

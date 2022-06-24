@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.expertLogic.character.costants;
 
+import org.jetbrains.annotations.NotNull;
+
 public enum CharacterExplanation{
     MONK("""
             Monk: this character offers the opportunity to add
@@ -76,6 +78,6 @@ public enum CharacterExplanation{
             if(name.equals(ce.name()))
                 return ce;
         }
-        return null;
+        throw new IllegalArgumentException("no such character");
     }
 }
