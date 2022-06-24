@@ -84,7 +84,7 @@ public class GameInterface {
 //        TODO: error disconnessione, information per win.
 //        for(Client c : clients.getClients()) {
             clients.forEach(cl -> cl.send(
-                    new EndGame("Player " + client.username() + " disconnected. The game is over.",
+                    new EndGame("Player " + client.username() + " disconnected. The game is over. \nPress any key to continue.",
                             AlertType.ERROR,
                             "",
                             Team.BLACK)));

@@ -75,6 +75,7 @@ class HeartBeatClient implements Runnable {
             System.err.println(e.getMessage());
         }
         if (!connected) {
+            System.out.println("Disconnected from HeartBeatClient");
             userInterface.disconnected();
         }
         run();

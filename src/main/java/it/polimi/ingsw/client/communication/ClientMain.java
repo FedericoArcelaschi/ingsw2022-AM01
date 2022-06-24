@@ -61,20 +61,11 @@ public class ClientMain {
      * Only for Input - Game commands
      * @param stringCommand the unformatted user input
      */
-    public void runCommand(String stringCommand) {
+    public boolean runCommand(String stringCommand) {
         if (socket.isClosed()) {
             userInterface.disconnected();
         }
         switch (state) {
-            case NOT_CONNECTED -> {
-
-            }
-            case OUTSIDE_LOBBY -> {
-
-            }
-            case INSIDE_LOBBY -> {
-
-            }
             case IN_GAME -> {
                 if (stringCommand.strip().equalsIgnoreCase("help"))
                     System.out.println(Outputs.HELP);
@@ -88,11 +79,13 @@ public class ClientMain {
                         userInterface.printError(e.getMessage());
                     }
                 }
+                return true;
             }
-            case GAME_ENDED -> {
-
+            default -> {
+                    return false;
             }
         }
+        //return true;
     }
 
     public void runCommand(Command command) {
