@@ -13,6 +13,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+/**
+ * This class encapsulates the controller. It is used to perform commands, as well as checking whehter or not the game is
+ * over, and checking for the validity of a command.
+ * Upon performing a command, an update is returned to its GameInterface, which will proceed to notify
+ * all players of the action.
+ */
 public class Game {
 
     private final static Logger logger = Logger.getLogger(Game.class);

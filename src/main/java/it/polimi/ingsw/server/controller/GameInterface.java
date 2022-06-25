@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * class to adapt the communication layer to the controller.
+ * Class to adapt the communication layer to the controller.
  */
 public class GameInterface {
 

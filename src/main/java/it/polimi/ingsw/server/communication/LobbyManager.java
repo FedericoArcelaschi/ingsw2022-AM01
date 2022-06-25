@@ -13,6 +13,10 @@ import java.net.Socket;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Class that handles game lobbies. Its purpose is to create games upon reaching the right amount of players,
+ * and notify players of the lobbies' status.
+ */
 public class LobbyManager {
 
     private static final Logger logger = LogManager.getLogger(LobbyManager.class); //.getName?

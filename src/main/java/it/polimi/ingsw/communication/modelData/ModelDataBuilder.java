@@ -11,6 +11,10 @@ import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardChar
 
 import java.util.*;
 
+/**
+ * The class is used to build objects that encapsulate the data of the single elements of the model.
+ * Each of its methods takes in input the respective portion of the model, and returns a class representing its data.
+ */
 public abstract class ModelDataBuilder {
     public static BoardData newBoardData(Board board, String username) {
         return new BoardData(
