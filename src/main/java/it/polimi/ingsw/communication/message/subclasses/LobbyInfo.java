@@ -50,7 +50,7 @@ public class LobbyInfo extends Message {
                 numberOfDrawnPlayers++;
                 if (player.length() > 10) {
                     builder.append(" ")
-                            .append(player.substring(0, 7))
+                            .append(player, 0, 7)
                             .append("...")
                             .append(' ')
                             .append('|');

@@ -19,7 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ExpertBoardTest{
 
     private static ExpertBoard expertBoard;
-    private String player1 = "Lorenzo", player2 = "Federico", player3 = "Giovanni";
+    private final String player1 = "Lorenzo";
+    private final String player2 = "Federico";
+    private final String player3 = "Giovanni";
 
     @BeforeEach
     public void setUp() {

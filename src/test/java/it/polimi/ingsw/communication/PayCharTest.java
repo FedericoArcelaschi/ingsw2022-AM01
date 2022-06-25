@@ -12,12 +12,12 @@ public class PayCharTest {
     @Test
     void errorMailman() {
         final String com = "paychar mailman 1";
-        assertThrowsExactly(IllegalArgumentException.class, ()-> new Command("", com));
+        assertThrowsExactly(IllegalArgumentException.class, ()-> new Command(com));
         final String com1 = "paychar mailman blue";
-        assertThrowsExactly(IllegalArgumentException.class, ()-> new Command("", com));
+        assertThrowsExactly(IllegalArgumentException.class, ()-> new Command(com));
         final String com2 = "paychar mailman";
         try {
-            new Command("", com);
+            new Command(com);
         } catch (ParseException e) {
             fail();
         }
@@ -31,12 +31,12 @@ public class PayCharTest {
             stringBuilder.append(" blue");
             if(i%2 == 0)
                 try {
-                    new Command("", stringBuilder.toString());
+                    new Command(stringBuilder.toString());
                 } catch (ParseException e) {
                     fail();
                 }
             else
-                assertThrowsExactly(IllegalArgumentException.class, ()-> new Command("", stringBuilder.toString()));
+                assertThrowsExactly(IllegalArgumentException.class, ()-> new Command(stringBuilder.toString()));
         }
 
     }
