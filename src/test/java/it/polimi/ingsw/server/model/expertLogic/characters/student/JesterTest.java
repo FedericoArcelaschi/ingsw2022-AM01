@@ -18,7 +18,8 @@ import java.util.random.RandomGenerator;
 import static java.util.Collections.shuffle;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Jester { //7° character
+public class JesterTest { //7° character
+
     private final CharacterExplanation explaination = CharacterExplanation.JESTER;
     private ExpertBoard expertBoard;
     private final String player1 = "pietro", player2 = "paolo";
@@ -68,7 +69,7 @@ public class Jester { //7° character
 
         assertEquals(waitingRoomForComparison,
                 castle.getWaitingRoom(),
-                "new waiting room contains the untouched waiting room + the students moved from Jester ");
+                "new waiting room contains the untouched waiting room + the students moved from JesterTest ");
 
         assertThrowsExactly(IllegalStateException.class,
                 ()-> expertBoard.playExpertCard(CharacterUtility.JESTER.getId(), 0, requestedStudents));
@@ -113,7 +114,7 @@ public class Jester { //7° character
 
         assertEquals(   waitingRoomForComparison,
                         castle.getWaitingRoom(),
-                "new waiting room contains the untouched waiting room + the students moved from Jester ");
+                "new waiting room contains the untouched waiting room + the students moved from JesterTest ");
     }
 
     @Test

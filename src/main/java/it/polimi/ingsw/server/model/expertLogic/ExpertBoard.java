@@ -67,7 +67,6 @@ public class ExpertBoard extends Board {
         expertCharactersCards = tavern.extract();
     }
 
-    @Deprecated
     /**
      * Pays for the card and then calls applyEffect with the right parameters
      * @param idChar      character id corresponding to CharacterList's position
@@ -123,10 +122,10 @@ public class ExpertBoard extends Board {
 
     private @NotNull ParametersForCharacter getParameters(CharacterParametersType characterParametersType, List<StudentColor> studentsList, Integer islandIndex) {
         return switch (characterParametersType) {
-            case STANDARD ->    standardParameters();
-            case STUDENT ->     studentParameters(studentsList, islandIndex);
-            case ISLAND ->      islandParameters(islandIndex);
-            case INFLUENCE ->   influenceParameters(studentsList);
+            case STANDARD       -> standardParameters();
+            case STUDENT        -> studentParameters(studentsList, islandIndex);
+            case ISLAND         -> islandParameters(islandIndex);
+            case INFLUENCE      -> influenceParameters(studentsList);
         };
     }
 

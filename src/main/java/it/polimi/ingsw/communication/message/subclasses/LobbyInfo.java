@@ -45,7 +45,7 @@ public class LobbyInfo extends Message {
             builder.append("|               |  ")
                     .append(gameType.expertMode ? "expert" : "normal")
                     .append(" mode  ||");
-            playerInLobbyMap.computeIfAbsent(gameType, k -> new HashSet<String>());
+            playerInLobbyMap.computeIfAbsent(gameType, k -> new HashSet<>());
             for (String player : (playerInLobbyMap.get(gameType).stream().toList())) {
                 numberOfDrawnPlayers++;
                 if (player.length() > 10) {
