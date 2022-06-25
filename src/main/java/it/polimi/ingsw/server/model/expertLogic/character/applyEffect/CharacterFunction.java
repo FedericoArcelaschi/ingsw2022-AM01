@@ -300,16 +300,18 @@ public enum CharacterFunction {
     TAXMAN(
         (ParametersForCharacter par)
         -> {
+            if(par.getRequestedStudentList() == null)
+                throw new IllegalArgumentException("TaxMan requires a color to be activated.");
+            if(par.getRequestedStudentList().isEmpty())
+                throw new IllegalArgumentException("TaxMan requires a color to be activated.");
             StudentColor student = par.getRequestedStudentList().get(0);
             List<StudentPlaces> placesList = par.getPlacesList();
             int players = par.getNumberOfPlayers();
-            final int studentsToMove = 3;
-            if (student == null)
-                throw new IllegalArgumentException("TaxMan requires a color to be activated.");
+            final int studentsToRemove = 3;
             for (int i = 0; i < players; i++) {
                 if(placesList.get(i) == null)
                     throw new IllegalArgumentException("a castle is missing");
-                for (int j = 0; j < studentsToMove; j++)
+                for (int j = 0; j < studentsToRemove; j++)
                     try {
                         placesList.get(i).removes(student, 0);
                     } catch (NoSuchStudentException ignored) {} //It's possible that a given player doesn't have 3 students of the requested color.
