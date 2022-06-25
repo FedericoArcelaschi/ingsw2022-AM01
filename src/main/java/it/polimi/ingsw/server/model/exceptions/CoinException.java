@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.model.exceptions;
 
 public class CoinException extends Exception{
-    private int expectedCoins;
-    private int availableCoins;
+    private final int expectedCoins;
+    private final int availableCoins;
 
     /**
      * @param expectedCoins coins needed

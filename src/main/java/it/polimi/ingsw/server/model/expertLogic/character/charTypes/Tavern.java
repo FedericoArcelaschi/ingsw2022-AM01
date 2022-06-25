@@ -10,8 +10,8 @@ import java.util.*;
  * Could contain the board to init the characters. Could also implement the character extraction.
  **/
 public class Tavern {
-    private long seed;
-    private static Bag bag;
+    private final long seed;
+    private final Bag bag;
     private final int numberOfCharacters = CharacterUtility.values().length+1; //final = 12
     private final int numberOfPlayableCharacter = 3;
 
@@ -20,7 +20,7 @@ public class Tavern {
      */
     public Tavern(Bag bag){
         seed = bag.getSeed();
-        Tavern.bag = bag;
+        this.bag = bag;
     }
 
     /**

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
-import it.polimi.ingsw.client.userInterface.gui.graphicObjects.CharacterPane;
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.GraphicCharacter;
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.MultipleToggleGroup;
 import it.polimi.ingsw.communication.command.Command;
@@ -104,7 +103,7 @@ public class GamePaneController {
         }
         Command command;
         try {
-            command = new Command(username, CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
+            command = new Command(CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
             send.accept(command);
         } catch (ParseException e) {
             throw new RuntimeException(e);
@@ -129,17 +128,16 @@ public class GamePaneController {
                 }
                 Command command;
                 try {
-                    command = new Command(username, CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
+                    command = new Command(CommandType.MOVE_STUDENT_TO_ISLAND, parameters);
                     send.accept(command);
                 } catch (ParseException ignored) {}
             } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
                 List<String> parameters = new ArrayList<>();
-                //FIXME: problem returning in low index islands from high index islands
                 int moveDistance = Integer.parseInt(island.getAccessibleText()) - (boardData.motherNaturePosition() + 1);
                 parameters.add(String.valueOf(moveDistance > 0 ? moveDistance : moveDistance+12));
                 Command command;
                 try {
-                    command = new Command(username, CommandType.MOVE_MOTHER_NATURE, parameters);
+                    command = new Command(CommandType.MOVE_MOTHER_NATURE, parameters);
                     send.accept(command);
                 } catch (ParseException ignored) {}
             }
@@ -149,7 +147,7 @@ public class GamePaneController {
             System.out.println(parameters);
             Command command;
             try {
-                command = new Command(username, CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
+                command = new Command(CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
                 send.accept(command);
             } catch (IllegalArgumentException | ParseException ignored) {}
         }
@@ -164,13 +162,13 @@ public class GamePaneController {
         parameters.add(String.valueOf(cloudId));
         Command command;
         try {
-            command = new Command(username, CommandType.CHOOSE_CLOUD, parameters);
+            command = new Command(CommandType.CHOOSE_CLOUD, parameters);
             send.accept(command);
         } catch (ParseException ignored) {
         }
     }
 
-    public void playCard(MouseEvent mouseEvent) {
+    public void playCard(MouseEvent mouseEvent) {   //TODO: fix jester command, taxman student drawing
         int cardId;
         //take card id from accessibleText
         String accessibleText = ((Pane) mouseEvent.getTarget()).getAccessibleText();
@@ -181,7 +179,7 @@ public class GamePaneController {
         parameters.add(String.valueOf(cardId));
         Command command = null;
         try {
-            command = new Command(username, CommandType.PLAY_CARD, parameters);
+            command = new Command(CommandType.PLAY_CARD, parameters);
         } catch (ParseException ignored) {}
         send.accept(command);
     }
@@ -199,7 +197,7 @@ public class GamePaneController {
         parameters.addAll(character.getMultipleToggleGroup().getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList());
         Command command;
         try {
-            command = new Command(username, CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
+            command = new Command(CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
             send.accept(command);
         } catch (IllegalArgumentException | ParseException ignored) {}
     }

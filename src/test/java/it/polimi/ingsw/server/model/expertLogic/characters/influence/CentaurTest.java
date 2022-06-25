@@ -22,7 +22,8 @@ public class CentaurTest { //6° character
     private ExpertProfessors professorsMap;
     private ExpertInfluence influence;
     private Castle castle1, castle2;
-    private String player1 = "Lorenza", player2 = "Federica";
+    private final String player1 = "Lorenza";
+    private final String player2 = "Federica";
 
     private ExpertIsland island;
 

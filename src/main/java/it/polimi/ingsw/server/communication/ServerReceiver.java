@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class ServerReceiver extends Receiver {
 
-    private static Logger logger = LogManager.getLogger(ServerReceiver.class);
+    private static final Logger logger = LogManager.getLogger(ServerReceiver.class);
 
     private final Client client;
     private final HeartBeatServer heartBeatServer;
@@ -45,7 +45,9 @@ public class ServerReceiver extends Receiver {
             case ERROR -> {
                 /*TODO: the serverReceiver received the error message from the server and sent back an acknowledgment.*/
             }
-            case PREFERENCES -> lobbyManager.addPlayer(client, (Preferences) message);
+            case PREFERENCES ->
+                    lobbyManager.addPlayer(client, (Preferences) message);
         }
     }
+
 }

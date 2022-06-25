@@ -22,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class influenceTesting {
 
     private Castle castle1, castle2;
-    private String player1 = "Guido", player2 = "Benz";
+    private final String player1 = "Guido";
+    private final String player2 = "Benz";
     private ExpertInfluence influence;
     private Island island;
     private Map<String, Castle> castleMap;

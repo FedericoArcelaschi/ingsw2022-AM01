@@ -23,12 +23,12 @@ public class CommandTest {
     @BeforeEach
     void setup() {
         //SEED 5: Taxman gets extracted
-        g = new Game(GameType.EXPERT_2_PLAYER, List.of("lore", "fede"), 5);
+        g = new Game(GameType.EXPERT_2_PLAYER, List.of("fede"), 5);
     }
 
     @Test
     void testMonk() throws ParseException {
-        Command command = new Command("fede", "paychar MONK 2 blue");
+        Command command = new Command("paychar MONK 2 blue");
         assertEquals(CharacterUtility.MONK, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE), command.getStudents());
         assertEquals(2, command.getIslandId());
@@ -36,7 +36,7 @@ public class CommandTest {
 
     @Test
     void testMailman() throws ParseException, WrongGameModeException {
-        Command command = new Command("fede", "paychar MAILMAN");
+        Command command = new Command("paychar MAILMAN");
         assertEquals(CharacterUtility.MAILMAN, CharacterUtility.getChar(command.getCharId()));
         g.executeCommand(command);
         //fixme assertEquals(3, g.getBoard().getPossibleMovingSteps());
@@ -44,28 +44,28 @@ public class CommandTest {
 
     @Test
     void testJester() throws ParseException {
-        Command command = new Command("fede", "paychar JESTER blue red");
+        Command command = new Command( "paychar JESTER blue red");
         assertEquals(CharacterUtility.JESTER, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE, StudentColor.RED), command.getStudents());
     }
 
     @Test
     void testStoryteller() throws ParseException {
-        Command command = new Command("fede", "paychar STORYTELLER blue red");
+        Command command = new Command( "paychar STORYTELLER blue red");
         assertEquals(CharacterUtility.STORYTELLER, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE, StudentColor.RED), command.getStudents());
     }
 
     @Test
     void testQueen() throws ParseException {
-        Command command = new Command("fede", "paychar QUEEN blue");
+        Command command = new Command("paychar QUEEN blue");
         assertEquals(CharacterUtility.QUEEN, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE), command.getStudents());
     }
 
     @Test
     void createCommand() throws ParseException {
-        Command command = new Command("fede", "\npaychar QUEEN blue");
+        Command command = new Command("\npaychar QUEEN blue");
         assertEquals(CharacterUtility.QUEEN, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE), command.getStudents());
     }
@@ -73,7 +73,7 @@ public class CommandTest {
     @Test
     void testTaxman() throws ParseException {
         //RUN THIS COMMAND WITH SEED 5.
-        Command command = new Command("lore", "paychar taxman blue");
+        Command command = new Command("paychar taxman blue");
         assertEquals(CharacterUtility.TAXMAN, CharacterUtility.getChar(command.getCharId()));
         assertEquals(List.of(StudentColor.BLUE), command.getStudents());
         try {
@@ -88,16 +88,16 @@ public class CommandTest {
     }
 
     private void setupTaxman() throws ParseException {
-        g.executeCommand(new Command("lore", "playcard 1"));
-        g.executeCommand(new Command("fede", "playcard 2"));
-        g.executeCommand(new Command("lore", "movestudentcastle pink pink pink"));
-        g.executeCommand(new Command("lore", "movemothernature 1"));
-        g.executeCommand(new Command("lore", "choosecloud 2"));
-        g.executeCommand(new Command("fede", "movestudentcastle red red pink"));
-        g.executeCommand(new Command("fede", "movemothernature 1"));
-        g.executeCommand(new Command("fede", "choosecloud 1"));
-        g.executeCommand(new Command("lore", "playcard 3"));
-        g.executeCommand(new Command("fede", "playcard 4"));
-        g.executeCommand(new Command("lore", "movestudentcastle green green green"));
+        g.executeCommand(new Command("playcard 1"));
+        g.executeCommand(new Command("playcard 2"));
+        g.executeCommand(new Command("movestudentcastle pink pink pink"));
+        g.executeCommand(new Command("movemothernature 1"));
+        g.executeCommand(new Command("choosecloud 2"));
+        g.executeCommand(new Command("movestudentcastle red red pink"));
+        g.executeCommand(new Command("movemothernature 1"));
+        g.executeCommand(new Command("choosecloud 1"));
+        g.executeCommand(new Command("playcard 3"));
+        g.executeCommand(new Command("playcard 4"));
+        g.executeCommand(new Command("movestudentcastle green green green"));
     }
 }

@@ -29,7 +29,8 @@ public enum Outputs {
             \t[ for expert mode only: ]
             \tPayChar NAME [N] [C]    -> pays for the requested character
             \tMore NAME               -> further informations about expert characters effects
-            \t\tnote: N->number, C->color, capitalization is not required\n\s""");// TODO: add a full rulebook
+            \t\tnote: N->number, C->color, capitalization is not required
+            \s""");// TODO: add a full rulebook
 
 
     private final String out;

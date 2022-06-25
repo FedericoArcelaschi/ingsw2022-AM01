@@ -21,7 +21,8 @@ public class MailmanTest { //4° character
 
     CharacterExplanation explanation = CharacterExplanation.MAILMAN;
 
-    private String player1 = "John", player2 = "Travolta";
+    private final String player1 = "John";
+    private final String player2 = "Travolta";
     private ExpertBoard expertBoard;
 
 

@@ -20,8 +20,9 @@ import java.util.random.RandomGenerator;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class QueenTest { //11° character
-    private CharacterExplanation characterExplanation = CharacterExplanation.QUEEN;
-    private String player1 = "Laura", player2 = "Niccolò";
+    private final CharacterExplanation characterExplanation = CharacterExplanation.QUEEN;
+    private final String player1 = "Laura";
+    private final String player2 = "Niccolò";
     private ExpertBoard expertBoard;
     private Castle currentPlayerCastle;
 

@@ -19,7 +19,7 @@ public class Cloud {
 
     public List<StudentColor> choose() {
         if(studentList.isEmpty())
-            throw new IllegalArgumentException("This cloud is no longer available.");;
+            throw new IllegalArgumentException("This cloud is no longer available.");
         List<StudentColor> students = new ArrayList<>(studentList);
         studentList.clear();
         return students;

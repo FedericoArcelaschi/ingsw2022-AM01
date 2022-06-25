@@ -23,7 +23,8 @@ public class StorytellerTest {// 10° character
 
     private final CharacterExplanation characterExplanation = CharacterExplanation.STORYTELLER;
     private ExpertBoard expertBoard;
-    private String player1 = "Piro", player2 = "Pinoli";
+    private final String player1 = "Piro";
+    private final String player2 = "Pinoli";
     private Castle currentPlayerCastle;
 
     @BeforeEach

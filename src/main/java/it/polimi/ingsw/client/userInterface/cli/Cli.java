@@ -19,6 +19,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.concurrent.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static it.polimi.ingsw.startUp.Outputs.CLEAR_SCREEN;
 
@@ -29,8 +31,8 @@ public class Cli implements UserInterface {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final long READ_TIME = 50;
     private String input = "";
-    private final StringBuffer stringBufferForInput = new StringBuffer();
-
+    private String newGame;
+    private boolean firstUpdate = true;
 
     public Cli() {
         clientMain = new ClientMain(this);
@@ -52,8 +54,8 @@ public class Cli implements UserInterface {
     }
 
     /**
-     * @implNote    Decided to wait to "start" the command parsing because
-     *              of problems with concurrent preferences & command parsing.
+     * @implNote Decided to wait to "start" the command parsing because
+     * of problems with concurrent preferences & command parsing.
      */
     @Override
     public void draw(BoardData update) {
@@ -61,50 +63,42 @@ public class Cli implements UserInterface {
         clientMain.setState(ClientState.IN_GAME);
         clientMain.setBoardData(update);
         System.out.println(update.toString());
-        executor.submit(this::readBuffer);
+        if (firstUpdate)
+            executor.submit(this::readBuffer);
+        firstUpdate = false;
     }
 
     /**
      * Input managing and Command generation.
      * Is a recursive function: will end only in case of a system shutdown.
      */
-    private void readBuffer() {
-        while (clientMain.getState() == ClientState.IN_GAME) {
-            ExecutorService e = Executors.newSingleThreadExecutor();
-            e.submit(this::input);
+    public void readBuffer() {
+        while (true) {
+            input = "";
             try {
-                e.awaitTermination(READ_TIME, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                input = br.readLine().strip();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
             if (!input.isBlank())
-                clientMain.runCommand(input);
-        }
-    }
-
-    private void input() {
-        input = "";
-        try {
-            input = br.readLine().strip();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                if (!clientMain.runCommand(input)) {
+                    break;
+                }
         }
     }
 
     @Override
     public void printLobby(LobbyInfo lobbyInfo) {
-        executor.submit(
-                () -> {
-                    System.out.println(CLEAR_SCREEN);
-                    System.out.println(lobbyInfo);
-                    if (clientMain.getState() == ClientState.OUTSIDE_LOBBY) {
-                        synchronized (System.out) {
-                            clientMain.sendPreferences(this.getValidPreferences());
-                        }
-                        clientMain.setState(ClientState.INSIDE_LOBBY);
-                    }
+        executor.submit(() -> {
+            System.out.println(CLEAR_SCREEN);
+            System.out.println(lobbyInfo);
+            if (clientMain.getState() == ClientState.OUTSIDE_LOBBY) {
+                synchronized (System.out) {
+                    clientMain.sendPreferences(this.getValidPreferences());
                 }
-        );
+                clientMain.setState(ClientState.INSIDE_LOBBY);
+            }
+        });
     }
 
     @Override
@@ -115,21 +109,22 @@ public class Cli implements UserInterface {
     /**
      * Ends the game and prompts the client if he wants to play another one.
      * If he wants to play another game he will be redirected to the Lobby
+     *
      * @param endGameMessage contains relevant information about the end of the game. A winner if present.
      */
     @Override
     public void endCurrentGame(EndGame endGameMessage) {
         clientMain.setState(ClientState.GAME_ENDED);
+        System.out.println(endGameMessage.getCause());
         executor.submit(
                 () -> {
-                    System.out.println(endGameMessage.getCause());
                     if (requestNewGame()) {
                         clientMain.setState(ClientState.OUTSIDE_LOBBY);
                         clientMain.sendPreferences(this.getValidPreferences());
                         clientMain.setState(ClientState.INSIDE_LOBBY);
                     } else {
-                        System.out.println("Disconnecting from endCurrentGame...");
-                        disconnected();
+                        System.out.println("Goodbye!");
+                        System.exit(0);
                     }
                 }
         );
@@ -148,7 +143,21 @@ public class Cli implements UserInterface {
     }
 
 
-//SUPPORT METHODS:
+    //SUPPORT METHODS:
+    private boolean requestNewGame() {
+        String query = "Do you want to play a new game? (y/n)";
+        Boolean answer;
+        do {
+            System.out.println(query);
+            query = "Please answer with yes or no.";
+            try {
+                answer = getBoolean(br.readLine().strip());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } while (answer == null);
+        return answer;
+    }
 
     /**
      * Before opening the connection with the server the client requires to insert the preferences.
@@ -156,7 +165,6 @@ public class Cli implements UserInterface {
     private @NotNull Preferences getValidPreferences() {
         int nPlayer;
         Boolean expertMode;
-        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String query = "Enter username:";
         String username;
         try {
@@ -194,23 +202,6 @@ public class Cli implements UserInterface {
             System.err.println(e.getMessage());
             return getValidPreferences();
         }
-    }
-
-    private boolean requestNewGame() {
-        String query = "Do you want to play a new game? (y/n)";
-        Boolean answer;
-        executor.shutdownNow();
-        //FIXME
-        do {
-            System.out.println(query);
-            try {
-                answer = getBoolean(br.readLine().strip());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            query = "Please answer with yes or no.";
-        } while (answer == null);
-        return answer;
     }
 
     private @Nullable Boolean getBoolean(String s) {

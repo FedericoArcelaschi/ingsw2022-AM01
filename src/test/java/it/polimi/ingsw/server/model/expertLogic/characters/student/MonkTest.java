@@ -21,7 +21,8 @@ public class MonkTest { //1° character
 
     CharacterExplanation explanation = CharacterExplanation.MONK;
 
-    private String player1 = "lorenza", player2 = "federica";
+    private final String player1 = "lorenza";
+    private final String player2 = "federica";
     private ExpertBoard expertBoard;
 
     @BeforeEach

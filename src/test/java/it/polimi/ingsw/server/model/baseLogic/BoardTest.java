@@ -16,7 +16,7 @@ public class BoardTest {
     private final String player1 = "a", player2= "2";
     private Board b;
     private Turn t;
-    private int seed = 1;
+    private final int seed = 1;
 
     @BeforeEach
     void setUp() {
@@ -26,25 +26,24 @@ public class BoardTest {
     }
 
     void turnSetUpStudents() throws PhaseNotRightException {
-        b.playCard(player1, 1);
         b.getTurn().addCard(player1, new Card(1));
         b.getTurn().changePhase();
-        b.playCard(player2, 2);
         b.getTurn().addCard(player2, new Card(2));
         b.getTurn().changePhase();
         //got through planning phase for two players
     }
 
     void turnSetUpMN() throws PhaseNotRightException {
-        b.playCard(player1, 1);
-        b.getTurn().addCard(player1, new Card(1));
-        b.getTurn().changePhase();
-        b.playCard(player2, 2);
-        b.getTurn().addCard(player2, new Card(2));
-        b.getTurn().changePhase();
+        turnSetUpStudents();
         //got through planning phase for two players
         b.getTurn().changePhase();
         //here turnphase is MOTHERNATURE
+    }
+
+    void turnSetUpCloud() throws PhaseNotRightException {
+        turnSetUpMN();
+        b.getTurn().changePhase();
+        //now it's chooseclouod
     }
     @Test
     public void testBoardIslandNumber() {
@@ -112,7 +111,8 @@ public class BoardTest {
     }
 
     @Test
-    public void testChooseCloud() throws NoSuchStudentException, TooManyStudentsException {
+    public void testChooseCloud() throws NoSuchStudentException, TooManyStudentsException, PhaseNotRightException {
+        turnSetUpStudents();
         List<StudentColor> cl = new ArrayList<>();
         //move 4 element to DR to free space for new students coming from cloud
         for(int i=0; i<4;i++){
@@ -123,6 +123,9 @@ public class BoardTest {
         } catch (PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
+        b.getTurn().changePhase();
+        //System.out.println(b.);
+        b.getTurn().changePhase();
         //move the students from cloud to WR
         List<StudentColor> cloud = b.getCloudList().get(0).getStudentList();
         try {
@@ -135,7 +138,8 @@ public class BoardTest {
         }
     }
     @Test
-    public void testMoveStudentToIsland() throws NoSuchStudentException {
+    public void testMoveStudentToIsland() throws NoSuchStudentException, PhaseNotRightException {
+        turnSetUpStudents();
         List<StudentColor> studentColorList =  new ArrayList<>();
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(1));
@@ -152,7 +156,7 @@ public class BoardTest {
         } catch (PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
-        assertEquals(studentColorList, b.getIslandList().get(0).getStudents());
+        assertEquals(students, b.getIslandList().get(0).getStudents());
         //test if the student get removed from castle waiting room
         assertEquals(7 - studentColorList.size(),
                 b.getCastle(player1).getWaitingRoom().size(),

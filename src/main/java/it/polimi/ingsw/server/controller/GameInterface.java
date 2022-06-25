@@ -9,6 +9,7 @@ import it.polimi.ingsw.server.model.baseLogic.Team;
 import javafx.scene.control.Alert.AlertType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -39,36 +40,36 @@ public class GameInterface {
     public void executeCommand(Command command, Client client) {
         logger.info(this + " is executing command: "+ command);
         try {
-            if (clients.stream()
-                    .anyMatch(clientInGame ->
-                                    clientInGame.equals(client) &&
-                                    clientInGame.username().equals(command.username())))
-                send(game.executeCommand(command));
-            else
-                client.send(new Error("you are in the wrong game. userID-socket don't match. Quit."));
+            clients.forEach(
+                    client1 -> {
+                        if(client1.equals(client))
+                                command.setUsername(client.username());
+                    });
+            send(game.executeCommand(command));
         } catch (Exception e) {
             logger.info("exception during a Game move:\n\t", e); //should be a WARNING
         }
     }
 
-    private void send(Map<String, Message> usernameMessageMap) {
+    private void send(@NotNull Map<String, Message> usernameMessageMap) {
         logger.info(this + " is sending an update to the client(s).");
-        logger.info("clients: " + clients.stream().map(Client::clientsSocket).collect(Collectors.toSet()));
+        logger.info("clients: " + clients.stream().map(Client::username).collect(Collectors.toSet()));
         usernameMessageMap.forEach(
                 (key, value) -> clients.stream()
                 .filter(i -> i.username().equals(key))
                 .findFirst()
                 .ifPresentOrElse(client -> client.send(value),
-                        () -> logger.info("client not in game")));
+                        () -> logger.info("client not in game!")));
     }
 
     public void endGame(Client client) {
+        clients.remove(client);
+        clients.forEach(Client::putInLobby);
         sendEndGameMsg(client);
         active = false;
     }
 
     private void sendEndGameMsg(Client client) {
-        clients.remove(client);
 //        //partiota 2 giocatori l'altro vince
 //        //partita a tre giocatori si vedrà
 //        //partita a 4 giocatori vince l'altra squadra
@@ -84,7 +85,7 @@ public class GameInterface {
 //        TODO: error disconnessione, information per win.
 //        for(Client c : clients.getClients()) {
             clients.forEach(cl -> cl.send(
-                    new EndGame("Player " + client.username() + " disconnected. The game is over.",
+                    new EndGame("Player " + client.username() + " disconnected. The game is over. \nPress any key to continue.",
                             AlertType.ERROR,
                             "",
                             Team.BLACK)));

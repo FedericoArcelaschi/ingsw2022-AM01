@@ -19,7 +19,7 @@ public class Game {
     private final Board board;
     private final Turn turn;
     private final int MAX_STUDENTS_TO_MOVE;
-    private boolean isLastTurn = false;
+    private final boolean isLastTurn = false;
     //FIXME: implement for Ending position, out of resources.
     //FIXME: better exception messages.
     private int movedStudents = 0;
