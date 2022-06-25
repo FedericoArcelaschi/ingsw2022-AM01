@@ -36,7 +36,7 @@ public class TaxmanTest {
         }
 
 
-        StandardCharacter taxman = new StudentCharacter(12);
+        StandardCharacter taxman = new StandardCharacter(12);
         ParametersForCharacter par4C = new ParametersForCharacter();
         par4C.setPlacesList(List.of(c1, c2, c3));
         par4C.setNumberOfPlayers(3);

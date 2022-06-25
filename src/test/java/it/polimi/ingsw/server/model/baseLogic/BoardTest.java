@@ -16,7 +16,7 @@ public class BoardTest {
     private final String player1 = "a", player2= "2";
     private Board b;
     private Turn t;
-    private int seed = 1;
+    private final int seed = 1;
 
     @BeforeEach
     void setUp() {

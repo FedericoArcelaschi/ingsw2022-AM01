@@ -27,7 +27,7 @@ import static it.polimi.ingsw.startUp.Outputs.CLEAR_SCREEN;
 public class Cli implements UserInterface {
 
     private final ClientMain clientMain;
-    private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final long READ_TIME = 50;
     private String input = "";

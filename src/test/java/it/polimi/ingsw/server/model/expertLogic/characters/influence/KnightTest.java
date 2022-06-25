@@ -24,7 +24,8 @@ public class KnightTest { //8° character
     CharacterExplanation explanation = CharacterExplanation.KNIGHT;
     private ExpertInfluence influence;
     private Castle castle1, castle2;
-    private String player1 = "Guido", player2 = "Benz";
+    private final String player1 = "Guido";
+    private final String player2 = "Benz";
 
     @Test
     void applyEffectTest() {

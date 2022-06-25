@@ -1,13 +1,11 @@
 package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.communication.message.Message;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 /**

@@ -8,16 +8,9 @@ import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.Parameters
 import java.util.*;
 
 public class StudentCharacter extends StandardCharacter {
-    private static Bag bag;
+    private final Bag bag;
     private final List<StudentColor> availableStudents = new ArrayList<>();
     private int numberOfAvailableStudents;
-
-    /**
-     * constructor for "stateless" characters
-     */
-    public StudentCharacter(int idChar) {
-        super(idChar);
-    }
 
     /**
      * Constructor for characters that have a buffer of available students
@@ -26,7 +19,7 @@ public class StudentCharacter extends StandardCharacter {
     public StudentCharacter(int idChar, Bag bag) {
         super(idChar);
         this.bag = bag;
-        switch (idChar) { //TODO: più funzionale
+        switch (idChar) {
             case 1, 11 ->   numberOfAvailableStudents = 4;
             case 7 ->       numberOfAvailableStudents = 6;
             default -> throw new IllegalArgumentException("Wrong character-id: can only be 1, 7, 11. Actual: " + idChar);

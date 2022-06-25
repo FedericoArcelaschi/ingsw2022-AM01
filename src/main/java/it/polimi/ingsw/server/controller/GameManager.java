@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class GameManager {
 
-    private static Logger logger = LogManager.getLogger(GameManager.class);
+    private static final Logger logger = LogManager.getLogger(GameManager.class);
     List<GameInterface> gameList;
 
     public GameManager() {

@@ -15,8 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.random.RandomGenerator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TavernTest{
     private static Turn t;
@@ -36,50 +35,8 @@ public class TavernTest{
         expCards = tavern.extract().values().stream().toList();
         board.getBag().extract();
         assertEquals(3, expCards.size());
-        assertTrue(expCards.contains(new StudentCharacter(1, board.getBag()))
-                || expCards.contains(new StudentCharacter(7, board.getBag()))
-                || expCards.contains(new StudentCharacter(10))
-                || expCards.contains(new StudentCharacter(12))
-                || expCards.contains(new StudentCharacter(11, board.getBag()))
-                || expCards.contains(new StandardCharacter(2))
-                || expCards.contains(new StandardCharacter(6))
-                || expCards.contains(new StandardCharacter(8))
-                || expCards.contains(new StandardCharacter(9))
-                || expCards.contains(new StandardCharacter(3))
-                || expCards.contains(new StandardCharacter(4))
-                || expCards.contains(new BlockCharacter(5)));
-        int i = 0;
-        for (StandardCharacter a : expCards) {
-            if (a != null)
-                i++;
+        for (StandardCharacter sc : expCards) {
+            assertNotNull(sc);
         }
-        assertEquals(3, i);
-    }
-
-
-    @Test
-    public void testExtract4Testing() {
-        List<CharacterUtility> expertModeCharacters = new ArrayList<>();
-        for (int i = 1; i < 13; i++) {
-            expertModeCharacters.add(tavern.extract4testing(i).getCharacterUtility());
-        }
-        //System.out.println(tavern.extract4testing(3).getCharacterName().name());
-        List<CharacterUtility> expertModeCharactersInfo4Comparison
-                = new ArrayList<>(
-                        Arrays.asList(
-                                CharacterUtility.MONK,
-                                CharacterUtility.FARMER,
-                                CharacterUtility.GUARD,
-                                CharacterUtility.MAILMAN,
-                                CharacterUtility.WITCH,
-                                CharacterUtility.CENTAUR,
-                                CharacterUtility.JESTER,
-                                CharacterUtility.KNIGHT,
-                                CharacterUtility.COOK,
-                                CharacterUtility.STORYTELLER,
-                                CharacterUtility.QUEEN,
-                                CharacterUtility.TAXMAN));
-        assertEquals(expertModeCharactersInfo4Comparison, expertModeCharacters,
-                "both CharacterList-lists should contain all characters names");
     }
 }

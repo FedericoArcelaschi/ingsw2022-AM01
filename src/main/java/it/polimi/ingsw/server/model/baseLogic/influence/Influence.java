@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class Influence {
 
-    private Professors professorsMap;
+    private final Professors professorsMap;
 
     public Influence(Professors professorsMap) {
         this.professorsMap = professorsMap;

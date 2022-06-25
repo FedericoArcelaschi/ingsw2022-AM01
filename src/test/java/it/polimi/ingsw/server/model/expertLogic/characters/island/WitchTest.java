@@ -20,7 +20,8 @@ public class WitchTest { //5° character
 
     CharacterExplanation explanation = CharacterExplanation.WITCH;
 
-    private String player1 = "Amico", player2 = "Frizz";
+    private final String player1 = "Amico";
+    private final String player2 = "Frizz";
     private ExpertBoard expertBoard;
 
     @BeforeEach

@@ -23,7 +23,8 @@ public class CookTest { //9° character
     private ExpertProfessors professorsMap;
     private ExpertInfluence influence;
     private Castle castle1, castle2;
-    private String player1 = "Gian Marco", player2 = "Antonino";
+    private final String player1 = "Gian Marco";
+    private final String player2 = "Antonino";
 
     @Test
     void applyEffectTest() {
