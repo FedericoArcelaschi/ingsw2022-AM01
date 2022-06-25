@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.expertLogic.character.costants;
+package it.polimi.ingsw.server.model.expertLogic.character.applyEffect;
 
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.GreaterTeam;
@@ -9,8 +9,6 @@ import it.polimi.ingsw.server.model.expertLogic.BlockedIsland;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
-import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ApplyEffect;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.InfluenceComputingFunction;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-enum CharacterFunction {
+public enum CharacterFunction {
     MONK(
         (ParametersForCharacter par)
         -> {

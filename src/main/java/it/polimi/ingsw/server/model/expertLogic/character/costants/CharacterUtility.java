@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.expertLogic.character.costants;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ApplyEffect;
+import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.CharacterFunction;
 import org.jetbrains.annotations.Contract;
 
 import java.text.ParseException;

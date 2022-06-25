@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.expertLogic.character.costants;
 
+import org.jetbrains.annotations.Nullable;
+
 public enum CharacterExplanation{
     MONK("""
             Monk: this character offers the opportunity to add
@@ -68,10 +70,18 @@ public enum CharacterExplanation{
         return "cardCharacter" + name().substring(0,1).toUpperCase() + name().substring(1).toLowerCase();
     }
 
+    /**
+     * @param id id >= 1 and id < number of Characters (12)
+     * @return the character in the same position
+     * @throws IllegalArgumentException in case of an invalid id.
+     */
     public static CharacterExplanation getInstance(int id) {
+        if(id < 1 || id > CharacterExplanation.values().length)
+            throw new IllegalArgumentException("not a valid Character id. Please give a value between 1 and " + CharacterExplanation.values().length);
         return CharacterExplanation.values()[id-1];
     }
-    public static CharacterExplanation getInstance(String name) {
+
+    public static @Nullable CharacterExplanation getInstance(String name) {
         for (CharacterExplanation ce: CharacterExplanation.values()) {
             if(name.equals(ce.name()))
                 return ce;
