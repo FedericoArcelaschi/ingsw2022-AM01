@@ -79,6 +79,6 @@
       </Tab>
    </tabs>
    <stylesheets>
-      <URL value="@css/test.css" />
+      <URL value="@css/style.css" />
    </stylesheets>
 </TabPane>
