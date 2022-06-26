@@ -127,7 +127,7 @@ public class GamePaneController {
             } else if (boardData.turn().currentPhase() == TurnPhase.MOTHERNATURE) {
                 List<String> parameters = new ArrayList<>();
                 int moveDistance = Integer.parseInt(island.getAccessibleText()) - (boardData.motherNaturePosition() + 1);
-                parameters.add(String.valueOf(moveDistance > 0 ? moveDistance : moveDistance+12));
+                parameters.add(String.valueOf(moveDistance > 0 ? moveDistance : moveDistance + boardData.islandList().size()));
                 Command command;
                 try {
                     command = new Command(CommandType.MOVE_MOTHER_NATURE, parameters);
