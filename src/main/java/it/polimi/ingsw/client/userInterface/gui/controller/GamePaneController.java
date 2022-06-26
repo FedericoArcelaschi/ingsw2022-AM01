@@ -8,9 +8,7 @@ import it.polimi.ingsw.communication.command.CommandType;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -30,7 +28,6 @@ public class GamePaneController {
     @FXML private ToggleButton expertMode;
     private MultipleToggleGroup waitingRoomToggleGroup;
     private Consumer<Command> send;
-    private String username;
     private BoardData boardData;
     private final List<String> parameters = new ArrayList<>();
 
@@ -51,8 +48,6 @@ public class GamePaneController {
 
     public void draw(BoardData boardData) {
         guiDrawer = new GuiDrawer(boardData.characters().size() == 3, boardData.nPlayer());
-
-        this.username = boardData.username();
         this.boardData = boardData;
 
         //FIXME: remove

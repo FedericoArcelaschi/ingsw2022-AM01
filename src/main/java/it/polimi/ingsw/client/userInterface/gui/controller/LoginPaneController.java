@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
-import it.polimi.ingsw.client.userInterface.gui.LoginPreferences;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.GameType;
@@ -11,7 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 
 import java.net.InetSocketAddress;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public class LoginPaneController {
