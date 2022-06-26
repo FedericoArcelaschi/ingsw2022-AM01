@@ -6,10 +6,9 @@ import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.InterfaceAdapter;
 import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
-import org.sonatype.inject.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * ExpertModeProfessor. Can implement custom computing functions
