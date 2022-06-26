@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.expertLogic.character.costants;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public enum CharacterExplanation{
     MONK("""
@@ -71,21 +71,19 @@ public enum CharacterExplanation{
     }
 
     /**
-     * @param id id >= 1 and id < number of Characters (12)
-     * @return the character in the same position
-     * @throws IllegalArgumentException in case of an invalid id.
+     * @param charId the ordinal number of the character. charId >= 1, charId <= 12
      */
-    public static CharacterExplanation getInstance(int id) {
-        if(id < 1 || id > CharacterExplanation.values().length)
-            throw new IllegalArgumentException("not a valid Character id. Please give a value between 1 and " + CharacterExplanation.values().length);
-        return CharacterExplanation.values()[id-1];
+    public static @NotNull CharacterExplanation getInstance(int charId) {
+        if(charId < 1 || charId > CharacterExplanation.values().length)
+            throw new IllegalArgumentException("Not a valid Character id. Please give a value between 1 and " + CharacterExplanation.values().length);
+        return CharacterExplanation.values()[charId - 1];
     }
 
-    public static @Nullable CharacterExplanation getInstance(String name) {
+    public static @NotNull CharacterExplanation getInstance(String name) {
         for (CharacterExplanation ce: CharacterExplanation.values()) {
             if(name.equals(ce.name()))
                 return ce;
         }
-        return null;
+        throw new IllegalArgumentException("'" + name + "' is not a valid Character name");
     }
 }

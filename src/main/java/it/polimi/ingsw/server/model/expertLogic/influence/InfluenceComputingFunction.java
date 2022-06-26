@@ -13,7 +13,10 @@ import java.util.Map;
  * in the decorator of ExpertInfluence
  */
 public enum InfluenceComputingFunction {
-    KNIGHT( //+2 of influence to the team who played paid the Knight
+    /**
+     * The knight gives +2 of influence to the team who played paid the Knight
+     */
+    KNIGHT(
         (Island island, Map<StudentColor, Team> professorsMap, Team currTeam) -> {
             //TODO: check for valid inputs!
             Map<Team, Integer> influenceMap = new HashMap<>();
@@ -38,7 +41,11 @@ public enum InfluenceComputingFunction {
             return influenceMap;
         }
     ),
-    CENTAUR( //doesn't count the towers
+    /**
+     * The centaur doesn't count the towers in the influence
+     * -> counts only the students on the island
+     */
+    CENTAUR(
         (Island island, Map<StudentColor, Team> professorsMap, PossibleParameters ignored) -> {
             Map<Team, Integer> influenceMap = new HashMap<>();
             //counts the students
@@ -53,17 +60,19 @@ public enum InfluenceComputingFunction {
             return influenceMap;
         }
     ),
-    COOK( //doesn't count the students of the given color
+    /**
+     * The cook doesn't count the students of the given color
+     */
+    COOK(
         (Island island, Map<StudentColor, Team> professorsMap, StudentColor student) -> {
             Map<Team, Integer> influenceMap = new HashMap<>();
             //counts the students
             for (Team t : Team.values()) {
                 int influence = 0;
-                for (StudentColor c : StudentColor.values()) {
+                for (StudentColor c : StudentColor.values())
                     if(c != student)
                         if (professorsMap.get(c) == t)
                             influence += island.getStudents().get(c);
-                }
                 influenceMap.put(t, influence);
             }
             return influenceMap;

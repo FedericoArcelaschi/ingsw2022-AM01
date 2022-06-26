@@ -12,10 +12,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Class that handles game lobbies. Its purpose is to create games upon reaching the right amount of players,
- * and notify players of the lobbies' status.
+  *Handles the server lobby.
+ * Creates a game upon reaching the right amount of players,
+ * and notify players of the updated lobbies' status.
  */
 public class LobbyManager {
 
@@ -48,7 +50,8 @@ public class LobbyManager {
     }
 
     /**
-     * Adds a player to the requested waiting room. Informs all the players  of the same lobby that the state of the lobby changed.
+     * Adds a player to the requested waiting room.
+     * Informs all the players of the same lobby that the state of the lobby changed.
      */
     public void addPlayer(Client client, Preferences preferences) {
         String username = validUsername(preferences.username());
@@ -65,6 +68,10 @@ public class LobbyManager {
         informPlayers();
     }
 
+    /**
+     * Checks that no other player choose the same username.
+     * Adds an asterisk to the end of the name to solve the conflict
+     */
     private String validUsername(@NotNull String username) {
         @NotNull String finalUsername = username;
         boolean isPresentName
@@ -77,6 +84,15 @@ public class LobbyManager {
         return username;
     }
 
+    public void remove(Client client) {
+        if(!clientsToInform.remove(client))
+            gameClientsMap.forEach((key, value) -> value.remove(client));
+        clientsToInform.forEach(this::sendLobbyInfo);
+        gameClientsMap.forEach(
+                (key, value) ->
+                        value.forEach(this::sendLobbyInfo));
+    }
+
     public int countGames(GameType type) {
         return this.gameManager.countGames(type);
     }
@@ -85,10 +101,10 @@ public class LobbyManager {
      * Sends to all the players in the lobby an updated
      */
     private void informPlayers() {
-       gameClientsMap.values().stream()
+        gameClientsMap.values().stream()
                 .flatMap(Collection::stream)
                 .forEach(this::sendLobbyInfo);
-       clientsToInform.forEach(this::sendLobbyInfo);
+        clientsToInform.forEach(this::sendLobbyInfo);
     }
 
     /**
@@ -126,14 +142,5 @@ public class LobbyManager {
                         .flatMap(Collection::stream)
                         .filter(Objects::nonNull)
                         .count();
-    }
-
-    public void remove(Client client) {
-        if(!clientsToInform.remove(client))
-            gameClientsMap.forEach((key, value) -> value.remove(client));
-        clientsToInform.forEach(this::sendLobbyInfo);
-        gameClientsMap.forEach(
-                (key, value) ->
-                value.forEach(this::sendLobbyInfo));
     }
 }

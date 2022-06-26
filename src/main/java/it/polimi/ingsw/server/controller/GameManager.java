@@ -25,15 +25,23 @@ public class GameManager {
     }
 
     public int countGames(GameType type) {
-        return (int) gameList.stream().filter(gameInterface -> gameInterface.getGameType() == type).count(); //TODO: maybe implement a map with games/player and add the option to only view  a game
+        return (int) gameList
+                .stream()
+                .filter(game -> game.getGameType() == type)
+                .count();
     }
 
     public Map<GameType, Integer> getActiveGames() {
         Map<GameType, Integer> activeGames = new HashMap<>();
         for (GameType g : GameType.values()) {
-            activeGames.put(g, gameList.stream().filter(x->x.getGameType().equals(g) && x.isActive()).toList().size());
+            activeGames
+                .put(g,
+                    gameList
+                        .stream()
+                        .filter(x -> x.getGameType().equals(g) &&
+                                     x.isActive())
+                        .toList().size());
         }
-        //return gameList.stream().flatMap(gameInterface -> activeGames.computeIfPresent(gameInterface.getGameType(), (g,i)->i++). ); FIXME
         return activeGames;
     }
 }

@@ -10,11 +10,13 @@ import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.InfluenceComputingFunction;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ProfessorsComputingExpert;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ProfessorsMapComputingFunctions;
 import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,15 +28,16 @@ public enum CharacterFunction {
         -> {
             //TODO: throw an exceptions for each wrong input!
             List<StudentColor> availableStudents = par.getAvailableStudentsList();
+            if(availableStudents == null)
+                throw new IllegalArgumentException("No student in monk");
             List<StudentColor> requestedStudents = par.getRequestedStudentList();
+            if(requestedStudents == null)
+                throw new IllegalArgumentException("No students to move");
+            if(requestedStudents.isEmpty())
+                throw new IllegalArgumentException("No students to move");
             Bag bag = par.getBag();
             List<StudentPlaces> placesList = par.getPlacesList();
-            final int StudentToMovePosition = 0;
 
-            if (availableStudents == null)
-                throw new IllegalArgumentException("No student in monk");
-            if (requestedStudents == null)
-                throw new IllegalArgumentException("No students to move");
             StudentPlaces island = placesList.get(par.getIslandIndex() + par.getNumberOfPlayers());
             if (island == null)
                 throw new IllegalArgumentException("No island in monk");
@@ -46,11 +49,11 @@ public enum CharacterFunction {
             }
 
             try {
-                island.adds(requestedStudents.get(StudentToMovePosition), -1); //Adds one student per use.
+                island.adds(requestedStudents.get(0), -1); //Adds one student per use.
             } catch (IllegalAccessException | TooManyStudentsException e) {
                 throw new AssertionError();
             }
-            availableStudents.remove(requestedStudents);
+            availableStudents.remove(requestedStudents.get(0));
             availableStudents.add(bag.extract());
         }
     ),
@@ -320,11 +323,12 @@ public enum CharacterFunction {
     );
 
     /**
-     *
-     * @param idChar between 1 and 12
+     * @param charId the ordinal number of the character. charId >= 1, charId <= 12
      */
-    public static ApplyEffect getCharFunction(int idChar){
-        return CharacterFunction.values()[idChar-1].function;
+    public static @NotNull ApplyEffect getCharFunction(int charId){
+        if(charId <=  0 || charId > CharacterFunction.values().length)
+            throw new IllegalArgumentException("Please insert a valid Character ID, " + charId + " is not.");
+        return CharacterFunction.values()[charId - 1].function;
     }
 
     private final ApplyEffect function;

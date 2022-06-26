@@ -56,7 +56,7 @@ public class GameInterface {
         logger.info("clients: " + clients.stream().map(Client::username).collect(Collectors.toSet()));
         usernameMessageMap.forEach(
                 (key, value) -> clients.stream()
-                .filter(i -> i.username().equals(key))
+                .filter(client -> client.username().equals(key))
                 .findFirst()
                 .ifPresentOrElse(client -> client.send(value),
                         () -> logger.info("client not in game!")));

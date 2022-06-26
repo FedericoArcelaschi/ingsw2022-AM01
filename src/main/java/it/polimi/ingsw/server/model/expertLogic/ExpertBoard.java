@@ -79,13 +79,12 @@ public class ExpertBoard extends Board {
     public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, PhaseNotRightException {
         if(turn.getCurrentPhase() == TurnPhase.PLANNING)
             throw new PhaseNotRightException("You can't use this command in this stage of the game.");
-        StandardCharacter ec = checkLegalExpertCard(idChar);
-        ParametersForCharacter par = getParameters(ec.getCharacterType(), studentsList, islandIndex);
-        int actualCost = ec.getCost();
+        StandardCharacter character = checkLegalExpertCard(idChar);
+        ParametersForCharacter par = getParameters(character, studentsList, islandIndex);
+        int actualCost = character.getCost();
         try{
-            ec.applyEffect(par);
+            character.applyEffect(par);
         } catch (StudentException | IllegalAccessException e) {
-            System.err.println(e.getMessage());
             throw new StudentException(e);
         }
         playedExpertChar = CharacterUtility.getChar(idChar);
@@ -102,11 +101,11 @@ public class ExpertBoard extends Board {
                         "Not possible to play " + charName + " card. During this turn " +
                                 playedExpertChar.name() + " is already active.");
 
-        StandardCharacter ec = expertCharactersCards.get(CharacterUtility.getChar(idChar));
+        CharacterUtility characterUtility = CharacterUtility.getChar(idChar);
 
-        if (ec == null) { //case where there is no active character but the card isn't available
+        if (expertCharactersCards.containsKey(characterUtility)) {
             String charactersName = expertCharactersCards.values().stream().map(StandardCharacter::getName).toString().replace("[", "").replace("]", "");
-            throw new IllegalArgumentException(CharacterUtility.getChar(idChar) + " was not an extracted character.\n" +
+            throw new IllegalArgumentException(characterUtility.name() + " was not an extracted character.\n" +
                     "Available characters are: " + charactersName);
         }
         int availableCoins = 0;
@@ -115,13 +114,20 @@ public class ExpertBoard extends Board {
                     .get(turn.getCurrentPlayer())
                     .getCoins();
         } catch (WrongGameModeException ignored) {}
-        if(availableCoins < ec.getCost())
-            throw new CoinException(ec.getCost(), availableCoins);
-        return ec;
+        StandardCharacter character = expertCharactersCards.get(characterUtility);
+        if(availableCoins < character.getCost())
+            throw new CoinException(character.getCost(), availableCoins);
+        return character;
     }
 
-    private @NotNull ParametersForCharacter getParameters(CharacterParametersType characterParametersType, List<StudentColor> studentsList, Integer islandIndex) {
-        return switch (characterParametersType) {
+    /**
+     * Factory to make tailored ParameterForCharacter objects for the character apply effects.
+     * Uses the client inputs and attributes from the board
+     * @param studentsList input from client
+     * @param islandIndex input from client
+     */
+    private @NotNull ParametersForCharacter getParameters(StandardCharacter character, List<StudentColor> studentsList, Integer islandIndex) {
+        return switch (character.getCharacterType()) {
             case STANDARD       -> standardParameters();
             case STUDENT        -> studentParameters(studentsList, islandIndex);
             case ISLAND         -> islandParameters(islandIndex);

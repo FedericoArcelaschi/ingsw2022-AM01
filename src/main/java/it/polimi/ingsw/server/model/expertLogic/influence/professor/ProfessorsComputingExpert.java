@@ -11,5 +11,4 @@ public interface ProfessorsComputingExpert<T> {
     void computeProfessorsMap(Map<String, Castle> castle,
                                           Map<StudentColor, Team> professorsMap,
                                           T var);
-
 }

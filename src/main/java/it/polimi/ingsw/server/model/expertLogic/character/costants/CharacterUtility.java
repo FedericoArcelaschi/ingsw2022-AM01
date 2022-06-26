@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.expertLogic.character.costants;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ApplyEffect;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.CharacterFunction;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 
@@ -57,15 +58,15 @@ public enum  CharacterUtility { //TODO: complete characters' explaination
     }
 
     /**
-     * @param charId >= 0, charId <= 12
+     * @param charId the ordinal number of the character. charId >= 1, charId <= 12
      */
-    public static CharacterUtility getChar(int charId) {
+    public static @NotNull CharacterUtility getChar(int charId) {
         if(charId <=  0 || charId > CharacterUtility.values().length)
-            throw new IllegalArgumentException("Please insert a valid Character ID");
+            throw new IllegalArgumentException("Please insert a valid Character ID, " + charId + " is not.");
         return CharacterUtility.values()[charId - 1];
     }
 
-    public static CharacterUtility getChar(String charName) throws  ParseException {
+    public static @NotNull CharacterUtility getChar(String charName) throws  ParseException {
         for (CharacterUtility expertCharacter : CharacterUtility.values()) {
             if (charName.equalsIgnoreCase(expertCharacter.name()))
                 return expertCharacter;

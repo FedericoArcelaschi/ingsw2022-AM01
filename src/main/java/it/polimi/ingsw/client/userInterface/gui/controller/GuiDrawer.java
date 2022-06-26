@@ -63,7 +63,7 @@ public class GuiDrawer {
         for (CharacterData character : characters) {
             CharacterPane pane = new CharacterPane();
             pane.setPrefSize(111, 200);
-            pane.getStyleClass().addAll(List.of("character", CharacterExplanation.getInstance(character.getName()).getCSS()));
+            pane.getStyleClass().addAll(List.of("character", CharacterExplanation.getInstance(character.getName()).getCSS())); //FIXME usa l'utility pls
             pane.setOnMouseClicked(payCharacter);
 
             FlowPane flowPane = new FlowPane();
