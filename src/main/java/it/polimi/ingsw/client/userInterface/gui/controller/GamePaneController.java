@@ -34,17 +34,10 @@ public class GamePaneController {
     private BoardData boardData;
     private final List<String> parameters = new ArrayList<>();
 
-    GuiDrawer guiDrawer = new GuiDrawer();
+    GuiDrawer guiDrawer;
 
     public void initialize(Consumer<Command> send) {
         this.send = send;
-    }
-
-    private void setToggleGroup(MultipleToggleGroup toggleGroup, ObservableList<Node> children) {
-        for (Node node : children) {
-            ToggleButton toggleButton = (ToggleButton) node;
-            toggleGroup.add(toggleButton);
-        }
     }
 
     public void clean() {
@@ -57,6 +50,8 @@ public class GamePaneController {
     }
 
     public void draw(BoardData boardData) {
+        guiDrawer = new GuiDrawer(boardData.characters().size() == 3, boardData.nPlayer());
+
         this.username = boardData.username();
         this.boardData = boardData;
 

@@ -162,6 +162,10 @@
     -fx-background-color: transparent;
 }
 
+.assistant-small{
+    -fx-background-size: 69.375, 125;
+}
+
 .cardAssistant1{
     -fx-background-image: url("/cards/Assistente1.png");
 }
