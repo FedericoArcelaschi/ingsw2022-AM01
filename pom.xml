@@ -1,14 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"
+  encoding="UTF-8"?>
 
 <project  xmlns="http://maven.apache.org/POM/4.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+  <modelVersion> 4.0.0 </modelVersion>
 
   <groupId> it.polimi.ingsw </groupId>
   <artifactId> AM01 </artifactId>
   <version> 2.0 - almost there! </version>
+  <url> https://github.com/FedericoArcelaschi-Polimi/ingsw2022-AM01 </url>
 
   <name> AM01 - Eriantys project </name>
 
@@ -19,6 +21,7 @@
   </properties>
 
   <dependencies>
+    <!-- server logger -->
     <dependency>
       <groupId> org.apache.logging.log4j </groupId>
       <artifactId> log4j-core </artifactId>
@@ -37,7 +40,7 @@
       <version>1.2.17 </version>
     </dependency>
 
-
+    <!-- annotations to improve IntelliJ's warnings -->
     <dependency>
       <groupId> org.jetbrains </groupId>
       <artifactId> annotations </artifactId>
@@ -45,6 +48,7 @@
       <scope> compile </scope>
     </dependency>
 
+    <!-- unit testing -->
     <dependency>
       <groupId> org.junit.jupiter </groupId>
       <artifactId>  junit-jupiter </artifactId>
@@ -59,6 +63,7 @@
       <scope> test </scope>
     </dependency>
 
+    <!-- java FX -->
     <dependency>
       <groupId> org.openjfx </groupId>
       <artifactId> javafx-controls </artifactId>
@@ -71,16 +76,19 @@
       <version> 18.0.1 </version>
     </dependency>
 
+    <!-- JSON library -->
     <dependency>
       <groupId> com.google.code.gson </groupId>
       <artifactId> gson </artifactId>
       <version> 2.9.0 </version>
     </dependency>
 
+    <!-- deployment -->
     <dependency>
-        <groupId> org.apache.maven.plugins </groupId>
-        <artifactId> maven-assembly-plugin </artifactId>
-        <version> 3.3.0 </version>
+      <groupId> org.apache.maven.plugins </groupId>
+      <artifactId> maven-assembly-plugin </artifactId>
+      <version> 3.3.0 </version>
+      <type> maven-plugin </type>
     </dependency>
   </dependencies>
 
@@ -88,11 +96,13 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.sonarsource.scanner.maven</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.7.0.1746</version>
+          <groupId> org.sonarsource.scanner.maven </groupId>
+          <artifactId> sonar-maven-plugin </artifactId>
+          <version> 3.7.0.1746 </version>
         </plugin>
-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <!-- default lifecycle, jar packaging:
+        see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging
+        -->
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.0.2</version>
@@ -101,48 +111,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
         </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
-        </plugin>
 
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.1.2</version>
-            <configuration>
-              <archive>
-                <manifest>
-                  <packageName> it.polimi.ingsw.ERYANTIS </packageName>
-                  <mainClass> it.polimi.ingsw.startUp.Main </mainClass>
-                </manifest>
-                <manifestEntries>
-                  <Created-By> AM01 - Giovanni Arriciati, Federico Arcelaschi, Lorenzo Aicardi </Created-By>
-                </manifestEntries>
-              </archive>
-            </configuration>
-        </plugin>
-
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
-        </plugin>
-
-        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-        <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
-        </plugin>
-
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
-
+        <!-- JavaFX -->
         <plugin>
           <groupId> org.openjfx </groupId>
           <artifactId> javafx-maven-plugin </artifactId>
@@ -161,11 +131,11 @@
         </configuration>
       </plugin>
 
+      <!--  Java Code Coverage Library see: https://www.jacoco.org/jacoco/ -->
       <plugin>
         <groupId> org.jacoco </groupId>
         <artifactId> jacoco-maven-plugin </artifactId>
         <version> 0.8.7 </version>
-
         <executions>
           <execution>
             <id> default-prepare-agent </id>
@@ -173,7 +143,6 @@
               <goal> prepare-agent </goal>
             </goals>
           </execution>
-
           <execution>
             <id> jacoco-report </id>
             <phase> test </phase>
@@ -186,22 +155,19 @@
 
       <plugin>
         <artifactId> maven-assembly-plugin </artifactId>
+        <version> 3.3.0 </version>
         <configuration>
-          <archive>
-            <manifest>
-                    mainClass = "it.polimi.ingsw.startUp.Main"
-            </manifest>
-          </archive>
-          <descriptorRefs>
-            jar-with-dependencies
-          </descriptorRefs>
+          <archive manifest='mainClass = "it.polimi.ingsw.startUp.Main"'/>
+          <descriptorRefs format = 'jar-with-dependencies'/>
         </configuration>
 
         <executions>
           <execution>
             <id> make-assembly </id>
             <phase> package </phase>
-            <goals> <goal> single </goal> </goals>
+            <goals>
+              <goal> single </goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
