@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.expertLogic.influence.professor.ProfessorsCo
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
 import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
@@ -36,8 +37,8 @@ public class ExpertInfluence extends Influence {
     }
 
     //for ExpertMode - Professors
-    public void decorateProfessors(ProfessorsComputingExpert<PossibleParameters> function, PossibleParameters x) {
-        professors.decorate(function, Optional.of(x));
+    public void decorateProfessors(ProfessorsComputingExpert<PossibleParameters> function, @Nullable PossibleParameters x) {
+        professors.decorate(function, x);
     }
 
     /**

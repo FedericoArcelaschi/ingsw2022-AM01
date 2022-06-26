@@ -6,12 +6,12 @@ import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.InterfaceAdapter;
 import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
- * ExpertModeProfessor. Can implement multiple computing functions
+ * ExpertModeProfessor. Can implement custom computing functions
  */
 public class ExpertProfessors extends Professors {
 
@@ -35,15 +35,19 @@ public class ExpertProfessors extends Professors {
         return professorsMap;
     }
 
-
-    public void decorate(ProfessorsComputingExpert<PossibleParameters> function, Optional<PossibleParameters> x) {
+    /**for ExpertMode - Professors
+     * @param function custom function that will be used in the next turn
+     * @param var a parameter that may be used to modify the professor location.
+     */
+    public void decorate(ProfessorsComputingExpert<PossibleParameters> function, @Nullable PossibleParameters var) {
         this.function = function;
-        var = x.orElse(null);
+        this.var = var;
     }
 
 
     public void reset(){
         function = InterfaceAdapter.adaptProfessorsExpert(defaultFunction);
+        var = null;
     }
 
 }
