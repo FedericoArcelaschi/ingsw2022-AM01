@@ -6,6 +6,11 @@
     -fx-background-position: center center;
 }
 
+.show{
+    -fx-background-color: blue;
+    -fx-opacity: 0.5;
+}
+
 #islandsPane{
     -fx-background-color: lightblue;
 }

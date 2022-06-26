@@ -9,4 +9,9 @@ public class GraphicTower extends ToggleButton {
         this.getStyleClass().addAll("tower", team.getCSS());
         this.setPrefSize(35,35);
     }
+
+    public GraphicTower(Team team, double prefWidth, double prefHeight) {
+        this.getStyleClass().addAll("tower", team.getCSS());
+        this.setPrefSize(prefWidth,prefHeight);
+    }
 }

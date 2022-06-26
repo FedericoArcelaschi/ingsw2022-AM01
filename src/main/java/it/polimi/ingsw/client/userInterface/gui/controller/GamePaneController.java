@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
+import it.polimi.ingsw.client.userInterface.gui.graphicObjects.GraphicCastle;
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.GraphicCharacter;
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.MultipleToggleGroup;
 import it.polimi.ingsw.communication.command.Command;
@@ -21,11 +22,10 @@ import java.util.function.Consumer;
 
 public class GamePaneController {
 
-    @FXML public BorderPane castlePane0;
-    @FXML public FlowPane castleTabHBox, cardsFlowPane, charFlowPane;
+    @FXML public FlowPane castleFlowPane, cardsFlowPane, charFlowPane;
     @FXML public Pane turnPane;
     @FXML public StackPane bottomStackPane;
-    @FXML private Pane waitingRoomPane, islandLeftPane, islandRightPane;
+    @FXML private Pane islandLeftPane, islandRightPane, myCastlePane;
     @FXML private FlowPane islandsTopRow, islandsBotRow, cloudFlowPane;
     @FXML private ToggleButton expertMode;
     private MultipleToggleGroup waitingRoomToggleGroup;
@@ -53,17 +53,18 @@ public class GamePaneController {
         guiDrawer.cleanIslands(islandLeftPane, islandRightPane, islandsTopRow, islandsBotRow);
         guiDrawer.cleanClouds(cloudFlowPane);
         guiDrawer.cleanTurn(turnPane);
+        guiDrawer.cleanCastles(myCastlePane, castleFlowPane);
     }
 
     public void draw(BoardData boardData) {
         this.username = boardData.username();
         this.boardData = boardData;
 
-        waitingRoomToggleGroup = new MultipleToggleGroup(boardData.nPlayer() == 3 ? 4 : 3);
-        setToggleGroup(waitingRoomToggleGroup, waitingRoomPane.getChildren());
+        //FIXME: remove
         expertMode.setVisible(boardData.characters().size() == 3);
 
-        guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), castlePane0, castleTabHBox);
+        GraphicCastle graphicCastle = guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), myCastlePane, castleFlowPane, this::moveStudentToDiningRoom);
+        waitingRoomToggleGroup = graphicCastle.getWaitingRoomToggleGroup();
         guiDrawer.drawClouds(boardData.cloudList(), cloudFlowPane, this::chooseCloud);
         guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandLeftPane, islandRightPane, islandsTopRow, islandsBotRow, this::island);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
@@ -87,7 +88,8 @@ public class GamePaneController {
         return alert.showAndWait().orElse(ButtonType.NO) == ButtonType.YES;
     }
 
-    public void moveStudentToDiningRoom() {
+    public void moveStudentToDiningRoom(MouseEvent mouseEvent) {
+        System.out.println("----");
         List<ToggleButton> selected = waitingRoomToggleGroup.getSelectedToggles();
         if (selected.size() == 0)
             return;
@@ -105,6 +107,7 @@ public class GamePaneController {
         try {
             command = new Command(CommandType.MOVE_STUDENT_TO_CASTLE, parameters);
             send.accept(command);
+            System.out.println(command);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

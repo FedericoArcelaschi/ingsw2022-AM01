@@ -27,19 +27,29 @@ import java.util.Map;
 
 public class GuiDrawer {
 
-    public void drawCastles(CastleData myCastle, List<CastleData> otherCastle, BorderPane myCastlePane , FlowPane castleTabHBox) {
-        GuiDrawer guiDrawer = new GuiDrawer();
+    public GraphicCastle drawCastles(CastleData myCastle, List<CastleData> otherCastle, Pane myCastlePane , FlowPane castleFlowPane, EventHandler<MouseEvent> moveStudentToCasle) {
         int i;
-        guiDrawer.drawCastle(myCastle, myCastlePane, null, false);
-        for (i = 0; i < otherCastle.size()+1; i++) {
-            VBox vbox = (VBox) castleTabHBox.getChildren().get(i);
-            Label nameLabel = (Label) ((Pane) vbox.getChildren().get(0)).getChildren().get(0);
-            BorderPane borderPane = (BorderPane) vbox.getChildren().get(1);
-            guiDrawer.drawCastle( i == 0? myCastle : otherCastle.get(i-1), borderPane, nameLabel, true);
+        GraphicCastle myGraphicCastle = new GraphicCastle(myCastle,false,otherCastle.size() == 2);
+        myGraphicCastle.getDiningRoom().setOnMouseClicked(moveStudentToCasle);
+        myCastlePane.getChildren().add(myGraphicCastle);
+
+        castleFlowPane.getChildren().add(new OtherGraphicCastle(myCastle,otherCastle.size() == 2));
+
+        for (i = 1; i < otherCastle.size()+1; i++) {
+            CastleData castleData = otherCastle.get(i-1);
+            castleFlowPane.getChildren().add(new OtherGraphicCastle(castleData,otherCastle.size() == 2));
         }
-        while (i<castleTabHBox.getChildren().size()) {
-            VBox vbox = (VBox) castleTabHBox.getChildren().get(i);
-            castleTabHBox.getChildren().remove(vbox);
+        return myGraphicCastle;
+    }
+
+    public void cleanCastles(Pane myCastlePane, FlowPane castleFlowPane) {
+        cleanCastle(myCastlePane);
+        for (int i = 0; i < castleFlowPane.getChildren().size(); i++) {
+            VBox vbox = (VBox) castleFlowPane.getChildren().get(i);
+            //Label nameLabel = (Label) ((Pane) vbox.getChildren().get(0)).getChildren().get(0);
+            BorderPane borderPane = (BorderPane) vbox.getChildren().get(1);
+            //nameLabel.setText("");
+            cleanCastle(i == 0 ? myCastlePane : borderPane);
         }
     }
 
@@ -79,7 +89,6 @@ public class GuiDrawer {
         }
         //add left
         FlowPane fp = (FlowPane) islandPaneList.get(j).getChildren().get(0);
-        System.out.println(fp.getChildren());
         left.getChildren().add(islandPaneList.get(j++));
         //add in top row
         for (; j < (islandPaneList.size()+1)/2; j++)
@@ -151,7 +160,7 @@ public class GuiDrawer {
     }
 
     private void drawCastle(CastleData castleData, BorderPane castle, Label nameLabel, boolean disabled) {
-        Pane waitingRoomPane = (Pane) castle.getBottom();
+        /*Pane waitingRoomPane = (Pane) castle.getBottom();
         Pane towerPane = (Pane) castle.getTop();
         Pane teacherTablePane = (Pane) ((VBox) castle.getCenter()).getChildren().get(0);
         Pane diningRoomPane = (Pane) ((VBox) castle.getCenter()).getChildren().get(1);
@@ -163,7 +172,12 @@ public class GuiDrawer {
         drawDiningRoom(castleData.diningRoom(), diningRoomPane);
         drawTeachers(castleData.teachers(), castleData.towerColor(), teacherTablePane);
         drawTower(castleData.towerColor(), castleData.nTower(), towerPane);
-        drawCoin(castleData.coins(), coinButton);
+        drawCoin(castleData.coins(), coinButton);*/
+
+    }
+
+    private void cleanCastle(Pane castle) {
+        castle.getChildren().clear();
     }
 
     private void drawWaitingRoom(List<StudentColor> waitingRoom, Pane waitingRoomPane, boolean disabled) {
@@ -175,6 +189,12 @@ public class GuiDrawer {
             }
             else
                 toggleButton.setDisable(true);
+        }
+    }
+
+    private void cleanWaitingRoom(Pane waitingRoomPane) {
+        for (int i = 0; i < waitingRoomPane.getChildren().size(); i++) {
+            ToggleButton toggleButton = (ToggleButton) waitingRoomPane.getChildren().get(i);
         }
     }
 
