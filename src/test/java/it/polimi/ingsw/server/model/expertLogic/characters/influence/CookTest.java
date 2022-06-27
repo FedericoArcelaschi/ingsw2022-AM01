@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CookTest { //9° character
 
     CharacterExplanation explanation = CharacterExplanation.COOK;
-    private ExpertProfessors professorsMap;
     private ExpertInfluence influence;
     private Castle castle1, castle2;
     private final String player1 = "Giammarco";
@@ -34,14 +33,13 @@ public class CookTest { //9° character
 
     @Test
     void applyEffectTest() {
-        castle1 = new ExpertCastle(Team.WHITE, 2, Bag.extractMany(7));
-        castle2 = new ExpertCastle(BLACK, 2, Bag.extractMany(7));
-        influence = new ExpertInfluence(
-                professorsMap
-                        = new ExpertProfessors(
-                        Map.of(player1, castle1, player2, castle2)));
+        castle1     = new ExpertCastle(Team.WHITE, 2, Bag.extractMany(7));
+        castle2     = new ExpertCastle(BLACK, 2, Bag.extractMany(7));
+        influence   = new ExpertInfluence(
+                            new ExpertProfessors(
+                                Map.of(player1, castle1, player2, castle2)));
 
-        Island island = new ExpertIsland(new Island());
+        var island = new ExpertIsland(new Island());
 
         for (Team t : Team.values())
             assertEquals(0, influence.getInfluenceMap(island).get(t));

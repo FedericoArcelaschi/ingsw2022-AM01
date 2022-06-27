@@ -4,8 +4,7 @@ public enum Outputs {
 
     CLEAR_SCREEN("\033[H\033[2J"),
 
-    USER_TYPE_REQUEST(
-            """
+    USER_TYPE_REQUEST("""
             What application do you want to launch?
                 "server"    -> you start an Eriantys host. You'll need this in order to play a game with your friends on the local network.
                 "t-client"  -> you start an Eriantys textual client. You'll be able to join a game and play it directly on your terminal.

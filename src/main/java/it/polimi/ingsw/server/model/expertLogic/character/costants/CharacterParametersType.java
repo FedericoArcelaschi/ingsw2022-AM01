@@ -1,8 +1,13 @@
 package it.polimi.ingsw.server.model.expertLogic.character.costants;
 
-/**
- * Possible Parameters 'groups' for the Parameter for Character building
- * #{@link it.polimi.ingsw.server.model.expertLogic.ExpertBoard #getParameter()}
+import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
+
+import java.util.List;
+
+ /**
+ * Possible Parameters 'groups' for the Parameter for Character building.
+ *
+ * @see     it.polimi.ingsw.server.model.expertLogic.ExpertBoard#getParameters(StandardCharacter, List, Integer)
  */
 public enum CharacterParametersType {
     STUDENT,

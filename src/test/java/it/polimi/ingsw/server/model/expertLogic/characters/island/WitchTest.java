@@ -25,7 +25,7 @@ public class WitchTest { //5° character
     void setUp() {
         expertBoard = new ExpertBoardStub(player1, player2, CharacterUtility.WITCH);
         expertBoard.playPlanningPhaseFirstPlayer1();
-        expertBoard.moveStudentsToDiningRoom();
+        expertBoard.easyMoveStudentsToDiningRoom();
     }
 
         @Test

@@ -26,7 +26,7 @@ public class CentaurTest { //6° character
     void setUp() throws CoinException, StudentException, PhaseNotRightException {
         expertBoard = new ExpertBoardStub(player1, player2, CharacterUtility.CENTAUR);
         expertBoard.playPlanningPhaseFirstPlayer1();
-        expertBoard.moveStudentsToDiningRoom();
+        expertBoard.easyMoveStudentsToDiningRoom();
         firstRound();
 
     }

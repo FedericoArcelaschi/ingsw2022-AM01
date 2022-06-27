@@ -77,7 +77,7 @@ public class ExpertBoardStub extends ExpertBoard {
      * current player gains two coins.
      * Only for setUp.
      */
-    public void moveStudentsToDiningRoom() {
+    public void easyMoveStudentsToDiningRoom() {
         try {
             moveStudentsToDiningRoom(getCurrentPlayer(), studentColors);
             //gains 2 coins because of the stub.

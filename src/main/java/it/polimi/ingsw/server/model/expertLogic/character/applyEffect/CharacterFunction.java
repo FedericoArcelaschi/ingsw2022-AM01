@@ -21,6 +21,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Implementations for {@link ApplyEffect}
+ * Dynamically applied to the different Characters
+ * @see     ParametersForCharacter
+ * @see
+ */
 public enum CharacterFunction {
     MONK(
         (ParametersForCharacter par)
@@ -288,13 +294,15 @@ public enum CharacterFunction {
         (ParametersForCharacter par)
         -> {
             List<StudentColor> requestedStudents = par.getRequestedStudentList();
+            if(requestedStudents == null)
+                throw new IllegalArgumentException("No student given to the queen: impossible to play the card.");
             List<StudentColor> availableStudents = par.getAvailableStudentsList();
             Bag bag = par.getBag();
             List<StudentPlaces> placesList = par.getPlacesList();
             final int studentsToMove = 1;
             final int availableStudentsSize = 4;
             if(availableStudents.size() != availableStudentsSize)
-                throw new IllegalArgumentException("wrong number of students available on Queen character.");
+                throw new IllegalArgumentException("ERROR: wrong number of students available on Queen character.");
             if(requestedStudents.get(0) == null)
                 throw new IllegalArgumentException("No student given to the queen: impossible to play the card.");
             StudentPlaces castle = placesList.get(0);
