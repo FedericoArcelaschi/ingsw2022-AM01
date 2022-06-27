@@ -20,7 +20,7 @@ public class CentaurTest { //6° character
 
     CharacterExplanation explanation = CharacterExplanation.CENTAUR;
     ExpertBoardStub expertBoard;
-    private String player1 = "giorgio", player2 = "moredered";
+    private String player1 = "giorgio", player2 = "moroder";
 
     @BeforeEach
     void setUp() throws CoinException, StudentException, PhaseNotRightException {
