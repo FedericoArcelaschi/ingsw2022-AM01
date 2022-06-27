@@ -3,6 +3,7 @@ package it.polimi.ingsw.startUp;
 public enum Outputs {
 
     CLEAR_SCREEN("\033[H\033[2J"),
+
     USER_TYPE_REQUEST(
             """
             What application do you want to launch?

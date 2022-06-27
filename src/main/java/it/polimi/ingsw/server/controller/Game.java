@@ -92,6 +92,7 @@ public class Game {
         List<StudentColor> students = command.getStudents();
         movedStudents += students.size();
         if (movedStudents > MAX_STUDENTS_TO_MOVE) {
+            movedStudents -= students.size();
             return Map.of(command.username(), new Error("you are trying to move too many students"));
         }
         try {
