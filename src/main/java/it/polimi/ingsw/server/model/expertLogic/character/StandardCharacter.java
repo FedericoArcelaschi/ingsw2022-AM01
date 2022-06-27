@@ -32,9 +32,7 @@ public class StandardCharacter {
 
     /**
      * Standard effect method
-     * @param par ParametersForCharacter object that contains the right parameters.
-     * @throws StudentException
-     * @throws IllegalAccessException
+     * <p>to see the implementations check out {@link it.polimi.ingsw.server.model.expertLogic.character.applyEffect.CharacterFunction}
      */
     public void applyEffect(ParametersForCharacter par) throws StudentException, IllegalAccessException {
         function.applyEffect(par);
