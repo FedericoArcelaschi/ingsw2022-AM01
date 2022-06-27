@@ -37,7 +37,7 @@ public class GameInterface {
         send(game.updateAll());
     }
 
-    public void executeCommand(Command command, Client client) {
+    public synchronized void executeCommand(Command command, Client client) {
         logger.info(this + " is executing command: "+ command);
         try {
             clients.forEach(
