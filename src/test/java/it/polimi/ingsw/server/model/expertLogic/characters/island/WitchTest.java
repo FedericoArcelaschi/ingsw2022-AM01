@@ -1,23 +1,15 @@
 package it.polimi.ingsw.server.model.expertLogic.characters.island;
 
-import it.polimi.ingsw.server.model.baseLogic.Card;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
-import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.BlockedIsland;
-import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoardStub;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
-import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.BlockingCharacter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,29 +19,13 @@ public class WitchTest { //5° character
 
     private final String player1 = "Amico";
     private final String player2 = "Frizz";
-    private ExpertBoard expertBoard;
+    private ExpertBoardStub expertBoard;
 
     @BeforeEach
     void setUp() {
-       expertBoard = new ExpertBoardStub(player1, player2, CharacterUtility.WITCH);
-        playPlanningPhaseFirstPlayer1();
-        moveStudentsToWaitingRoom();
-    }
-
-    private void moveStudentsToWaitingRoom() {
-        List<StudentColor> studentsToAdd = expertBoard.getCastle(player1).getWaitingRoom();
-        try {
-            expertBoard.moveStudentsToDiningRoom(player1, studentsToAdd);
-            //gains 2 coins because of the stub.
-        } catch (NoSuchStudentException | PhaseNotRightException | TooManyStudentsException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            assertEquals(3, expertBoard.getCastle(player1).getCoins());
-        } catch (WrongGameModeException e) {
-            e.printStackTrace();
-            fail();
-        }
+        expertBoard = new ExpertBoardStub(player1, player2, CharacterUtility.WITCH);
+        expertBoard.playPlanningPhaseFirstPlayer1();
+        expertBoard.moveStudentsToDiningRoom();
     }
 
         @Test
@@ -141,17 +117,5 @@ public class WitchTest { //5° character
         }
     }
 
-    void playPlanningPhaseFirstPlayer1() {
-        try {
-            expertBoard.playCard(player1, 5);
-            expertBoard.changePhase();
-            expertBoard.playCard(player2, 8);
-        } catch (PhaseNotRightException e) {
-            throw new RuntimeException(e);
-        }
-        expertBoard.getTurn().addCard(player1, new Card(5));
-        expertBoard.getTurn().addCard(player2, new Card(8));
-        expertBoard.getTurn().changePhase();
-        //here is in student phase - player 1
-    }
+
 }

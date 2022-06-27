@@ -137,7 +137,9 @@ public class ExpertBoard extends Board {
     private @NotNull ParametersForCharacter influenceParameters(List<StudentColor> studentsList) {
         ParametersForCharacter par = new ParametersForCharacter();
         par.setInfluence((ExpertInfluence) influence);
-        if(!studentsList.isEmpty()) par.setRequestedStudent(studentsList.get(0));
+        if(studentsList != null)
+            if(!studentsList.isEmpty())
+                par.setRequestedStudent(studentsList.get(0));
         par.setCurrentTeam(getCurrentTeam());
         return par;
     }
@@ -175,8 +177,6 @@ public class ExpertBoard extends Board {
         par.setInfluence((ExpertInfluence) influence);
         assert islandList != null && !islandList.isEmpty();
         par.setIslandList(islandList);
-        if(islandIndex == null)
-            throw new IllegalArgumentException("The island index cannot be empty");
         par.setIslandIndex(islandIndex);
         return par;
     }
