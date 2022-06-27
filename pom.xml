@@ -82,15 +82,8 @@
       <artifactId> gson </artifactId>
       <version> 2.9.0 </version>
     </dependency>
-
-    <!-- deployment -->
-    <dependency>
-      <groupId> org.apache.maven.plugins </groupId>
-      <artifactId> maven-assembly-plugin </artifactId>
-      <version> 3.3.0 </version>
-      <type> maven-plugin </type>
-    </dependency>
   </dependencies>
+
 
   <build>
     <pluginManagement>
@@ -153,24 +146,6 @@
         </executions>
       </plugin>
 
-      <plugin>
-        <artifactId> maven-assembly-plugin </artifactId>
-        <version> 3.3.0 </version>
-        <configuration>
-          <archive manifest='mainClass = "it.polimi.ingsw.startUp.Main"'/>
-          <descriptorRefs format = 'jar-with-dependencies'/>
-        </configuration>
-
-        <executions>
-          <execution>
-            <id> make-assembly </id>
-            <phase> package </phase>
-            <goals>
-              <goal> single </goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
 </project>
