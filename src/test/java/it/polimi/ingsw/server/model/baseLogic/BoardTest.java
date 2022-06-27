@@ -291,23 +291,23 @@ public class BoardTest {
             throw new RuntimeException(e);
         }
         Team expectedWinner = Collections.max(bs.placedTowers().entrySet(), Map.Entry.comparingByValue()).getKey();
-        Map<Team, List<StudentColor>> reverseMap = new HashMap<>();
-        for (Team t : bs.placedTowers().keySet()) {
-            if (Objects.equals(bs.placedTowers().get(expectedWinner), bs.placedTowers().get(t)) && t != expectedWinner) { //if there is an equal number of towers on the board
-                for(Team t2 : bs.getCastleMap().values().stream().map(Castle::getTeam).toList())
-                    reverseMap.put(t2, bs.getProfessorsMap().entrySet().stream()
-                            .filter(entry -> entry.getValue() == t2)
-                            .map(Map.Entry::getKey)
-                            .toList());
-                //for (Map.Entry<Team, List<StudentColor>> entry : reverseMap.entrySet())
-                //{
-                //    if (entry.getValue().size().compareTo(maxEntry.getValue()) > 0)
-                //    {
-                //        maxEntry = entry;
-                //    }
-                //}
-            }
-        }
+        //Map<Team, List<StudentColor>> reverseMap = new HashMap<>();
+        //for (Team t : bs.placedTowers().keySet()) {
+        //    if (Objects.equals(bs.placedTowers().get(expectedWinner), bs.placedTowers().get(t)) && t != expectedWinner) { //if there is an equal number of towers on the board
+        //        for(Team t2 : bs.getCastleMap().values().stream().map(Castle::getTeam).toList())
+        //            reverseMap.put(t2, bs.getProfessorsMap().entrySet().stream()
+        //                    .filter(entry -> entry.getValue() == t2)
+        //                    .map(Map.Entry::getKey)
+        //                    .toList());
+        //        //for (Map.Entry<Team, List<StudentColor>> entry : reverseMap.entrySet())
+        //        //{
+        //        //    if (entry.getValue().size().compareTo(maxEntry.getValue()) > 0)
+        //        //    {
+        //        //        maxEntry = entry;
+        //        //    }
+        //        //}
+        //    }
+        //}
         System.out.println(expectedWinner);
         assertNotNull(winner);
     }

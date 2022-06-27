@@ -60,6 +60,7 @@ public class BoardStub extends Board implements EndGame {
             randomMotherNature();
             changePhase();
             randomChooseCloud(p);
+            endOfRound();
             changePhase();
             turnCounter++;
         }

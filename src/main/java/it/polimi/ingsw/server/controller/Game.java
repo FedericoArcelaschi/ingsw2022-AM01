@@ -128,6 +128,7 @@ public class Game {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
+        board.endOfRound();
         turn.changePhase();
         return updateAll();
     }
