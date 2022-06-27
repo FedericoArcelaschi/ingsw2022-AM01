@@ -15,13 +15,14 @@ import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtil
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class ExpertBoard extends Board {
 
-    private Map<CharacterUtility, StandardCharacter> expertCharactersCards;
-    private CharacterUtility playedExpertChar = null;
+    protected Map<CharacterUtility, StandardCharacter> expertCharactersCards;
+    protected CharacterUtility playedExpertChar = null;
 
     public ExpertBoard(String playerID1, String playerID2, Turn t, long seed) {
         super(t, seed, 2);
@@ -101,7 +102,7 @@ public class ExpertBoard extends Board {
 
         CharacterUtility characterUtility = CharacterUtility.getChar(idChar);
 
-        if (expertCharactersCards.containsKey(characterUtility)) {
+        if (!expertCharactersCards.containsKey(characterUtility)) {
             String charactersName = expertCharactersCards.values().stream().map(StandardCharacter::getName).toString().replace("[", "").replace("]", "");
             throw new IllegalArgumentException(characterUtility.name() + " was not an extracted character.\n" +
                     "Available characters are: " + charactersName);
@@ -124,7 +125,7 @@ public class ExpertBoard extends Board {
      * @param studentsList input from client
      * @param islandIndex input from client
      */
-    private @NotNull ParametersForCharacter getParameters(StandardCharacter character, List<StudentColor> studentsList, Integer islandIndex) {
+    private @NotNull ParametersForCharacter getParameters(StandardCharacter character, List<StudentColor> studentsList, @Nullable Integer islandIndex) {
         return switch (character.getCharacterType()) {
             case STANDARD       -> standardParameters();
             case STUDENT        -> studentParameters(studentsList, islandIndex);
@@ -215,11 +216,5 @@ public class ExpertBoard extends Board {
 
     public CharacterUtility getPlayedExpertChar() {
         return playedExpertChar;
-    }
-
-    @Deprecated
-    public StandardCharacter extract4CharacterTesting(int idChar) {
-        Tavern tavern = new Tavern(bag);
-        return tavern.extract4testing(idChar);
     }
 }
