@@ -11,7 +11,6 @@ import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.Tavern;
-import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterParametersType;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
@@ -189,8 +188,8 @@ public class ExpertBoard extends Board {
     }
 
     @Override
-    protected void endOfTurn() {
-        super.endOfTurn();
+    public void endOfRound() {
+        super.endOfRound();
         playedExpertChar = null;
         influence.reset();
     }

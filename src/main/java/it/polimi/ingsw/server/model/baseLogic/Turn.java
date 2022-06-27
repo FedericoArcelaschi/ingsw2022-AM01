@@ -24,6 +24,7 @@ public class Turn {
     private final int N_PLAYERS;
     private final int FIRST_PLANNING_TURN = 1;
     private int planningCounter = FIRST_PLANNING_TURN;
+    private boolean isLastTurn;
 
     /**
      * For the first round the PlanningPhase is the Sitting Order
@@ -36,6 +37,7 @@ public class Turn {
         this.currentPlayer = sittingOrder.get(0);
         this.currentPhase = TurnPhase.PLANNING;
         this.N_PLAYERS = sittingOrder.size();
+        isLastTurn = false;
     }
 
     /**
@@ -51,8 +53,14 @@ public class Turn {
                     setNewRound(playedCards);               //Method that sets the new order for the turn and switches turn player to the new one
             }
             default -> currentPhase = currentPhase.next();  //We can move on to the next phase as normal and the turn player stays the same
+            case MOTHERNATURE -> {
+                currentPhase = currentPhase.next();
+                if(isLastTurn) {
+                    changePhase();
+                }
+            }
             case CLOUD -> {
-                if (actionOrder.indexOf(currentPlayer) < N_PLAYERS - 1) {       //If there are other players that need to play
+                if (!isLastActionTurn()) {                                      //If there are other players that need to play
                     currentPhase = TurnPhase.STUDENTS;                          //and set the phase to students
                 } else {                                                        //If we're done throughout the turn
                     currentPhase = TurnPhase.PLANNING;                          //and we go back to planning
@@ -149,6 +157,18 @@ public class Turn {
     @Contract(pure = true)
     public List<String> getActionOrder() {
         return new ArrayList<>(actionOrder);
+    }
+
+    public Map<String, Card> getPlayedCards() {
+        return playedCards;
+    }
+
+    public boolean isLastTurn() {
+        return isLastTurn;
+    }
+
+    public void setLastTurn(boolean lastTurn) {
+        isLastTurn = lastTurn;
     }
 
     @Override

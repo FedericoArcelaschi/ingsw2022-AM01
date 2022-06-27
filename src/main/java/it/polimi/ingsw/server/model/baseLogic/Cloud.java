@@ -39,6 +39,10 @@ public class Cloud {
         return new ArrayList<>(studentList);
     }
 
+    public int getSTUDENTS_ON_CLOUD() {
+        return STUDENTS_ON_CLOUD;
+    }
+
     @Override
     public String toString() {
         return "Cloud{" +

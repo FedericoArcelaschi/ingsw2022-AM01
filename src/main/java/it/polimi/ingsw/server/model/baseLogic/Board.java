@@ -36,6 +36,7 @@ public class Board {
     private final int TOWERS_TO_PLACE_TO_WIN = 8;
     private final int CLOUD_SIZE_2_4_PLAYERS = 3;
     private final int CLOUD_SIZE_3_PLAYERS = 4;
+    private boolean endGame = false;
 
     public Board(String playerID1, String playerID2, Turn turn, long seed) {
         nPlayer = 2;
@@ -179,7 +180,7 @@ public class Board {
         if(possibleMovingSteps == null)
             possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps());
         if (steps > possibleMovingSteps.getInt() || steps < 1)
-            throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.getInt());
+            throw new IllegalArgumentException(steps < 1 ? "You can't move by less than one step." : "Too many steps. possible steps: " + possibleMovingSteps.getInt());
         if ((motherNaturePosition + steps) >= (islandList.size()))
             motherNaturePosition += steps - islandList.size();
         else
@@ -261,23 +262,36 @@ public class Board {
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
         castle.addStudentsInWaitingRoom(cloud.choose());
-        endOfTurn();
+        endOfRound();
     }
 
     /**
      * Resets the students that can be moved
      */
-    protected void endOfTurn() {
-        if(turn.isLastActionTurn())
-            cloudRefill();
+    public void endOfRound() {
+        boolean refillableClouds;
+        if(turn.isLastActionTurn()) {
+            refillableClouds = cloudRefill();
+            endGame =  refillableClouds || remainingCards() == 0;
+        }
         possibleMovingSteps.setInt(turn.getNextPossibleMovingSteps());
     }
 
     /**
      * after a whole turn
      */
-    public void cloudRefill() {
+    public boolean cloudRefill() {
+        if(turn.isLastTurn())
+            return true;
+        if(bag.remainingStudents() < (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
+            turn.setLastTurn(true);
+            return false;
+        }
+        if(bag.remainingStudents() == (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
+            turn.setLastTurn(true);
+        }
         cloudList.forEach(Cloud::refill);
+        return false;
     }
 
 //Ending of a game
@@ -303,15 +317,6 @@ public class Board {
             if (nTowers.get(t) >= TOWERS_TO_PLACE_TO_WIN || islandList.size() <= MINIMUM_NUMBER_OF_ISLANDS)
                 return true;
         return false;
-    }
-
-    /**
-     * Checks if the game is won after each player's turn is over by checking whether the players don't have any more
-     * cards or if there are no more students in the bag.
-     * @return the winner team
-     */
-    public boolean isWonByResources() {
-        return bag.remainingStudents() <= 0 || remainingCards() == 0;
     }
 
     /**
@@ -401,6 +406,10 @@ public class Board {
 
     public Turn getTurn() {
         return turn;
+    }
+
+    public boolean isEndGame() {
+        return endGame;
     }
 
     //FOR VIEW:

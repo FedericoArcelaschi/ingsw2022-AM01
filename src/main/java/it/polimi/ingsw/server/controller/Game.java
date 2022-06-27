@@ -107,14 +107,12 @@ public class Game {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
-        if (board.isWinningState()) {
+        if (board.isWinningState() || board.isEndGame()) {
             try {
                 winUpdate(board.getWinner());
             } catch (DrawException e) {
                 logger.info(e);
                 return errorMessage(command.username(), e);
-                //FIXME: handle game-end.
-                //parità?
             }
         }
         turn.changePhase();
@@ -129,15 +127,8 @@ public class Game {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
-        if (board.isWonByResources()){
-            logger.info("the game is ending!!");
-            try {
-                return winUpdate(board.getWinner());
-            } catch (DrawException e) {
-                return null; //FIXME WinUpdate
-            }
-        }
         turn.changePhase();
+        board.endOfRound();
         return updateAll();
     }
 

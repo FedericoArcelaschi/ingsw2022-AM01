@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.communication.modelData.ModelDataBuilder;
-import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,7 @@ public class BoardTest {
     private Board b;
     private Turn t;
     private final int seed = 1;
+
 
     @BeforeEach
     void setUp() {
@@ -205,7 +205,7 @@ public class BoardTest {
 
     @Test
     public void testIsNotWonByResources() {
-        assertFalse(b.isWonByResources());
+        assertFalse(b.isEndGame());
     }
 
     @Test
@@ -271,5 +271,14 @@ public class BoardTest {
                 "also the next island is untouched");
         assertEquals(oldList.get(1).getOwnership(), b.getIslandList().get(2).getOwnership(),
                 "no owner should be present");
+    }
+
+    @Test
+    public void testEndGame() {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        t = new Turn(listOfPlayer);
+        BoardStub bs = new BoardStub(player1, player2, t, new Random().nextLong());
+        bs.getToEndGame(player1);
+        System.out.println(bs.getData(player1));
     }
 }
