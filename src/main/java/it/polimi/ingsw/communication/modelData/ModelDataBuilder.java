@@ -7,7 +7,7 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 
 import java.util.*;
 

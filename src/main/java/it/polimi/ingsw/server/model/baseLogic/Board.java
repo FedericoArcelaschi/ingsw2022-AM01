@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.baseLogic.influence.Influence;
 import it.polimi.ingsw.server.model.baseLogic.influence.Professors;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.GreaterTeam;
 import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

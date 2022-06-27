@@ -8,7 +8,6 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.MapToList;
 import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;

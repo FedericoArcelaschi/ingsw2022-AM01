@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StudentCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.StudentCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;

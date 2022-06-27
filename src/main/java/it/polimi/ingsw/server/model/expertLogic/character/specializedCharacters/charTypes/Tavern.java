@@ -1,6 +1,7 @@
-package it.polimi.ingsw.server.model.expertLogic.character.charTypes;
+package it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes;
 
 import it.polimi.ingsw.server.model.baseLogic.Bag;
+import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
 import java.util.*;
@@ -41,7 +42,6 @@ public class Tavern {
 
         }
         return characterMap;
-
     }
 
     /**
@@ -55,13 +55,8 @@ public class Tavern {
         //TODO: improve
         return switch (idChar) {
             case 1, 7, 11 -> new StudentCharacter(idChar, bag);
-            case 5 -> new BlockCharacter(idChar);
+            case 5 -> new BlockingCharacter(idChar);
             default -> new StandardCharacter(idChar);
         };
     }
-
-    public StandardCharacter extract4testing(int idChar){
-        return getExpertCharacter(idChar);
-    }
-
 }

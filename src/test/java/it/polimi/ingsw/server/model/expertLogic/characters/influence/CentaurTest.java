@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;

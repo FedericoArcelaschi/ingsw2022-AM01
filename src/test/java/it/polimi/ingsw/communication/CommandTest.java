@@ -3,18 +3,14 @@ package it.polimi.ingsw.communication;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.server.controller.Game;
 import it.polimi.ingsw.server.controller.GameType;
-import it.polimi.ingsw.server.model.baseLogic.Castle;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
-import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;

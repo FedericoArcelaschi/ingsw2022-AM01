@@ -53,12 +53,12 @@ public class ExpertCastle extends Castle implements StudentPlaces {
      * Only available in Expert mode.
      * @param studentColor color of the student to remove
      */
-    void removeStudentFromDiningRoom(StudentColor studentColor) throws NoSuchStudentException {
+    private void removeStudentFromDiningRoom(StudentColor studentColor) throws NoSuchStudentException {
         if(diningRoom.get(studentColor) > 0) {
             diningRoom.replace(studentColor, diningRoom.get(studentColor) - 1);
         }
         else
-            throw new NoSuchStudentException("StudentCharacter " + studentColor + " not in dining room");
+            throw new NoSuchStudentException("Student " + studentColor + " not in dining room");
     }
 
     /**

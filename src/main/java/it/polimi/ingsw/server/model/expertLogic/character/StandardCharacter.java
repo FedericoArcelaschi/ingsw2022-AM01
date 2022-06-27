@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.expertLogic.character.charTypes;
+package it.polimi.ingsw.server.model.expertLogic.character;
 
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.exceptions.StudentException;

@@ -1,14 +1,15 @@
-package it.polimi.ingsw.server.model.expertLogic.character.charTypes;
+package it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes;
 
 import it.polimi.ingsw.server.model.exceptions.StudentException;
+import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
 import org.jetbrains.annotations.Range;
 
-public class BlockCharacter extends StandardCharacter {
+public class BlockingCharacter extends StandardCharacter {
 
     private int availableBlockTiles; @Range(from = 0, to = 4)
 
-    public BlockCharacter(int idChar) {
+    public BlockingCharacter(int idChar) {
         super(idChar);
         availableBlockTiles = 4;
     }
@@ -20,7 +21,7 @@ public class BlockCharacter extends StandardCharacter {
     @Override
     public void applyEffect(ParametersForCharacter par) throws StudentException, IllegalAccessException {
         par.setAvailableTiles(availableBlockTiles);
-        par.setBlockChar(this);
+        par.setBlockCharacter(this);
         function.applyEffect(par);
         availableBlockTiles--;
         cost = character.getCost() + 1;

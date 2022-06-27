@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StudentCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.StudentCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;

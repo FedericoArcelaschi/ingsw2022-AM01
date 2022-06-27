@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StudentCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.StudentCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;

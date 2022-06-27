@@ -1,8 +1,9 @@
-package it.polimi.ingsw.server.model.expertLogic.character.charTypes;
+package it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes;
 
 import it.polimi.ingsw.server.model.baseLogic.Bag;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.exceptions.StudentException;
+import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
 
 import java.util.*;

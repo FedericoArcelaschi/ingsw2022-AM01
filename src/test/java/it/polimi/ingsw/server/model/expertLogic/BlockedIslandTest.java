@@ -2,28 +2,24 @@ package it.polimi.ingsw.server.model.expertLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.Island;
 import it.polimi.ingsw.server.model.baseLogic.Team;
-import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
-import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
-import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.BlockingCharacter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BlockedIslandTest {
     Island island;
-    BlockCharacter witch;
+    BlockingCharacter witch;
 
     @BeforeEach
     void setUp() {
         island = new ExpertIsland(new Island());
-        witch = new BlockCharacter(5);
+        witch = new BlockingCharacter(5);
     }
 
     @Test
