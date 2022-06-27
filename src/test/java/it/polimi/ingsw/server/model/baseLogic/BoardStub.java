@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
+import it.polimi.ingsw.server.model.exceptions.DrawException;
 import it.polimi.ingsw.server.model.exceptions.NoSuchStudentException;
 import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
@@ -65,7 +66,8 @@ public class BoardStub extends Board implements EndGame {
     }
 
     public void playRandomCard(String player) {
-        int chosenCard = new Random().nextInt(1, 11);
+        Random rand = new Random();
+        int chosenCard = rand.nextInt(1, 11);
         if (getCastle(player).isCardAvailable(chosenCard)
                 && !turn.getPlayedCards().containsValue(new Card(chosenCard)))
             try {

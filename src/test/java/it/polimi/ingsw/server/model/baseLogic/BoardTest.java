@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
 
-    private final String player1 = "a", player2= "2";
+    private final String player1 = "a", player2 = "2";
     private Board b;
     private Turn t;
     private final int seed = 1;
@@ -22,7 +22,7 @@ public class BoardTest {
     void setUp() {
         List<String> listOfPlayer = Arrays.asList(player1, player2);
         t = new Turn(listOfPlayer);
-        b =  BoardFactory.getBoard(listOfPlayer, false);
+        b = BoardFactory.getBoard(listOfPlayer, false);
     }
 
     void turnSetUpStudents() throws PhaseNotRightException {
@@ -45,6 +45,7 @@ public class BoardTest {
         b.getTurn().changePhase();
         //now it's chooseclouod
     }
+
     @Test
     public void testBoardIslandNumber() {
 
@@ -68,29 +69,29 @@ public class BoardTest {
     }
 
     @Test
-    public void testNotYourTurnException(){
-        assertDoesNotThrow(() -> b.playCard(player1,1), "player should be able to move because it's his turn");
+    public void testNotYourTurnException() {
+        assertDoesNotThrow(() -> b.playCard(player1, 1), "player should be able to move because it's his turn");
     }
 
     @Test
-    public void testBoardIslandStartingColor(){
-        for(int i=0; i<12; i++){
+    public void testBoardIslandStartingColor() {
+        for (int i = 0; i < 12; i++) {
             int nStudents = b.getIslandList().get(i).getStudents().values().stream().mapToInt(n -> n).sum();
-            if(i%6 == 0)    assertEquals(0, nStudents);
-            else assertEquals(1,nStudents);
+            if (i % 6 == 0) assertEquals(0, nStudents);
+            else assertEquals(1, nStudents);
         }
     }
 
     @Test
-    public void testBoardCloudNumber(){
+    public void testBoardCloudNumber() {
         String player3 = "3";
         String player4 = "4";
-        Turn t1 = new Turn(Arrays.asList(player1,player2));
-        Turn t2 = new Turn(Arrays.asList(player1,player2,player3));
-        Turn t3 = new Turn(Arrays.asList(player1,player2,player3,player4));
-        Board b2=new Board(player1,player2,t1, seed);
-        Board b3=new Board(player1,player2,player3,t2, seed);
-        Board b4=new Board(player1,player2,player3,player4,t3, seed);
+        Turn t1 = new Turn(Arrays.asList(player1, player2));
+        Turn t2 = new Turn(Arrays.asList(player1, player2, player3));
+        Turn t3 = new Turn(Arrays.asList(player1, player2, player3, player4));
+        Board b2 = new Board(player1, player2, t1, seed);
+        Board b3 = new Board(player1, player2, player3, t2, seed);
+        Board b4 = new Board(player1, player2, player3, player4, t3, seed);
         List<Cloud> cl2 = b2.getCloudList();
         List<Cloud> cl3 = b3.getCloudList();
         List<Cloud> cl4 = b4.getCloudList();
@@ -105,6 +106,7 @@ public class BoardTest {
         //assertEquals(4, cl3.get(0).getSize());
         //assertEquals(3, cl4.get(0).getSize());
     }
+
     @Test
     public void testResetClouds() {
         b.cloudRefill();
@@ -115,7 +117,7 @@ public class BoardTest {
         turnSetUpStudents();
         List<StudentColor> cl = new ArrayList<>();
         //move 4 element to DR to free space for new students coming from cloud
-        for(int i=0; i<4;i++){
+        for (int i = 0; i < 4; i++) {
             cl.add(b.getCastleMap().get(player1).getWaitingRoom().get(i));
         }
         try {
@@ -137,17 +139,18 @@ public class BoardTest {
             fail();
         }
     }
+
     @Test
     public void testMoveStudentToIsland() throws NoSuchStudentException, PhaseNotRightException {
         turnSetUpStudents();
-        List<StudentColor> studentColorList =  new ArrayList<>();
+        List<StudentColor> studentColorList = new ArrayList<>();
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(1));
         Map<StudentColor, Integer> students = new HashMap<>();
-        for(StudentColor c : StudentColor.values()) {
-            students.put(c,0);
+        for (StudentColor c : StudentColor.values()) {
+            students.put(c, 0);
         }
-        for(StudentColor c : studentColorList) {
+        for (StudentColor c : studentColorList) {
             students.replace(c, students.get(c) + 1);
         }
         //test if the method returns correctly
@@ -166,38 +169,39 @@ public class BoardTest {
         Map<StudentColor, Integer> studentsOnIsland = b.getIslandList().get(0).getStudents();
         assertEquals(students, studentsOnIsland);
     }
+
     @Test
     public void testPlayCard() throws PhaseNotRightException {
         //check if the card is not used at the beginning
         assertTrue(b.getCastleMap().get(player1).getDeck().get(0).isAvailable());
         //check if the card is played correctly
         assertTrue(b.getCastle(player1).getDeck().get(0).isAvailable());
-        b.playCard(player1,1);
+        b.playCard(player1, 1);
         assertFalse(b.getCastle(player1).getDeck().get(0).isAvailable());
         //check if last card played is the one we played
         assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed().priority());
         assertEquals(1, b.getCastleMap().get(player1).getLastCardPlayed().distance());
         //check if the card can't be reused
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-                    b.playCard(player1, 1);
-                }, "IllegalArgumentException was expected");
+            b.playCard(player1, 1);
+        }, "IllegalArgumentException was expected");
 
         assertEquals("Card cannot be played. Card is already played and you have another card to play in your castle. You don't have this card in the castle.",
                 thrown.getMessage());
     }
+
     @Test
     public void testUpdateProfessor() throws NoSuchStudentException, TooManyStudentsException, PhaseNotRightException {
         turnSetUpStudents();
-        List<StudentColor> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0),b.getCastleMap().get(player1).getWaitingRoom().get(1));
+        List<StudentColor> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0), b.getCastleMap().get(player1).getWaitingRoom().get(1));
         b.moveStudentsToDiningRoom(player1, students);
 
         //test professor get assigned
-        Map<StudentColor,Team> pm1 = b.getProfessorsMap();
-        for(StudentColor c : StudentColor.values()){
-            if(students.contains(c)){
+        Map<StudentColor, Team> pm1 = b.getProfessorsMap();
+        for (StudentColor c : StudentColor.values()) {
+            if (students.contains(c)) {
                 assertNotNull(pm1.get(c));
-            }
-            else{
+            } else {
                 assertNull(pm1.get(c));
             }
         }
@@ -230,7 +234,7 @@ public class BoardTest {
      * Joins 3 islands with three students and no owner.
      */
     @Test
-    public void testJoinIsland(){
+    public void testJoinIsland() {
         List<Island> oldList = new ArrayList<>(b.getIslandList());
         Island islandA = b.getIslandList().get(1);
         Island islandB = b.getIslandList().get(2);
@@ -247,16 +251,16 @@ public class BoardTest {
                 = new HashMap<>(EmptyStudentsMap);
 
         for (int i = 1; i < 4; i++) {
-            for (StudentColor student: StudentColor.values()) {
-                if(oldList.get(i).getStudents().get(student) > 0){
-                    if(expectedStudentsMap.get(student) != null){
+            for (StudentColor student : StudentColor.values()) {
+                if (oldList.get(i).getStudents().get(student) > 0) {
+                    if (expectedStudentsMap.get(student) != null) {
                         int previousStudents = expectedStudentsMap.get(student);
                         expectedStudentsMap
                                 .replace(student,
                                         previousStudents +
-                                        oldList.get(i).getStudents().get(student));
+                                                oldList.get(i).getStudents().get(student));
                         break;
-                    }else{
+                    } else {
                         expectedStudentsMap
                                 .put(student,
                                         oldList.get(i).getStudents().get(student));
@@ -280,5 +284,31 @@ public class BoardTest {
         BoardStub bs = new BoardStub(player1, player2, t, new Random().nextLong());
         bs.getToEndGame(player1);
         System.out.println(bs.getData(player1));
+        Team winner;
+        try {
+            winner = bs.getWinner();
+        } catch (DrawException e) {
+            throw new RuntimeException(e);
+        }
+        Team expectedWinner = Collections.max(bs.placedTowers().entrySet(), Map.Entry.comparingByValue()).getKey();
+        Map<Team, List<StudentColor>> reverseMap = new HashMap<>();
+        for (Team t : bs.placedTowers().keySet()) {
+            if (Objects.equals(bs.placedTowers().get(expectedWinner), bs.placedTowers().get(t)) && t != expectedWinner) { //if there is an equal number of towers on the board
+                for(Team t2 : bs.getCastleMap().values().stream().map(Castle::getTeam).toList())
+                    reverseMap.put(t2, bs.getProfessorsMap().entrySet().stream()
+                            .filter(entry -> entry.getValue() == t2)
+                            .map(Map.Entry::getKey)
+                            .toList());
+                //for (Map.Entry<Team, List<StudentColor>> entry : reverseMap.entrySet())
+                //{
+                //    if (entry.getValue().size().compareTo(maxEntry.getValue()) > 0)
+                //    {
+                //        maxEntry = entry;
+                //    }
+                //}
+            }
+        }
+        System.out.println(expectedWinner);
+        assertNotNull(winner);
     }
 }
