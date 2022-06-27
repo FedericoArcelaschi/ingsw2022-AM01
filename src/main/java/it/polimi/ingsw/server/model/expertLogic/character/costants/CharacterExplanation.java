@@ -9,9 +9,9 @@ public enum CharacterExplanation{
             call function: paychar MONK: student islandNumber\s"""),
     FARMER( """
             Farmer: this character gives you the chance to have
-            more influence than your competitor.
-            Pay 2 or 3 coins to break tie the number of students
-            in your Castle and take the control over of the professors!
+            more influence than your competitor. Pay to break
+            tie the number of students in your Castle and take
+            the control over of the professors!
             call function: paychar FARMER\s"""),
     GUARD("""
             Guard: this character offers you the chance to conquer another
@@ -19,7 +19,7 @@ public enum CharacterExplanation{
             call function: paychar GUARD islandNumber\s"""),
     MAILMAN("""
             Mailman: this character allows you to optionally move
-            mother nature further by up to 2 steps during the MOTHERNATURE phase.
+            mother nature further by up to 2 steps during the MOTHER NATURE phase.
             call function: paychar MAILMAN\s"""),
     WITCH("""
             Witch: this character can prevent anyone from conquering

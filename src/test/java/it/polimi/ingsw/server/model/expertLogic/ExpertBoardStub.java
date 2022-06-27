@@ -91,4 +91,19 @@ public class ExpertBoardStub extends ExpertBoard {
             fail();
         }
     }
+
+    public void easyMoveStudentsToDiningRoom(String playerID) {
+        try {
+            moveStudentsToDiningRoom(playerID, studentColors);
+            //gains 2 coins because of the stub.
+        } catch (NoSuchStudentException | PhaseNotRightException | TooManyStudentsException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            assertEquals(3, castleMap.get(playerID).getCoins());
+        } catch (WrongGameModeException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
 }
