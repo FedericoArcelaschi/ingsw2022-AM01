@@ -118,7 +118,11 @@ public class Board {
             throw new PhaseNotRightException("You can't play a card in this phase of the game. " +
                     "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         Castle castle = castleMap.get(playerID);
-        if(!turn.isAlreadyPlayed(cardID) || castle.getDeck().stream().allMatch(card-> turn.isAlreadyPlayed(card.priority())))
+        if(!turn.isAlreadyPlayed(cardID) ||
+                castle.getDeck()
+                        .stream()
+                        .filter(Card::isAvailable)
+                        .allMatch(card-> turn.isAlreadyPlayed(card.priority())))
             if(castle.isCardAvailable(cardID)) {
                 Card card = castle.playCard(cardID);
                 turn.addCard(playerID, card);
