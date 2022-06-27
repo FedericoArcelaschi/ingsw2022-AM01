@@ -4,14 +4,19 @@ import it.polimi.ingsw.server.model.baseLogic.Card;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.exceptions.*;
+import it.polimi.ingsw.server.model.expertLogic.BlockedIsland;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoardStub;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.BlockingCharacter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,11 +31,7 @@ public class WitchTest { //5° character
 
     @BeforeEach
     void setUp() {
-        expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
-        if(!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.WITCH)) {
-            setUp();
-            return;
-        }
+       expertBoard = new ExpertBoardStub(player1, player2, CharacterUtility.WITCH);
         playPlanningPhaseFirstPlayer1();
         moveStudentsToWaitingRoom();
     }
@@ -39,36 +40,105 @@ public class WitchTest { //5° character
         List<StudentColor> studentsToAdd = expertBoard.getCastle(player1).getWaitingRoom();
         try {
             expertBoard.moveStudentsToDiningRoom(player1, studentsToAdd);
-        } catch (Exception e) {
+            //gains 2 coins because of the stub.
+        } catch (NoSuchStudentException | PhaseNotRightException | TooManyStudentsException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            assertEquals(3, expertBoard.getCastle(player1).getCoins());
+        } catch (WrongGameModeException e) {
             e.printStackTrace();
             fail();
         }
-        try {
-            if(expertBoard.getCastle(player1).getCoins() < 2) {
-                setUp();
-            }
-        } catch (WrongGameModeException e) {
-            e.printStackTrace();
-            return;
-        }
+    }
 
+        @Test
+    void playExpertCardTest() throws WrongGameModeException, CoinException, StudentException, PhaseNotRightException {
+        final int islandIndex = 2;
+        expertBoard.playExpertCard(
+                CharacterUtility.WITCH.getId(),
+                islandIndex,
+                List.of());
+        ExpertIsland blockedIsland = (ExpertIsland) expertBoard.getIslandList().get(islandIndex);
+        assertTrue(blockedIsland.isBlocked());
+        assertEquals(3, expertBoard.getAvailableCharacters().get(CharacterUtility.WITCH).getCost());
+        assertEquals(1, expertBoard.getCastle(player1).getCoins());
     }
 
     @Test
-    void playExpertCardTest() {
-        final int islandIndex = 2;
+    void errorNoInput() {
+        assertThrowsExactly(IllegalArgumentException.class,
+                () ->
+                        expertBoard.playExpertCard(
+                                CharacterUtility.WITCH.getId(),
+                                null,
+                                List.of()),
+                "Illegal argument if no island index is given to the witch");
+    }
 
+    @Test
+    void errorWrongInput() {
+        assertThrowsExactly(IllegalArgumentException.class,
+                ()->
+                        expertBoard.playExpertCard(
+                                CharacterUtility.WITCH.getId(),
+                                15,
+                                List.of()),
+                "Illegal argument if a island number too big is given to the island");
+        assertThrowsExactly(IllegalArgumentException.class,
+                ()->
+                expertBoard.playExpertCard(
+                        CharacterUtility.WITCH.getId(),
+                        -2,
+                        List.of()),
+                "Illegal argument if a island number too small (negative) is given to the island");
+    }
+
+    @Test
+    void alreadyBlockedIsland() throws CoinException, StudentException, PhaseNotRightException, WrongGameModeException {
+        expertBoard.playExpertCard(
+                CharacterUtility.WITCH.getId(),
+                0,
+                List.of());
+
+        playTillNextTurn();
+
+        assertEquals("Island is already blocked",
+            assertThrowsExactly(IllegalArgumentException.class,
+                    ()->
+                            expertBoard.playExpertCard(
+                                    CharacterUtility.WITCH.getId(),
+                                    0,
+                                    List.of()),
+                    "Illegal argument because the given island is already blocked").getMessage());
+    }
+
+    private void playTillNextTurn() {
+        expertBoard.changePhase();
         try {
-            expertBoard.playExpertCard(
-                    CharacterUtility.WITCH.getId(),
-                    islandIndex,
-                    List.of());
-        } catch (StudentException | PhaseNotRightException | CoinException e) {
-            e.printStackTrace();
-            fail();
+            expertBoard.moveMotherNature(1);
+        } catch (PhaseNotRightException e) {
+            throw new RuntimeException(e);
         }
-        ExpertIsland blockedIsland = (ExpertIsland) expertBoard.getIslandList().get(islandIndex);
-        assertTrue(blockedIsland.isBlocked());
+        expertBoard.changePhase();
+        try {
+            expertBoard.chooseCloud(player1, 1);
+        } catch (TooManyStudentsException | PhaseNotRightException e) {
+            throw new RuntimeException(e);
+        }
+        expertBoard.changePhase();
+        //player 2, student
+        try {
+            expertBoard.moveStudentsToDiningRoom(player2, List.of(StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN));
+        } catch (NoSuchStudentException | TooManyStudentsException | PhaseNotRightException e) {
+            throw new RuntimeException(e);
+        }
+        //the stub gives me for sure those 6 students.
+        try {
+            assertEquals(3, expertBoard.getCastle(player2).getCoins());
+        } catch (WrongGameModeException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     void playPlanningPhaseFirstPlayer1() {
@@ -82,6 +152,6 @@ public class WitchTest { //5° character
         expertBoard.getTurn().addCard(player1, new Card(5));
         expertBoard.getTurn().addCard(player2, new Card(8));
         expertBoard.getTurn().changePhase();
-        //here is in student phase
+        //here is in student phase - player 1
     }
 }

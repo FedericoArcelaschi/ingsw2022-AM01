@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.expertLogic.character.applyEffect;
 
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.BlockingCharacter;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class ParametersForCharacter { //FIXME
     private Integer numberOfPlayers;
     private IntegerBoxing steps;
     private Bag bag;
-    private BlockCharacter blockChar;
+    private BlockingCharacter blockingCharacter;
     private List<StudentColor> requestedStudentList;
     private List<StudentColor> availableStudentsList;
     private List<StudentPlaces> placesList;
@@ -73,8 +73,8 @@ public class ParametersForCharacter { //FIXME
     public void setAvailableTiles(int availableTiles) {
         this.availableTiles = availableTiles;
     }
-    public void setBlockChar(BlockCharacter blockChar) {
-        this.blockChar = blockChar;
+    public void setBlockCharacter(BlockingCharacter blockingCharacter) {
+        this.blockingCharacter = blockingCharacter;
     }
 
 //GETTER
@@ -119,8 +119,8 @@ public class ParametersForCharacter { //FIXME
         return requestedStudentList;
     }
 
-    public BlockCharacter getBlockChar() {
-        return blockChar;
+    public BlockingCharacter getBlockingCharacter() {
+        return blockingCharacter;
     }
 
     public Bag getBag() {

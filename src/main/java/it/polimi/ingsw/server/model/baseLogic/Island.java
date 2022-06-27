@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.baseLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class Island implements StudentPlaces {
         this.ownership = null;
     }
 
-    public Team getOwnership() {
+    public @Nullable Team getOwnership() {
         return ownership;
     }
 

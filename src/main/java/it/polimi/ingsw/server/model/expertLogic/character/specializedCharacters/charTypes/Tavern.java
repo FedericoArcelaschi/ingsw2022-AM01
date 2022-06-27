@@ -13,11 +13,11 @@ import java.util.*;
 public class Tavern {
     private final long seed;
     private final Bag bag;
-    private final int numberOfCharacters = CharacterUtility.values().length+1; //final = 12
+    private final int numberOfCharacters = CharacterUtility.values().length + 1; //final = 12
     private final int numberOfPlayableCharacter = 3;
 
     /**
-     * @param bag for StudentCharacter Character generation
+     * @param bag for StudentCharacter Character generation (with seed)
      */
     public Tavern(Bag bag){
         seed = bag.getSeed();
@@ -28,8 +28,7 @@ public class Tavern {
      * extract 3 different cards for the game
      * @return List<StandardCharacter>
      */
-    public Map<CharacterUtility, StandardCharacter> extract(){
-        StandardCharacter ec;
+    public Map<CharacterUtility, StandardCharacter> extract() {
         Random rand = new Random(seed);
         int idChar;
         Map<CharacterUtility, StandardCharacter> characterMap = new EnumMap<>(CharacterUtility.class);

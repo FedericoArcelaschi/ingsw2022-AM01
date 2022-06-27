@@ -9,8 +9,7 @@ import it.polimi.ingsw.server.model.expertLogic.BlockedIsland;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.BlockingCharacter;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.InfluenceComputingFunction;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ProfessorsComputingExpert;
@@ -129,14 +128,20 @@ public enum CharacterFunction {
         -> {
             int availableBlockTile = par.getAvailableTiles();
             List<Island> islandList = par.getIslandList();
-            int islandIndex = par.getIslandIndex();
-            ExpertIsland islandToBlock = (ExpertIsland) islandList.get(islandIndex);
-            BlockCharacter blockChar = par.getBlockChar();
+            Integer islandIndex = par.getIslandIndex();
+            if(islandIndex == null)
+                throw new IllegalArgumentException("no island number given to the witch");
+            if(islandList.size() < islandIndex || islandIndex < 0)
+                throw new IllegalArgumentException("the requested island is not present");
+            BlockingCharacter blockingCharacter = par.getBlockingCharacter();
+            if(blockingCharacter == null)
+                throw new IllegalArgumentException("the character is not present");
             if (availableBlockTile == 0)
-                throw new IllegalArgumentException("4 islands are already blocked");
+                throw new IllegalArgumentException( blockingCharacter.getName() + " already blocked four islands");
+            ExpertIsland islandToBlock = (ExpertIsland) islandList.get(islandIndex);
             if (islandToBlock.isBlocked())
                 throw new IllegalArgumentException("Island is already blocked");
-            BlockedIsland blockedIsland = new BlockedIsland(islandToBlock, blockChar);
+            BlockedIsland blockedIsland = new BlockedIsland(islandToBlock, blockingCharacter);
             islandList.remove(islandToBlock);
             islandList.add(islandIndex, blockedIsland);
         }

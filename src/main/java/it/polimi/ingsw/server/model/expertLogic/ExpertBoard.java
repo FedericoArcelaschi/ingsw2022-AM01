@@ -49,7 +49,7 @@ public class ExpertBoard extends Board {
     /**
      * Cleans the contructors' implementation
      */
-    private void construct() {
+    protected void construct() {
         for (int i = 0; i < 12; i++) {
             Island oldIsland = islandList.remove(i);
             islandList.add(i, new ExpertIsland(oldIsland));
@@ -169,10 +169,14 @@ public class ExpertBoard extends Board {
         return par;
     }
 
-    private @NotNull ParametersForCharacter islandParameters(Integer islandIndex) {
+    private @NotNull ParametersForCharacter islandParameters(@NotNull Integer islandIndex) {
         ParametersForCharacter par = new ParametersForCharacter();
+        assert influence != null;
         par.setInfluence((ExpertInfluence) influence);
+        assert islandList != null && !islandList.isEmpty();
         par.setIslandList(islandList);
+        if(islandIndex == null)
+            throw new IllegalArgumentException("The island index cannot be empty");
         par.setIslandIndex(islandIndex);
         return par;
     }

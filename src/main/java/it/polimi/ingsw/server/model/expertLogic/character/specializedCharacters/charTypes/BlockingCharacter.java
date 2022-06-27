@@ -5,6 +5,9 @@ import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
 import org.jetbrains.annotations.Range;
 
+/**
+ * The Witch is the only character that has this power.
+ */
 public class BlockingCharacter extends StandardCharacter {
 
     private int availableBlockTiles; @Range(from = 0, to = 4)
