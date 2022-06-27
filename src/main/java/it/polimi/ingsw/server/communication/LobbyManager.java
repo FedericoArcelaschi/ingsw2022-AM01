@@ -105,7 +105,7 @@ public class LobbyManager {
     }
 
     private LobbyInfo getLobbyInfo() {
-        Set<String> clients; //FIXME: implement con uno stream? sarebbe bello
+        Set<String> clients;
         Map<GameType, Set<String>> gameTypeUsernameMap = new EnumMap<>(GameType.class);
         for (GameType g : GameType.values()) {
             clients = gameClientsMap.get(g).stream()

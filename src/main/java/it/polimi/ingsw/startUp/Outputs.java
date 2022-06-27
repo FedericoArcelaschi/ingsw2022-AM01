@@ -30,7 +30,8 @@ public enum Outputs {
             \tPayChar NAME [N] [C]    -> pays for the requested character
             \tMore NAME               -> further informations about expert characters effects
             \t\tnote: N->number, C->color, capitalization is not required
-            \s""");// TODO: add a full rulebook
+            \t Rulebook: https://www.craniocreations.it/wp-content/uploads/2021/11/Eriantys_ITA_bassa.pdf
+            \s""");
 
 
     private final String out;

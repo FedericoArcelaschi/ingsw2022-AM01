@@ -7,7 +7,8 @@ import java.util.*;
 
 /**
  * Class that implements the heart-beat protocol.
- * if a client doesn't ping back before TIMEOUT //TODO it gets removed from his game (the game end) or queue.
+ * if a client doesn't ping back before TIMEOUT
+ * it gets removed from his game (the game end) or queue.
  */
 public class HeartBeatServer implements Runnable {
 

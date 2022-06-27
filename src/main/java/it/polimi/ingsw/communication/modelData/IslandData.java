@@ -45,7 +45,7 @@ public class IslandData {
         if (ownership == null) {
             s.append("no towers");
         } else {
-            s.append(islandSize) //TODO: here could color all this part to the team color!
+            s.append(islandSize)
                     .append(" ")
                     .append(ownership)
                     .append((islandSize > 1) ? " towers" : " tower");

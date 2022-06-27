@@ -48,7 +48,7 @@ public class Castle implements StudentPlaces {
         if (waitingRoom.isEmpty())
             x = 0;
         else
-            x = waitingRoom.size(); //FIXME: is needed?
+            x = waitingRoom.size();
         if (students.size() + x > waitingRoomSize)
             throw new TooManyStudentsException("there are already " + waitingRoomSize +
                     " students in the waiting room", null);
@@ -121,7 +121,7 @@ public class Castle implements StudentPlaces {
      * @param i priority of the card i >= 1 || i <= 10
      * @return true if the card was played correctly
      */
-    public Card playCard(int i) { // FIXME
+    public Card playCard(int i) {
         Card play = deck.get(i - 1);
         play.setAvailable(false);
         lastPlayedCard = play;

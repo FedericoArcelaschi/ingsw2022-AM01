@@ -9,10 +9,6 @@ import java.util.List;
 
 @JsonAdapter(BoardDataAdapter.class)
 public class ExpertBoardData extends BoardData {
-
-    //TODO: there are some characters that behave strangely (e.g.: may add students on their character card)
-    //and need their data to be handled separately.
-    //TODO: make the character descriptions an attribute of this class.
     private final List<CharacterData> characters;
     private final CharacterUtility activeChar;
 

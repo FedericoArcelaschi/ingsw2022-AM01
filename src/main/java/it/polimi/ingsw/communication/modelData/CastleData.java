@@ -17,7 +17,7 @@ public class CastleData {
     protected final Team towerColor;
     private final int nTower;
     private final boolean isMyCastle;
-    private final Map<StudentColor, Team> teachers; //FIXME
+    private final Map<StudentColor, Team> teachers; //FIXME EnumMap
 
     public CastleData(String username, List<StudentColor> waitingRoom, EnumMap<StudentColor, Integer> diningRoom, List<String> deck, String lastPlayedCard, Team towerColor, int nTower, Map<StudentColor, Team> teachers, boolean isMyCastle) {
         this.username = username;

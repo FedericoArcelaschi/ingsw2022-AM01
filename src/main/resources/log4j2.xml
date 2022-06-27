@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
     <Appenders>
-        <Console name="ConsoleAppender" target="SYSTEM_OUT"> <!--FIXME: remove this appender.-->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %c{1} - %msg%n" />
         </Console>
         <File name="FileAppender" fileName="./out/logs/EriantysServer-${date:yyyyMMdd}.log" immediateFlush="false" append="true">

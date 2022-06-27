@@ -67,8 +67,11 @@ public class ClientMain {
             case IN_GAME -> {
                 if (stringCommand.strip().equalsIgnoreCase("help"))
                     System.out.println(Outputs.HELP);
-                else if(stringCommand.strip().equalsIgnoreCase("charinfo"))
-                    System.out.println(boardData.characters().stream().map(CharacterData::getDescription).collect(Collectors.toList())); //fixme
+                else if(stringCommand.strip().equalsIgnoreCase("charinfo")) {
+                    for(CharacterData c : boardData.characters()) {
+                        System.out.println(c.getDescription());
+                    }
+                }
                 else {
                     try {
                         CommandMessage commandMessage = new CommandMessage(stringCommand);

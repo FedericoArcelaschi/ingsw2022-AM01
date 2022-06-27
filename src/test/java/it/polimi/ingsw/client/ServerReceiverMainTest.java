@@ -26,7 +26,7 @@ class ServerReceiverMainTest {
     }
 
     @Test
-    void testConnect() throws InterruptedException {//FIXME: need to synchronize access to connectedPlayers list
+    void testConnect() throws InterruptedException {
         int i;
         int n2 = 100, n3 = 90, n4=100;
         for (i = 1; i <= n2; i++) {

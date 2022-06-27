@@ -74,7 +74,6 @@ public class Turn {
      * @param playerCardMap to be sorted
      */
     void setNewRound(Map<String, Card> playerCardMap) {
-//        FIXME: handle case of equal cards.
         Map<String, Integer> priorityMap = new HashMap<>();
         playerCardMap.forEach((key, value) -> priorityMap.put(key, value.priority()));
         Map<String, Integer> sortedMap =

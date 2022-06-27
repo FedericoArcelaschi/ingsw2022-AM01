@@ -43,7 +43,7 @@ public class Command {
 
     public Command(String command) throws ParseException {
         command = command.strip();
-        List<String> commandAttributes = new ArrayList<>(Arrays.stream(command.split(" ")).toList()); // FIXME: more spaces break the command.
+        List<String> commandAttributes = new ArrayList<>(Arrays.stream(command.split("\\s+")).toList());
         type = getCommandType(commandAttributes.remove(0));
         if (commandAttributes.size() < 1)
 

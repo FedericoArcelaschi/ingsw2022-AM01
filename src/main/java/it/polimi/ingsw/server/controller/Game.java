@@ -20,8 +20,7 @@ public class Game {
     private final Turn turn;
     private final int MAX_STUDENTS_TO_MOVE;
     private final boolean isLastTurn = false;
-    //FIXME: implement for Ending position, out of resources.
-    //FIXME: better exception messages.
+    //FIXME: implement for Ending position, out of resources..
     private int movedStudents = 0;
 
     public Game(GameType gameType, List<String> usernames) {
@@ -130,7 +129,7 @@ public class Game {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
-        if (board.isWonByResources()) {
+        if (board.isWonByResources()){
             logger.info("the game is ending!!");
             try {
                 return winUpdate(board.getWinner());
@@ -143,18 +142,6 @@ public class Game {
     }
 
     private @NotNull Map<String, Message> payCharCommand(@NotNull Command command) {
-        //MONK WORKS!
-        //FARMER
-        //GUARD
-        //MAILMAN WORKS!
-        //WITCH
-        //CENTAUR
-        //JESTER WORKS!
-        //KNIGHT
-        //COOK
-        //STORYTELLER WORKS!
-        //QUEEN WORKS!
-        //TAXMAN
         try {
             board.playExpertCard(command.getCharId(), command.getIslandId() - 1, command.getStudents());
         } catch (WrongGameModeException | CoinException | StudentException | PhaseNotRightException | IllegalStateException e) {

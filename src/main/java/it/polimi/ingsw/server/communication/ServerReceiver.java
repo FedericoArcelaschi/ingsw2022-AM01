@@ -39,12 +39,6 @@ public class ServerReceiver extends Receiver {
                     Command command = commandMessage.getCommand();
                     client.executeCommand(command, client);
             }
-            case END -> {
-                /*TODO: the serverReceiver received the end message from the server and sent back an acknowledgment.*/
-            }
-            case ERROR -> {
-                /*TODO: the serverReceiver received the error message from the server and sent back an acknowledgment.*/
-            }
             case PREFERENCES ->
                     lobbyManager.addPlayer(client, (Preferences) message);
         }

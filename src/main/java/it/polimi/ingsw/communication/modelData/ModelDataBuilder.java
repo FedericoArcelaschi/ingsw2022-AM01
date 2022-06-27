@@ -107,6 +107,6 @@ public abstract class ModelDataBuilder {
     }
 
     private static TurnData newTurnData(Turn t){
-        return new TurnData(t.getSittingOrder(), t.getActionOrder(), t.getCurrentPhase(), t.getCurrentPlayer()); //FIXME
+        return new TurnData(t.getSittingOrder(), t.getActionOrder(), t.getCurrentPhase(), t.getCurrentPlayer());
     }
 }

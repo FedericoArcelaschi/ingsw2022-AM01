@@ -36,7 +36,7 @@ public class CharacterData {
                     .append(name.substring(1).toLowerCase());
         output  .append(", cost: ")
                 .append(cost);
-        if(students != null)
+        if(!students.isEmpty())
             output.append(", students on here: ").append(students);
         return output.toString();
     }

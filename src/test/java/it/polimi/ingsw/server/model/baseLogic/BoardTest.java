@@ -235,7 +235,6 @@ public class BoardTest {
         Island islandA = b.getIslandList().get(1);
         Island islandB = b.getIslandList().get(2);
         Island islandC = b.getIslandList().get(3);
-        //TODO: this method is protected. Either we make it public or we find another way to test it.
         b.joinIslands(List.of(1, 2, 3));
         assertEquals(oldList.get(0), b.getIslandList().get(0),
                 "The first island should stay untouched");

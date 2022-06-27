@@ -311,7 +311,7 @@ public class Board {
      * @return the winner team
      */
     public boolean isWonByResources() {
-        return bag.remainingStudents() == 0 || remainingCards() == 0;
+        return bag.remainingStudents() <= 0 || remainingCards() == 0;
     }
 
     /**
@@ -343,7 +343,6 @@ public class Board {
     /**
      * @return the team with the most professors.
      * @throws DrawException if there is no team with more professors than the others (E.g.: White: 2, Black: 1, Grey: 1)
-     * //TODO: test after modifications.
      */
     private @NotNull Team teamWithMostProfessors() throws DrawException {
         Team withMoreProfessors = null;
@@ -388,11 +387,11 @@ public class Board {
         return new HashMap<>(castleMap);
     }
 
-    public Castle getCastle(String playerID) { //TODO: make return only a copy
+    public Castle getCastle(String playerID) {
         return castleMap.get(playerID);
     }
 
-    public Map<StudentColor, Team> getProfessorsMap() {//TODO: make return only a copy
+    public Map<StudentColor, Team> getProfessorsMap() {
         return influence.getProfessorsMap();
     }
 

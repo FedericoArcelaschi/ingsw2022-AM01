@@ -50,7 +50,7 @@ public class StandardCharacter {
      * @return the explanation and the cost (updated)
      */
     public String getExplanation() {
-        return explanation + "\nCost: " + this.getCost();
+        return explanation + ", cost: " + this.getCost() + "\n\n";
     }
     public String getName() {
         return character.name();

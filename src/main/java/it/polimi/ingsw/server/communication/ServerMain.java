@@ -74,6 +74,6 @@ public class ServerMain implements Runnable {
     }
 
     public int getGamesNumber(GameType type){
-        return lobbyManager.countGames(type); //FIXME gamesNumber.get(type);
+        return lobbyManager.countGames(type);
     }
 }
