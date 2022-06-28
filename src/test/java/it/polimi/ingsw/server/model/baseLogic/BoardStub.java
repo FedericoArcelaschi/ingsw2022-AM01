@@ -12,6 +12,7 @@ public class BoardStub extends Board implements EndGame {
     private int maxStudentsToMove = 3;
     private int turnCounter = 0;
     private Map<String, List<Card>> availableCards = new HashMap<>();
+    private Team winner = null;
 
     public BoardStub(String playerID1, String playerID2, Turn turn, long seed) {
         super(playerID1, playerID2, turn, seed);
@@ -39,11 +40,33 @@ public class BoardStub extends Board implements EndGame {
 
 
     @Override
-    public void getToEndGame(String player) {
+    public void getToEndGame() {
         while (!isEndGame()) {
             planning();
             actions();
+            if(winner!=null)
+                break;
         }
+    }
+
+    public Team endTheGame() {
+        planning();
+        for (String p : turn.getActionOrder()) {
+            System.out.println("This should be students: " + turn.getCurrentPhase());
+            randomStudentsMoved(p);
+            changePhase();
+            System.out.println("This should be mothernature: " + turn.getCurrentPhase());
+            randomMotherNature();
+            changePhase();
+            if(turn.getActionOrder().get(turn.getActionOrder().size()-1).equals(p)) {
+                try {
+                    winner = getWinner();
+                } catch (DrawException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        return winner;
     }
 
     public void planning() {
@@ -58,11 +81,18 @@ public class BoardStub extends Board implements EndGame {
             randomStudentsMoved(p);
             changePhase();
             randomMotherNature();
+            if(isWinningState()) {
+                try {
+                    winner = getWinner();
+                } catch (DrawException e) {
+                    throw new RuntimeException(e);
+                }
+                //If there is a winner I immediately end the game
+                break;
+            }
             changePhase();
             randomChooseCloud(p);
-            endOfRound();
             changePhase();
-            turnCounter++;
         }
     }
 
@@ -90,7 +120,8 @@ public class BoardStub extends Board implements EndGame {
         Random rand = new Random();
         List<StudentColor> students = new ArrayList<>();
         List<StudentColor> waitingRoom = getCastle(player).getWaitingRoom();
-        for (int i = 0; i < 3; i++) {
+        int studentsToMove = castleMap.size() == 3 ? 4 : 3;
+        for (int i = 0; i < studentsToMove; i++) {
             StudentColor added = waitingRoom.get(rand.nextInt(waitingRoom.size()));
             students.add(added);
             waitingRoom.remove(added);
@@ -128,7 +159,12 @@ public class BoardStub extends Board implements EndGame {
             } catch (TooManyStudentsException | PhaseNotRightException e) {
                 throw new RuntimeException(e);
             }
+            endOfRound();
         } else
             randomChooseCloud(player);
+    }
+
+    public Team getWinnerTeam() {
+        return winner;
     }
 }

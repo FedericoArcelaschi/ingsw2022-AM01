@@ -278,19 +278,18 @@ public class BoardTest {
     }
 
     @Test
-    public void testEndGame() {
+    public void testEndGame2Players() {
         List<String> listOfPlayer = Arrays.asList(player1, player2);
         t = new Turn(listOfPlayer);
         BoardStub bs = new BoardStub(player1, player2, t, new Random().nextLong());
-        bs.getToEndGame(player1);
+        bs.getToEndGame();
         System.out.println(bs.getData(player1));
         Team winner;
-        try {
-            winner = bs.getWinner();
-        } catch (DrawException e) {
-            throw new RuntimeException(e);
-        }
-        Team expectedWinner = Collections.max(bs.placedTowers().entrySet(), Map.Entry.comparingByValue()).getKey();
+        if(bs.getWinnerTeam()!=null)
+            winner = bs.getWinnerTeam();
+        else
+            winner = bs.endTheGame();
+        //Team expectedWinner = Collections.max(bs.placedTowers().entrySet(), Map.Entry.comparingByValue()).getKey();
         //Map<Team, List<StudentColor>> reverseMap = new HashMap<>();
         //for (Team t : bs.placedTowers().keySet()) {
         //    if (Objects.equals(bs.placedTowers().get(expectedWinner), bs.placedTowers().get(t)) && t != expectedWinner) { //if there is an equal number of towers on the board
@@ -308,7 +307,38 @@ public class BoardTest {
         //        //}
         //    }
         //}
-        System.out.println(expectedWinner);
-        assertNotNull(winner);
+        System.out.println(winner);
+    }
+
+    @Test
+    public void testEndGame3Players() {
+        String player3 = "gamma";
+        List<String> listOfPlayer = Arrays.asList(player1, player2, player3);
+        t = new Turn(listOfPlayer);
+        BoardStub bs = new BoardStub(player1, player2, player3, t, new Random().nextLong());
+        bs.getToEndGame();
+        System.out.println(bs.getData(player1));
+        Team winner;
+        if(bs.getWinnerTeam()!=null)
+            winner = bs.getWinnerTeam();
+        else
+            winner = bs.endTheGame();
+        System.out.println(winner);
+    }
+
+    @Test
+    public void testEndGame4Players() {
+        List<String> listOfPlayer = Arrays.asList(player1, player2, "gamma", "delta");
+        t = new Turn(listOfPlayer);
+        BoardStub bs = new BoardStub(player1, player2, "gamma", "delta", t, new Random().nextLong());
+        bs.getToEndGame();
+        System.out.println(bs.getData(player1));
+        Team winner;
+        if(bs.getWinnerTeam()!=null)
+            winner = bs.getWinnerTeam();
+        else
+            winner = bs.endTheGame();
+        Team expectedWinner = Collections.max(bs.placedTowers().entrySet(), Map.Entry.comparingByValue()).getKey();
+        System.out.println(winner);
     }
 }

@@ -273,10 +273,11 @@ public class Board {
      * Resets the students that can be moved
      */
     public void endOfRound() {
-        boolean refillableClouds;
+        boolean areCloudsRefillable;
         if(turn.isLastActionTurn()) {
-            refillableClouds = cloudRefill();
-            endGame =  refillableClouds || remainingCards() == 0;
+            areCloudsRefillable = cloudRefill();
+            System.out.println(areCloudsRefillable);
+            endGame =  areCloudsRefillable || remainingCards() == 1;
         }
         possibleMovingSteps.setInt(turn.getNextPossibleMovingSteps());
     }
@@ -289,7 +290,8 @@ public class Board {
             return true;
         if(bag.remainingStudents() < (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
             turn.setLastTurn(true);
-            return false;
+            //return false;
+            return true;
         }
         if(bag.remainingStudents() == (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
             turn.setLastTurn(true);
