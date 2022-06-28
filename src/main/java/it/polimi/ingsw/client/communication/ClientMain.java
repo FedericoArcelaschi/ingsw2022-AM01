@@ -75,8 +75,8 @@ public class ClientMain {
                     openRuleBook();
                 } else {
                     try {
-                        CommandMessage commandMessage = new CommandMessage(stringCommand);
-                        clientSender.send(commandMessage);
+                        Command command = new Command(stringCommand);
+                        runCommand(command);
                     } catch (ParseException e) {
                         userInterface.printError(e.getMessage());
                     }

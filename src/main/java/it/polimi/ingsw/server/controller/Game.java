@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.random.RandomGenerator;
 
 /**
  * This class encapsulates the controller. It is used to perform commands, as well as checking whehter or not the game is
@@ -31,7 +32,7 @@ public class Game {
     private int movedStudents = 0;
 
     public Game(GameType gameType, List<String> usernames) {
-        this.board = BoardFactory.getBoard(usernames, gameType.expertMode);
+        this.board = BoardFactory.getBoard(usernames, gameType.expertMode, RandomGenerator.getDefault().nextLong());
         this.turn  = board.getTurn();
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
