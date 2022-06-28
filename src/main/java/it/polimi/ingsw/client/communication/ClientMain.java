@@ -9,6 +9,8 @@ import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 import it.polimi.ingsw.startUp.Outputs;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -68,8 +70,10 @@ public class ClientMain {
                 if (stringCommand.strip().equalsIgnoreCase("help"))
                     System.out.println(Outputs.HELP);
                 else if(stringCommand.strip().equalsIgnoreCase("charinfo"))
-                    System.out.println(boardData.characters().stream().map(CharacterData::getDescription).collect(Collectors.toList())); //fixme
-                else {
+                    System.out.println(boardData.characters().stream().map(CharacterData::getDescription).collect(Collectors.toList()));
+                else if(stringCommand.strip().equalsIgnoreCase("rules")) {
+                    openRuleBook();
+                } else {
                     try {
                         CommandMessage commandMessage = new CommandMessage(stringCommand);
                         clientSender.send(commandMessage);
@@ -105,4 +109,16 @@ public class ClientMain {
         this.boardData = boardData;
     }
 
+    public void openRuleBook() {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                File ruleBook = new File( "src/main/resources/rulebook_ITA.pdf");
+                Desktop.getDesktop().open(ruleBook);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                // no application registered for PDFs
+            }
+        } else
+            System.err.println("Your computer does not support the visualization of the Rulebook");
+    }
 }
