@@ -76,17 +76,25 @@ public class ExpertBoardStub extends ExpertBoard {
      * moves all the students to the dining room.
      * current player gains two coins.
      * Only for setUp.
+     * @throws NoSuchStudentException if the waiting room doesn't
+     * contain all the {@link ExpertBoardStub#studentColors}
      */
     public void easyMoveStudentsToDiningRoom() {
         try {
             moveStudentsToDiningRoom(getCurrentPlayer(), studentColors);
             //gains 2 coins because of the stub.
-        } catch (NoSuchStudentException | PhaseNotRightException | TooManyStudentsException e) {
+        } catch (PhaseNotRightException | TooManyStudentsException | NoSuchStudentException e) {
             throw new RuntimeException(e);
         }
         try {
             assertEquals(3, castleMap.get(getCurrentPlayer()).getCoins());
         } catch (WrongGameModeException e) {
+            e.printStackTrace();
+            fail();
+        }
+        try {
+            castleMap.get(getCurrentPlayer()).addStudentsInWaitingRoom(studentColors);
+        } catch (TooManyStudentsException e) {
             e.printStackTrace();
             fail();
         }
