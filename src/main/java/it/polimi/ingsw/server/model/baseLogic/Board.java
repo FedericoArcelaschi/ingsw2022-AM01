@@ -28,8 +28,10 @@ public class Board {
     protected Influence influence = new Influence(new Professors(castleMap));
 
     protected final Turn turn;
+    //the idea is to save it or send it to the player at the end of the game
     private final long seed;
     protected IntegerBoxing possibleMovingSteps = new IntegerBoxing(0); //calculated form the card: must be stored in memory til the player action turn
+
     //constants
     private final int INITIAL_NUMBER_OF_ISLANDS = 12;
     private final int MINIMUM_NUMBER_OF_ISLANDS = 3;

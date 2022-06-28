@@ -42,6 +42,13 @@ public class Game {
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
 
+    /**
+     * Checks if the {@link Command#username()} is the current player.
+     * if he is the current player he can play the command on the model.
+     * @see         Turn#getCurrentPlayer()
+     * @return      either an error message addressed to the single player or
+     *              an update message for all the player in the game
+     */
     public @NotNull Map<String, Message> executeCommand(@NotNull Command command) {
         if(!command.username().equals(turn.getCurrentPlayer()))
             return errorMessage(command.username(), new Exception("You can't play! It's " + turn.getCurrentPlayer() + "'s turn"));
@@ -175,7 +182,8 @@ public class Game {
         Map<String, Message> usernameMessageMap = new HashMap<>();
         board   .getCastleMap()
                 .keySet()
-                .forEach(i->usernameMessageMap.put(i, new Update(board.getData(i))));
+                .forEach(i ->
+                        usernameMessageMap.put(i, new Update(board.getData(i))));
         return usernameMessageMap;
     }
 

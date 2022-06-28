@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.EndGame;
-import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.server.communication.Client;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 import javafx.scene.control.Alert.AlertType;
@@ -42,7 +41,7 @@ public class GameInterface {
         try {
             clients.forEach(
                     client1 -> {
-                        if(client1.equals(client))
+                        if(client1.equals(client)) //the client who sent the command must be playing this game
                                 command.setUsername(client.username());
                     });
             send(game.executeCommand(command));
