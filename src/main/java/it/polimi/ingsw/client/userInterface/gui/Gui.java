@@ -29,6 +29,7 @@ import java.net.SocketAddress;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.random.RandomGenerator;
 
 public class Gui extends Application implements UserInterface {
     Stage stage;
@@ -59,7 +60,7 @@ public class Gui extends Application implements UserInterface {
 
     private BoardData createBoardData(){
         //FIXME: for testing.
-        Board b =  BoardFactory.getBoard(Arrays.asList("Fede", "Gio"/*, "pippo"*/), true);
+        Board b =  BoardFactory.getBoard(Arrays.asList("Fede", "Gio"/*, "pippo"*/), true, RandomGenerator.getDefault().nextLong());
         Turn t = b.getTurn();
         try{
             for (String player: t.getSittingOrder()) {

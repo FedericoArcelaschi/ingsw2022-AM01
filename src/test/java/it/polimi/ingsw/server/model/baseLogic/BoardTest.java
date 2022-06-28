@@ -22,7 +22,7 @@ public class BoardTest {
     void setUp() {
         List<String> listOfPlayer = Arrays.asList(player1, player2);
         t = new Turn(listOfPlayer);
-        b =  BoardFactory.getBoard(listOfPlayer, false);
+        b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
     }
 
     void turnSetUpStudents() throws PhaseNotRightException {
