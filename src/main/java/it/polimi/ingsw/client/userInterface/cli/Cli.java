@@ -19,8 +19,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.concurrent.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static it.polimi.ingsw.startUp.Outputs.CLEAR_SCREEN;
 
@@ -33,11 +31,11 @@ public class Cli implements UserInterface {
     private String input = "";
     private String newGame;
     private boolean firstUpdate = true;
+    private final SocketAddress DEFAULT_ADDRESS = new InetSocketAddress("localhost", 12345);
 
     public Cli() {
         clientMain = new ClientMain(this);
-        SocketAddress defaultSocket = new InetSocketAddress("localhost", 12345);
-        connect(defaultSocket);
+        connect(DEFAULT_ADDRESS);
     }
 
     /**
@@ -131,7 +129,7 @@ public class Cli implements UserInterface {
     }
 
     /**
-     * Re-connects the client to the server.
+     * Re-connects the disconnected client to the server.
      * The newly connected client will be in the lobby.
      */
     @Override
@@ -139,7 +137,7 @@ public class Cli implements UserInterface {
         clientMain.setState(ClientState.NOT_CONNECTED);
         System.err.println("connection lost: you left the game.");
         System.err.flush();
-        this.connect(getNetworkPreferences());
+        this.connect(DEFAULT_ADDRESS);
     }
 
 
