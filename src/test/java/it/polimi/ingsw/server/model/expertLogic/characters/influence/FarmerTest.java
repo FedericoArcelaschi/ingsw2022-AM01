@@ -30,12 +30,10 @@ class FarmerTest { //2° character
     void setUp() {
         expertBoard = new ExpertBoardStub(playerID1, playerID2, CharacterUtility.FARMER);
         expertBoard.playPlanningPhaseFirstPlayer1();
+
         expertBoard.easyMoveStudentsToDiningRoom(playerID1);
         expertBoard.easyMoveStudentsToDiningRoom(playerID2);
-    }
 
-    @Test
-    void playExpertCharacterTest() {
         assertEquals(WHITE, expertBoard.getProfessorsMap().get(StudentColor.GREEN)); //player1
         assertEquals(WHITE, expertBoard.getProfessorsMap().get(StudentColor.YELLOW)); //player1
 
@@ -43,6 +41,10 @@ class FarmerTest { //2° character
         expertBoard.changePhase();
         expertBoard.changePhase();
         //player2 - student
+    }
+
+    @Test
+    void playExpertCharacterTest() {
         try {
             expertBoard.playExpertCard(2, null, null);
         } catch (CoinException | StudentException | PhaseNotRightException e) {
@@ -54,13 +56,6 @@ class FarmerTest { //2° character
 
     @Test
     void playExpertCharacterTestOtherInputs() {
-        assertEquals(WHITE, expertBoard.getProfessorsMap().get(StudentColor.GREEN)); //player1
-        assertEquals(WHITE, expertBoard.getProfessorsMap().get(StudentColor.YELLOW)); //player1
-
-        expertBoard.changePhase();
-        expertBoard.changePhase();
-        expertBoard.changePhase();
-        //player2 - student
         try {
             expertBoard.playExpertCard(2, 12, List.of(StudentColor.RED, StudentColor.GREEN));
         } catch (CoinException | StudentException | PhaseNotRightException e) {
@@ -69,5 +64,12 @@ class FarmerTest { //2° character
         assertEquals(BLACK, expertBoard.getProfessorsMap().get(StudentColor.GREEN)); //player1
         assertEquals(BLACK, expertBoard.getProfessorsMap().get(StudentColor.YELLOW)); //player1
     }
+
+    @Test
+    void doNOTPlayExpertCharacterTest() {
+        assertEquals(WHITE, expertBoard.getProfessorsMap().get(StudentColor.GREEN)); //player1
+        assertEquals(WHITE, expertBoard.getProfessorsMap().get(StudentColor.YELLOW)); //player1
+    }
+
 
 }
