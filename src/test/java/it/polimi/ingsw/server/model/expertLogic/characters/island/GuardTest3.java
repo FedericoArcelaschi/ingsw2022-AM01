@@ -49,7 +49,6 @@ public class GuardTest3 {
                 "the island should be now conquered by Gianpaolo");
     }
 
-    @Test
     void playExpertCharacterButNotConquer(int islandIndex) {
         setUp();
         if(MapToList.apply(board.getIslandList().get(islandIndex).getStudents()).contains(YELLOW) ||

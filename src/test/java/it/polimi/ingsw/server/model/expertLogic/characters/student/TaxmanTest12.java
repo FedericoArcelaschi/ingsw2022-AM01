@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.MapToList;
 import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoardStub;
 import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TaxmanTest12 {
 
     private final CharacterExplanation explanation = CharacterExplanation.TAXMAN;
-    private ExpertBoard expertBoard;
+    private ExpertBoardStub expertBoard;
     private final String player1 = "pippo", player2 = "baudo";
     private Turn turn;
 
@@ -34,36 +35,11 @@ public class TaxmanTest12 {
     @BeforeEach
     void setUp() {
         turn = new Turn(List.of(player1, player2));
-        expertBoard = new ExpertBoard(player1, player2, turn, RandomGenerator.getDefault().nextLong());
-        if(!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.TAXMAN)) {
-            setUp();
-            return;
-        }
-        try {
-            expertBoard.playCard(player1, 5);
-            expertBoard.changePhase();
-            expertBoard.playCard(player2, 8);
-        } catch (PhaseNotRightException e) {
-            throw new RuntimeException(e);
-        }
-        expertBoard.getTurn().addCard(player1, new Card(5));
-        expertBoard.getTurn().addCard(player2, new Card(8));
-        expertBoard.getTurn().changePhase();
+        expertBoard = new ExpertBoardStub(player1, player2, CharacterUtility.TAXMAN);
+        expertBoard.playPlanningPhaseFirstPlayer1();
         //here is in student phase
-        Castle castlePl1 = expertBoard.getCastle(player1);
-        try {
-            expertBoard.moveStudentsToDiningRoom(player1, castlePl1.getWaitingRoom());
-        } catch (NoSuchStudentException | TooManyStudentsException | PhaseNotRightException e) {
-            fail();
-        }
-        try {
-            if(castlePl1.getCoins() < 3)
-                setUp();
-        } catch (WrongGameModeException e) {
-            e.printStackTrace();
-            fail();
-        }
-
+        expertBoard.add1Coin(player1);
+        expertBoard.add1Coin(player1);
     }
 
     @Test

@@ -72,6 +72,7 @@ public class WitchTest5 {
 
     @Test
     void alreadyBlockedIsland() throws CoinException, StudentException, PhaseNotRightException, WrongGameModeException {
+        //player1 plays this card
         expertBoard.playExpertCard(
                 CharacterUtility.WITCH.getId(),
                 0,
@@ -92,28 +93,18 @@ public class WitchTest5 {
     private void playTillNextTurn() {
         expertBoard.changePhase();
         try {
-            expertBoard.moveMotherNature(1);
-        } catch (PhaseNotRightException e) {
-            throw new RuntimeException(e);
-        }
+        expertBoard.moveMotherNature(1);
         expertBoard.changePhase();
-        try {
-            expertBoard.chooseCloud(player1, 1);
-        } catch (TooManyStudentsException | PhaseNotRightException e) {
-            throw new RuntimeException(e);
-        }
+        expertBoard.getCastle(player1).removeStudentsFromWaitingRoom(List.of(StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN));
+        expertBoard.chooseCloud(player1, 1);
         expertBoard.changePhase();
         //player 2, student
-        try {
-            expertBoard.moveStudentsToDiningRoom(player2, List.of(StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN));
-        } catch (NoSuchStudentException | TooManyStudentsException | PhaseNotRightException e) {
-            throw new RuntimeException(e);
-        }
+        expertBoard.moveStudentsToDiningRoom(player2, List.of(StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN));
         //the stub gives me for sure those 6 students.
-        try {
-            assertEquals(3, expertBoard.getCastle(player2).getCoins());
-        } catch (WrongGameModeException e) {
-            throw new RuntimeException(e);
+        assertEquals(3, expertBoard.getCastle(player2).getCoins());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
         }
     }
 

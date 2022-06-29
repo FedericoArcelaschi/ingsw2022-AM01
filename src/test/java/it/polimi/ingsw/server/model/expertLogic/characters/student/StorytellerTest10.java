@@ -1,12 +1,12 @@
 package it.polimi.ingsw.server.model.expertLogic.characters.student;
 
-import it.polimi.ingsw.server.model.baseLogic.Card;
 import it.polimi.ingsw.server.model.baseLogic.Castle;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.MapToList;
 import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
+import it.polimi.ingsw.server.model.expertLogic.ExpertBoardStub;
 import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
@@ -21,32 +21,30 @@ import static org.junit.jupiter.api.Assertions.*;
 public class StorytellerTest10 {
 
     private final CharacterExplanation characterExplanation = CharacterExplanation.STORYTELLER;
-    private ExpertBoard expertBoard;
+    private ExpertBoardStub board;
     private final String player1 = "Piro";
     private final String player2 = "Pinoli";
     private Castle currentPlayerCastle;
 
     @BeforeEach
     void setUp() {
-        expertBoard = new ExpertBoard(player1, player2, new Turn(List.of(player1, player2)), RandomGenerator.getDefault().nextLong());
-        if(!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.STORYTELLER)) {
+        board = new ExpertBoardStub(player1, player2, CharacterUtility.STORYTELLER);
+        if(!board.getAvailableCharacters().containsKey(CharacterUtility.STORYTELLER)) {
             setUp();
             return;
         }
-        playPlanningPhaseFirstPlayer1();
-        currentPlayerCastle = expertBoard.getCastle(expertBoard.getCurrentPlayer());
+        board.playPlanningPhaseFirstPlayer1();
+        currentPlayerCastle = board.getCastle(board.getCurrentPlayer());
     }
 
     @Test
     void playCharacterTest() {
-
-        var storyTeller = expertBoard.getAvailableCharacters().get(CharacterUtility.STORYTELLER);
         //ColorsToMove
         var studentsToMove = currentPlayerCastle.getWaitingRoom().subList(0, 2);
         var studentsInWaitingRoom = currentPlayerCastle.getWaitingRoom().subList(2, 7);
 
         try {
-            expertBoard.moveStudentsToDiningRoom("Piro", studentsToMove);
+            board.moveStudentsToDiningRoom("Piro", studentsToMove);
         } catch (NoSuchStudentException | TooManyStudentsException | PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
@@ -65,7 +63,7 @@ public class StorytellerTest10 {
 
         //actual playExpertCard
         try {
-            expertBoard.playExpertCard(10, 0, new ArrayList<>(studentsForCharacter));
+            board.playExpertCard(10, 0, new ArrayList<>(studentsForCharacter));
         } catch (StudentException | CoinException | PhaseNotRightException e) {
             fail(e.getCause());
         }
@@ -84,13 +82,11 @@ public class StorytellerTest10 {
 
     @Test
     void applyEffectErrorTest() {
-        //Castle to work on:
-        ExpertCastle castle = (ExpertCastle) expertBoard.getCastle("Piro");
-        //ColorsToMove
-        List<StudentColor> studentsToMove = castle.getWaitingRoom();
+        ExpertCastle currPlayerCastle = (ExpertCastle) board.getCastle("Piro");
+        List<StudentColor> studentsToMove = currPlayerCastle.getWaitingRoom();
 
         try {
-            expertBoard.moveStudentsToDiningRoom("Piro", studentsToMove); //all students are moved to the dining room.
+            board.moveStudentsToDiningRoom("Piro", studentsToMove); //all students are moved to the dining room.
         } catch (NoSuchStudentException | TooManyStudentsException | PhaseNotRightException e) {
             e.printStackTrace();
             fail();
@@ -100,47 +96,37 @@ public class StorytellerTest10 {
         //first two students in waiting room will be moved to the dining room
         studentsForCharacter.addAll(studentsToMove.subList(0, 2));
         //first two students in dining room will be moved to the waiting room
-
         assertThrowsExactly(
                 StudentException.class,
-                ()->expertBoard.playExpertCard(10, 0, studentsForCharacter),
+                ()-> board.playExpertCard(10, 0, studentsForCharacter),
                 "there are no students in the Waiting room, therefore the NoSuchStudentException should be thrown!");
-
         try {
-            castle.addStudentsInWaitingRoom(studentsToMove);
-        } catch (TooManyStudentsException e) {throw new RuntimeException(e);}
-
+            currPlayerCastle.addStudentsInWaitingRoom(studentsToMove);
+        } catch (TooManyStudentsException e) {
+            throw new RuntimeException(e);
+        }
         try {
-            expertBoard.playExpertCard(10, 0, studentsForCharacter);
+            board.playExpertCard(10, 0, studentsForCharacter);
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
 
     @Test
-    void EmptyListError1() {
+    void OddListError() {
         assertThrows(IllegalArgumentException.class,
-                () -> expertBoard.playExpertCard(10, 0, List.of()));
+                () -> board.playExpertCard(10, 0, List.of(StudentColor.YELLOW)),
+                "Storyteller needs an odd number of students as an input");
+        assertThrows(IllegalArgumentException.class,
+                () -> board.playExpertCard(10, 0, List.of(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW)));
+        assertThrows(IllegalArgumentException.class,
+                () -> board.playExpertCard(10, 0, List.of(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW)));
     }
 
     @Test
     void EmptyListError() {
         assertThrowsExactly(IllegalArgumentException.class,
-                () -> expertBoard.playExpertCard(10, 0, List.of()),
+                () -> board.playExpertCard(10, 0, List.of()),
                 "no student will give an error");
-    }
-
-    void playPlanningPhaseFirstPlayer1() {
-        try {
-            expertBoard.playCard(player1, 5);
-            expertBoard.changePhase();
-            expertBoard.playCard(player2, 8);
-        } catch (PhaseNotRightException e) {
-            throw new RuntimeException(e);
-        }
-        expertBoard.getTurn().addCard(player1, new Card(5));
-        expertBoard.getTurn().addCard(player2, new Card(8));
-        expertBoard.getTurn().changePhase();
-        //here is in student phase
     }
 }
