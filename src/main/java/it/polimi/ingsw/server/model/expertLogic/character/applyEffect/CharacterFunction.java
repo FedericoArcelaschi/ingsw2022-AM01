@@ -168,14 +168,11 @@ public enum CharacterFunction {
         -> {
             List<StudentColor> requestedStudents = par.getRequestedStudentList();
             List<StudentColor> availableStudents = par.getAvailableStudentsList();
-            StudentPlaces castle = par.getPlacesList().get(0);
-
-            if (requestedStudents == null)
-                throw new IllegalArgumentException("no students list");
+            if(availableStudents == null || requestedStudents == null)
+                throw new IllegalArgumentException("Illegal students list in jester.");
             if (!Arrays.asList(2, 4, 6) //legal requested student list sizes.
                     .contains(requestedStudents.size()))
                 throw new IllegalArgumentException("Player should give a list of 2, 4 or 6 students");
-
             int numberOfStudentsToMove = requestedStudents.size() / 2;
             //First three (or less) students in the list are the ones
                 //to add in the Castle-Waiting Room and take from the Jester's available students.
@@ -183,22 +180,23 @@ public enum CharacterFunction {
             //Second three (or less) students are the ones
                 //to remove from waiting room and put in the Jester's available students.
             List<StudentColor> studentsToRemove = requestedStudents.subList(numberOfStudentsToMove, numberOfStudentsToMove * 2);
-            if (!availableStudents.containsAll(studentsToAdd)) {
-                List<StudentColor> temp = new ArrayList<>(availableStudents);
-                for (StudentColor c : studentsToAdd) {
-                    if (!temp.contains(c))
-                        throw new NoSuchStudentException("jester doesn't contain a " + c + " student!");
-                    temp.remove(c);
-                } //initial checking
+
+            List<StudentColor> temp = new ArrayList<>(availableStudents);
+            for (StudentColor c : studentsToAdd) {
+                if (!temp.contains(c))
+                    throw new NoSuchStudentException("jester doesn't contain a " + c + " student!");
+                temp.remove(c);
             }
-            for (StudentColor c: studentsToRemove) {
+
+            StudentPlaces castle = par.getPlacesList().get(0);
+            for (StudentColor c: studentsToRemove) { //here could be thrown the StudentException
                 try {
                     castle.removes(c, 1);
-                } catch (NoSuchStudentException nsse ) {
+                } catch (NoSuchStudentException e ) {
                     castle.adds(c, 1);
-                    throw new NoSuchStudentException(nsse.getMessage());
+                    throw new NoSuchStudentException(e.getMessage());
                 }
-            } //here could be thrown the StudentException
+            }
 
             for (StudentColor c: studentsToAdd) {
                 castle.adds(c, 1);

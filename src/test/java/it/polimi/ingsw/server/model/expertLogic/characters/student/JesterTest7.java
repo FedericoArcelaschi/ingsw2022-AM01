@@ -22,12 +22,12 @@ public class JesterTest7 {
 
     private final CharacterExplanation explaination = CharacterExplanation.JESTER;
     private ExpertBoard expertBoard;
-    private final String player1 = "pietro", player2 = "paolo";
-    private final Turn turn = new Turn(List.of(player1, player2));
+    private final String player1 = "Giovanni", player2 = "Paolo", player3 = "Secondo";
+    private final Turn turn = new Turn(List.of(player1, player2, player3));
 
     @BeforeEach
     void setUp() {
-        expertBoard = new ExpertBoard(player1, player2, turn, RandomGenerator.getDefault().nextLong());
+        expertBoard = new ExpertBoard(player1, player2, player3, turn, RandomGenerator.getDefault().nextLong());
         if(!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.JESTER)) {
             setUp();
             return;
@@ -36,17 +36,21 @@ public class JesterTest7 {
             expertBoard.playCard(player1, 5);
             expertBoard.changePhase();
             expertBoard.playCard(player2, 8);
+            expertBoard.changePhase();
+            expertBoard.playCard(player3, 7);
+
         } catch (PhaseNotRightException e) {
             throw new RuntimeException(e);
         }
         expertBoard.getTurn().addCard(player1, new Card(5));
         expertBoard.getTurn().addCard(player2, new Card(8));
+        expertBoard.getTurn().addCard(player3, new Card(7));
         expertBoard.getTurn().changePhase();
         //here is in student phase
     }
 
     @Test
-    void testJesterBoard() {
+    void testJesterOnBoard() {
         var castle = expertBoard.getCastle(player1);
         var studentsOnJester = expertBoard.getAvailableCharacters().get(CharacterUtility.JESTER).getAvailableStudents();
         var studentsInWaitingRoom = castle.getWaitingRoom();
@@ -73,16 +77,19 @@ public class JesterTest7 {
 
         assertThrowsExactly(IllegalStateException.class,
                 ()-> expertBoard.playExpertCard(CharacterUtility.JESTER.getId(), 0, requestedStudents));
-
-
     }
 
     void JesterApplyEffect(int studentsToMove) {
         StudentCharacter jester
-                = new StudentCharacter(7, new Bag(2, RandomGenerator.getDefault().nextLong()));
-        List<StudentColor> studentsOnJester = jester.getAvailableStudents();
+                = new StudentCharacter(
+                        7,
+                        new Bag(2,
+                        RandomGenerator.getDefault().nextLong()));
+        List<StudentColor> studentsOnJester
+                = jester.getAvailableStudents();
         shuffle(studentsOnJester);
-        List<StudentColor> requestedStudents = new ArrayList<>(studentsOnJester.subList(0, studentsToMove));
+        List<StudentColor> requestedStudents
+                = new ArrayList<>(studentsOnJester.subList(0, studentsToMove));
         List<StudentColor> studentsInWaitingRoom
                 = new ArrayList<>(List.of(StudentColor.BLUE, StudentColor.GREEN, StudentColor.BLUE, StudentColor.BLUE, StudentColor.YELLOW, StudentColor.RED, StudentColor.PINK));
         shuffle(studentsInWaitingRoom);
@@ -122,4 +129,24 @@ public class JesterTest7 {
         for (int i = 1; i < 4; i++)
             JesterApplyEffect(i);
     }
+
+    @Test
+    void testException() {
+        assertThrowsExactly(IllegalArgumentException.class,
+                ()-> expertBoard.playExpertCard(7, 0, null),
+                "Without students doesn't work");
+        assertThrowsExactly(IllegalArgumentException.class,
+                ()-> expertBoard.playExpertCard(7, 0, List.of()),
+                "Without students doesn't work");
+        assertThrowsExactly(IllegalArgumentException.class,
+                ()-> expertBoard.playExpertCard(7, 0, List.of(StudentColor.YELLOW)),
+                "Without students doesn't work");
+        assertThrowsExactly(IllegalArgumentException.class,
+                ()-> expertBoard.playExpertCard(7, 0, List.of(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW)),
+                "Without students doesn't work");
+        assertThrowsExactly(IllegalArgumentException.class,
+                ()-> expertBoard.playExpertCard(7, 0, List.of(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW)),
+                "Without students doesn't work");
+    }
+
 }
