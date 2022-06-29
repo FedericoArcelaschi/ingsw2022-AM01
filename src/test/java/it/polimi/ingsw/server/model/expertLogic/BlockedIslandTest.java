@@ -3,7 +3,7 @@ package it.polimi.ingsw.server.model.expertLogic;
 import it.polimi.ingsw.server.model.baseLogic.Island;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.BlockingCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.BlockingCharacter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -10,7 +10,6 @@ import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.Tavern;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;

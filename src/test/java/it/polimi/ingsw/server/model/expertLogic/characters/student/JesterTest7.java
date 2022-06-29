@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertCastle;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.StudentCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.StudentCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ import java.util.random.RandomGenerator;
 import static java.util.Collections.shuffle;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JesterTest { //7° character
+public class JesterTest7 {
 
     private final CharacterExplanation explaination = CharacterExplanation.JESTER;
     private ExpertBoard expertBoard;
@@ -69,7 +69,7 @@ public class JesterTest { //7° character
 
         assertEquals(waitingRoomForComparison,
                 castle.getWaitingRoom(),
-                "new waiting room contains the untouched waiting room + the students moved from JesterTest ");
+                "new waiting room contains the untouched waiting room + the students moved from JesterTest7 ");
 
         assertThrowsExactly(IllegalStateException.class,
                 ()-> expertBoard.playExpertCard(CharacterUtility.JESTER.getId(), 0, requestedStudents));
@@ -114,7 +114,7 @@ public class JesterTest { //7° character
 
         assertEquals(   waitingRoomForComparison,
                         castle.getWaitingRoom(),
-                "new waiting room contains the untouched waiting room + the students moved from JesterTest ");
+                "new waiting room contains the untouched waiting room + the students moved from JesterTest7 ");
     }
 
     @Test

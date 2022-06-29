@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes;
+package it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters;
 
 import it.polimi.ingsw.server.model.baseLogic.Bag;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;

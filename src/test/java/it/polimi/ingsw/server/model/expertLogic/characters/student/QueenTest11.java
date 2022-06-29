@@ -3,20 +3,19 @@ package it.polimi.ingsw.server.model.expertLogic.characters.student;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.exceptions.*;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoardStub;
-import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.StudentCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.StudentCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class QueenTest { //11° character
+public class QueenTest11 {
 
     private final CharacterExplanation characterExplanation = CharacterExplanation.QUEEN;
     private final String player1 = "Laura";

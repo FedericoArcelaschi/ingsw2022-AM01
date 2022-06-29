@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.model.expertLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.Tavern;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 
 import java.util.List;

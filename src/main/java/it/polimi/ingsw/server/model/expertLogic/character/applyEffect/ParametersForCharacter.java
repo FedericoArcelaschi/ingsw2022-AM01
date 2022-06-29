@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.expertLogic.character.applyEffect;
 
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
-import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.BlockingCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.BlockingCharacter;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 
 import java.util.List;

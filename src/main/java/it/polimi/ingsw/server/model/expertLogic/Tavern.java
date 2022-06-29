@@ -1,8 +1,10 @@
-package it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes;
+package it.polimi.ingsw.server.model.expertLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.Bag;
 import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.BlockingCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.StudentCharacter;
 
 import java.util.*;
 

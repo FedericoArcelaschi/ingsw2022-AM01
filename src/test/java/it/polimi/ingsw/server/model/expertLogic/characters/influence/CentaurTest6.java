@@ -16,7 +16,7 @@ import static it.polimi.ingsw.server.model.baseLogic.Team.WHITE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class CentaurTest { //6° character
+public class CentaurTest6 {
 
     CharacterExplanation explanation = CharacterExplanation.CENTAUR;
     ExpertBoardStub expertBoard;

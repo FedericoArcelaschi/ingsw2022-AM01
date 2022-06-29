@@ -2,25 +2,19 @@ package it.polimi.ingsw.server.model.expertLogic.characters.influence;
 
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoardStub;
-import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
-import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
-import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
-import java.util.random.RandomGenerator;
 
 import static it.polimi.ingsw.server.model.baseLogic.Team.BLACK;
 import static it.polimi.ingsw.server.model.baseLogic.Team.WHITE;
 import static org.junit.jupiter.api.Assertions.*;
 
-class FarmerTest { //2° character
+class FarmerTest2 {
 
     CharacterExplanation explanation = CharacterExplanation.FARMER;
     String playerID1 = "£", playerID2 = "$";

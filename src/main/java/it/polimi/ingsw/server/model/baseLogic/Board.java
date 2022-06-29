@@ -30,7 +30,7 @@ public class Board {
     protected final Turn turn;
     //the idea is to save it or send it to the player at the end of the game
     private final long seed;
-    protected IntegerBoxing possibleMovingSteps = new IntegerBoxing(0); //calculated form the card: must be stored in memory til the player action turn
+    protected final IntegerBoxing possibleMovingSteps = new IntegerBoxing(0); //calculated form the card: must be stored in memory til the player action turn
 
     //constants
     private final int INITIAL_NUMBER_OF_ISLANDS = 12;
@@ -128,7 +128,7 @@ public class Board {
             if(castle.isCardAvailable(cardID)) {
                 Card card = castle.playCard(cardID);
                 turn.addCard(playerID, card);
-                possibleMovingSteps = null;
+                possibleMovingSteps.zero();
                 return;
             }
         throw new IllegalArgumentException("Card cannot be played. " +
@@ -182,9 +182,10 @@ public class Board {
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
             throw new PhaseNotRightException("You can't move mother nature in this stage of the game. " +
                     "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
-        if(possibleMovingSteps == null)
-            possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps());
-        if (steps > possibleMovingSteps.getInt() || steps < 1)
+        possibleMovingSteps.add(turn.getPossibleMovingSteps());
+        if(steps < 1)
+            throw new IllegalArgumentException("You must move! Steps must be grater or equal than zero.");
+        if (steps > possibleMovingSteps.getInt())
             throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.getInt());
         if ((motherNaturePosition + steps) >= (islandList.size()))
             motherNaturePosition += steps - islandList.size();
@@ -261,7 +262,8 @@ public class Board {
      */
     public void chooseCloud(String PlayerID, int cloudID) throws TooManyStudentsException, PhaseNotRightException {
         if(turn.getCurrentPhase() != TurnPhase.CLOUD)
-            throw new PhaseNotRightException("You can't use this command in this stage of the game.");
+            throw new PhaseNotRightException("You can't choose a cloud in this phase of the game. " +
+                    "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         if(cloudID < 0 || cloudID >= nPlayer)
             throw new IllegalArgumentException("Illegal cloudId number. Please, insert a number between 1 and " + nPlayer);
         Castle castle = castleMap.get(PlayerID);
@@ -293,8 +295,8 @@ public class Board {
      * @return number of cards left.
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
-    private int remainingCards(){
-        Castle currPlayerCastle = getCastle(turn.getCurrentPlayer());
+    private int remainingCards() {
+        Castle currPlayerCastle = castleMap.get(turn.getCurrentPlayer());
         int cardsLeft = (int) currPlayerCastle.getDeck().stream().filter(Card::isAvailable).count();
         return cardsLeft;
     }

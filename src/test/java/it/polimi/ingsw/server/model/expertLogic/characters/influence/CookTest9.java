@@ -21,7 +21,7 @@ import static it.polimi.ingsw.server.model.baseLogic.StudentColor.YELLOW;
 import static it.polimi.ingsw.server.model.baseLogic.Team.BLACK;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CookTest { //9° character
+public class CookTest9 {
 
     CharacterExplanation explanation = CharacterExplanation.COOK;
     private ExpertInfluence influence;

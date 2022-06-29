@@ -18,7 +18,7 @@ import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StorytellerTest {// 10° character
+public class StorytellerTest10 {
 
     private final CharacterExplanation characterExplanation = CharacterExplanation.STORYTELLER;
     private ExpertBoard expertBoard;

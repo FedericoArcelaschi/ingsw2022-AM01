@@ -2,21 +2,17 @@ package it.polimi.ingsw.server.model.expertLogic.characters.island;
 
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.MapToList;
-import it.polimi.ingsw.server.model.exceptions.*;
-import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoardStub;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterExplanation;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.random.RandomGenerator;
 
 import static it.polimi.ingsw.server.model.baseLogic.StudentColor.*;
-import static it.polimi.ingsw.server.model.baseLogic.Team.WHITE;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GuardTest { //3° Character
+public class GuardTest3 {
 
     CharacterExplanation explanation = CharacterExplanation.GUARD;
     private ExpertBoardStub board;

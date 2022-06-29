@@ -5,7 +5,6 @@ import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.Tavern;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

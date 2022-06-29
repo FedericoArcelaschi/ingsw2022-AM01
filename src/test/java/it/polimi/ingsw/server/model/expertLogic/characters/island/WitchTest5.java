@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WitchTest { //5° character
+public class WitchTest5 {
 
     CharacterExplanation explanation = CharacterExplanation.WITCH;
 

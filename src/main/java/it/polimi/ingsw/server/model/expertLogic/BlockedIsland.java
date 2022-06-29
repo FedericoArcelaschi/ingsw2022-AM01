@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.expertLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
-import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.BlockingCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.BlockingCharacter;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

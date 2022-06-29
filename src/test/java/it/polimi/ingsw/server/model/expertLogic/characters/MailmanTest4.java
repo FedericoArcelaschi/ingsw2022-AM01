@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.expertLogic.characters;
 
+import it.polimi.ingsw.server.model.baseLogic.Card;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
 import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import it.polimi.ingsw.server.model.exceptions.CoinException;
@@ -17,14 +18,14 @@ import java.util.random.RandomGenerator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class MailmanTest { //4° character
+public class MailmanTest4 {
 
     CharacterExplanation explanation = CharacterExplanation.MAILMAN;
 
     private final String player1 = "John";
     private final String player2 = "Travolta";
     private ExpertBoard expertBoard;
-
+    private Card playedCard;
 
     @BeforeEach
     void setUp() {
@@ -35,6 +36,7 @@ public class MailmanTest { //4° character
         }
         try {
             expertBoard.playCard(player1, 5);
+            playedCard = new Card(5);
             expertBoard.changePhase();
             expertBoard.playCard(player2, 7);
             expertBoard.changePhase();
@@ -57,10 +59,11 @@ public class MailmanTest { //4° character
         assertEquals(TurnPhase.MOTHERNATURE, expertBoard.getTurn().getCurrentPhase());
 
         try {
-            expertBoard.moveMotherNature(3 + 2);
+            expertBoard.moveMotherNature(playedCard.distance() + 2);
         } catch (PhaseNotRightException e) {
             e.printStackTrace();
             fail();
         }
+        System.out.println((int)5/2);
     }
 }

@@ -9,7 +9,7 @@ import it.polimi.ingsw.server.model.expertLogic.BlockedIsland;
 import it.polimi.ingsw.server.model.expertLogic.ExpertIsland;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.PossibleParameters;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
-import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes.BlockingCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.BlockingCharacter;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.InfluenceComputingFunction;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ProfessorsComputingExpert;
@@ -71,7 +71,7 @@ public enum CharacterFunction {
             influence.decorateProfessors(function, currTeam);
             }
     ),
-    GUARD( //FIXME /*
+    GUARD(
         (ParametersForCharacter par)
         -> {
             List<Island> islandList = par.getIslandList();
@@ -152,7 +152,6 @@ public enum CharacterFunction {
             islandList.add(islandIndex, blockedIsland);
         }
     ),
-
     CENTAUR(
         (ParametersForCharacter par)
         -> {

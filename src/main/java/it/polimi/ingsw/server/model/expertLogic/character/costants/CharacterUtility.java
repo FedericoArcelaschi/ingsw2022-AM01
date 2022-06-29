@@ -73,6 +73,5 @@ public enum  CharacterUtility {
         }
         throw new ParseException(charName + " is not a character name", 0);
     }
-
 }
 

@@ -22,7 +22,7 @@ import java.util.random.RandomGenerator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TaxmanTest {
+public class TaxmanTest12 {
 
     private final CharacterExplanation explanation = CharacterExplanation.TAXMAN;
     private ExpertBoard expertBoard;

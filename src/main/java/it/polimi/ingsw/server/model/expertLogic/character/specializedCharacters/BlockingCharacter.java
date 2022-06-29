@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.charTypes;
+package it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters;
 
 import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
