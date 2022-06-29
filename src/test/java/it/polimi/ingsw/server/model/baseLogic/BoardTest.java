@@ -284,11 +284,9 @@ public class BoardTest {
         BoardStub bs = new BoardStub(player1, player2, t, new Random().nextLong());
         bs.getToEndGame();
         System.out.println(bs.getData(player1));
-        Team winner;
+        Team winner = null;
         if(bs.getWinnerTeam()!=null)
             winner = bs.getWinnerTeam();
-        else
-            winner = bs.endTheGame();
         //Team expectedWinner = Collections.max(bs.placedTowers().entrySet(), Map.Entry.comparingByValue()).getKey();
         //Map<Team, List<StudentColor>> reverseMap = new HashMap<>();
         //for (Team t : bs.placedTowers().keySet()) {
@@ -307,6 +305,7 @@ public class BoardTest {
         //        //}
         //    }
         //}
+        //assertEquals(expectedWinner, winner);
         System.out.println(winner);
     }
 
@@ -318,11 +317,9 @@ public class BoardTest {
         BoardStub bs = new BoardStub(player1, player2, player3, t, new Random().nextLong());
         bs.getToEndGame();
         System.out.println(bs.getData(player1));
-        Team winner;
+        Team winner = null;
         if(bs.getWinnerTeam()!=null)
             winner = bs.getWinnerTeam();
-        else
-            winner = bs.endTheGame();
         System.out.println(winner);
     }
 
@@ -333,11 +330,9 @@ public class BoardTest {
         BoardStub bs = new BoardStub(player1, player2, "gamma", "delta", t, new Random().nextLong());
         bs.getToEndGame();
         System.out.println(bs.getData(player1));
-        Team winner;
+        Team winner = null;
         if(bs.getWinnerTeam()!=null)
             winner = bs.getWinnerTeam();
-        else
-            winner = bs.endTheGame();
         Team expectedWinner = Collections.max(bs.placedTowers().entrySet(), Map.Entry.comparingByValue()).getKey();
         System.out.println(winner);
     }

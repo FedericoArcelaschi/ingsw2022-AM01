@@ -56,7 +56,10 @@ public class Turn {
             case MOTHERNATURE -> {
                 currentPhase = currentPhase.next();
                 if(isLastTurn) {
-                    changePhase();
+                    //currentPlayer = next(actionOrder, currentPlayer);
+                    //changePhase();
+                    currentPhase = TurnPhase.STUDENTS;
+                    currentPlayer = next(actionOrder, currentPlayer);
                 }
             }
             case CLOUD -> {

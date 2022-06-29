@@ -49,26 +49,6 @@ public class BoardStub extends Board implements EndGame {
         }
     }
 
-    public Team endTheGame() {
-        planning();
-        for (String p : turn.getActionOrder()) {
-            System.out.println("This should be students: " + turn.getCurrentPhase());
-            randomStudentsMoved(p);
-            changePhase();
-            System.out.println("This should be mothernature: " + turn.getCurrentPhase());
-            randomMotherNature();
-            changePhase();
-            if(turn.getActionOrder().get(turn.getActionOrder().size()-1).equals(p)) {
-                try {
-                    winner = getWinner();
-                } catch (DrawException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        return winner;
-    }
-
     public void planning() {
         for (String p : castleMap.keySet()) {
             playRandomCard(p);
@@ -87,12 +67,20 @@ public class BoardStub extends Board implements EndGame {
                 } catch (DrawException e) {
                     throw new RuntimeException(e);
                 }
-                //If there is a winner I immediately end the game
                 break;
             }
+            if(turn.isLastTurn() && turn.getActionOrder().get(turn.getActionOrder().size()-1).equals(p)) {
+                try {
+                    winner = getWinner();
+                } catch (DrawException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             changePhase();
-            randomChooseCloud(p);
-            changePhase();
+            if(turn.getCurrentPhase()==TurnPhase.CLOUD) {
+                randomChooseCloud(p);
+                changePhase();
+            }
         }
     }
 
@@ -142,8 +130,10 @@ public class BoardStub extends Board implements EndGame {
         int steps;
         if (turn.getPossibleMovingSteps() == 1)
             steps = 1;
-        else
-            steps = new Random().nextInt(1, turn.getPossibleMovingSteps()+1);
+        else {
+            steps = new Random().nextInt(1, turn.getPossibleMovingSteps() + 1);
+        }
+        System.out.println(getData(turn.getCurrentPlayer()));
         try {
             moveMotherNature(steps);
         } catch (PhaseNotRightException e) {

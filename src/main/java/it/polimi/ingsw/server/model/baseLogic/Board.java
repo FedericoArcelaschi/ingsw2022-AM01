@@ -184,12 +184,15 @@ public class Board {
         if(possibleMovingSteps == null)
             possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps());
         if (steps > possibleMovingSteps.getInt() || steps < 1)
-            throw new IllegalArgumentException(steps < 1 ? "You can't move by less than one step." : "Too many steps. possible steps: " + possibleMovingSteps.getInt());
+            throw new IllegalArgumentException(steps < 1 ? "You can't move by less than one step." : "Too many steps. possible steps: " + possibleMovingSteps.getInt()
+                                                            + ", attempted steps: " +steps);
         if ((motherNaturePosition + steps) >= (islandList.size()))
             motherNaturePosition += steps - islandList.size();
         else
             motherNaturePosition += steps;
         conquerIsland(motherNaturePosition);
+        if(turn.isLastTurn())
+            possibleMovingSteps.setInt(turn.getNextPossibleMovingSteps());
     }
 
     /**
@@ -277,7 +280,7 @@ public class Board {
         if(turn.isLastActionTurn()) {
             areCloudsRefillable = cloudRefill();
             System.out.println(areCloudsRefillable);
-            endGame =  areCloudsRefillable || remainingCards() == 1;
+            endGame =  areCloudsRefillable || remainingCards() == 0;
         }
         possibleMovingSteps.setInt(turn.getNextPossibleMovingSteps());
     }
@@ -290,12 +293,13 @@ public class Board {
             return true;
         if(bag.remainingStudents() < (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
             turn.setLastTurn(true);
-            //return false;
-            return true;
+            return false;
         }
         if(bag.remainingStudents() == (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
             turn.setLastTurn(true);
         }
+        //if()
+        //cloudList.stream().map(Cloud::isFillable).anyMatch(false);
         cloudList.forEach(Cloud::refill);
         return false;
     }
