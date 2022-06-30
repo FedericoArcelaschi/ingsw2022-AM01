@@ -373,5 +373,4 @@ public enum CharacterFunction {
     CharacterFunction(ApplyEffect function) {
         this.function = function;
     }
-
 }
