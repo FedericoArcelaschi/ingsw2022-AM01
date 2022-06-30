@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.GraphicCastle;
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.GraphicCharacter;
-import it.polimi.ingsw.client.userInterface.gui.graphicObjects.GraphicStudent;
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.MultipleToggleGroup;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.command.CommandType;
@@ -16,7 +15,6 @@ import javafx.scene.layout.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
