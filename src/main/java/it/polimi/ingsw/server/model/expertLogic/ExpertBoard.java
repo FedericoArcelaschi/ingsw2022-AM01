@@ -145,7 +145,6 @@ public class ExpertBoard extends Board {
 
     private @NotNull ParametersForCharacter standardParameters() {
         ParametersForCharacter par = new ParametersForCharacter();
-        possibleMovingSteps.add(turn.getPossibleMovingSteps());
         par.setSteps(possibleMovingSteps);
         return par;
     }

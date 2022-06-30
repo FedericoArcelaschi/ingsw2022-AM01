@@ -183,11 +183,11 @@ public class Board {
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
             throw new PhaseNotRightException("You can't move mother nature in this stage of the game. " +
                     "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
-        possibleMovingSteps.add(turn.getPossibleMovingSteps());
         if(steps < 1)
             throw new IllegalArgumentException("You must move! Steps must be grater or equal than zero.");
         if (steps > possibleMovingSteps.getInt())
             throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.getInt());
+        possibleMovingSteps.add(turn.getPossibleMovingSteps());
         if ((motherNaturePosition + steps) >= (islandList.size()))
             motherNaturePosition += steps - islandList.size();
         else
