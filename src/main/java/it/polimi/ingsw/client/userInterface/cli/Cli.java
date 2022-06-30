@@ -71,7 +71,7 @@ public class Cli implements UserInterface {
      * Is a recursive function: will end only in case of a system shutdown.
      */
     public void readBuffer() {
-        while (true) {
+        while (clientMain.getState() == ClientState.IN_GAME) {
             input = "";
             try {
                 input = br.readLine().strip();
@@ -245,5 +245,9 @@ public class Cli implements UserInterface {
             System.err.flush();
             return getNetworkPreferences();
         }
+        if(requestNewGame(reader))
+            connect(getNetworkPreferences(reader));
+        else
+            System.exit(0);
     }
 }
