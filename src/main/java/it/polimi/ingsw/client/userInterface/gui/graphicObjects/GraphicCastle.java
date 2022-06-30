@@ -44,7 +44,7 @@ public class GraphicCastle extends BorderPane {
 
 class WaitingRoom extends Pane {
     public MultipleToggleGroup multipleToggleGroup;
-    public WaitingRoom(List<StudentColor> students, boolean is3Game, boolean disable) {
+    public WaitingRoom(List<StudentColor> students, boolean disable, boolean is3Game) {
         this.setPrefSize(290, 108);
         List<GraphicStudent> graphicStudents = new ArrayList<>();
         students.forEach(color -> graphicStudents.add(new GraphicStudent(color)));
