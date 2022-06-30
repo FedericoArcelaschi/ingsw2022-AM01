@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.userInterface.gui.controller;
 
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.GraphicCastle;
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.GraphicCharacter;
+import it.polimi.ingsw.client.userInterface.gui.graphicObjects.GraphicStudent;
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.MultipleToggleGroup;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.command.CommandType;
@@ -15,6 +16,7 @@ import javafx.scene.layout.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -58,7 +60,7 @@ public class GamePaneController {
         guiDrawer.drawClouds(boardData.cloudList(), cloudFlowPane, this::chooseCloud);
         guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandLeftPane, islandRightPane, islandsTopRow, islandsBotRow, this::island);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
-        guiDrawer.drawCharacters(boardData.characters(), charFlowPane, this::payCharacter);
+        guiDrawer.drawCharacters(boardData.characters(), boardData.activeChar(), charFlowPane, this::payCharacter, boardData.myCastle().diningRoom());
         guiDrawer.drawTurn(boardData.turn(), turnPane);
         switchCommandMode();
     }
@@ -177,6 +179,7 @@ public class GamePaneController {
         send.accept(command);
     }
 
+
     public void payCharacter(MouseEvent mouseEvent) {
         parameters.clear();
         GraphicCharacter character;
@@ -187,11 +190,24 @@ public class GamePaneController {
             character = (GraphicCharacter) flowPane.getParent();
         }
         parameters.add(character.getAccessibleText());
-        parameters.addAll(character.getMultipleToggleGroup().getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList());
+        List<String> students = character.getMultipleToggleGroup().getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList();
+        parameters.addAll(students);
+        List<String> studentAlert = character.showDialog(students.size() == 0 ? 1 : students.size());
+        parameters.addAll(studentAlert);
+        if ("jester".equals(character.getAccessibleText().toLowerCase())) {
+            try {
+                parameters.addAll(waitingRoomToggleGroup.getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList().subList(0, students.size()));
+            } catch (Exception e) {
+                return;
+            }
+        }
+
         Command command;
         try {
             command = new Command(CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
             send.accept(command);
+            expertMode.setSelected(false);
+            switchCommandMode();
         } catch (IllegalArgumentException | ParseException ignored) {}
     }
 

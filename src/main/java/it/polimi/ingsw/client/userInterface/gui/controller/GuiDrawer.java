@@ -6,6 +6,8 @@ import it.polimi.ingsw.communication.modelData.CloudData;
 import it.polimi.ingsw.communication.modelData.IslandData;
 import it.polimi.ingsw.communication.modelData.TurnData;
 import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
+import it.polimi.ingsw.server.model.baseLogic.StudentColor;
+import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -14,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 public class GuiDrawer {
@@ -61,9 +64,10 @@ public class GuiDrawer {
         cardsFlowPane.getChildren().clear();
     }
 
-    public void drawCharacters(List<CharacterData> characters, FlowPane charFlowPane, EventHandler<MouseEvent> payCharacter){
+    public void drawCharacters(List<CharacterData> characters, CharacterUtility activatedCharacter, FlowPane charFlowPane, EventHandler<MouseEvent> payCharacter, EnumMap<StudentColor, Integer> diningRoom){
         for (CharacterData character : characters) {
-            GraphicCharacter graphicCharacter = new GraphicCharacter(character.getName(), character.getStudents().orElse(new ArrayList<>()), character.getDescription());
+            boolean active = activatedCharacter != null && character.getName().equalsIgnoreCase(activatedCharacter.name());
+            GraphicCharacter graphicCharacter = GraphicCharacter.newGraphicCharacter(character.getName(), character.getStudents(), character.getDescription(), active, diningRoom);
             graphicCharacter.setOnMouseClicked(payCharacter);
             charFlowPane.getChildren().add(graphicCharacter);
         }

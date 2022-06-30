@@ -92,22 +92,34 @@ class DiningRoom extends Pane {
     }
 
     static class Table extends Pane {
+        private boolean selected;
+
         public Table(StudentColor studentColor, int nStudent) {
             List<GraphicStudent> students = new ArrayList<>();
+            selected = false;
 
             for (int i = 0; i < nStudent; i++) {
                 students.add(new GraphicStudent(studentColor, true));
             }
             setStudentPosition(students);
             this.getChildren().addAll(students);
+            this.setOnMouseClicked(this::onClick);
         }
 
-        public void setStudentPosition(List<GraphicStudent> students) {
+        private void setStudentPosition(List<GraphicStudent> students) {
             double y = 287;
             for (GraphicStudent student : students) {
                 student.setLayoutY(y);
                 y -= 32;
             }
+        }
+
+        private void onClick(MouseEvent mouseEvent){
+            if(getStyleClass().contains("selected"))
+                getStyleClass().remove("selected");
+            else
+                getStyleClass().add("selected");
+            selected = !selected;
         }
     }
 }

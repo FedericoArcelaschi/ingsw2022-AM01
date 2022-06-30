@@ -8,12 +8,12 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 
-import java.util.List;
+import java.util.*;
 
 public class GraphicCharacter extends Pane {
     MultipleToggleGroup multipleToggleGroup;
 
-    public GraphicCharacter(String name, List<StudentColor> students, String description) {
+    public GraphicCharacter(String name, List<StudentColor> students, String description, boolean active) {
         this.setPrefSize(111, 200);
         this.getStyleClass().addAll(List.of("character", CharacterExplanation.getInstance(name).getCSS()));
 
@@ -30,6 +30,7 @@ public class GraphicCharacter extends Pane {
             toggleGroup.add(toggleButton);
             flowPane.getChildren().add(toggleButton);
         }
+        if(active) opacity();
 
         Tooltip tooltip = new Tooltip(description);
         Tooltip.install(this, tooltip);
@@ -47,5 +48,33 @@ public class GraphicCharacter extends Pane {
 
     public void setMultipleToggleGroup(MultipleToggleGroup multipleToggleGroup) {
         this.multipleToggleGroup = multipleToggleGroup;
+    }
+
+    public void opacity() {
+        setOpacity(0.5);
+    }
+
+    public List<String>  showDialog(int maxSelect) {
+        return new ArrayList<>();
+    }
+
+    public static GraphicCharacter newGraphicCharacter(String name, Optional<List<StudentColor>> students, String description, boolean active, EnumMap<StudentColor, Integer> diningRoom) {
+        switch (name.toLowerCase()) {
+            case "taxman", "cook" -> {
+                return new GraphicCharacterWithAlert(name, students.orElse(new ArrayList<>()), Arrays.asList(StudentColor.values()), description, active);
+            }
+            case "storyteller" -> {
+                List<StudentColor> s = new ArrayList<>();
+                diningRoom.keySet().forEach(key -> {
+                    for (int i = 0; i < diningRoom.get(key); i++) {
+                        s.add(key);
+                    }
+                });
+                return new GraphicCharacterWithAlert(name, students.orElse(new ArrayList<>()), s, description, active);
+            }
+            default -> {
+                return new GraphicCharacter(name, students.orElse(new ArrayList<>()), description, active);
+            }
+        }
     }
 }

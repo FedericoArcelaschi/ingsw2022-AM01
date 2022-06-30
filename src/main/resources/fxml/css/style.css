@@ -222,3 +222,8 @@
     -fx-border-color: black;
     -fx-border-width: 1;
 }
+
+.selected{
+    -fx-border-color: black;
+    -fx-border-width: 1;
+}
