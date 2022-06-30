@@ -9,20 +9,19 @@ import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
 import it.polimi.ingsw.server.model.exceptions.PhaseNotRightException;
 import it.polimi.ingsw.server.model.exceptions.StudentException;
 import it.polimi.ingsw.server.model.expertLogic.character.applyEffect.ParametersForCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.Tavern;
-import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterParametersType;
+import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 import it.polimi.ingsw.server.model.expertLogic.influence.professor.ExpertProfessors;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class ExpertBoard extends Board {
 
-    private Map<CharacterUtility, StandardCharacter> expertCharactersCards;
-    private CharacterUtility playedExpertChar = null;
+    protected Map<CharacterUtility, StandardCharacter> expertCharactersCards;
+    protected CharacterUtility playedExpertChar = null;
 
     public ExpertBoard(String playerID1, String playerID2, Turn t, long seed) {
         super(t, seed, 2);
@@ -49,7 +48,7 @@ public class ExpertBoard extends Board {
     /**
      * Cleans the contructors' implementation
      */
-    private void construct() {
+    protected void construct() {
         for (int i = 0; i < 12; i++) {
             Island oldIsland = islandList.remove(i);
             islandList.add(i, new ExpertIsland(oldIsland));
@@ -66,7 +65,6 @@ public class ExpertBoard extends Board {
         expertCharactersCards = tavern.extract();
     }
 
-    @Deprecated
     /**
      * Pays for the card and then calls applyEffect with the right parameters
      * @param idChar      character id corresponding to CharacterList's position
@@ -79,13 +77,12 @@ public class ExpertBoard extends Board {
     public void playExpertCard (int idChar, Integer islandIndex, List<StudentColor> studentsList) throws StudentException, CoinException, PhaseNotRightException {
         if(turn.getCurrentPhase() == TurnPhase.PLANNING)
             throw new PhaseNotRightException("You can't use this command in this stage of the game.");
-        StandardCharacter ec = checkLegalExpertCard(idChar);
-        ParametersForCharacter par = getParameters(ec.getCharacterType(), studentsList, islandIndex);
-        int actualCost = ec.getCost();
+        StandardCharacter character = checkLegalExpertCard(idChar);
+        ParametersForCharacter par = getParameters(character, studentsList, islandIndex);
+        int actualCost = character.getCost();
         try{
-            ec.applyEffect(par);
+            character.applyEffect(par);
         } catch (StudentException | IllegalAccessException e) {
-            System.err.println(e.getMessage());
             throw new StudentException(e);
         }
         playedExpertChar = CharacterUtility.getChar(idChar);
@@ -102,11 +99,11 @@ public class ExpertBoard extends Board {
                         "Not possible to play " + charName + " card. During this turn " +
                                 playedExpertChar.name() + " is already active.");
 
-        StandardCharacter ec = expertCharactersCards.get(CharacterUtility.getChar(idChar));
+        CharacterUtility characterUtility = CharacterUtility.getChar(idChar);
 
-        if (ec == null) { //case where there is no active character but the card isn't available
+        if (!expertCharactersCards.containsKey(characterUtility)) {
             String charactersName = expertCharactersCards.values().stream().map(StandardCharacter::getName).toString().replace("[", "").replace("]", "");
-            throw new IllegalArgumentException(CharacterUtility.getChar(idChar) + " was not an extracted character.\n" +
+            throw new IllegalArgumentException(characterUtility.name() + " was not an extracted character.\n" +
                     "Available characters are: " + charactersName);
         }
         int availableCoins = 0;
@@ -115,33 +112,41 @@ public class ExpertBoard extends Board {
                     .get(turn.getCurrentPlayer())
                     .getCoins();
         } catch (WrongGameModeException ignored) {}
-        if(availableCoins < ec.getCost())
-            throw new CoinException(ec.getCost(), availableCoins);
-        return ec;
+        StandardCharacter character = expertCharactersCards.get(characterUtility);
+        if(availableCoins < character.getCost())
+            throw new CoinException(character.getCost(), availableCoins);
+        return character;
     }
 
-    private @NotNull ParametersForCharacter getParameters(CharacterParametersType characterParametersType, List<StudentColor> studentsList, Integer islandIndex) {
-        return switch (characterParametersType) {
-            case STANDARD ->    standardParameters();
-            case STUDENT ->     studentParameters(studentsList, islandIndex);
-            case ISLAND ->      islandParameters(islandIndex);
-            case INFLUENCE ->   influenceParameters(studentsList);
+    /**
+     * Factory to make tailored ParameterForCharacter objects for the character apply effects.
+     * Uses the client inputs and attributes from the board
+     * @param studentsList input from client
+     * @param islandIndex input from client
+     */
+    private @NotNull ParametersForCharacter getParameters(StandardCharacter character, List<StudentColor> studentsList, @Nullable Integer islandIndex) {
+        return switch (character.getCharacterType()) {
+            case STANDARD       -> standardParameters();
+            case STUDENT        -> studentParameters(studentsList, islandIndex);
+            case ISLAND         -> islandParameters(islandIndex);
+            case INFLUENCE      -> influenceParameters(studentsList);
         };
     }
 
     private @NotNull ParametersForCharacter influenceParameters(List<StudentColor> studentsList) {
         ParametersForCharacter par = new ParametersForCharacter();
         par.setInfluence((ExpertInfluence) influence);
-        if(!studentsList.isEmpty()) par.setRequestedStudent(studentsList.get(0));
+        if(studentsList != null)
+            if(!studentsList.isEmpty())
+                par.setRequestedStudent(studentsList.get(0));
         par.setCurrentTeam(getCurrentTeam());
         return par;
     }
 
     private @NotNull ParametersForCharacter standardParameters() {
         ParametersForCharacter par = new ParametersForCharacter();
-        par.setSteps(   possibleMovingSteps == null ?
-                        possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps()) :
-                        possibleMovingSteps);
+        possibleMovingSteps.add(turn.getPossibleMovingSteps());
+        par.setSteps(possibleMovingSteps);
         return par;
     }
 
@@ -164,9 +169,11 @@ public class ExpertBoard extends Board {
         return par;
     }
 
-    private @NotNull ParametersForCharacter islandParameters(Integer islandIndex) {
+    private @NotNull ParametersForCharacter islandParameters(@NotNull Integer islandIndex) {
         ParametersForCharacter par = new ParametersForCharacter();
+        assert influence != null;
         par.setInfluence((ExpertInfluence) influence);
+        assert islandList != null && !islandList.isEmpty();
         par.setIslandList(islandList);
         par.setIslandIndex(islandIndex);
         return par;
@@ -211,11 +218,5 @@ public class ExpertBoard extends Board {
 
     public CharacterUtility getPlayedExpertChar() {
         return playedExpertChar;
-    }
-
-    @Deprecated
-    public StandardCharacter extract4CharacterTesting(int idChar) {
-        Tavern tavern = new Tavern(bag);
-        return tavern.extract4testing(idChar);
     }
 }

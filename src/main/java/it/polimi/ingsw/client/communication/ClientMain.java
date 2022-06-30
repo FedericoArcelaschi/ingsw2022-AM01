@@ -109,16 +109,4 @@ public class ClientMain {
         this.boardData = boardData;
     }
 
-    public static void openRuleBook() {
-        if (Desktop.isDesktopSupported()) {
-            try {
-                File ruleBook = new File( "src/main/resources/rulebook_ITA.pdf");
-                Desktop.getDesktop().open(ruleBook);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                // no application registered for PDFs
-            }
-        } else
-            System.err.println("Your computer does not support the visualization of the Rulebook");
-    }
 }

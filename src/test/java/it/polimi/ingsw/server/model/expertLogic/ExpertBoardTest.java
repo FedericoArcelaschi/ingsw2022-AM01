@@ -26,7 +26,7 @@ public class ExpertBoardTest{
     @BeforeEach
     public void setUp() {
         Turn t = new Turn(Arrays.asList(player1, player2, player3));
-        expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList(player1, player2, player3), true);
+        expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList(player1, player2, player3), true, RandomGenerator.getDefault().nextLong());
         try {
             expertBoard.playCard(player1, 5);
             expertBoard.changePhase();

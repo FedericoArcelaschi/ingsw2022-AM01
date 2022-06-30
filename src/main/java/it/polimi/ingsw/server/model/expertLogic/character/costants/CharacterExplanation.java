@@ -9,9 +9,9 @@ public enum CharacterExplanation{
             call function: paychar MONK: student islandNumber\s"""),
     FARMER( """
             Farmer: this character gives you the chance to have
-            more influence than your competitor.
-            Pay 2 or 3 coins to break tie the number of students
-            in your Castle and take the control over of the professors!
+            more influence than your competitor. Pay to break
+            tie the number of students in your Castle and take
+            the control over of the professors!
             call function: paychar FARMER\s"""),
     GUARD("""
             Guard: this character offers you the chance to conquer another
@@ -19,7 +19,7 @@ public enum CharacterExplanation{
             call function: paychar GUARD islandNumber\s"""),
     MAILMAN("""
             Mailman: this character allows you to optionally move
-            mother nature further by up to 2 steps during the MOTHERNATURE phase.
+            mother nature further by up to 2 steps during the MOTHER NATURE phase.
             call function: paychar MAILMAN\s"""),
     WITCH("""
             Witch: this character can prevent anyone from conquering
@@ -70,14 +70,20 @@ public enum CharacterExplanation{
         return "cardCharacter" + name().substring(0,1).toUpperCase() + name().substring(1).toLowerCase();
     }
 
-    public static CharacterExplanation getInstance(int id) {
-        return CharacterExplanation.values()[id-1];
+    /**
+     * @param charId the ordinal number of the character. charId >= 1, charId <= 12
+     */
+    public static @NotNull CharacterExplanation getInstance(int charId) {
+        if(charId < 1 || charId > CharacterExplanation.values().length)
+            throw new IllegalArgumentException("Not a valid Character id. Please give a value between 1 and " + CharacterExplanation.values().length);
+        return CharacterExplanation.values()[charId - 1];
     }
-    public static CharacterExplanation getInstance(String name) {
+
+    public static @NotNull CharacterExplanation getInstance(String name) {
         for (CharacterExplanation ce: CharacterExplanation.values()) {
             if(name.equals(ce.name()))
                 return ce;
         }
-        throw new IllegalArgumentException("no such character");
+        throw new IllegalArgumentException("'" + name + "' is not a valid Character name");
     }
 }

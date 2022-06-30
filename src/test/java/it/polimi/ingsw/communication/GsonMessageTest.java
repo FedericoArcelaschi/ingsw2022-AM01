@@ -22,7 +22,6 @@ public class GsonMessageTest {
         LobbyInfo lobbyInfo = new LobbyInfo(clientsInLobbyMap, activeGames);
 
         String json = lobbyInfo.toJson();
-        System.out.println(lobbyInfo);
         System.out.println(json);
         Message lobbyInfo1 = new Gson().fromJson(json, Message.class);
         System.out.println(lobbyInfo1);

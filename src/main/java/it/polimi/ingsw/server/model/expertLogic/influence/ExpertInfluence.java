@@ -19,7 +19,6 @@ import java.util.Optional;
 public class ExpertInfluence extends Influence {
 
     private final ExpertProfessors professors;
-
     private InfluenceComputingExpert<PossibleParameters> function;
     private PossibleParameters var;
 
@@ -30,15 +29,21 @@ public class ExpertInfluence extends Influence {
         var = null;
     }
 
-    public void decorateInfluence(InfluenceComputingExpert<PossibleParameters> function,
-                                  PossibleParameters var) {
+    /**
+     * @param function custom function that will be used in the next turn's influence computing
+     * @param var a parameter that may be used to modify the influence computing
+     */
+    public void decorateInfluence(InfluenceComputingExpert<PossibleParameters> function, @Nullable PossibleParameters var) {
         this.function = function;
         this.var = var;
     }
 
-    //for ExpertMode - Professors
-    public void decorateProfessors(ProfessorsComputingExpert<PossibleParameters> function, @Nullable PossibleParameters x) {
-        professors.decorate(function, x);
+    /**
+     * @param function custom function that will be used in the next turn professors assigning
+     * @param var a parameter that may be used to modify the professor location.
+     */
+    public void decorateProfessors(ProfessorsComputingExpert<PossibleParameters> function, @Nullable PossibleParameters var) {
+        professors.decorate(function, var);
     }
 
     /**
@@ -48,6 +53,7 @@ public class ExpertInfluence extends Influence {
     public void reset() {
         professors.reset();
         function = InterfaceAdapter.adaptExpertInfluence(defaultFunction);
+        var = null;
     }
 
     @Override

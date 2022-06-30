@@ -45,14 +45,15 @@ public class Influence {
         return professorsMap.getProfessorsAssigning();
     }
 
+    public void reset() {}
 
+    protected final InfluenceComputing defaultFunction =
     /**
      * Default function to compute influence in the base game mode or in the expertLogic game without special effects.
      * @param island        the island to compute the influence on
      * @param professorsMap the professors map used to compute the influence
      * @return the influenceMap that contains the winning team
      */
-    protected final InfluenceComputing defaultFunction=
         (Island island, Map<StudentColor, Team> professorsMap) -> {
             Map< Team, Integer> influenceMap = new HashMap<>();
             //counts the students
@@ -72,7 +73,5 @@ public class Influence {
             }
             return influenceMap;
         };
-
-    public void reset() {}
 
 }

@@ -17,12 +17,11 @@ public class BoardTest {
     private Turn t;
     private final int seed = 1;
 
-
     @BeforeEach
     void setUp() {
         List<String> listOfPlayer = Arrays.asList(player1, player2);
         t = new Turn(listOfPlayer);
-        b = BoardFactory.getBoard(listOfPlayer, false);
+        b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
     }
 
     void turnSetUpStudents() throws PhaseNotRightException {
@@ -45,7 +44,6 @@ public class BoardTest {
         b.getTurn().changePhase();
         //now it's chooseclouod
     }
-
     @Test
     public void testBoardIslandNumber() {
 
@@ -143,7 +141,7 @@ public class BoardTest {
     @Test
     public void testMoveStudentToIsland() throws NoSuchStudentException, PhaseNotRightException {
         turnSetUpStudents();
-        List<StudentColor> studentColorList = new ArrayList<>();
+        List<StudentColor> studentColorList =  new ArrayList<>();
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(1));
         Map<StudentColor, Integer> students = new HashMap<>();
@@ -222,7 +220,7 @@ public class BoardTest {
         turn.changePhase();
         //List<StudentColor> availableStudents = board.getCastle("prova").waitingRoom.subList(0, 3);
         //System.out.println(availableStudents);
-        //board.moveStudentsToDiningRoom("prova", availableStudents);
+        //board.easyMoveStudentsToDiningRoom("prova", availableStudents);
         turn.changePhase();
         board.moveMotherNature(1);
         assertEquals(1, board.getMotherNaturePosition());

@@ -83,14 +83,13 @@
       <version> 2.9.0 </version>
     </dependency>
 
-    <!-- deployment -->
     <dependency>
-      <groupId> org.apache.maven.plugins </groupId>
-      <artifactId> maven-assembly-plugin </artifactId>
-      <version> 3.3.0 </version>
-      <type> maven-plugin </type>
+        <groupId> org.apache.maven.plugins </groupId>
+        <artifactId> maven-assembly-plugin </artifactId>
+        <version> 3.3.0 </version>
     </dependency>
   </dependencies>
+
 
   <build>
     <pluginManagement>
@@ -155,10 +154,15 @@
 
       <plugin>
         <artifactId> maven-assembly-plugin </artifactId>
-        <version> 3.3.0 </version>
         <configuration>
-          <archive manifest='mainClass = "it.polimi.ingsw.startUp.Main"'/>
-          <descriptorRefs format = 'jar-with-dependencies'/>
+          <archive>
+            <manifest
+                    mainClass="it.polimi.ingsw.startUp.Main">
+            </manifest>
+          </archive>
+          <descriptorRefs>
+            jar-with-dependencies
+          </descriptorRefs>
         </configuration>
 
         <executions>

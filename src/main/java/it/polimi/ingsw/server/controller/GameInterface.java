@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.Message;
 import it.polimi.ingsw.communication.message.subclasses.EndGame;
-import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.server.communication.Client;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 import javafx.scene.control.Alert.AlertType;
@@ -17,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * class to adapt the communication layer to the controller.
+ * Class to adapt the communication layer to the controller.
  */
 public class GameInterface {
 
@@ -37,12 +36,12 @@ public class GameInterface {
         send(game.updateAll());
     }
 
-    public void executeCommand(Command command, Client client) {
+    public synchronized void executeCommand(Command command, Client client) {
         logger.info(this + " is executing command: "+ command);
         try {
             clients.forEach(
                     client1 -> {
-                        if(client1.equals(client))
+                        if(client1.equals(client)) //the client who sent the command must be playing this game
                                 command.setUsername(client.username());
                     });
             send(game.executeCommand(command));
@@ -56,7 +55,7 @@ public class GameInterface {
         logger.info("clients: " + clients.stream().map(Client::username).collect(Collectors.toSet()));
         usernameMessageMap.forEach(
                 (key, value) -> clients.stream()
-                .filter(i -> i.username().equals(key))
+                .filter(client -> client.username().equals(key))
                 .findFirst()
                 .ifPresentOrElse(client -> client.send(value),
                         () -> logger.info("client not in game!")));

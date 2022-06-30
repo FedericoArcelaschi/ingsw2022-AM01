@@ -4,13 +4,10 @@ import it.polimi.ingsw.server.model.baseLogic.Bag;
 import it.polimi.ingsw.server.model.baseLogic.Board;
 import it.polimi.ingsw.server.model.baseLogic.BoardFactory;
 import it.polimi.ingsw.server.model.baseLogic.Turn;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.*;
-import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
+import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.random.RandomGenerator;
@@ -25,7 +22,7 @@ public class TavernTest{
     @BeforeAll
     static void beforeAll() {
         t = new Turn(Arrays.asList("a","b"));
-        board = BoardFactory.getBoard(Arrays.asList("a","b"), true);
+        board = BoardFactory.getBoard(Arrays.asList("a","b"), true, RandomGenerator.getDefault().nextLong());
         tavern = new Tavern(new Bag(20, 1));
     }
 

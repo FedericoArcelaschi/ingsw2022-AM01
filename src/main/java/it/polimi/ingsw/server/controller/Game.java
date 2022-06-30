@@ -12,7 +12,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.random.RandomGenerator;
 
+/**
+ * This class encapsulates the controller. It is used to perform commands, as well as checking whehter or not the game is
+ * over, and checking for the validity of a command.
+ * Upon performing a command, an update is returned to its GameInterface, which will proceed to notify
+ * all players of the action.
+ */
 public class Game {
 
     private final static Logger logger = Logger.getLogger(Game.class);
@@ -24,7 +31,7 @@ public class Game {
     private int movedStudents = 0;
 
     public Game(GameType gameType, List<String> usernames) {
-        this.board = BoardFactory.getBoard(usernames, gameType.expertMode);
+        this.board = BoardFactory.getBoard(usernames, gameType.expertMode, RandomGenerator.getDefault().nextLong());
         this.turn  = board.getTurn();
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
@@ -35,6 +42,13 @@ public class Game {
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
 
+    /**
+     * Checks if the {@link Command#username()} is the current player.
+     * if he is the current player he can play the command on the model.
+     * @see         Turn#getCurrentPlayer()
+     * @return      either an error message addressed to the single player or
+     *              an update message for all the player in the game
+     */
     public @NotNull Map<String, Message> executeCommand(@NotNull Command command) {
         if(!command.username().equals(turn.getCurrentPlayer()))
             return errorMessage(command.username(), new Exception("You can't play! It's " + turn.getCurrentPlayer() + "'s turn"));
@@ -136,7 +150,7 @@ public class Game {
     private @NotNull Map<String, Message> payCharCommand(@NotNull Command command) {
         try {
             board.playExpertCard(command.getCharId(), command.getIslandId() - 1, command.getStudents());
-        } catch (WrongGameModeException | CoinException | StudentException | PhaseNotRightException | IllegalStateException e) {
+        } catch (WrongGameModeException | CoinException | StudentException | PhaseNotRightException | RuntimeException e) {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
@@ -147,7 +161,8 @@ public class Game {
         Map<String, Message> usernameMessageMap = new HashMap<>();
         board   .getCastleMap()
                 .keySet()
-                .forEach(i->usernameMessageMap.put(i, new Update(board.getData(i))));
+                .forEach(i ->
+                        usernameMessageMap.put(i, new Update(board.getData(i))));
         return usernameMessageMap;
     }
 
