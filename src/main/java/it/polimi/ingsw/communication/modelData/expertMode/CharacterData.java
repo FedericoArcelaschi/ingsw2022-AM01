@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,11 +16,11 @@ public class CharacterData {
     private final String description;
     private final CharacterUtility characterUtility;
 
-    public CharacterData(CharacterUtility characterUtility, int cost, Optional<List<StudentColor>> students, String description){
+    public CharacterData(CharacterUtility characterUtility, int cost, List<StudentColor> students, String description){
         this.name = characterUtility.name();
         this.characterUtility = characterUtility;
         this.cost = cost;
-        this.students = students.orElse(new ArrayList<>());
+        this.students = students;
         this.description = description;
     }
 
@@ -48,8 +49,8 @@ public class CharacterData {
         return cost;
     }
 
-    public Optional<List<StudentColor>> getStudents() {
-        return Optional.ofNullable(students);
+    public List<StudentColor> getStudents() {
+        return students;
     }
 
     public String getDescription() {

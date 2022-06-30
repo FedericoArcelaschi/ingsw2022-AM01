@@ -72,7 +72,7 @@ public class ClientMain {
                 else if(stringCommand.strip().equalsIgnoreCase("charinfo"))
                     System.out.println(boardData.characters().stream().map(CharacterData::getDescription).collect(Collectors.toList()));
                 else if(stringCommand.strip().equalsIgnoreCase("rules")) {
-                    openRuleBook();
+                    //soutOutputs.RULES;
                 } else {
                     try {
                         CommandMessage commandMessage = new CommandMessage(stringCommand);

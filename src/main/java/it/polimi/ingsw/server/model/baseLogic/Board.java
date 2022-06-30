@@ -270,7 +270,7 @@ public class Board {
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
         castle.addStudentsInWaitingRoom(cloud.choose());
-        //endOfRound();
+        endOfRound();
     }
 
     /**

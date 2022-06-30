@@ -58,10 +58,10 @@ public class GraphicCharacter extends Pane {
         return new ArrayList<>();
     }
 
-    public static GraphicCharacter newGraphicCharacter(String name, Optional<List<StudentColor>> students, String description, boolean active, EnumMap<StudentColor, Integer> diningRoom) {
+    public static GraphicCharacter newGraphicCharacter(String name, List<StudentColor> students, String description, boolean active, EnumMap<StudentColor, Integer> diningRoom) {
         switch (name.toLowerCase()) {
             case "taxman", "cook" -> {
-                return new GraphicCharacterWithAlert(name, students.orElse(new ArrayList<>()), Arrays.asList(StudentColor.values()), description, active);
+                return new GraphicCharacterWithAlert(name, students, Arrays.asList(StudentColor.values()), description, active);
             }
             case "storyteller" -> {
                 List<StudentColor> s = new ArrayList<>();
@@ -70,10 +70,10 @@ public class GraphicCharacter extends Pane {
                         s.add(key);
                     }
                 });
-                return new GraphicCharacterWithAlert(name, students.orElse(new ArrayList<>()), s, description, active);
+                return new GraphicCharacterWithAlert(name, students, s, description, active);
             }
             default -> {
-                return new GraphicCharacter(name, students.orElse(new ArrayList<>()), description, active);
+                return new GraphicCharacter(name, students, description, active);
             }
         }
     }

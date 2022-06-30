@@ -61,6 +61,7 @@ public class WitchTest5 {
                                 15,
                                 List.of()),
                 "Illegal argument if a island number too big is given to the island");
+
         assertThrowsExactly(IllegalArgumentException.class,
                 ()->
                 expertBoard.playExpertCard(

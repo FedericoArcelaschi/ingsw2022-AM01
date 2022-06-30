@@ -24,8 +24,4 @@ public enum CommandType {
         }
         throw new ParseException("'" + commandString + "' is not a valid command. Please use 'help' to get a list of valid commands.", 0);
     }
-
-    public String getCommandString(){
-        return commandString;
-    }
 }

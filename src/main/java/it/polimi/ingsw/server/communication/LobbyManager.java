@@ -143,13 +143,4 @@ public class LobbyManager {
                         .filter(Objects::nonNull)
                         .count();
     }
-
-    public void remove(Client client) {
-        if(!clientsToInform.remove(client))
-            gameClientsMap.forEach((key, value) -> value.remove(client));
-        clientsToInform.forEach(this::sendLobbyInfo);
-        gameClientsMap.forEach(
-                (key, value) ->
-                value.forEach(this::sendLobbyInfo));
-    }
 }

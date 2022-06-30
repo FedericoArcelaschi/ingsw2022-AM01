@@ -32,6 +32,7 @@ public class StudentCharacter extends StandardCharacter {
     /**
      * MONK: Adds one student from the card to the given island
      * JESTER: Switches three or fewer students form the card to the dining room
+     * QUEEN: lets you swap a student in the dining room with a student on the card
      *
      * @param par   The student(s) that this character will affect (move)
      *              The index to use in case the student(s) need(s) to be moved to an island
