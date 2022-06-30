@@ -5,9 +5,9 @@ import it.polimi.ingsw.server.model.baseLogic.Island;
 import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
-import java.util.Map;
 
 /**
  * A decorator to the normal Island or Archipelago.
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class ExpertIsland extends Island implements StudentPlaces {
 
-    private Island island;
+    private @NotNull Island island;
 
     public ExpertIsland(@NotNull Island island) {
         this.island = island;
@@ -37,7 +37,7 @@ public class ExpertIsland extends Island implements StudentPlaces {
 
 //As for Base mode:
     @Override
-    public Team getOwnership() {
+    public @Nullable Team getOwnership() {
         return island.getOwnership();
     }
 

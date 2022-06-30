@@ -16,11 +16,11 @@ public class CharacterData {
     private final String description;
     private final CharacterUtility characterUtility;
 
-    public CharacterData(CharacterUtility characterUtility, int cost, Optional<List<StudentColor>> students, String description){
+    public CharacterData(CharacterUtility characterUtility, int cost, List<StudentColor> students, String description){
         this.name = characterUtility.name();
         this.characterUtility = characterUtility;
         this.cost = cost;
-        this.students = students.orElse(new ArrayList<>());
+        this.students = students;
         this.description = description;
     }
 
@@ -49,8 +49,8 @@ public class CharacterData {
         return cost;
     }
 
-    public Optional<List<StudentColor>> getStudents() {
-        return Optional.ofNullable(students);
+    public List<StudentColor> getStudents() {
+        return students;
     }
 
     public String getDescription() {

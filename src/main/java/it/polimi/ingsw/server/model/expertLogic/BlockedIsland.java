@@ -2,8 +2,10 @@ package it.polimi.ingsw.server.model.expertLogic;
 
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.BlockingCharacter;
 import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 
@@ -14,14 +16,14 @@ import java.util.EnumMap;
  */
 public class BlockedIsland extends ExpertIsland implements StudentPlaces {
 
-    private final ExpertIsland island;
+    private final @NotNull ExpertIsland island;
 
     /**
      * Needed to restore the "Block Tile" when the island is unlocked.
      */
-    private final BlockCharacter witch;
+    private final BlockingCharacter witch;
 
-    public BlockedIsland(ExpertIsland island, BlockCharacter witch) {
+    public BlockedIsland(@NotNull ExpertIsland island, BlockingCharacter witch) {
         super();
         this.island = island;
         this.witch = witch;
@@ -36,6 +38,16 @@ public class BlockedIsland extends ExpertIsland implements StudentPlaces {
     public ExpertIsland setOwnership(Team ownership) {
         witch.addBlockTile();
         return island; //unchanged ownership.
+    }
+
+    @Override
+    public @Nullable Team getOwnership() {
+        return island.getOwnership();
+    }
+
+    @Override
+    public int getIslandNumber() {
+        return island.getIslandNumber();
     }
 
     @Override

@@ -58,18 +58,6 @@ public class ExpertCastleTest{
     }
 
     @Test
-    public void testRemoveStudentFromDiningRoom() throws TooManyStudentsException, NoSuchStudentException {
-        try {
-            expertCastle.addStudentsInDiningRoom(Arrays.asList(StudentColor.YELLOW, StudentColor.YELLOW));
-        } catch (it.polimi.ingsw.server.model.exceptions.TooManyStudentsException e) {
-            throw new RuntimeException(e);
-        }
-        expertCastle.removeStudentFromDiningRoom(StudentColor.YELLOW);
-        int numberOfYellows = expertCastle.getDiningRoom().get(StudentColor.YELLOW);
-        assertEquals(1, numberOfYellows);
-    }
-
-    @Test
     //test not enough coins
     public void testFalsePayChar() {
         assertEquals(1, expertCastle.getCoins());

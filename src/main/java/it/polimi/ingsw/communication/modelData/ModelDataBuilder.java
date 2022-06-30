@@ -7,10 +7,14 @@ import it.polimi.ingsw.communication.modelData.expertMode.ExpertIslandData;
 import it.polimi.ingsw.server.model.baseLogic.*;
 import it.polimi.ingsw.server.model.exceptions.WrongGameModeException;
 import it.polimi.ingsw.server.model.expertLogic.ExpertBoard;
-import it.polimi.ingsw.server.model.expertLogic.character.charTypes.StandardCharacter;
+import it.polimi.ingsw.server.model.expertLogic.character.StandardCharacter;
 
 import java.util.*;
 
+/**
+ * The class is used to build objects that encapsulate the data of the single elements of the model.
+ * Each of its methods takes in input the respective portion of the model, and returns view for the client.
+ */
 public abstract class ModelDataBuilder {
     public static BoardData newBoardData(Board board, String username) {
         return new BoardData(
@@ -47,7 +51,7 @@ public abstract class ModelDataBuilder {
     }
 
     private static CharacterData newCharacterData(StandardCharacter character) {
-        return new CharacterData(character.getCharacterUtility(), character.getCost(), Optional.ofNullable(character.getAvailableStudents()), character.getExplanation());
+        return new CharacterData(character.getCharacterUtility(), character.getCost(), Optional.ofNullable(character.getAvailableStudents()).orElse(new ArrayList<>()), character.getExplanation());
     }
 
     private static CloudData newCloudData(Cloud cloud) {

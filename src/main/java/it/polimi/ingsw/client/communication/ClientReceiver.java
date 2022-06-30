@@ -68,17 +68,19 @@ class HeartBeatClient implements Runnable {
 
     @Override
     public synchronized void run() {
-        connected = false;
-        try {
-            wait(TIMEOUT);
-        } catch (InterruptedException e) {
-            System.err.println(e.getMessage());
-        }
-        if (!connected) {
+        while (true) {
+            connected = false;
+            try {
+                wait(TIMEOUT);
+            } catch (InterruptedException e) {
+                System.err.println(e.getMessage());
+            }
+            if (!connected) {
             System.out.println("Disconnected from HeartBeatClient");
-            userInterface.disconnected();
+                userInterface.disconnected();
+                break;
+            }
         }
-        run();
     }
 
     void validate() {

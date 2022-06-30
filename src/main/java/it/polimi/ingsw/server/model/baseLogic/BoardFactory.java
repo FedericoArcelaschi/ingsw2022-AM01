@@ -7,14 +7,6 @@ import java.util.random.RandomGenerator;
 
 public interface BoardFactory {
 
-    //without seed
-    static Board getBoard(List<String> playerList, boolean expert) {
-        Turn turn = new Turn(playerList);
-        if(expert)
-            return createExpertBoard(playerList, turn, RandomGenerator.getDefault().nextLong());
-        return createBoard(playerList, turn, RandomGenerator.getDefault().nextLong());
-    }
-
     //with seed
     static Board getBoard(List<String> playerList, boolean expert, long seed) {
         Turn turn = new Turn(playerList);

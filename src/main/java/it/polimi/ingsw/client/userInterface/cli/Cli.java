@@ -22,14 +22,13 @@ import java.util.concurrent.*;
 
 import static it.polimi.ingsw.startUp.Outputs.CLEAR_SCREEN;
 
-public class Cli implements UserInterface {
+public class Cli implements UserInterface, DefaultConversations {
 
     private final ClientMain clientMain;
-    private final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final long READ_TIME = 50;
     private String input = "";
-    private String newGame;
     private boolean firstUpdate = true;
     private final SocketAddress DEFAULT_ADDRESS = new InetSocketAddress("localhost", 12345);
 
@@ -47,7 +46,7 @@ public class Cli implements UserInterface {
     private void connect(@Nullable SocketAddress address) {
         if (address != null)
             clientMain.connect(address);
-        if (!clientMain.isConnected()) connect(getNetworkPreferences());
+        if (!clientMain.isConnected()) connect(getNetworkPreferences(reader));
         System.out.println("connected!");
     }
 
@@ -71,10 +70,10 @@ public class Cli implements UserInterface {
      * Is a recursive function: will end only in case of a system shutdown.
      */
     public void readBuffer() {
-        while (true) {
+        while (clientMain.getState() == ClientState.IN_GAME) {
             input = "";
             try {
-                input = br.readLine().strip();
+                input = reader.readLine().strip();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -92,7 +91,7 @@ public class Cli implements UserInterface {
             System.out.println(lobbyInfo);
             if (clientMain.getState() == ClientState.OUTSIDE_LOBBY) {
                 synchronized (System.out) {
-                    clientMain.sendPreferences(this.getValidPreferences());
+                    clientMain.sendPreferences(this.getValidPreferences(reader));
                 }
                 clientMain.setState(ClientState.INSIDE_LOBBY);
             }
@@ -116,9 +115,9 @@ public class Cli implements UserInterface {
         System.out.println(endGameMessage.getCause());
         executor.submit(
                 () -> {
-                    if (requestNewGame()) {
+                    if (requestNewGame(reader)) {
                         clientMain.setState(ClientState.OUTSIDE_LOBBY);
-                        clientMain.sendPreferences(this.getValidPreferences());
+                        clientMain.sendPreferences(this.getValidPreferences(reader));
                         clientMain.setState(ClientState.INSIDE_LOBBY);
                     } else {
                         System.out.println("Goodbye!");
@@ -135,115 +134,11 @@ public class Cli implements UserInterface {
     @Override
     public void disconnected() {
         clientMain.setState(ClientState.NOT_CONNECTED);
-        System.err.println("connection lost: you left the game.");
+        System.err.println("connection lost: you left the game.\n");
         System.err.flush();
-        this.connect(DEFAULT_ADDRESS);
-    }
-
-
-    //SUPPORT METHODS:
-    private boolean requestNewGame() {
-        String query = "Do you want to play a new game? (y/n)";
-        Boolean answer;
-        do {
-            System.out.println(query);
-            query = "Please answer with yes or no.";
-            try {
-                answer = getBoolean(br.readLine().strip());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } while (answer == null);
-        return answer;
-    }
-
-    /**
-     * Before opening the connection with the server the client requires to insert the preferences.
-     */
-    private @NotNull Preferences getValidPreferences() {
-        int nPlayer;
-        Boolean expertMode;
-        String query = "Enter username:";
-        String username;
-        try {
-            do {
-                System.out.println(query);
-                username = br.readLine().strip();
-                query = "Enter a valid username:";
-            } while (username == null || username.isBlank());
-
-            query = "Enter the number of players:";
-            do {
-                System.out.println(query);
-                try {
-                    nPlayer = Integer.parseInt(br.readLine());
-                } catch (NumberFormatException ignored) {
-                    nPlayer = 0;
-                }
-                query = "Enter a valid number of players: (between 2 and 4)";
-            } while (nPlayer < 2 || nPlayer > 4);
-
-            query = "Expert mode? (Y/n)";
-            do {
-                System.out.println(query);
-                expertMode = getBoolean(br.readLine().strip());
-            } while (expertMode == null);
-
-        } catch (IOException e) {
-            System.err.println("input error:\n\t" + e.getMessage());
-            return getValidPreferences();
-        }
-        try {
-            System.out.println(Outputs.CLEAR_SCREEN);
-            return new Preferences(username, nPlayer, expertMode);
-        } catch (IllegalAccessException e) {
-            System.err.println(e.getMessage());
-            return getValidPreferences();
-        }
-    }
-
-    private @Nullable Boolean getBoolean(String s) {
-        if (s.equalsIgnoreCase("y") || s.equalsIgnoreCase("yes"))
-            return true;
-        if (s.equalsIgnoreCase("n") || s.equalsIgnoreCase("no"))
-            return false;
-        return null;
-    }
-
-    private @NotNull SocketAddress getNetworkPreferences() {
-        String hostName;
-        int port = 0;
-        InetAddress address = null;
-
-        synchronized (System.out) {
-            while (address == null) {
-                try {
-                    System.out.println("\ninsert the host IP:");
-                    hostName = br.readLine().strip();
-                    address = Inet4Address.getAllByName(hostName)[0];
-                } catch (IOException e) {
-                    System.out.println("\u001b[31m" + e.getMessage() + "\u001b[0m");
-                }
-            }
-            while (port == 0) {
-                try {
-                    System.out.println("\ninsert the port:");
-                    port = Integer.parseInt(br.readLine().strip());
-                } catch (NumberFormatException e) {
-                    System.out.println("\u001b[31mNot a valid number.\u001b[0m");
-                    System.err.flush();
-                } catch (IOException e) {
-                    System.err.println(e.getMessage());
-                    System.err.flush();
-                }
-            }
-        }
-        try {
-            return new InetSocketAddress(address, port);
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-            System.err.flush();
-            return getNetworkPreferences();
-        }
+        if(requestNewGame(reader))
+            connect(getNetworkPreferences(reader));
+        else
+            System.exit(0);
     }
 }

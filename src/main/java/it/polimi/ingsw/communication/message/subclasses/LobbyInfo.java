@@ -19,13 +19,9 @@ public class LobbyInfo extends Message {
         super(MessageType.LOBBYINFO);
         this.activeGames = activeGames;
         lobbies = new ArrayList<>();
-        for (GameType gt: clientsInLobbyMap.keySet()) {
-            lobbies.add(new Lobby(gt, clientsInLobbyMap.get(gt)));
+        for (GameType gameType: clientsInLobbyMap.keySet()) {
+            lobbies.add(new Lobby(gameType, clientsInLobbyMap.get(gameType)));
         }
-    }
-
-    public Map<GameType, Integer> getActiveGames() {
-        return activeGames;
     }
 
     public List<Lobby> getLobbies() {
@@ -47,7 +43,6 @@ public class LobbyInfo extends Message {
             builder.append("|               |  ")
                     .append(gameType.expertMode ? "expert" : "normal")
                     .append(" mode  ||");
-            //lobbies.computeIfAbsent(gameType, k -> new HashSet<String>());
             for (String player : lobbies.get(i).getConnectedPlayers()) {
                 numberOfDrawnPlayers++;
                 if (player.length() > 10) {
@@ -96,6 +91,10 @@ public class LobbyInfo extends Message {
         return builder.toString();
     }
 
+    /**
+     * Structure to keep the client list ordered.
+     * Used in the LoginPane for formatting.
+     */
     public static class Lobby {
         private final GameType gameType;
         private final Set<String> connectedPlayers;

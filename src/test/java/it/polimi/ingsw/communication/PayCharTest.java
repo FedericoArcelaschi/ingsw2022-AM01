@@ -14,10 +14,10 @@ public class PayCharTest {
         final String com = "paychar mailman 1";
         assertThrowsExactly(IllegalArgumentException.class, ()-> new Command(com));
         final String com1 = "paychar mailman blue";
-        assertThrowsExactly(IllegalArgumentException.class, ()-> new Command(com));
+        assertThrowsExactly(IllegalArgumentException.class, ()-> new Command(com1));
         final String com2 = "paychar mailman";
         try {
-            new Command(com);
+            new Command(com2);
         } catch (ParseException e) {
             fail();
         }

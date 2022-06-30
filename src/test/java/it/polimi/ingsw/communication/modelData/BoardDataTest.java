@@ -20,7 +20,7 @@ class BoardDataTest {
     @Test
     void toStringTest() throws PhaseNotRightException, NoSuchStudentException, TooManyStudentsException {
         BoardData bd;
-        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio", "pippo"), false);
+        Board b = BoardFactory.getBoard(Arrays.asList("fede","gio", "pippo"), false, RandomGenerator.getDefault().nextLong());
         b.playCard("fede", 2);
         b.changePhase();
         b.playCard("gio", 3);
