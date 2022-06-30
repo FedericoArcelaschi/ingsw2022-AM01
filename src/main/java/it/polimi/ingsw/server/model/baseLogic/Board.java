@@ -246,10 +246,10 @@ public class Board {
      */
     protected void joinIslands(@NotNull List<Integer> islandsToJoin) {
         int firstIslandIndex = islandsToJoin.get(0);
-        List<Island> islandList = new ArrayList<>();
-        islandsToJoin.forEach(index -> islandList.add(this.islandList.get(index)));
-        this.islandList.add(firstIslandIndex, new Archipelago(islandList));
-        this.islandList.removeAll(islandList);
+        List<Island> islandsToRemove = new ArrayList<>();
+        islandsToJoin.forEach(index -> islandsToRemove.add(this.islandList.get(index)));
+        this.islandList.add(firstIslandIndex, new Archipelago(islandsToRemove));
+        this.islandList.removeAll(islandsToRemove);
         motherNaturePosition = firstIslandIndex;
     }
 
