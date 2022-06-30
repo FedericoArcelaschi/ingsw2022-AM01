@@ -194,7 +194,7 @@ public class GamePaneController {
         parameters.addAll(students);
         List<String> studentAlert = character.showDialog(students.size() == 0 ? 1 : students.size());
         parameters.addAll(studentAlert);
-        if ("jester".equals(character.getAccessibleText().toLowerCase())) {
+        if ("jester".equalsIgnoreCase(character.getAccessibleText())) {
             try {
                 parameters.addAll(waitingRoomToggleGroup.getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList().subList(0, students.size()));
             } catch (Exception e) {

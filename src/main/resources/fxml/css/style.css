@@ -26,6 +26,10 @@
     -fx-background-repeat: stretch;
 }
 
+.blockedIsland{
+    -fx-background-image: url("/islands/island1.png");
+}
+
 .cloud{
     -fx-background-image: url("/clouds/cloud_card.png");
     -fx-background-size: 180, 180;

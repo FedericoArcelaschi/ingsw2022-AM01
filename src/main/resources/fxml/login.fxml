@@ -72,5 +72,6 @@
          </children>
       </Pane>
       <Button fx:id="submitButton" defaultButton="true" disable="true" layoutX="530" layoutY="460" mnemonicParsing="false" onAction="#submitPreferences" text="Play" />
+      <Button layoutX="456.0" layoutY="461.0" mnemonicParsing="false" onMouseClicked="#openRulebook" text="Rulebook" />
    </children>
 </Pane>

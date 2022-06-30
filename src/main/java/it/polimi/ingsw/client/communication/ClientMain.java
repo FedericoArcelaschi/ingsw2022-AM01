@@ -109,7 +109,7 @@ public class ClientMain {
         this.boardData = boardData;
     }
 
-    public void openRuleBook() {
+    public static void openRuleBook() {
         if (Desktop.isDesktopSupported()) {
             try {
                 File ruleBook = new File( "src/main/resources/rulebook_ITA.pdf");

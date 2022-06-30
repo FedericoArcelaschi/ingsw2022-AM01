@@ -151,7 +151,7 @@ public class GuiDrawer {
     }
 
     private Pane drawIsland(IslandData islandData, int index, int motherNaturePosition, EventHandler<MouseEvent> onClick){
-        GraphicIsland island = new GraphicIsland(islandData.getStudents(), islandData.getIslandSize(), islandData.getOwnership(), index, motherNaturePosition == index);
+        GraphicIsland island = new GraphicIsland(islandData.getStudents(), islandData.getIslandSize(), islandData.getOwnership(), index, motherNaturePosition == index, islandData.isBlocked());
         island.setOnMouseClicked(onClick);
         return island;
     }
