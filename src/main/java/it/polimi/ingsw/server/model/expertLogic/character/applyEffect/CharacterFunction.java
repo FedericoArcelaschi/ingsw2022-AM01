@@ -130,9 +130,9 @@ public enum CharacterFunction {
     MAILMAN(
         (ParametersForCharacter par)
         -> {
-            IntegerBoxing steps = par.getSteps()
+            PossibleMovingSteps steps = par.getSteps()
                     .orElseThrow(() -> new IllegalArgumentException("Number of steps not found in Mailman"));
-            steps.affect(2);
+            steps.add(2);
         }
     ),
     WITCH(

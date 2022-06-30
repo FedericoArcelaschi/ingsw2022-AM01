@@ -30,7 +30,7 @@ public class Board {
     protected final Turn turn;
     //the idea is to save it or send it to the player at the end of the game
     private final long seed;
-    protected final IntegerBoxing possibleMovingSteps = new IntegerBoxing(0); //calculated form the card: must be stored in memory til the player action turn
+    protected final PossibleMovingSteps possibleMovingSteps = new PossibleMovingSteps(); //calculated form the card: must be stored in memory til the player action turn
 
     //constants
     private final int INITIAL_NUMBER_OF_ISLANDS = 12;
@@ -183,11 +183,11 @@ public class Board {
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
             throw new PhaseNotRightException("You can't move mother nature in this stage of the game. " +
                     "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
+        possibleMovingSteps.update(turn.getPossibleMovingSteps());
         if(steps < 1)
             throw new IllegalArgumentException("You must move! Steps must be grater or equal than zero.");
-        if (steps > possibleMovingSteps.getInt())
-            throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.getInt());
-        possibleMovingSteps.add(turn.getPossibleMovingSteps());
+        if (steps > possibleMovingSteps.get())
+            throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.get());
         if ((motherNaturePosition + steps) >= (islandList.size()))
             motherNaturePosition += steps - islandList.size();
         else
@@ -282,7 +282,7 @@ public class Board {
             refillableClouds = cloudRefill();
             endGame =  refillableClouds || remainingCards() == 0;
         }
-        possibleMovingSteps.setInt(turn.getNextPossibleMovingSteps());
+        possibleMovingSteps.zero();
     }
 
     /**
