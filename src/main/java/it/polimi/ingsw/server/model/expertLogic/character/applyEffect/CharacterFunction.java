@@ -118,7 +118,7 @@ public enum CharacterFunction {
                 islandToJoin = neightbouringIsland.subList(1, 3);
 
             if (islandToJoin == null)
-                return; //another escape if the conquered island won't join with the neighbours
+                return;
             //islands are joined
             islandList
                     .add(islandIndex,
