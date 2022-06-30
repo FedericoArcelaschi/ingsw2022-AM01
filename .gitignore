@@ -12,7 +12,7 @@ hs_err_pid*
 ## PROJECT
 ##############################
 Deliveries/play/out
-out/artifacts/
+out/
 
 ##############################
 ## Maven
