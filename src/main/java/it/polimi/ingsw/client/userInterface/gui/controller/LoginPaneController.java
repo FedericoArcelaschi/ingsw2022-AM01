@@ -93,8 +93,4 @@ public class LoginPaneController {
         lobbyTable.getColumns().add(gameTypeColumn);
         lobbyTable.getColumns().add(playerColumn);
     }
-
-    public void openRulebook(MouseEvent mouseEvent) {
-        ClientMain.openRuleBook();
-    }
 }

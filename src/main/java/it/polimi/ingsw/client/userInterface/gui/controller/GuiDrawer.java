@@ -31,7 +31,7 @@ public class GuiDrawer {
 
     public GraphicCastle drawCastles(CastleData myCastle, List<CastleData> otherCastle, Pane myCastlePane , FlowPane castleFlowPane, EventHandler<MouseEvent> moveStudentToCasle) {
         int i;
-        GraphicCastle myGraphicCastle = new GraphicCastle(myCastle,false,otherCastle.size() == 2);
+        GraphicCastle myGraphicCastle = new GraphicCastle(myCastle,false,nPlayer == 3);
         myGraphicCastle.getDiningRoom().setOnMouseClicked(moveStudentToCasle);
         myCastlePane.getChildren().add(myGraphicCastle);
 
