@@ -133,7 +133,6 @@ public class BoardStub extends Board implements EndGame {
         else {
             steps = new Random().nextInt(1, turn.getPossibleMovingSteps() + 1);
         }
-        System.out.println(getData(turn.getCurrentPlayer()));
         try {
             moveMotherNature(steps);
         } catch (PhaseNotRightException e) {

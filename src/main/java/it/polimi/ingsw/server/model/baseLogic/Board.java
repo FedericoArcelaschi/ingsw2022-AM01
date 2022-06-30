@@ -269,7 +269,6 @@ public class Board {
         Castle castle = castleMap.get(PlayerID);
         Cloud cloud = cloudList.get(cloudID);
         castle.addStudentsInWaitingRoom(cloud.choose());
-        //endOfRound();
     }
 
     /**
@@ -279,7 +278,6 @@ public class Board {
         boolean areCloudsRefillable;
         if(turn.isLastActionTurn()) {
             areCloudsRefillable = cloudRefill();
-            System.out.println(areCloudsRefillable);
             endGame =  areCloudsRefillable || remainingCards() == 0;
         }
         possibleMovingSteps.setInt(turn.getNextPossibleMovingSteps());
