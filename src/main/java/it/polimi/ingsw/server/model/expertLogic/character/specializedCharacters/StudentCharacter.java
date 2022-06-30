@@ -48,7 +48,9 @@ public class StudentCharacter extends StandardCharacter {
         par.setBag(bag);
         function.applyEffect(par);
         availableStudents.clear();
-        availableStudents.addAll(par.getAvailableStudentsList());
+        availableStudents.addAll(
+                par.getAvailableStudentsList()
+                        .orElseThrow(() -> new IllegalArgumentException("Error updating the available students on the character")));
         cost = character.getCost() + 1;
     }
 

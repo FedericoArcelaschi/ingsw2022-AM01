@@ -32,25 +32,26 @@ public enum CharacterFunction {
         (ParametersForCharacter par)
         -> {
             //TODO: throw an exceptions for each wrong input!
-            List<StudentColor> availableStudents = par.getAvailableStudentsList();
-            if(availableStudents == null)
-                throw new IllegalArgumentException("No student in monk");
-            List<StudentColor> requestedStudents = par.getRequestedStudentList();
-            if(requestedStudents == null)
-                throw new IllegalArgumentException("No students to move");
+            List<StudentColor> availableStudents = par.getAvailableStudentsList()
+                    .orElseThrow(() -> new IllegalArgumentException("No student in monk."));
+            List<StudentColor> requestedStudents = par.getRequestedStudentList()
+                    .orElseThrow(()->new IllegalArgumentException("No given student to move."));
             if(requestedStudents.isEmpty())
                 throw new IllegalArgumentException("No students to move");
-            Bag bag = par.getBag();
-            List<StudentPlaces> placesList = par.getPlacesList();
+            Bag bag = par.getBag()
+                    .orElseThrow(()->new IllegalArgumentException("No available bag in Jester."));
+            List<StudentPlaces> placesList = par.getPlacesList()
+                    .orElseThrow(() -> new IllegalArgumentException("No island found."));
 
-            StudentPlaces island = placesList.get(par.getIslandIndex() + par.getNumberOfPlayers());
-            if (island == null)
-                throw new IllegalArgumentException("No island in monk");
+            StudentPlaces island = placesList.get(
+                    par.getIslandIndex().orElseThrow(() -> new IllegalArgumentException("No island found.")) +
+                    par.getNumberOfPlayers().orElseThrow(IllegalArgumentException::new));
+            //could throw indexOutOfBoundException
 
             List<StudentColor> availableStudentsCopy = new ArrayList<>(availableStudents);
             for (StudentColor color : requestedStudents) {
                 if(!availableStudentsCopy.remove(color))
-                    throw new NoSuchStudentException("Students not available on monk card");
+                    throw new NoSuchStudentException("Students not available on monk card.");
             }
 
             try {
@@ -65,8 +66,10 @@ public enum CharacterFunction {
     FARMER(
         (ParametersForCharacter par)
         -> {
-            ExpertInfluence influence = par.getInfluence();
-            Team currTeam = par.getCurrentTeam();
+            ExpertInfluence influence = par.getInfluence()
+                    .orElseThrow(() -> new IllegalArgumentException("No influence available in Farmer."));
+            Team currTeam = par.getCurrentTeam()
+                    .orElseThrow(() -> new IllegalArgumentException("Farmer needs \"team\" parameter."));
             ProfessorsComputingExpert<PossibleParameters> function = ProfessorsMapComputingFunctions.FARMER.getFunction();
             influence.decorateProfessors(function, currTeam);
             }
@@ -74,9 +77,12 @@ public enum CharacterFunction {
     GUARD(
         (ParametersForCharacter par)
         -> {
-            List<Island> islandList = par.getIslandList();
-            Influence influence = par.getInfluence();
-            int islandIndex = par.getIslandIndex();
+            List<Island> islandList = par.getIslandList()
+                    .orElseThrow(() -> new IllegalArgumentException("No islands found in Farmer,"));
+            Influence influence = par.getInfluence()
+                    .orElseThrow(() -> new IllegalArgumentException("No influence available in Guard."));
+            int islandIndex = par.getIslandIndex()
+                    .orElseThrow(() -> new IllegalArgumentException("Guard needs \"int\" parameter: the island you want to conquer."));
             Island island = islandList.get(islandIndex);
             Team teamBeforeComputing = island.getOwnership();
             Team t = GreaterTeam.findGreaterTeam(influence.getInfluenceMap(island));
@@ -119,29 +125,29 @@ public enum CharacterFunction {
                             new ExpertIsland(
                                     new Archipelago(islandToJoin)));
             islandList.removeAll(islandToJoin);
-            par.getSteps().setInt(islandIndex);
         }
     ),
     MAILMAN(
         (ParametersForCharacter par)
         -> {
-            IntegerBoxing steps = par.getSteps();
+            IntegerBoxing steps = par.getSteps()
+                    .orElseThrow(() -> new IllegalArgumentException("Number of steps not found in Mailman"));
             steps.affect(2);
         }
     ),
     WITCH(
         (ParametersForCharacter par)
         -> {
-            int availableBlockTile = par.getAvailableTiles();
-            List<Island> islandList = par.getIslandList();
-            Integer islandIndex = par.getIslandIndex();
-            if(islandIndex == null)
-                throw new IllegalArgumentException("no island number given to the witch");
+            List<Island> islandList = par.getIslandList()
+                    .orElseThrow(() -> new IllegalArgumentException("Islands not found in Witch"));
+            Integer islandIndex = par.getIslandIndex()
+                    .orElseThrow(() -> new IllegalArgumentException("Which an islandIndex as a parameter."));
             if(islandList.size() < islandIndex || islandIndex < 0)
                 throw new IllegalArgumentException("the requested island is not present");
-            BlockingCharacter blockingCharacter = par.getBlockingCharacter();
-            if(blockingCharacter == null)
-                throw new IllegalArgumentException("the character is not present");
+            BlockingCharacter blockingCharacter = par.getBlockingCharacter()
+                    .orElseThrow(() -> new IllegalArgumentException("WITCH ERROR")); //witch passes herself to the island.
+            int availableBlockTile = par.getAvailableTiles()
+                    .orElseThrow(() -> new IllegalArgumentException("Witch has no available block tiles"));
             if (availableBlockTile == 0)
                 throw new IllegalArgumentException( blockingCharacter.getName() + " already blocked four islands");
             ExpertIsland islandToBlock = (ExpertIsland) islandList.get(islandIndex);
@@ -155,9 +161,8 @@ public enum CharacterFunction {
     CENTAUR(
         (ParametersForCharacter par)
         -> {
-            ExpertInfluence influence = par.getInfluence();
-            if(influence == null)
-                throw new IllegalArgumentException("ERROR: no influence available");
+            ExpertInfluence influence = par.getInfluence()
+                    .orElseThrow(()->new IllegalArgumentException("No influence in centaur"));
             influence.decorateInfluence(
                     InfluenceComputingFunction.CENTAUR.getFunction(),
                     null);
@@ -166,10 +171,10 @@ public enum CharacterFunction {
     JESTER(
         (ParametersForCharacter par)
         -> {
-            List<StudentColor> requestedStudents = par.getRequestedStudentList();
-            List<StudentColor> availableStudents = par.getAvailableStudentsList();
-            if(availableStudents == null || requestedStudents == null)
-                throw new IllegalArgumentException("Illegal students list in jester.");
+            List<StudentColor> requestedStudents = par.getRequestedStudentList()
+                    .orElseThrow(() -> new IllegalArgumentException("No students given from user to centaur"));
+            List<StudentColor> availableStudents = par.getAvailableStudentsList()
+                    .orElseThrow(()->new IllegalArgumentException("No students on centaur"));
             if (!Arrays.asList(2, 4, 6) //legal requested student list sizes.
                     .contains(requestedStudents.size()))
                 throw new IllegalArgumentException("Player should give a list of 2, 4 or 6 students");
@@ -184,11 +189,14 @@ public enum CharacterFunction {
             List<StudentColor> temp = new ArrayList<>(availableStudents);
             for (StudentColor c : studentsToAdd) {
                 if (!temp.contains(c))
-                    throw new NoSuchStudentException("jester doesn't contain a " + c + " student!");
+                    throw new NoSuchStudentException("Jester doesn't contain a " + c + " student!");
                 temp.remove(c);
             }
 
-            StudentPlaces castle = par.getPlacesList().get(0);
+            StudentPlaces castle = par.getPlacesList()
+                    .orElseThrow(() -> new IllegalArgumentException("No castle found in Jester"))
+                    .stream().findFirst()//not empty
+                    .orElseThrow(() -> new IllegalArgumentException("No castle found in Jester"));
             for (StudentColor c: studentsToRemove) { //here could be thrown the StudentException
                 try {
                     castle.removes(c, 1);
@@ -210,8 +218,10 @@ public enum CharacterFunction {
     KNIGHT(
         (ParametersForCharacter par)
         -> {
-            ExpertInfluence influence = par.getInfluence();
-            Team currTeam = par.getCurrentTeam();
+            ExpertInfluence influence = par.getInfluence()
+                    .orElseThrow(()->new IllegalArgumentException("No influence in knight"));
+            Team currTeam = par.getCurrentTeam()
+                                .orElseThrow(()->new IllegalArgumentException("No influence in centaur"));
             if (influence == null)
                 throw new IllegalArgumentException("influence is null");
             influence.decorateInfluence(
@@ -222,12 +232,10 @@ public enum CharacterFunction {
     COOK(
         (ParametersForCharacter par)
         -> {
-            ExpertInfluence influence = par.getInfluence();
-            StudentColor student = par.getRequestedStudent();
-            if (student == null)
-                throw new IllegalArgumentException("no student given for cook card");
-            if (influence == null)
-                throw new IllegalArgumentException("influence problem (model-side)");
+            ExpertInfluence influence = par.getInfluence()
+                    .orElseThrow(() -> new IllegalArgumentException("No influence found in Cook"));
+            StudentColor student = par.getRequestedStudent()
+                    .orElseThrow(()->new IllegalArgumentException("No student given to cook"));
             influence.decorateInfluence(
                 InfluenceComputingFunction.COOK.getFunction(),
                 student);
@@ -236,10 +244,11 @@ public enum CharacterFunction {
     STORYTELLER (
         (ParametersForCharacter par)
         -> {
-            List<StudentColor> students = par.getRequestedStudentList();
-            List<StudentPlaces> placesList = par.getPlacesList();
+            List<StudentColor> students = par.getRequestedStudentList()
+                    .orElseThrow(() -> new IllegalArgumentException("No student found in storyteller"));
             final int maxStudentsToMove = 4;
-            if (students.size() != maxStudentsToMove && students.size() != maxStudentsToMove / 2)
+            if (    students.size() != maxStudentsToMove &&
+                    students.size() != maxStudentsToMove / 2)
                 throw new IllegalArgumentException("wrong student input");
 
             //first student(s) are the ones in the waiting room, to be moved to the dining room
@@ -247,6 +256,10 @@ public enum CharacterFunction {
             //the other(s) are the ones to be moved from the dining room to the waiting room
             List<StudentColor> studentsToWaitingRoom = new ArrayList<>(students.subList(students.size() / 2, students.size()));
 
+            List<StudentPlaces> placesList = par.getPlacesList()
+                    .orElseThrow(() -> new IllegalArgumentException("No castle found in centaur"));
+            if(placesList.isEmpty())
+                throw new IllegalArgumentException("No castle found in centaur");
             StudentPlaces currentPlayerCastle = placesList.get(0);
 
             int removedStudents = 0;
@@ -290,38 +303,50 @@ public enum CharacterFunction {
     QUEEN(
         (ParametersForCharacter par)
         -> {
-            List<StudentColor> requestedStudents = par.getRequestedStudentList();
-            if(requestedStudents == null)
-                throw new IllegalArgumentException("No student given to the queen: impossible to play the card.");
-            List<StudentColor> availableStudents = par.getAvailableStudentsList();
-            Bag bag = par.getBag();
-            List<StudentPlaces> placesList = par.getPlacesList();
-            final int studentsToMove = 1;
+            List<StudentColor> requestedStudents = par.getRequestedStudentList()
+                    .orElseThrow(() -> new IllegalArgumentException("No student given to the queen: impossible to play the card."));
+            List<StudentColor> availableStudents = par.getAvailableStudentsList()
+                    .orElseThrow(() -> new IllegalArgumentException("No students found on the queen"));
+            Bag bag = par.getBag()
+                    .orElseThrow(() -> new IllegalArgumentException("No bag on the queen"));
+            List<StudentPlaces> placesList = par.getPlacesList()
+                    .orElseThrow(() -> new IllegalArgumentException("No castle found in queen"));
             final int availableStudentsSize = 4;
             if(availableStudents.size() != availableStudentsSize)
                 throw new IllegalArgumentException("ERROR: wrong number of students available on Queen character.");
-            if(requestedStudents.get(0) == null)
-                throw new IllegalArgumentException("No student given to the queen: impossible to play the card.");
-            StudentPlaces castle = placesList.get(0);
-            if (castle == null)
-                throw new IllegalArgumentException("no castle.");
-            if (!availableStudents.contains(requestedStudents.get(0)))
-                throw new NoSuchStudentException(requestedStudents.get(0).toString().toLowerCase() + " students not available in the Queen.\n" +
-                        "Available students are: " + availableStudents.toString().replace(']', ' ').replace('[', ' '));
-            castle.adds(requestedStudents.get(0), 0);
+            StudentColor studentToMove
+                    = requestedStudents.stream()
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("No student given to the queen: impossible to play the card."));
+            StudentPlaces castle
+                    = placesList
+                    .stream().findAny()
+                    .orElseThrow(() ->new IllegalArgumentException("no castle."));
+            if (!availableStudents.contains(studentToMove))
+                throw new NoSuchStudentException(studentToMove + " students not available in the Queen.\n" +
+                        "Available students are: " + availableStudents.toString().replace(']', '.').replace('[', ' '));
+            availableStudents.remove(studentToMove);
+            try {
+                castle.adds(studentToMove, 0);
+            } catch (TooManyStudentsException e) {
+                availableStudents.add(studentToMove);
+                throw e;
+            }
             availableStudents.add(bag.extract());
         }
     ),
     TAXMAN(
         (ParametersForCharacter par)
         -> {
-            if(par.getRequestedStudentList() == null)
-                throw new IllegalArgumentException("TaxMan requires a color to be activated.");
-            if(par.getRequestedStudentList().isEmpty())
-                throw new IllegalArgumentException("TaxMan requires a color to be activated.");
-            StudentColor student = par.getRequestedStudentList().get(0);
-            List<StudentPlaces> placesList = par.getPlacesList();
-            int players = par.getNumberOfPlayers();
+            StudentColor student = par.getRequestedStudentList()
+                    .orElseThrow(() -> new IllegalArgumentException("TaxMan requires a color to be activated."))
+                    .stream().findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("TaxMan requires a color to be activated."));
+            List<StudentPlaces> placesList
+                    = par.getPlacesList()
+                    .orElseThrow(() -> new IllegalArgumentException("No castle found in Taxman."));
+            int players = par.getNumberOfPlayers()
+                    .orElseThrow(() -> new IllegalArgumentException("Taxman Error."));
             final int studentsToRemove = 3;
             for (int i = 0; i < players; i++) {
                 if(placesList.get(i) == null)
@@ -329,7 +354,7 @@ public enum CharacterFunction {
                 for (int j = 0; j < studentsToRemove; j++)
                     try {
                         placesList.get(i).removes(student, 0);
-                    } catch (NoSuchStudentException ignored) {} //It's possible that a given player doesn't have 3 students of the requested color.
+                    } catch (NoSuchStudentException ignored){} //It's possible that a given player doesn't have 3 students of the requested color.
             }
         }
     );

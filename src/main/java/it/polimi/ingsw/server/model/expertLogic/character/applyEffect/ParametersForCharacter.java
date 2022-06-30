@@ -6,8 +6,9 @@ import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 
 import java.util.List;
+import java.util.Optional;
 
-public class ParametersForCharacter { //FIXME
+public class ParametersForCharacter {
     private StudentColor requestedStudent;
     private ExpertInfluence influence;
     private Team currentTeam;
@@ -21,9 +22,6 @@ public class ParametersForCharacter { //FIXME
     private List<StudentPlaces> placesList;
     private List<Island> islandList;
     private Integer availableTiles;
-
-    public ParametersForCharacter() {
-    }
 
 //SETTER
 
@@ -70,64 +68,66 @@ public class ParametersForCharacter { //FIXME
     public void setBag(Bag bag) {
         this.bag = bag;
     }
+
     public void setAvailableTiles(int availableTiles) {
         this.availableTiles = availableTiles;
     }
+
     public void setBlockCharacter(BlockingCharacter blockingCharacter) {
         this.blockingCharacter = blockingCharacter;
     }
 
 //GETTER
-
-    public List<Island> getIslandList() {
-        return islandList;
+    public Optional<List<Island>> getIslandList() {
+        return Optional.ofNullable(islandList);
     }
 
-    public ExpertInfluence getInfluence() {
-        return influence;
+    public Optional<ExpertInfluence> getInfluence() {
+        return Optional.ofNullable(influence);
     }
 
-    public Team getCurrentTeam() {
-        return currentTeam;
+    public Optional<Team> getCurrentTeam() {
+        return Optional.ofNullable(currentTeam);
     }
 
-    public List<StudentColor> getAvailableStudentsList() {
-        return availableStudentsList;
+    public Optional<List<StudentPlaces>> getPlacesList() {
+        return Optional.ofNullable(placesList);
     }
 
-    public List<StudentPlaces> getPlacesList() {
-        return placesList;
+
+    public Optional<IntegerBoxing> getSteps() {
+        return Optional.ofNullable(steps);
     }
 
-    public Integer getIslandIndex() {
-        return islandNumber;
+    public Optional<StudentColor> getRequestedStudent() {
+        return Optional.ofNullable(requestedStudent);
     }
 
-    public Integer getNumberOfPlayers() {
-        return numberOfPlayers;
+    public Optional<List<StudentColor>> getRequestedStudentList() {
+        return Optional.ofNullable(requestedStudentList);
     }
 
-    public IntegerBoxing getSteps() {
-        return steps;
+    public Optional<List<StudentColor>> getAvailableStudentsList() {
+        return Optional.ofNullable(availableStudentsList);
     }
 
-    public StudentColor getRequestedStudent() {
-        return requestedStudent;
+    public Optional<BlockingCharacter> getBlockingCharacter() {
+        return Optional.ofNullable(blockingCharacter);
     }
 
-    public List<StudentColor> getRequestedStudentList() {
-        return requestedStudentList;
+    public Optional<Bag> getBag() {
+        return Optional.ofNullable(bag);
     }
 
-    public BlockingCharacter getBlockingCharacter() {
-        return blockingCharacter;
+    public Optional<Integer> getAvailableTiles() {
+        return Optional.ofNullable(availableTiles);
     }
 
-    public Bag getBag() {
-        return bag;
+    public Optional<Integer> getIslandIndex() {
+        return Optional.ofNullable(islandNumber);
     }
 
-    public int getAvailableTiles() {
-        return availableTiles;
+    public Optional<Integer> getNumberOfPlayers() {
+        return Optional.ofNullable(numberOfPlayers);
     }
 }
