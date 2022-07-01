@@ -6,7 +6,7 @@ Federico Arcelaschi, 10654781, federico.arcelaschi@mail.polimi.it
 Lorenzo Aicardi, 10675881, lorenzo.aicardi@mail.polimi.it
 
 ## Project specification
-The project consists of a Java version of the board game *Eriatys*, made by Cranio Crations.
+The project consists of a Java version of the board game *Eriantys*, made by Cranio Crations.
 
 The final version includes:
 * initial UML diagram;
