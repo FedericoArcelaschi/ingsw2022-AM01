@@ -47,6 +47,7 @@ public class ClientReceiver extends Receiver {
             }
             case END -> {
                 EndGame endGameMessage = (EndGame) message;
+                userInterface.draw(endGameMessage.getBoardData());
                 userInterface.endCurrentGame(endGameMessage);
             }
             case ERROR -> {

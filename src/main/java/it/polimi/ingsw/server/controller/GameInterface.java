@@ -87,7 +87,7 @@ public class GameInterface {
                     new EndGame("Player " + client.username() + " disconnected. The game is over. \nPress any key to continue.",
                             AlertType.ERROR,
                             "",
-                            Team.BLACK)));
+                            Team.BLACK, game.getBoard().getData(cl.username()))));
 //
 //            c.send(new EndGame(
 //                    draw ? "The game ended in a draw." : "The winner is: " + winner.toString() +

@@ -32,25 +32,26 @@ public class Game {
 
     public Game(GameType gameType, List<String> usernames) {
         this.board = BoardFactory.getBoard(usernames, gameType.expertMode, RandomGenerator.getDefault().nextLong());
-        this.turn  = board.getTurn();
+        this.turn = board.getTurn();
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
 
     public Game(GameType gameType, List<String> usernames, long seed) {
         this.board = BoardFactory.getBoard(usernames, gameType.expertMode, seed);
-        this.turn  = board.getTurn();
+        this.turn = board.getTurn();
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
 
     /**
      * Checks if the {@link Command#username()} is the current player.
      * if he is the current player he can play the command on the model.
-     * @see         Turn#getCurrentPlayer()
-     * @return      either an error message addressed to the single player or
-     *              an update message for all the player in the game
+     *
+     * @return either an error message addressed to the single player or
+     * an update message for all the player in the game
+     * @see Turn#getCurrentPlayer()
      */
     public @NotNull Map<String, Message> executeCommand(@NotNull Command command) {
-        if(!command.username().equals(turn.getCurrentPlayer()))
+        if (!command.username().equals(turn.getCurrentPlayer()))
             return errorMessage(command.username(), new Exception("You can't play! It's " + turn.getCurrentPlayer() + "'s turn"));
         return switch (command.getType()) {
             case PLAY_CARD -> playCardCommand(command);
@@ -59,7 +60,7 @@ public class Game {
             case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
             case CHOOSE_CLOUD -> chooseCloudCommand(command);
             case PAY_CHARACTER -> payCharCommand(command);
-            };
+        };
     }
 
     private @NotNull Map<String, Message> playCardCommand(@NotNull Command command) {
@@ -122,9 +123,9 @@ public class Game {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
-        if(turn.isLastTurn())
+        if (turn.isLastTurn())
             board.endOfRound();
-        if(board.isWinningState() || board.isEndGame()) {
+        if (board.isWinningState() || board.isEndGame()) {
             try {
                 return winUpdate(board.getWinner());
             } catch (DrawException e) {
@@ -152,7 +153,8 @@ public class Game {
     private @NotNull Map<String, Message> payCharCommand(@NotNull Command command) {
         try {
             board.playExpertCard(command.getCharId(), command.getIslandId() - 1, command.getStudents());
-        } catch (WrongGameModeException | CoinException | StudentException | PhaseNotRightException | RuntimeException e) {
+        } catch (WrongGameModeException | CoinException | StudentException | PhaseNotRightException |
+                 RuntimeException e) {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
@@ -161,7 +163,7 @@ public class Game {
 
     public @NotNull Map<String, Message> updateAll() {
         Map<String, Message> usernameMessageMap = new HashMap<>();
-        board   .getCastleMap()
+        board.getCastleMap()
                 .keySet()
                 .forEach(i ->
                         usernameMessageMap.put(i, new Update(board.getData(i))));
@@ -170,17 +172,12 @@ public class Game {
 
     private @NotNull Map<String, Message> winUpdate(@Nullable Team winner) {
         Map<String, Message> usernameMessageMap = new HashMap<>();
-            board.getCastleMap()
-                        .forEach((key, value) -> {
-                            if (value.getTeam() == winner) {
-                                board   .getCastleMap()
-                                        .keySet()
-                                        .forEach(i ->
-                                                usernameMessageMap.put(i, new Update(board.getData(i))));
-                                                usernameMessageMap.put(key, new EndGame("The game is over. Winner: " + key +
-                                                        "\nDo you want to play another game? (y/n)", Alert.AlertType.INFORMATION, key, value.getTeam()));
-                            }
-                        });
+                    board.getCastleMap()
+                            .keySet()
+                            .forEach(i -> {
+                                    usernameMessageMap.put(i, new EndGame("The game is over. Winner: " + winner +
+                                        "\nDo you want to play another game? (y/n)", Alert.AlertType.INFORMATION, i, winner, board.getData(i)));
+                            });
         return usernameMessageMap;
     }
 
