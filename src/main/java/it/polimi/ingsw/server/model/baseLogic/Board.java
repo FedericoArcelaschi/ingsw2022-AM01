@@ -205,7 +205,8 @@ public class Board {
         Team teamBeforeComputing = island.getOwnership();
         Team t = GreaterTeam.findGreaterTeam(influence.getInfluenceMap(island));
         islandList.add(islandIndex, island.setOwnership(t));
-        if (t != null && t != teamBeforeComputing)
+        if (islandList.get(islandIndex).getOwnership() != null
+                && t != teamBeforeComputing)
             checkJoinIsland(islandIndex);
     }
 
