@@ -184,12 +184,12 @@ public class ExpertBoard extends Board {
      */
     protected void joinIslands(@NotNull List<Integer> islandsToJoin) {
         int firstIslandIndex = islandsToJoin.get(0);
-        List<Island> islandList = new ArrayList<>();
-        islandsToJoin.forEach(index -> islandList.add(this.islandList.get(index)));
+        List<Island> islandsToRemove = new ArrayList<>();
+        islandsToJoin.forEach(index -> islandsToRemove.add(this.islandList.get(index)));
         this.islandList
                 .add(firstIslandIndex,
-                new ExpertIsland(
-                        new Archipelago(islandList)));
+                    new ExpertIsland(new Archipelago(islandsToRemove)));
+        this.islandList.removeAll(islandsToRemove);
         motherNaturePosition = firstIslandIndex;
     }
 
