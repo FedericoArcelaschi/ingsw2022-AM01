@@ -324,7 +324,8 @@ public class Board {
     public boolean isWinningState() {
         EnumMap<Team, Integer> nTowers = placedTowers();
         for (Team t : Team.values())
-            if (nTowers.get(t) >= TOWERS_TO_PLACE_TO_WIN_2_4_PLAYERS || islandList.size() <= MINIMUM_NUMBER_OF_ISLANDS)
+            if (nTowers.get(t) >= (castleMap.size() == 3 ? TOWERS_TO_PLACE_TO_WIN_3_PLAYERS : TOWERS_TO_PLACE_TO_WIN_2_4_PLAYERS)
+                    || islandList.size() <= MINIMUM_NUMBER_OF_ISLANDS)
                 return true;
         return false;
     }
@@ -336,7 +337,8 @@ public class Board {
     public Team getWinner() throws DrawException {
         Map<Team, Integer> nTowers = placedTowers();
         for (Team t : Team.values())
-            if (nTowers.get(t) == TOWERS_TO_PLACE_TO_WIN_2_4_PLAYERS) return t;
+            if (nTowers.get(t) == (castleMap.size() == 3 ? TOWERS_TO_PLACE_TO_WIN_3_PLAYERS : TOWERS_TO_PLACE_TO_WIN_2_4_PLAYERS))
+                return t;
         Team winner = GreaterTeam.findGreaterTeam(nTowers);
         if (winner == null)
             return teamWithMostProfessors();
