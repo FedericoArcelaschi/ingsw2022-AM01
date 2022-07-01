@@ -1,48 +1,72 @@
-(to view with tab size 4.)
-Comunication Protocol:
+Communication Protocol:
 
-+---------------+												+---------------+
-| Client		|												| Server		|
-+---------------+												+---------------+
-		|																| SERVER IS LISTENING on PORT 8888
-		|																|
-		|																|
-		|	*FIRST MESSAGE*												|
-		|	------------------------------------------------------->	| Answers the first message, opens the Socket and assignes 
-		|	<-------------------------------------------------------	| an unique ID to the client.
-		|																|
-		|																|
-		|																|
-		|													  *PING*	|
-		|	<-------------------------------------------------------	| Heartbeat protocol:
-		|	*PONG*														| The server every 10 seconds sends a Ping message to the client
-		|	------------------------------------------------------->	| and waits for a Pong message. If the client doesn't answer within
-		|												*DISCONNECT*	| 10 seconds the Server sends a disconnect message
-		|	< - - - - - - - - - - - - - - - - - - - - - - - - - - - 	|
-		|																|
-		|																|
-		|																|
-		|								    *GAME BEGINS (broadcast)* 	| If there is a game the player can join, assignes
-		|	<-------------------------------------------------------	| the player with his peers to a game and sends
-		|	<-------------------------------------------------------	| the game view to all the players in that game.
-		|																|
-		|																|
-		|											*ACTION TO MAKE*	| When is his turn, the server sends to the player a prompt to
-		|	<-------------------------------------------------------	| make an action
-		|	(e.g.: It's your turn to play a card)						|
-		|																|
-		|																|
-		|																|
-		|	*LEGAL ACTION*												|
-		|	------------------------------------------------------->	| The server receives a legal command from the client.
-		|	(e.g.: Move GREEN to Castle)*UPDATE TO VIEW (broadcast)*	| The server updates the model and each time it sends
-		|	<-------------------------------------------------------	| the updated view to all the clients in the game.
-		|	<-------------------------------------------------------	|
-		|																|
-		|																|
-		|																|
-		|	*ILLEGAL ACTION*											| In case a player sends an illegal move we don't update the model
-		|	------------------------------------------------------->	| and the server sends only to him an error message.
-		|	(e.g: Move MotherNature 7)				 *ERROR MESSAGE*	| Beacause the game has predefined turns and phases we'll wait for
-		|	< - - - - - - - - - - - - - - - - - - - - - - - - - - - 	| each player to send a legal action before we can proced with the
-		|																| game-play
++---------------+                                                +---------------+
+|Client         |                                                |Server         |
++---------------+                                                +---------------+
+        |                                                                | SERVER IS LISTENING on PORT 12345
+        |                                                                |
+        |                                                                |
+        |    *CONNECTION REQUEST*                                        |
+        |    ------------------------------------------------------->    | The first message sent by the user is a connection request. 
+        |    *LOBBY INFORMATION*                                         | If the connection is successful, the server will reply to the user by sending 
+        |    <-------------------------------------------------------    | information about the lobbies for each game mode, allowing him to see every player 
+        |                                                                | in every lobby. The server also asks the player to send preferences, e.g.:
+        |                                                                | username, number of players, and whether to play in expert mode or not.
+        |                                                                |
+        |                                                                | 
+        |                                                                |
+        |    *PREFERENCES*                                               | Once the preferences are sent, the client is invited to wait 
+        |    ------------------------------------------------------->    | for the game to begin. If upon the information being received 
+        |    *BOARD UPDATE* (once a game can be joined)                  | by the server the lobby contains enough players, the game will 
+        |    <-------------------------------------------------------    | begin and a board view will be sent to every player.
+        |    *WAITING MESSAGE* (if a game can't be joined)               |
+        |    <-------------------------------------------------------    |
+        |                                                                |
+        |                                                                |
+        |                                                                |
+        |    *LEGAL ACTION*                                              |
+        |    ------------------------------------------------------->    | The server listens for commands being sent by the client.
+        |    (e.g.: playcard  4).        *UPDATE TO VIEW (broadcast)*    | If the command is valid, the server processes the command, 
+        |    <-------------------------------------------------------    | changing the state of the game.
+        |    <-------------------------------------------------------    | The server then updates the model and sends
+        |                                                                | the updated view to all the clients in the game.
+        |                                                *WIN UPDATE*    |
+        |    <-------------------------------------------------------    | A game might be won upon performing a legal action. If that is the case, 
+        |    *PREFERENCES*                                               | the server will send to every client an update in which 
+        |    ------------------------------------------------------->    | the winner will be declared, and the player will be asked whether to 
+        |    *System.exit*                                               | play the game again or not. If he answers yes, then he will be asked
+        |                                                                | to send the preferences once again.
+        |                                                                | Else, a system.exit will be performed.
+        |                                                                |
+        |                                                                |
+        |                                                                |
+        |    *ILLEGAL ACTION*                                            | In case a player sends an illegal move the model is not updated
+        |    ------------------------------------------------------->    | and the server sends him an error message.
+        |    (e.g: movestudentcastle 7)                 *ERROR MESSAGE*  | The server only performs part of the controls required to
+        |    < - - - - - - - - - - - - - - - - - - - - - - - - - - -     | ensure that the move is legal; for example, it will send an error 
+        |                                                                | message to the player if the command was sent if it is not his turn.
+        |                                                                | Conversely, checks about the semantics of the command are made client side.
+        |                                                                |
+        |                                                                |
+        |                                                                |
+        |                                                      *PING*    |
+        |    <-------------------------------------------------------    | Heartbeat protocol:
+        |    *PONG*                                                      | Upon connection the socket is put in a list of sockets to ping. 
+        |    ------------------------------------------------------->    | Every 5 seconds a Ping message is sent to the client
+        |                                             *DISCONNECTION*    | and waits for a Pong message. If the client doesn't answer within
+        |    < - - - - - - - - - - - - - - - - - - - - - - - - - - -     | 5 seconds the Server sends a disconnect message. If the client was in a lobby,
+        |                                                                | the client is simply removed from the lobby.
+        |                                                                | 
+        |                                                                |
+        |                                  *DISCONNECT ERROR MESSAGE*    | 
+        |    <-------------------------------------------------------    | If the client was in a game, then a disconnection error will be sent  
+        |    *PREFERENCES*                                               | to every other client. Then, they will be asked whether or not they 
+        |    ------------------------------------------------------->    | want to play again. If he answers yes, then he will be asked to send the preferences once again.
+        |    *System.exit*                                               | Else, a system.exit will be performed.     
+        |                                                                | 
+
+
+
+
+
+
