@@ -2,12 +2,14 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.command.Command;
 import it.polimi.ingsw.communication.message.Message;
+import it.polimi.ingsw.communication.message.subclasses.EndGame;
 import it.polimi.ingsw.communication.message.subclasses.Error;
 import it.polimi.ingsw.communication.message.subclasses.Update;
 import it.polimi.ingsw.communication.modelData.BoardData;
 import it.polimi.ingsw.server.communication.HeartBeatServer;
 import it.polimi.ingsw.server.communication.ServerReceiver;
 import it.polimi.ingsw.server.model.baseLogic.Card;
+import it.polimi.ingsw.server.model.baseLogic.Team;
 import it.polimi.ingsw.server.model.baseLogic.TurnPhase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import java.net.Socket;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,5 +66,15 @@ class GameTest {
         assertTrue(errorMessage instanceof Error);
     }
 
-
+    @Test
+    void winUpdateTest() {
+        Map<String, Message> stringMessageMap =
+                game.winUpdate(Team.GREY);
+        assertTrue(stringMessageMap.get(player1) instanceof EndGame,
+                "winUpdates returns 1 endGame message for 'Lucio Battisti'");
+        assertTrue(stringMessageMap.get(player2) instanceof EndGame,
+                "winUpdates returns 1 endGame message for 'Lucio Dalla'");
+        assertEquals(stringMessageMap.entrySet().size(), 2,
+                "winUpdates returns 2 messages");
+    }
 }

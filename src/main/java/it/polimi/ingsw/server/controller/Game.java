@@ -166,7 +166,7 @@ public class Game {
         return usernameMessageMap;
     }
 
-    private @NotNull Map<String, Message> winUpdate(@Nullable Team winner) {
+    protected @NotNull Map<String, Message> winUpdate(@Nullable Team winner) {
         Map<String, Message> usernameMessageMap = new HashMap<>();
                     board.getCastleMap()
                             .keySet()
