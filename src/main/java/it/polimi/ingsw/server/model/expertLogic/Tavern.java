@@ -53,7 +53,6 @@ public class Tavern {
     private StandardCharacter getExpertCharacter(int idChar) {
         if(idChar < 1 || idChar > numberOfCharacters)
             throw new IllegalArgumentException(idChar + " is not a legal id for ExpertCharacters");
-        //TODO: improve
         return switch (idChar) {
             case 1, 7, 11 -> new StudentCharacter(idChar, bag);
             case 5 -> new BlockingCharacter(idChar);

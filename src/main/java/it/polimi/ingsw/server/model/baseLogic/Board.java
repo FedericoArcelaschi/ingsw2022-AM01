@@ -28,10 +28,9 @@ public class Board {
     protected Influence influence = new Influence(new Professors(castleMap));
 
     protected final Turn turn;
-    private final long seed;
     //the idea is to save it or send it to the player at the end of the game
+    private final long seed;
     protected final PossibleMovingSteps possibleMovingSteps = new PossibleMovingSteps(); //calculated form the card: must be stored in memory til the player action turn
-
     //constants
     private final int INITIAL_NUMBER_OF_ISLANDS = 12;
     private final int MINIMUM_NUMBER_OF_ISLANDS = 3;
@@ -154,6 +153,7 @@ public class Board {
                     "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
         castleMap.get(playerID).addStudentsInDiningRoom(students);
+        // FIXME
         influence.updateProfessors();
     }
 
@@ -187,14 +187,15 @@ public class Board {
         possibleMovingSteps.update(turn.getPossibleMovingSteps());
         if(steps < 1)
             throw new IllegalArgumentException("You must move! Steps must be grater or equal than zero.");
-        if (steps > possibleMovingSteps.get())
-            throw new IllegalArgumentException("too many steps. possible steps: " + possibleMovingSteps.get());
+        if(steps > possibleMovingSteps.get())
+            throw new IllegalArgumentException("Too many steps. possible steps: " + possibleMovingSteps.get());
         if ((motherNaturePosition + steps) >= (islandList.size()))
             motherNaturePosition += steps - islandList.size();
         else
             motherNaturePosition += steps;
         conquerIsland(motherNaturePosition);
-        possibleMovingSteps.zero();
+        if(turn.isSkipCloudPhase())
+            possibleMovingSteps.update(turn.getPossibleMovingSteps());
     }
 
     /**
@@ -283,20 +284,21 @@ public class Board {
             areCloudsRefillable = cloudRefill();
             endGame =  areCloudsRefillable || endedCards();
         }
+        possibleMovingSteps.zero();
     }
 
     /**
      * after a whole turn
      */
     public boolean cloudRefill() {
-        if(turn.isLastTurn())
+        if(turn.isSkipCloudPhase())
             return true;
         if(bag.remainingStudents() < (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
-            turn.setLastTurn(true);
+            turn.setSkipCloudPhase(true);
             return false;
         }
         if(bag.remainingStudents() == (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
-            turn.setLastTurn(true);
+            turn.setSkipCloudPhase(true);
         }
         //if()
         //cloudList.stream().map(Cloud::isFillable).anyMatch(false);
@@ -376,7 +378,7 @@ public class Board {
             else if (sum == max)
                 withMoreProfessors = null;
         }
-        if (withMoreProfessors == null) throw new DrawException("Two players have the same number of professors"); //FIXME
+        if (withMoreProfessors == null) throw new DrawException("Two players have the same number of professors");
         return withMoreProfessors;
     }
 

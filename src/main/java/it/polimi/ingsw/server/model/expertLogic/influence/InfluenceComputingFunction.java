@@ -18,7 +18,6 @@ public enum InfluenceComputingFunction {
      */
     KNIGHT(
         (Island island, Map<StudentColor, Team> professorsMap, Team currTeam) -> {
-            //TODO: check for valid inputs!
             Map<Team, Integer> influenceMap = new HashMap<>();
             //counts the students
             for (Team t : Team.values()) {

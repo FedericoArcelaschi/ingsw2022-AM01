@@ -58,7 +58,7 @@ public class GamePaneController {
         guiDrawer.drawClouds(boardData.cloudList(), cloudFlowPane, this::chooseCloud);
         guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandLeftPane, islandRightPane, islandsTopRow, islandsBotRow, this::island);
         guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
-        guiDrawer.drawCharacters(boardData.characters(), boardData.activeChar(), charFlowPane, this::payCharacter, boardData.myCastle().diningRoom());
+        guiDrawer.drawCharacters(boardData.characters(), charFlowPane, this::payCharacter);
         guiDrawer.drawTurn(boardData.turn(), turnPane);
         switchCommandMode();
     }

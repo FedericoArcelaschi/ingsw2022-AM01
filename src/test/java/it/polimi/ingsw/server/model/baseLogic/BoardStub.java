@@ -29,10 +29,6 @@ public class BoardStub extends Board implements EndGame {
 
     /**
      * Constructor for ExpertBoard: doesn't generate the castles.
-     *
-     * @param turn
-     * @param seed
-     * @param nPlayer
      */
     protected BoardStub(Turn turn, long seed, int nPlayer) {
         super(turn, 1, nPlayer);
@@ -57,7 +53,7 @@ public class BoardStub extends Board implements EndGame {
     }
 
     public void actions() {
-        for (String p : turn.getActionOrder()) {
+        for (String p : turn.getTurnOrder()) {
             randomStudentsMoved(p);
             changePhase();
             randomMotherNature();
@@ -69,7 +65,7 @@ public class BoardStub extends Board implements EndGame {
                 }
                 break;
             }
-            if(turn.isLastTurn() && turn.getActionOrder().get(turn.getActionOrder().size()-1).equals(p)) {
+            if(turn.isSkipCloudPhase() && turn.getTurnOrder().get(turn.getTurnOrder().size()-1).equals(p)) {
                 try {
                     winner = getWinner();
                 } catch (DrawException e) {

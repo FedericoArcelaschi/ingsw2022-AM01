@@ -69,30 +69,11 @@ public class GameInterface {
     }
 
     private void sendEndGameMsg(Client client) {
-//        //partiota 2 giocatori l'altro vince
-//        //partita a tre giocatori si vedrà
-//        //partita a 4 giocatori vince l'altra squadra
-//        if(clients.size() == 3 || clients.size() == 1) {
-//
-//        }
-//        boolean draw = game.getBoard().placedTowers().values().stream().distinct().toList().size() != clients.size();
-//        boolean draw = game.getBoard().getWinner() != clients.size();
-//        Team winner = game.getBoard().placedTowers().entrySet().stream()
-//                .max((team1, team2) -> team1.getValue() > team2.getValue() ? 1 : 0)
-//                .get()
-//                .getKey();
-//        TODO: error disconnessione, information per win.
-//        for(Client c : clients.getClients()) {
-            clients.forEach(cl -> cl.send(
+            clients.forEach(client1 -> client1.send(
                     new EndGame("Player " + client.username() + " disconnected. The game is over. \nPress any key to continue.",
                             AlertType.ERROR,
                             "",
-                            Team.BLACK, game.getBoard().getData(cl.username()))));
-//
-//            c.send(new EndGame(
-//                    draw ? "The game ended in a draw." : "The winner is: " + winner.toString() +
-//                    "\nDo you want to play another game? (y/n)", Alert.AlertType.INFORMATION, client.username(), winner));
-//        }
+                            Team.BLACK)));
     }
 
     public GameType getGameType() {

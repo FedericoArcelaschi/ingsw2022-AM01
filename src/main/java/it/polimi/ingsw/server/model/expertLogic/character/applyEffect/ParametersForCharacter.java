@@ -9,19 +9,19 @@ import java.util.List;
 import java.util.Optional;
 
 public class ParametersForCharacter {
-    private StudentColor requestedStudent;
-    private ExpertInfluence influence;
-    private Team currentTeam;
-    private Integer islandNumber;
-    private Integer numberOfPlayers;
-    private PossibleMovingSteps steps;
-    private Bag bag;
-    private BlockingCharacter blockingCharacter;
     private List<StudentColor> requestedStudentList;
     private List<StudentColor> availableStudentsList;
     private List<StudentPlaces> placesList;
     private List<Island> islandList;
+    private BlockingCharacter blockingCharacter;
+    private StudentColor requestedStudent;
+    private ExpertInfluence influence;
+    private PossibleMovingSteps steps;
+    private Integer numberOfPlayers;
     private Integer availableTiles;
+    private Integer islandNumber;
+    private Team currentTeam;
+    private Bag bag;
 
 //SETTER
 
@@ -73,7 +73,7 @@ public class ParametersForCharacter {
         this.availableTiles = availableTiles;
     }
 
-    public void setBlockCharacter(BlockingCharacter blockingCharacter) {
+    public void setBlockChar(BlockingCharacter blockingCharacter) {
         this.blockingCharacter = blockingCharacter;
     }
 
