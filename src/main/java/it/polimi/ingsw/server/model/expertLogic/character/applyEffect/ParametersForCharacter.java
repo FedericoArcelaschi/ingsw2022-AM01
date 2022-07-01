@@ -5,7 +5,6 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.BlockingCharacter;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 
-import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Optional;
 

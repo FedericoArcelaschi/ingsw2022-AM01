@@ -48,7 +48,6 @@ public class Game {
     public @NotNull Map<String, Message> executeCommand(@NotNull Command command) {
         if(!command.username().equals(board.getCurrentPlayer()))
             return errorMessage(command.username(), new Exception("You can't play! It's " + board.getCurrentPlayer() + "'s turn"));
-        try {
         return switch (command.getType()) {
             case PLAY_CARD -> playCardCommand(command);
             case MOVE_STUDENT_TO_CASTLE -> moveStudentToDiningRoomCommand(command);
@@ -57,9 +56,6 @@ public class Game {
             case CHOOSE_CLOUD -> chooseCloudCommand(command);
             case PAY_CHARACTER -> payCharCommand(command);
         };
-        } catch (Exception e) {
-            return errorMessage(command.username(), e);
-        }
     }
 
     private @NotNull Map<String, Message> playCardCommand(@NotNull Command command) {

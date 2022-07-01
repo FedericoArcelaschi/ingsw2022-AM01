@@ -54,7 +54,7 @@ class BoardDataTest {
     }
 
     @Test
-    void CastleDataTest() { //with Maps!!
+    void CastleDataTest() {
         Board board = new Board("pippo", "pluto", new Turn(List.of("pippo", "pluto")), RandomGenerator.getDefault().nextLong());
         BoardData boardData = board.getData("pippo");
         String Json = new Gson().toJson(boardData);

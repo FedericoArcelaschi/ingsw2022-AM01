@@ -27,10 +27,10 @@ public class CharacterData {
     public String toString(@Nullable CharacterUtility characterUtility){
         StringBuilder output = new StringBuilder();
         if(Objects.equals(this.characterUtility, characterUtility))
-            output  .append("\u0033[38;5;2;252;233;79m")
+            output  .append("\u001b[38;5;2;252;233;79m")
                     .append(name.charAt(0))
                     .append(name.substring(1).toLowerCase())
-                    .append("\u0033[0m");
+                    .append("\u001b[0m");
         else
             output  .append(name.charAt(0))
                     .append(name.substring(1).toLowerCase());

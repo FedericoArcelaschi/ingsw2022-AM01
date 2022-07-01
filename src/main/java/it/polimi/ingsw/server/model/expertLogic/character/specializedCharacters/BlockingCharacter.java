@@ -32,7 +32,7 @@ public class BlockingCharacter extends StandardCharacter {
 
     @Override
     public String getExplanation() {
-        return super.getExplanation() + "\b, number of available tiles: " + availableBlockTiles;
+        return super.getExplanation() + "\b\b, number of available tiles: " + availableBlockTiles + "\n";
     }
 
     public void addBlockTile(){
