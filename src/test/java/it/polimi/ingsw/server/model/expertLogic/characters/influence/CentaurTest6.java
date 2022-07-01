@@ -76,6 +76,7 @@ public class CentaurTest6 {
         expertBoard.changePhase();
         expertBoard.changePhase();
 
+        expertBoard.endOfRound();
         expertBoard.playPlanningPhaseFirstPlayer2();
         expertBoard.changePhase();
         expertBoard.moveMotherNature(5);

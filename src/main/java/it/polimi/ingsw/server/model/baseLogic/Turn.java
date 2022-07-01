@@ -58,10 +58,9 @@ public class Turn implements IterableList {
                     currentPlayer = next(sittingOrder, currentPlayer);
                     planningCounter++;
                 } else {
-                    actionOrder = setNewRound(playedCards);
+                    setNewRound();
                     currentPlayer = actionOrder.get(0);
                     currentPhase = TurnPhase.STUDENTS;
-                    planningCounter = FIRST_PLANNING_TURN;
                 }
             }
             default -> {
@@ -76,6 +75,8 @@ public class Turn implements IterableList {
                 else {                                                      //If we're done throughout the turn
                     currentPhase = TurnPhase.PLANNING;
                     currentPlayer = actionOrder.get(0);
+                    playedCards.clear();
+                    planningCounter = FIRST_PLANNING_TURN;
                 }
             }
         }
@@ -87,17 +88,15 @@ public class Turn implements IterableList {
 
     /**
      * Sets the new turn order.
-     *
-     * @param playerCardMap to be sorted
      */
-    List<String> setNewRound(Map<String, Card> playerCardMap) {
+    void setNewRound() {
         Map<String, Integer> priorityMap = new HashMap<>();
-        playerCardMap.forEach((key, value) -> priorityMap.put(key, value.priority()));
+        playedCards.forEach((key, value) -> priorityMap.put(key, value.priority()));
         Map<String, Integer> sortedMap =
                 priorityMap.entrySet().stream()
                         .sorted(Map.Entry.comparingByValue())
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-        return new ArrayList<>(sortedMap.keySet());
+        actionOrder = new ArrayList<>(sortedMap.keySet());
     }
 
 

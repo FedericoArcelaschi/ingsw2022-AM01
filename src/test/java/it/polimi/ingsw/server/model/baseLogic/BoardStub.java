@@ -84,7 +84,7 @@ public class BoardStub extends Board implements EndGame {
         Random rand = new Random();
         int chosenCard = rand.nextInt(1, 11);
         if (getCastle(player).isCardAvailable(chosenCard)
-                && !turn.getPlayedCards().containsValue(new Card(chosenCard)))
+                && !turn.isAlreadyPlayed(chosenCard))
             try {
                 playCard(player, chosenCard);
             } catch (PhaseNotRightException e) {
