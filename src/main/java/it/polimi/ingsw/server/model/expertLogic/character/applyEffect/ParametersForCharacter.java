@@ -5,10 +5,19 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.expertLogic.character.specializedCharacters.BlockingCharacter;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Optional;
 
 public class ParametersForCharacter {
+    private StudentColor requestedStudent;
+    private ExpertInfluence influence;
+    private Team currentTeam;
+    private Integer islandNumber;
+    private Integer numberOfPlayers;
+    private PossibleMovingSteps steps;
+    private Bag bag;
+    private BlockCharacter blockChar;
     private List<StudentColor> requestedStudentList;
     private List<StudentColor> availableStudentsList;
     private List<StudentPlaces> placesList;
@@ -19,9 +28,6 @@ public class ParametersForCharacter {
     private PossibleMovingSteps steps;
     private Integer numberOfPlayers;
     private Integer availableTiles;
-    private Integer islandNumber;
-    private Team currentTeam;
-    private Bag bag;
 
 //SETTER
 
@@ -107,8 +113,8 @@ public class ParametersForCharacter {
         return Optional.ofNullable(requestedStudentList);
     }
 
-    public Optional<List<StudentColor>> getAvailableStudentsList() {
-        return Optional.ofNullable(availableStudentsList);
+    public Optional<PossibleMovingSteps> getSteps() {
+        return Optional.ofNullable(steps);
     }
 
     public Optional<BlockingCharacter> getBlockingCharacter() {

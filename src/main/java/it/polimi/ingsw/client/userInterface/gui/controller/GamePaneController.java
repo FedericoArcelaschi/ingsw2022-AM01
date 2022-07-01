@@ -46,23 +46,6 @@ public class GamePaneController {
         guiDrawer.cleanCastles(myCastlePane, castleFlowPane);
     }
 
-    public void draw(BoardData boardData) {
-        guiDrawer = new GuiDrawer(boardData.characters().size() == 3, boardData.nPlayer());
-        this.boardData = boardData;
-
-        //FIXME: remove
-        expertMode.setVisible(boardData.characters().size() == 3);
-
-        GraphicCastle graphicCastle = guiDrawer.drawCastles(boardData.myCastle(), boardData.otherCastles(), myCastlePane, castleFlowPane, this::moveStudentToDiningRoom);
-        waitingRoomToggleGroup = graphicCastle.getWaitingRoomToggleGroup();
-        guiDrawer.drawClouds(boardData.cloudList(), cloudFlowPane, this::chooseCloud);
-        guiDrawer.drawIslands(boardData.islandList(), boardData.motherNaturePosition(), islandLeftPane, islandRightPane, islandsTopRow, islandsBotRow, this::island);
-        guiDrawer.drawCards(boardData.myCastle().deck(), cardsFlowPane, this::playCard);
-        guiDrawer.drawCharacters(boardData.characters(), charFlowPane, this::payCharacter);
-        guiDrawer.drawTurn(boardData.turn(), turnPane);
-        switchCommandMode();
-    }
-
     public void printMessage(Alert.AlertType type, String message) {
         Alert alert = new Alert(type);
         alert.setHeaderText(null);
