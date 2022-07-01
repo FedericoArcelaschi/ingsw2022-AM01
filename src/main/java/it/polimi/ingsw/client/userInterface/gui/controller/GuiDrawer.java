@@ -1,10 +1,7 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
 import it.polimi.ingsw.client.userInterface.gui.graphicObjects.*;
-import it.polimi.ingsw.communication.modelData.CastleData;
-import it.polimi.ingsw.communication.modelData.CloudData;
-import it.polimi.ingsw.communication.modelData.IslandData;
-import it.polimi.ingsw.communication.modelData.TurnData;
+import it.polimi.ingsw.communication.modelData.*;
 import it.polimi.ingsw.communication.modelData.expertMode.CharacterData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
@@ -19,6 +16,9 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
+/**
+ * Contains all methods to draw and clean JavaFX elements using {@link BoardData}
+ */
 public class GuiDrawer {
 
     private final boolean expert;

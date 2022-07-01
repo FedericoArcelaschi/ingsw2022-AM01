@@ -1,13 +1,15 @@
 package it.polimi.ingsw.client.userInterface.gui.graphicObjects;
 
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Allows to select n multiple ToggleButtons and get only selected ones.
+ * Used mostly to select students.
+ */
 public class MultipleToggleGroup {
     List<ToggleButton> elements;
     List<ToggleButton> selectedElements;

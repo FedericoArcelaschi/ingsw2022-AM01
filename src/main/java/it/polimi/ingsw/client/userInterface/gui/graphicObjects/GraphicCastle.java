@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.userInterface.gui.graphicObjects;
 import it.polimi.ingsw.communication.modelData.CastleData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;

@@ -8,11 +8,27 @@ import it.polimi.ingsw.communication.modelData.BoardData;
 public interface UserInterface {
 
     /**
-     * updates the view with the new data received from the server.
+     * Updates the view with the new data received from the server.
      */
     void draw(BoardData boardData);
+
+    /**
+     * Show and update info regarding players waiting to join games
+     */
     void printLobby(LobbyInfo lobbyInfo);
+
+    /**
+     * Display error message
+     */
     void printError(String error);
+
+    /**
+     * Draw for the last time and show info about the winner
+     */
     void endCurrentGame(EndGame endGameMessage);
+
+    /**
+     * Display error message due to lost connection with the server
+     */
     void disconnected();
 }

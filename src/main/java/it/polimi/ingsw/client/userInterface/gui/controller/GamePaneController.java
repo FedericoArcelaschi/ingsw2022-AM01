@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * JavaFX controller for GamePane
+ */
 public class GamePaneController {
 
     @FXML public FlowPane castleFlowPane, cardsFlowPane, charFlowPane;
