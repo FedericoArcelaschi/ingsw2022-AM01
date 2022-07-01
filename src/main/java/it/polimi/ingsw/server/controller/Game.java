@@ -17,35 +17,35 @@ public class Game {
 
     private final static Logger logger = Logger.getLogger(Game.class);
     private final Board board;
-    private final Turn turn;
     private final int MAX_STUDENTS_TO_MOVE;
     private final boolean isLastTurn = false;
-    //FIXME: implement for Ending position, out of resources..
     private int movedStudents = 0;
 
     public Game(GameType gameType, List<String> usernames) {
         this.board = BoardFactory.getBoard(usernames, gameType.expertMode);
-        this.turn  = board.getTurn();
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
 
     public Game(GameType gameType, List<String> usernames, long seed) {
         this.board = BoardFactory.getBoard(usernames, gameType.expertMode, seed);
-        this.turn  = board.getTurn();
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
 
     public @NotNull Map<String, Message> executeCommand(@NotNull Command command) {
-        if(!command.username().equals(turn.getCurrentPlayer()))
-            return errorMessage(command.username(), new Exception("You can't play! It's " + turn.getCurrentPlayer() + "'s turn"));
-        return switch (command.getType()) {
-            case PLAY_CARD -> playCardCommand(command);
-            case MOVE_STUDENT_TO_CASTLE -> moveStudentToDiningRoomCommand(command);
-            case MOVE_STUDENT_TO_ISLAND -> moveStudentToIslandCommand(command);
-            case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
-            case CHOOSE_CLOUD -> chooseCloudCommand(command);
-            case PAY_CHARACTER -> payCharCommand(command);
+        if(!command.username().equals(board.getCurrentPlayer()))
+            return errorMessage(command.username(), new Exception("You can't play! It's " + board.getCurrentPlayer() + "'s turn"));
+        try {
+            return switch (command.getType()) {
+                case PLAY_CARD -> playCardCommand(command);
+                case MOVE_STUDENT_TO_CASTLE -> moveStudentToDiningRoomCommand(command);
+                case MOVE_STUDENT_TO_ISLAND -> moveStudentToIslandCommand(command);
+                case MOVE_MOTHER_NATURE -> moveMotherNatureCommand(command);
+                case CHOOSE_CLOUD -> chooseCloudCommand(command);
+                case PAY_CHARACTER -> payCharCommand(command);
             };
+        } catch (Exception e) {
+            return errorMessage(command.username(), e);
+        }
     }
 
     private @NotNull Map<String, Message> playCardCommand(@NotNull Command command) {
@@ -55,7 +55,7 @@ public class Game {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
-        turn.changePhase();
+        board.changePhase();
         return updateAll();
     }
 
@@ -76,7 +76,7 @@ public class Game {
         }
         if (movedStudents == MAX_STUDENTS_TO_MOVE) {
             movedStudents = 0;
-            turn.changePhase();
+            board.changePhase();
         }
         return updateAll();
     }
@@ -96,7 +96,7 @@ public class Game {
         }
         if (movedStudents == MAX_STUDENTS_TO_MOVE) {
             movedStudents = 0;
-            turn.changePhase();
+            board.changePhase();
         }
         return updateAll();
     }
@@ -116,7 +116,7 @@ public class Game {
                 return errorMessage(command.username(), e);
             }
         }
-        turn.changePhase();
+        board.changePhase();
         return updateAll();
     }
 
@@ -129,7 +129,7 @@ public class Game {
             return errorMessage(command.username(), e);
         }
         board.endOfRound();
-        turn.changePhase();
+        board.changePhase();
         return updateAll();
     }
 
@@ -174,9 +174,5 @@ public class Game {
 
     public Board getBoard() {
         return board;
-    }
-
-    public Turn getTurn() {
-        return turn;
     }
 }

@@ -11,6 +11,7 @@ public enum TurnPhase {
     public @Nullable TurnPhase next() {
         if(this != CLOUD)
             return TurnPhase.values()[this.ordinal() + 1];
-        return null;
+        else
+            return STUDENTS;
     }
 }

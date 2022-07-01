@@ -25,7 +25,7 @@ public class TurnTest{
             b.playCard("gio", 1);
             t.changePhase();
             List<String> order = Arrays.asList("gio", "lore", "fede");
-            assertEquals(order, t.getActionOrder());
+            assertEquals(order, t.getTurnOrder());
             Assertions.assertEquals(TurnPhase.STUDENTS, t.getCurrentPhase());
             assertEquals("gio", t.getCurrentPlayer());
             t.changePhase();
@@ -59,7 +59,7 @@ public class TurnTest{
             b.playCard("fede", 9);
             t.changePhase();
             List<String> newOrder = Arrays.asList("lore", "fede", "gio");
-            assertEquals(newOrder, t.getActionOrder());
+            assertEquals(newOrder, t.getTurnOrder());
         } catch (PhaseNotRightException e) {
             e.printStackTrace();
         }
@@ -75,7 +75,7 @@ public class TurnTest{
                     "lore", new Card(2),
                     "gio", new Card(3)));
         //t.setNewRound(mapPlayersCard);
-        System.out.println(t.getActionOrder());
+        System.out.println(t.getTurnOrder());
     }
 
     @Test
@@ -99,6 +99,6 @@ public class TurnTest{
     @Test
     void nextTestCloud() {
         TurnPhase current = TurnPhase.CLOUD;
-        assertEquals(null, current.next());
+        assertEquals(TurnPhase.STUDENTS, current.next());
     }
 }

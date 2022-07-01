@@ -72,7 +72,6 @@ public class ServerMain implements Runnable {
         }
         executor.shutdown();
     }
-    //TODO: improve shutdown and logger
 
     public int getGamesNumber(GameType type){
         return lobbyManager.countGames(type);

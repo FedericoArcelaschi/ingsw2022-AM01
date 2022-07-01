@@ -5,15 +5,16 @@ import it.polimi.ingsw.server.model.baseLogic.interfaces.StudentPlaces;
 import it.polimi.ingsw.server.model.expertLogic.character.charTypes.BlockCharacter;
 import it.polimi.ingsw.server.model.expertLogic.influence.ExpertInfluence;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
-public class ParametersForCharacter { //FIXME
+public class ParametersForCharacter {
     private StudentColor requestedStudent;
     private ExpertInfluence influence;
     private Team currentTeam;
     private Integer islandNumber;
     private Integer numberOfPlayers;
-    private IntegerBoxing steps;
+    private PossibleMovingSteps steps;
     private Bag bag;
     private BlockCharacter blockChar;
     private List<StudentColor> requestedStudentList;
@@ -21,9 +22,6 @@ public class ParametersForCharacter { //FIXME
     private List<StudentPlaces> placesList;
     private List<Island> islandList;
     private Integer availableTiles;
-
-    public ParametersForCharacter() {
-    }
 
 //SETTER
 
@@ -63,16 +61,18 @@ public class ParametersForCharacter { //FIXME
         this.numberOfPlayers = numberOfPlayers;
     }
 
-    public void setSteps(IntegerBoxing steps) {
+    public void setSteps(PossibleMovingSteps steps) {
         this.steps = steps;
     }
 
     public void setBag(Bag bag) {
         this.bag = bag;
     }
+
     public void setAvailableTiles(int availableTiles) {
         this.availableTiles = availableTiles;
     }
+
     public void setBlockChar(BlockCharacter blockChar) {
         this.blockChar = blockChar;
     }
@@ -107,7 +107,7 @@ public class ParametersForCharacter { //FIXME
         return numberOfPlayers;
     }
 
-    public IntegerBoxing getSteps() {
+    public PossibleMovingSteps getSteps() {
         return steps;
     }
 

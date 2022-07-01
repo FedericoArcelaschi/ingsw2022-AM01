@@ -35,11 +35,10 @@ public class CommandTest {
     }
 
     @Test
-    void testMailman() throws ParseException, WrongGameModeException {
+    void testMailman() throws ParseException {
         Command command = new Command("paychar MAILMAN");
         assertEquals(CharacterUtility.MAILMAN, CharacterUtility.getChar(command.getCharId()));
         g.executeCommand(command);
-        //fixme assertEquals(3, g.getBoard().getPossibleMovingSteps());
     }
 
     @Test

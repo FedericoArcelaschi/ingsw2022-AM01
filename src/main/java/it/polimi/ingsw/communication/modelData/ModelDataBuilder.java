@@ -84,7 +84,7 @@ public abstract class ModelDataBuilder {
                 );
     }
 
-    private static CastleData newExpertCastleData(String username, Castle castle, boolean isMyCastle, EnumMap<Team, Integer> placedTower, Map<StudentColor, Team> teachers) {
+    private static CastleData newExpertCastleData(String username, Castle castle, boolean isMyCastle, Map<Team, Integer> placedTower, Map<StudentColor, Team> teachers) {
         List<String> deck = castle.getDeck().stream().filter(Card::isAvailable).map(Card::toString).toList();
         Integer coins = null;
         try {
@@ -107,6 +107,6 @@ public abstract class ModelDataBuilder {
     }
 
     private static TurnData newTurnData(Turn t){
-        return new TurnData(t.getSittingOrder(), t.getActionOrder(), t.getCurrentPhase(), t.getCurrentPlayer());
+        return new TurnData(t.getTurnOrder(), t.getCurrentPhase(), t.getCurrentPlayer());
     }
 }

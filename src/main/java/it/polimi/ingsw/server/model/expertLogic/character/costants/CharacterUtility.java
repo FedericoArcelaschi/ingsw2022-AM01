@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Contract;
 
 import java.text.ParseException;
 
-public enum  CharacterUtility { //TODO: complete characters' explaination
+public enum  CharacterUtility {
     MONK(CharacterParametersType.STUDENT),
     FARMER(CharacterParametersType.INFLUENCE),
     GUARD(CharacterParametersType.ISLAND),

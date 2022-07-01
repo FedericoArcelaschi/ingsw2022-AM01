@@ -74,7 +74,6 @@ public class Gui extends Application implements UserInterface {
             }
             gamePaneController = gameLoader.getController();
             gamePaneController.initialize(this::send);
-            gamePaneController.draw(boardData);
             stage.setTitle(boardData.username());
             game = new Scene(gameFXML);
             stage.setScene(game);
@@ -82,7 +81,6 @@ public class Gui extends Application implements UserInterface {
         }
         else {
             gamePaneController.clean();
-            gamePaneController.draw(boardData);
         }
     }
 

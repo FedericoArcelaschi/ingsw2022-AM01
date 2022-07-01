@@ -73,7 +73,6 @@ public class ExpertBoardTest{
             e.printStackTrace();
             fail(" playExpertCard() method throw exception " + e);
         }
-        //FIXME assertEquals(expectedPossibleMovingSteps, expertBoard.getPossibleMovingSteps());
         assertEquals(CharacterUtility.MAILMAN.name(),
                 expertBoard.getAvailableCharacters().get(CharacterUtility.MAILMAN).getName());
     }

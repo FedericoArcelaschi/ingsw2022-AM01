@@ -66,6 +66,8 @@ public class BoardTest {
         b.playCard(player1, 9);
         b.playCard(player1, 10);
         assertEquals(0, b.getCastle(player1).getDeck().stream().filter(card -> card.isAvailable()).count());
+        assertThrowsExactly(IllegalArgumentException.class,
+                ()-> b.playCard(player1, 1));
     }
 
     @Test
@@ -126,7 +128,6 @@ public class BoardTest {
             throw new RuntimeException(e);
         }
         b.getTurn().changePhase();
-        //System.out.println(b.);
         b.getTurn().changePhase();
         //move the students from cloud to WR
         List<StudentColor> cloud = b.getCloudList().get(0).getStudentList();
@@ -220,13 +221,9 @@ public class BoardTest {
         turn.changePhase();
         board.playCard("qwerty", 10);
         turn.changePhase();
-        //List<StudentColor> availableStudents = board.getCastle("prova").waitingRoom.subList(0, 3);
-        //System.out.println(availableStudents);
-        //board.moveStudentsToDiningRoom("prova", availableStudents);
         turn.changePhase();
         board.moveMotherNature(1);
         assertEquals(1, board.getMotherNaturePosition());
-        System.out.println(ModelDataBuilder.newBoardData(board, board.getCurrentPlayer()));
     }
 
     /**
@@ -283,7 +280,6 @@ public class BoardTest {
         t = new Turn(listOfPlayer);
         BoardStub bs = new BoardStub(player1, player2, t, new Random().nextLong());
         bs.getToEndGame();
-        System.out.println(bs.getData(player1));
         Team winner = null;
         if(bs.getWinnerTeam()!=null)
             winner = bs.getWinnerTeam();
@@ -309,6 +305,7 @@ public class BoardTest {
         System.out.println(winner);
     }
 
+
     @Test
     public void testEndGame3Players() {
         String player3 = "gamma";
@@ -316,6 +313,7 @@ public class BoardTest {
         t = new Turn(listOfPlayer);
         BoardStub bs = new BoardStub(player1, player2, player3, t, new Random().nextLong());
         bs.getToEndGame();
+        bs.changePhase();
         System.out.println(bs.getData(player1));
         Team winner = null;
         if(bs.getWinnerTeam()!=null)
@@ -329,7 +327,6 @@ public class BoardTest {
         t = new Turn(listOfPlayer);
         BoardStub bs = new BoardStub(player1, player2, "gamma", "delta", t, new Random().nextLong());
         bs.getToEndGame();
-        System.out.println(bs.getData(player1));
         Team winner = null;
         if(bs.getWinnerTeam()!=null)
             winner = bs.getWinnerTeam();

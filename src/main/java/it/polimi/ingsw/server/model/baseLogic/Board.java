@@ -28,8 +28,9 @@ public class Board {
     protected Influence influence = new Influence(new Professors(castleMap));
 
     protected final Turn turn;
+    //the idea is to save it or send it to the player at the end of the game
     private final long seed;
-    protected IntegerBoxing possibleMovingSteps = new IntegerBoxing(0); //calculated form the card: must be stored in memory til the player action turn
+    protected final PossibleMovingSteps possibleMovingSteps = new PossibleMovingSteps(); //calculated form the card: must be stored in memory til the player action turn
     //constants
     private final int INITIAL_NUMBER_OF_ISLANDS = 12;
     private final int MINIMUM_NUMBER_OF_ISLANDS = 3;
@@ -128,7 +129,7 @@ public class Board {
             if(castle.isCardAvailable(cardID)) {
                 Card card = castle.playCard(cardID);
                 turn.addCard(playerID, card);
-                possibleMovingSteps = null;
+                possibleMovingSteps.zero();
                 return;
             }
         throw new IllegalArgumentException("Card cannot be played. " +
@@ -152,6 +153,7 @@ public class Board {
                     "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
         castleMap.get(playerID).addStudentsInDiningRoom(students);
+        // FIXME
         influence.updateProfessors();
     }
 
@@ -182,18 +184,18 @@ public class Board {
         if(turn.getCurrentPhase() != TurnPhase.MOTHERNATURE)
             throw new PhaseNotRightException("You can't move mother nature in this stage of the game. " +
                     "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
-        if(possibleMovingSteps == null)
-            possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps());
-        if (steps > possibleMovingSteps.getInt() || steps < 1)
-            throw new IllegalArgumentException(steps < 1 ? "You can't move by less than one step." : "Too many steps. possible steps: " + possibleMovingSteps.getInt()
-                                                            + ", attempted steps: " +steps);
+        possibleMovingSteps.update(turn.getPossibleMovingSteps());
+        if(steps < 1)
+            throw new IllegalArgumentException("You must move! Steps must be grater or equal than zero.");
+        if(steps > possibleMovingSteps.get())
+            throw new IllegalArgumentException("Too many steps. possible steps: " + possibleMovingSteps.get());
         if ((motherNaturePosition + steps) >= (islandList.size()))
             motherNaturePosition += steps - islandList.size();
         else
             motherNaturePosition += steps;
         conquerIsland(motherNaturePosition);
-        if(turn.isLastTurn())
-            possibleMovingSteps.setInt(turn.getNextPossibleMovingSteps());
+        if(turn.isSkipCloudPhase())
+            possibleMovingSteps.update(turn.getPossibleMovingSteps());
     }
 
     /**
@@ -250,10 +252,10 @@ public class Board {
      */
     protected void joinIslands(@NotNull List<Integer> islandsToJoin) {
         int firstIslandIndex = islandsToJoin.get(0);
-        List<Island> islandList = new ArrayList<>();
-        islandsToJoin.forEach(index -> islandList.add(this.islandList.get(index)));
-        this.islandList.add(firstIslandIndex, new Archipelago(islandList));
-        this.islandList.removeAll(islandList);
+        List<Island> islandsToRemove = new ArrayList<>();
+        islandsToJoin.forEach(index -> islandsToRemove.add(this.islandList.get(index)));
+        this.islandList.add(firstIslandIndex, new Archipelago(islandsToRemove));
+        this.islandList.removeAll(islandsToRemove);
         motherNaturePosition = firstIslandIndex;
     }
 
@@ -281,21 +283,21 @@ public class Board {
             areCloudsRefillable = cloudRefill();
             endGame =  areCloudsRefillable || remainingCards() == 0;
         }
-        possibleMovingSteps.setInt(turn.getNextPossibleMovingSteps());
+        possibleMovingSteps.zero();
     }
 
     /**
      * after a whole turn
      */
     public boolean cloudRefill() {
-        if(turn.isLastTurn())
+        if(turn.isSkipCloudPhase())
             return true;
         if(bag.remainingStudents() < (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
-            turn.setLastTurn(true);
+            turn.setSkipCloudPhase(true);
             return false;
         }
         if(bag.remainingStudents() == (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
-            turn.setLastTurn(true);
+            turn.setSkipCloudPhase(true);
         }
         //if()
         //cloudList.stream().map(Cloud::isFillable).anyMatch(false);
@@ -311,7 +313,7 @@ public class Board {
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
     private int remainingCards(){
-        Castle currPlayerCastle = getCastle(turn.getCurrentPlayer());
+        Castle currPlayerCastle = castleMap.get(turn.getCurrentPlayer());
         int cardsLeft = (int) currPlayerCastle.getDeck().stream().filter(Card::isAvailable).count();
         return cardsLeft;
     }
@@ -373,7 +375,7 @@ public class Board {
             else if (sum == max)
                 withMoreProfessors = null;
         }
-        if (withMoreProfessors == null) throw new DrawException("Two players have the same number of professors"); //FIXME
+        if (withMoreProfessors == null) throw new DrawException("Two players have the same number of professors");
         return withMoreProfessors;
     }
 

@@ -139,9 +139,7 @@ public class ExpertBoard extends Board {
 
     private @NotNull ParametersForCharacter standardParameters() {
         ParametersForCharacter par = new ParametersForCharacter();
-        par.setSteps(   possibleMovingSteps == null ?
-                        possibleMovingSteps = new IntegerBoxing(turn.getPossibleMovingSteps()) :
-                        possibleMovingSteps);
+        par.setSteps(possibleMovingSteps);
         return par;
     }
 

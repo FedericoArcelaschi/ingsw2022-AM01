@@ -113,14 +113,12 @@ enum CharacterFunction {
                                 new ExpertIsland(
                                         new Archipelago(islandToJoin)));
                 islandList.removeAll(islandToJoin);
-                par.getSteps().setInt(islandIndex);
             }
         ),
     MAILMAN(
         (ParametersForCharacter par)
         -> {
-            IntegerBoxing steps = par.getSteps();
-            steps.affect(2);
+            //FIXME
         }
     ),
     WITCH(
