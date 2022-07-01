@@ -57,9 +57,9 @@ public class Cli implements UserInterface, DefaultConversations {
     @Override
     public void draw(BoardData update) {
         System.out.println(CLEAR_SCREEN);
+        System.out.println(update.toString());
         clientMain.setState(ClientState.IN_GAME);
         clientMain.setBoardData(update);
-        System.out.println(update.toString());
         if (firstUpdate)
             executor.submit(this::readBuffer);
         firstUpdate = false;
@@ -119,6 +119,7 @@ public class Cli implements UserInterface, DefaultConversations {
                         clientMain.setState(ClientState.OUTSIDE_LOBBY);
                         clientMain.sendPreferences(this.getValidPreferences(reader));
                         clientMain.setState(ClientState.INSIDE_LOBBY);
+                        firstUpdate = true;
                     } else {
                         System.out.println("Goodbye!");
                         System.exit(0);
