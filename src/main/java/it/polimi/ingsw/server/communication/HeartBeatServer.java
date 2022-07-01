@@ -42,13 +42,14 @@ public class HeartBeatServer implements Runnable {
      * Heart-beat server main thread keeps executing the following methods to keep track of the connected players.
      */
     public void run() {
-        long previousTime = new Date().getTime();
-        sendsPingToAll();
-        waits(previousTime);
-        synchronized (heartBeats) {
-            heartBeats.forEach(this::removeClient);
+        while(true ) {
+            long previousTime = new Date().getTime();
+            sendsPingToAll();
+            waits(previousTime);
+            synchronized (heartBeats) {
+                heartBeats.forEach(this::removeClient);
+            }
         }
-        run();
     }
 
     private void sendsPingToAll() {

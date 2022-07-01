@@ -63,8 +63,8 @@ public class GameInterface {
 
     public void endGame(Client client) {
         clients.remove(client);
-        clients.forEach(Client::putInLobby);
         sendEndGameMsg(client);
+        clients.forEach(Client::putInLobby);
         active = false;
     }
 

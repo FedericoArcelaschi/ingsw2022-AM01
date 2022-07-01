@@ -33,12 +33,12 @@ public class GameManager {
 
     public Map<GameType, Integer> getActiveGames() {
         Map<GameType, Integer> activeGames = new HashMap<>();
-        for (GameType g : GameType.values()) {
+        for (GameType gameType : GameType.values()) {
             activeGames
-                .put(g,
+                .put(gameType,
                     gameList
                         .stream()
-                        .filter(x -> x.getGameType().equals(g) &&
+                        .filter(x -> x.getGameType().equals(gameType) &&
                                      x.isActive())
                         .toList().size());
         }
