@@ -1,11 +1,12 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
+import it.polimi.ingsw.server.model.baseLogic.interfaces.IterableList;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Turn {
+public class Turn implements IterableList {
 
     /**
      * ordered list of players as they joined the game.
@@ -56,7 +57,10 @@ public class Turn {
             case MOTHERNATURE -> {
                 currentPhase = currentPhase.next();
                 if(isLastTurn) {
-                    changePhase();
+                    //currentPlayer = next(actionOrder, currentPlayer);
+                    //changePhase();
+                    currentPhase = TurnPhase.STUDENTS;
+                    currentPlayer = next(actionOrder, currentPlayer);
                 }
             }
             case CLOUD -> {
@@ -112,14 +116,7 @@ public class Turn {
         currentPlayer = next(sittingOrder, currentPlayer);
     }
 
-    @Contract(pure = true)
-    private String next(List<String> list, String element) {
-        int dim = list.size();
-        int index = list.indexOf(element);
-        if(index == dim - 1)
-            return list.get(0);
-        else return list.get(index + 1);
-    }
+
 
     @Contract(pure = true)
     public boolean isLastActionTurn() {

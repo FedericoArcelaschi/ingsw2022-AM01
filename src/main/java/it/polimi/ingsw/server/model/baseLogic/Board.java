@@ -35,7 +35,8 @@ public class Board {
     //constants
     private final int INITIAL_NUMBER_OF_ISLANDS = 12;
     private final int MINIMUM_NUMBER_OF_ISLANDS = 3;
-    private final int TOWERS_TO_PLACE_TO_WIN = 8;
+    private final int TOWERS_TO_PLACE_TO_WIN_2_4_PLAYERS = 8;
+    private final int TOWERS_TO_PLACE_TO_WIN_3_PLAYERS = 8;
     private final int CLOUD_SIZE_2_4_PLAYERS = 3;
     private final int CLOUD_SIZE_3_PLAYERS = 4;
     private boolean endGame = false;
@@ -277,10 +278,10 @@ public class Board {
      * Resets the students that can be moved
      */
     public void endOfRound() {
-        boolean refillableClouds;
+        boolean areCloudsRefillable;
         if(turn.isLastActionTurn()) {
-            refillableClouds = cloudRefill();
-            endGame =  refillableClouds || endedCards();
+            areCloudsRefillable = cloudRefill();
+            endGame =  areCloudsRefillable || endedCards();
         }
     }
 
@@ -297,6 +298,8 @@ public class Board {
         if(bag.remainingStudents() == (cloudList.size()*cloudList.get(0).getSTUDENTS_ON_CLOUD())) {
             turn.setLastTurn(true);
         }
+        //if()
+        //cloudList.stream().map(Cloud::isFillable).anyMatch(false);
         cloudList.forEach(Cloud::refill);
         return false;
     }
@@ -321,7 +324,7 @@ public class Board {
     public boolean isWinningState() {
         EnumMap<Team, Integer> nTowers = placedTowers();
         for (Team t : Team.values())
-            if (nTowers.get(t) >= TOWERS_TO_PLACE_TO_WIN || islandList.size() <= MINIMUM_NUMBER_OF_ISLANDS)
+            if (nTowers.get(t) >= TOWERS_TO_PLACE_TO_WIN_2_4_PLAYERS || islandList.size() <= MINIMUM_NUMBER_OF_ISLANDS)
                 return true;
         return false;
     }
@@ -333,7 +336,7 @@ public class Board {
     public Team getWinner() throws DrawException {
         Map<Team, Integer> nTowers = placedTowers();
         for (Team t : Team.values())
-            if (nTowers.get(t) == TOWERS_TO_PLACE_TO_WIN) return t;
+            if (nTowers.get(t) == TOWERS_TO_PLACE_TO_WIN_2_4_PLAYERS) return t;
         Team winner = GreaterTeam.findGreaterTeam(nTowers);
         if (winner == null)
             return teamWithMostProfessors();

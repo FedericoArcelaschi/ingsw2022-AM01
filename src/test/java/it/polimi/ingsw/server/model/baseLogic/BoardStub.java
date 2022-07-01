@@ -12,6 +12,7 @@ public class BoardStub extends Board implements EndGame {
     private int maxStudentsToMove = 3;
     private int turnCounter = 0;
     private Map<String, List<Card>> availableCards = new HashMap<>();
+    private Team winner = null;
 
     public BoardStub(String playerID1, String playerID2, Turn turn, long seed) {
         super(playerID1, playerID2, turn, seed);
@@ -39,10 +40,12 @@ public class BoardStub extends Board implements EndGame {
 
 
     @Override
-    public void getToEndGame(String player) {
+    public void getToEndGame() {
         while (!isEndGame()) {
             planning();
             actions();
+            if(winner!=null)
+                break;
         }
     }
 
@@ -58,11 +61,26 @@ public class BoardStub extends Board implements EndGame {
             randomStudentsMoved(p);
             changePhase();
             randomMotherNature();
+            if(isWinningState()) {
+                try {
+                    winner = getWinner();
+                } catch (DrawException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            }
+            if(turn.isLastTurn() && turn.getActionOrder().get(turn.getActionOrder().size()-1).equals(p)) {
+                try {
+                    winner = getWinner();
+                } catch (DrawException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             changePhase();
-            randomChooseCloud(p);
-            endOfRound();
-            changePhase();
-            turnCounter++;
+            if(turn.getCurrentPhase()==TurnPhase.CLOUD) {
+                randomChooseCloud(p);
+                changePhase();
+            }
         }
     }
 
@@ -90,7 +108,8 @@ public class BoardStub extends Board implements EndGame {
         Random rand = new Random();
         List<StudentColor> students = new ArrayList<>();
         List<StudentColor> waitingRoom = getCastle(player).getWaitingRoom();
-        for (int i = 0; i < 3; i++) {
+        int studentsToMove = castleMap.size() == 3 ? 4 : 3;
+        for (int i = 0; i < studentsToMove; i++) {
             StudentColor added = waitingRoom.get(rand.nextInt(waitingRoom.size()));
             students.add(added);
             waitingRoom.remove(added);
@@ -111,8 +130,9 @@ public class BoardStub extends Board implements EndGame {
         int steps;
         if (turn.getPossibleMovingSteps() == 1)
             steps = 1;
-        else
-            steps = new Random().nextInt(1, turn.getPossibleMovingSteps()+1);
+        else {
+            steps = new Random().nextInt(1, turn.getPossibleMovingSteps() + 1);
+        }
         try {
             moveMotherNature(steps);
         } catch (PhaseNotRightException e) {
@@ -128,7 +148,12 @@ public class BoardStub extends Board implements EndGame {
             } catch (TooManyStudentsException | PhaseNotRightException e) {
                 throw new RuntimeException(e);
             }
+            endOfRound();
         } else
             randomChooseCloud(player);
+    }
+
+    public Team getWinnerTeam() {
+        return winner;
     }
 }

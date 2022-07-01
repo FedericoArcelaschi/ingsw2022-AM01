@@ -18,7 +18,7 @@ public class Castle implements StudentPlaces {
     protected final Team towerColor;
     protected final int waitingRoomSize;
     //constants
-    private static final int diningRoomSizePerColor = 9;
+    private static final int diningRoomSizePerColor = 10;
     private static final int waitingRoomSize2Players = 7;
     private static final int waitingRoomSize3Players = 9;
     private static final int numberOfCards = 10;
@@ -80,7 +80,7 @@ public class Castle implements StudentPlaces {
                 addStudentInDiningRoom(c);
             } catch (TooManyStudentsException e) {
                 exception = e;
-                this.addStudentsInWaitingRoom(List.of(e.getColor()));
+                this.addStudentsInWaitingRoom(List.of(e.getColor()));//FIXME
             }
         }
         if(exception != null)
