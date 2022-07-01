@@ -33,7 +33,7 @@ public class CommandTest {
     }
 
     @Test
-    void testMailman() throws ParseException {
+    void testMailman() throws ParseException, WrongGameModeException {
         Command command = new Command("paychar MAILMAN");
         command.setUsername("fede");
         assertEquals(CharacterUtility.MAILMAN, CharacterUtility.getChar(command.getCharId()));

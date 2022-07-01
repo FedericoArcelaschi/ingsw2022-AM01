@@ -43,4 +43,5 @@ public class ServerReceiver extends Receiver {
                     lobbyManager.addPlayer(client, (Preferences) message);
         }
     }
+
 }

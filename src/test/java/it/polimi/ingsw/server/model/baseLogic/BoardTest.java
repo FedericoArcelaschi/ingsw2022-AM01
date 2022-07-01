@@ -219,6 +219,9 @@ public class BoardTest {
         turn.changePhase();
         board.playCard("qwerty", 10);
         turn.changePhase();
+        //List<StudentColor> availableStudents = board.getCastle("prova").waitingRoom.subList(0, 3);
+        //System.out.println(availableStudents);
+        //board.moveStudentsToDiningRoom("prova", availableStudents);
         turn.changePhase();
         board.moveMotherNature(1);
         assertEquals(1, board.getMotherNaturePosition());

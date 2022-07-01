@@ -17,7 +17,7 @@ public class ParametersForCharacter {
     private Integer numberOfPlayers;
     private PossibleMovingSteps steps;
     private Bag bag;
-    private BlockCharacter blockChar;
+    private BlockingCharacter blockingCharacter;
     private List<StudentColor> requestedStudentList;
     private List<StudentColor> availableStudentsList;
     private List<StudentPlaces> placesList;
@@ -79,7 +79,7 @@ public class ParametersForCharacter {
         this.availableTiles = availableTiles;
     }
 
-    public void setBlockChar(BlockingCharacter blockingCharacter) {
+    public void setBlockCharacter(BlockingCharacter blockingCharacter) {
         this.blockingCharacter = blockingCharacter;
     }
 
@@ -113,8 +113,8 @@ public class ParametersForCharacter {
         return Optional.ofNullable(requestedStudentList);
     }
 
-    public Optional<PossibleMovingSteps> getSteps() {
-        return Optional.ofNullable(steps);
+    public Optional<List<StudentColor>> getAvailableStudentsList() {
+        return Optional.ofNullable(availableStudentsList);
     }
 
     public Optional<BlockingCharacter> getBlockingCharacter() {

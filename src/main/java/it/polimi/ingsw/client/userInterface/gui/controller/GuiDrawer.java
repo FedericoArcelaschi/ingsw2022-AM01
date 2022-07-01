@@ -66,10 +66,35 @@ public class GuiDrawer {
 
     public void drawCharacters(List<CharacterData> characters, CharacterUtility activatedCharacter, FlowPane charFlowPane, EventHandler<MouseEvent> payCharacter, EnumMap<StudentColor, Integer> diningRoom){
         for (CharacterData character : characters) {
-            boolean active = activatedCharacter != null && character.getName().equalsIgnoreCase(activatedCharacter.name());
-            GraphicCharacter graphicCharacter = GraphicCharacter.newGraphicCharacter(character.getName(), character.getStudents(), character.getDescription(), active, diningRoom);
-            graphicCharacter.setOnMouseClicked(payCharacter);
-            charFlowPane.getChildren().add(graphicCharacter);
+            CharacterPane pane = new CharacterPane();
+            pane.setPrefSize(111, 200);
+            pane.getStyleClass().addAll(List.of("character", CharacterExplanation.getInstance(character.getName()).getCSS())); //FIXME usa l'utility pls
+            pane.setOnMouseClicked(payCharacter);
+
+            FlowPane flowPane = new FlowPane();
+            flowPane.setPrefSize(111, 100);
+            flowPane.setHgap(5);
+            flowPane.setAlignment(Pos.CENTER);
+            flowPane.setLayoutY(50);
+            MultipleToggleGroup toggleGroup = new MultipleToggleGroup(character.getStudents().orElse(new ArrayList<>()).size());
+            pane.setMultipleToggleGroup(toggleGroup);
+
+            for (StudentColor studentColor: character.getStudents().orElse(new ArrayList<>())) {
+                ToggleButton toggleButton = createElementToggleButton("student", 25, 25, false);
+                toggleGroup.add(toggleButton);
+                setStudentButtonColor(toggleButton, studentColor);
+                flowPane.getChildren().add(toggleButton);
+            }
+
+            Tooltip tooltip = new Tooltip(character.getDescription());
+            Tooltip.install(pane, tooltip);
+            Tooltip.install(flowPane, tooltip);
+
+            pane.setAccessibleText(character.getName());
+            flowPane.setAccessibleText(character.getName());
+
+            pane.getChildren().add(flowPane);
+            charFlowPane.getChildren().add(pane);
         }
     }
 
