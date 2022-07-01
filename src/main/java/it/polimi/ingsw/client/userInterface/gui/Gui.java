@@ -124,7 +124,6 @@ public class Gui extends Application implements UserInterface {
     public void disconnected() {
         clientMain.setState(ClientState.NOT_CONNECTED);
         if(gamePaneController != null) Platform.runLater(()->gamePaneController.printMessage(Alert.AlertType.ERROR, "Connection lost, you left the game"));
-        //TODO:
     }
 
     public void connect(InetSocketAddress address) {

@@ -17,6 +17,7 @@ import static it.polimi.ingsw.startUp.Outputs.CLEAR_SCREEN;
  * Receives all the messages from the server and handles them correctly.
  */
 public class ClientReceiver extends Receiver {
+
     private final UserInterface userInterface;
     private final HeartBeatClient heartBeatClient;
     private PrintWriter out;
