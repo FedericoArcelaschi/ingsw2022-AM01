@@ -14,7 +14,7 @@ public class ParametersForCharacter {
     private Team currentTeam;
     private Integer islandNumber;
     private Integer numberOfPlayers;
-    private IntegerBoxing steps;
+    private PossibleMovingSteps steps;
     private Bag bag;
     private BlockingCharacter blockingCharacter;
     private List<StudentColor> requestedStudentList;
@@ -61,7 +61,7 @@ public class ParametersForCharacter {
         this.numberOfPlayers = numberOfPlayers;
     }
 
-    public void setSteps(IntegerBoxing steps) {
+    public void setSteps(PossibleMovingSteps steps) {
         this.steps = steps;
     }
 
@@ -95,7 +95,7 @@ public class ParametersForCharacter {
     }
 
 
-    public Optional<IntegerBoxing> getSteps() {
+    public Optional<PossibleMovingSteps> getSteps() {
         return Optional.ofNullable(steps);
     }
 

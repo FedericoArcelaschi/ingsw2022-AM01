@@ -19,11 +19,20 @@
     -fx-background-color: lightblue;
 }
 
+#castleFlowPane{
+    -fx-background-image: url("/castle/proposta-sfondo.jpg");
+    -fx-background-size: 600, 600;
+}
+
 .island{
     -fx-background-image: url("/islands/island-desaturato.png");
     -fx-background-size: 220, 220;
     -fx-background-position: center center;
     -fx-background-repeat: stretch;
+}
+
+.username{
+    -fx-font-size: 20px;
 }
 
 .blockedIsland{

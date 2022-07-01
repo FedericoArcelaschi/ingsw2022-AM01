@@ -122,9 +122,11 @@ public class Game {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
-        if (board.isWinningState() || board.isEndGame()) {
+        if(turn.isLastTurn())
+            board.endOfRound();
+        if(board.isWinningState() || board.isEndGame()) {
             try {
-                winUpdate(board.getWinner());
+                return winUpdate(board.getWinner());
             } catch (DrawException e) {
                 logger.info(e);
                 return errorMessage(command.username(), e);
