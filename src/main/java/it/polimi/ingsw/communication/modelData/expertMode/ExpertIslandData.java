@@ -41,4 +41,9 @@ public class ExpertIslandData extends IslandData {
         }
         return s.toString();
     }
+
+    @Override
+    public boolean isBlocked() {
+        return isBlocked;
+    }
 }

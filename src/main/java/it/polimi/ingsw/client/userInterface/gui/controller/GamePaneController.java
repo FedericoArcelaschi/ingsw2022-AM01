@@ -179,6 +179,8 @@ public class GamePaneController {
 
 
     public void payCharacter(MouseEvent mouseEvent) {
+        int maxSelect;
+
         parameters.clear();
         GraphicCharacter character;
         try {
@@ -190,16 +192,19 @@ public class GamePaneController {
         parameters.add(character.getAccessibleText());
         List<String> students = character.getMultipleToggleGroup().getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList();
         parameters.addAll(students);
-        List<String> studentAlert = character.showDialog(students.size() == 0 ? 1 : students.size());
-        parameters.addAll(studentAlert);
-        if ("jester".equalsIgnoreCase(character.getAccessibleText())) {
+        maxSelect = students.size();
+        if ("jester".equalsIgnoreCase(character.getAccessibleText()) || "storyteller".equalsIgnoreCase(character.getAccessibleText())) {
             try {
-                parameters.addAll(waitingRoomToggleGroup.getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList().subList(0, students.size()));
+                List<String> waitingRoom = waitingRoomToggleGroup.getSelectedToggles().stream().map(ToggleButton::getAccessibleText).toList().subList(0, students.size());
+                parameters.addAll(waitingRoom);
+                maxSelect = waitingRoom.size();
             } catch (Exception e) {
                 return;
             }
         }
 
+        List<String> studentAlert = character.showDialog(students.size() == 0 ? 1 : students.size());
+        parameters.addAll(studentAlert);
         Command command;
         try {
             command = new Command(CommandType.PAY_CHARACTER, new ArrayList<>(parameters));
@@ -218,5 +223,6 @@ public class GamePaneController {
             cardsFlowPane.setVisible(true);
             charFlowPane.setVisible(false);
         }
+        parameters.clear();
     }
 }

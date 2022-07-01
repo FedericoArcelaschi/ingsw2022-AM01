@@ -15,8 +15,9 @@ public class GraphicIsland extends Pane {
     public GraphicIsland(EnumMap<StudentColor, Integer> students, int size, Team ownership, int index, boolean motherNature, boolean blocked) {
         this.setPrefSize(185, 200);
         this.getStyleClass().add("island");
-        if(blocked)
+        if(blocked) {
             this.getStyleClass().add("blockedIsland");
+        }
         this.setAccessibleText(String.valueOf(index+1));
         FlowPane islandFlowPane = new FlowPane();
         islandFlowPane.setPrefSize(145, 160);
