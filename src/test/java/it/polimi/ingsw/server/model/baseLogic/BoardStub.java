@@ -7,6 +7,8 @@ import it.polimi.ingsw.server.model.exceptions.TooManyStudentsException;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 public class BoardStub extends Board implements EndGame {
 
     private int maxStudentsToMove = 3;
@@ -53,28 +55,28 @@ public class BoardStub extends Board implements EndGame {
     }
 
     public void actions() {
-        for (String p : turn.getTurnOrder()) {
-            randomStudentsMoved(p);
+        for (String player : turn.getTurnOrder()) {
+            randomStudentsMoved(player);
             changePhase();
             randomMotherNature();
             if(isWinningState()) {
                 try {
                     winner = getWinner();
                 } catch (DrawException e) {
-                    throw new RuntimeException(e);
+                    System.out.println(e.getMessage());
                 }
                 break;
             }
-            if(turn.isSkipCloudPhase() && turn.getTurnOrder().get(turn.getTurnOrder().size()-1).equals(p)) {
+            if(turn.isSkipCloudPhase() && turn.getTurnOrder().get(turn.getTurnOrder().size() - 1).equals(player)) {
                 try {
                     winner = getWinner();
                 } catch (DrawException e) {
-                    throw new RuntimeException(e);
+                    System.out.println(e.getMessage());
                 }
             }
             changePhase();
             if(turn.getCurrentPhase()==TurnPhase.CLOUD) {
-                randomChooseCloud(p);
+                randomChooseCloud(player);
                 changePhase();
             }
         }
@@ -88,7 +90,8 @@ public class BoardStub extends Board implements EndGame {
             try {
                 playCard(player, chosenCard);
             } catch (PhaseNotRightException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                fail();
             }
         else
             playRandomCard(player);
@@ -96,9 +99,6 @@ public class BoardStub extends Board implements EndGame {
 
     /**
      * Used to add random students from the Waiting Room to the Dining Room.
-     *
-     * @param player
-     * @return
      */
     public void randomStudentsMoved(String player) {
         Random rand = new Random();

@@ -136,11 +136,6 @@ public class Turn implements IterableList {
                 new ArrayList<>(actionOrder);
     }
 
-    //Remove: stub should use only public methods
-    public Map<String, Card> getPlayedCards() {
-        return playedCards;
-    }
-
     public boolean isSkipCloudPhase() {
         return skipCloudPhase;
     }

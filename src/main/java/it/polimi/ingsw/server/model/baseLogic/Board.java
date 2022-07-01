@@ -125,7 +125,7 @@ public class Board {
                 castle.getDeck()
                         .stream()
                         .filter(Card::isAvailable)
-                        .allMatch(card-> turn.isAlreadyPlayed(card.priority())))
+                        .allMatch(card -> turn.isAlreadyPlayed(card.priority())))
             if(castle.isCardAvailable(cardID)) {
                 Card card = castle.playCard(cardID);
                 turn.addCard(playerID, card);
