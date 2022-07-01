@@ -2,7 +2,8 @@ package it.polimi.ingsw.server.model.baseLogic;
 
 import java.util.List;
 
-public class Archipelago extends Island{
+public class Archipelago extends Island {
+
     int islandNumber;
 
     /**
