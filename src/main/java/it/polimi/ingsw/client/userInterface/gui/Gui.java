@@ -61,7 +61,6 @@ public class Gui extends Application implements UserInterface {
 
 
     public void refresh(BoardData boardData) {
-        System.out.println(boardData);
         //draws the game panel for testing.
         if(!inGame) {
             FXMLLoader gameLoader
@@ -97,6 +96,7 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void endCurrentGame(EndGame endGameMessage) {
+        refresh(endGameMessage.getBoardData());
         clientMain.setState(ClientState.GAME_ENDED);
         inGame = false;
         if(gamePaneController != null) Platform.runLater(()-> {

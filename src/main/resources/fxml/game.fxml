@@ -16,7 +16,7 @@
 
 <TabPane prefHeight="800.0" side="LEFT" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.userInterface.gui.controller.GamePaneController">
    <tabs>
-      <Tab text="Game">
+      <Tab closable="false" text="Game">
          <content>
             <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1400.0">
                <right>
@@ -72,7 +72,7 @@
             </BorderPane>
          </content>
       </Tab>
-      <Tab text="Castle">
+      <Tab closable="false" text="Castle">
          <content>
             <FlowPane fx:id="castleFlowPane" alignment="CENTER" hgap="50.0" prefHeight="100.0" prefWidth="200.0" />
          </content>

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
 public final class Card {
+
     private final int priority;
     private final int distance;
     private boolean isAvailable;

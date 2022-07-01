@@ -97,6 +97,7 @@ public class WitchTest5 {
         expertBoard.changePhase();
         expertBoard.getCastle(player1).removeStudentsFromWaitingRoom(List.of(StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN));
         expertBoard.chooseCloud(player1, 1);
+        expertBoard.endOfRound();
         expertBoard.changePhase();
         //player 2, student
         expertBoard.moveStudentsToDiningRoom(player2, List.of(StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN));

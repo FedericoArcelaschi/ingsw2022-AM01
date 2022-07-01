@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -49,7 +50,7 @@ public class CharacterData {
     }
 
     public List<StudentColor> getStudents() {
-        return students;
+        return Optional.ofNullable(students).orElse(new ArrayList<>());
     }
 
     public String getDescription() {

@@ -22,11 +22,6 @@ public class ParametersForCharacter {
     private List<StudentColor> availableStudentsList;
     private List<StudentPlaces> placesList;
     private List<Island> islandList;
-    private BlockingCharacter blockingCharacter;
-    private StudentColor requestedStudent;
-    private ExpertInfluence influence;
-    private PossibleMovingSteps steps;
-    private Integer numberOfPlayers;
     private Integer availableTiles;
 
 //SETTER

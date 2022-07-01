@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.userInterface.gui.controller;
 
-import it.polimi.ingsw.client.communication.ClientMain;
 import it.polimi.ingsw.communication.message.subclasses.LobbyInfo;
 import it.polimi.ingsw.communication.message.subclasses.Preferences;
 import it.polimi.ingsw.server.controller.GameType;
@@ -8,12 +7,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 import java.net.InetSocketAddress;
 import java.util.function.Consumer;
 
+/**
+ * JavaFX controller for LoginPane
+ */
 public class LoginPaneController {
     @FXML TableView<LobbyInfo.Lobby> lobbyTable;
     @FXML Pane networkPane, preferencesPane, waitingForGamePane;

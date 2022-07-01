@@ -282,7 +282,7 @@ public class Board {
         boolean areCloudsRefillable;
         if(turn.isLastActionTurn()) {
             areCloudsRefillable = cloudRefill();
-            endGame =  areCloudsRefillable || endedCards();
+            endGame =  areCloudsRefillable || noRemainingCards();
         }
         possibleMovingSteps.zero();
     }
@@ -313,7 +313,7 @@ public class Board {
      * @return number of cards left.
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
-    private boolean endedCards() {
+    private boolean noRemainingCards() {
         Castle currPlayerCastle = castleMap.get(turn.getCurrentPlayer());
         int cardsLeft = (int) currPlayerCastle.getDeck().stream().filter(Card::isAvailable).count();
         return cardsLeft == 0;
