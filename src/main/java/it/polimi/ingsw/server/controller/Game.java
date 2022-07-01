@@ -26,8 +26,6 @@ public class Game {
     private final Board board;
     private final Turn turn;
     private final int MAX_STUDENTS_TO_MOVE;
-    private final boolean isLastTurn = false;
-    //FIXME: implement for Ending position, out of resources..
     private int movedStudents = 0;
 
     public Game(GameType gameType, List<String> usernames) {
@@ -165,8 +163,7 @@ public class Game {
         Map<String, Message> usernameMessageMap = new HashMap<>();
         board.getCastleMap()
                 .keySet()
-                .forEach(i ->
-                        usernameMessageMap.put(i, new Update(board.getData(i))));
+                .forEach(i -> usernameMessageMap.put(i, new Update(board.getData(i))));
         return usernameMessageMap;
     }
 

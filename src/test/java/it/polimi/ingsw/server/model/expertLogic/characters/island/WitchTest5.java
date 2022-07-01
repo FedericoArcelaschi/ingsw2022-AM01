@@ -99,6 +99,7 @@ public class WitchTest5 {
         expertBoard.getCastle(player1).removeStudentsFromWaitingRoom(List.of(StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN));
         expertBoard.chooseCloud(player1, 1);
         expertBoard.changePhase();
+        expertBoard.endOfRound();
         //player 2, student
         expertBoard.moveStudentsToDiningRoom(player2, List.of(StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN, StudentColor.GREEN));
         //the stub gives me for sure those 6 students.

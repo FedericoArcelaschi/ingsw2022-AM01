@@ -1,6 +1,7 @@
-package it.polimi.ingsw.server.controller;
+package it.polimi.ingsw.server.communication;
 
-import it.polimi.ingsw.server.communication.Client;
+import it.polimi.ingsw.server.controller.GameInterface;
+import it.polimi.ingsw.server.controller.GameType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,7 +10,8 @@ import java.util.*;
 /**
  * Class to keep all the games organized and accessible.
  */
-public class GameManager {
+public class
+GameManager {
 
     private static final Logger logger = LogManager.getLogger(GameManager.class);
     List<GameInterface> gameList;
@@ -21,7 +23,7 @@ public class GameManager {
     public void createGame(GameType type, Set<Client> clients) {
         GameInterface gameInterface = new GameInterface(type, clients);
         gameList.add(gameInterface);
-        clients.forEach(client->client.setGameInterface(gameInterface));
+        clients.forEach(client -> client.setGameInterface(gameInterface));
     }
 
     public int countGames(GameType type) {
