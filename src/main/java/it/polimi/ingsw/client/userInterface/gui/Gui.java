@@ -61,7 +61,6 @@ public class Gui extends Application implements UserInterface {
 
 
     public void refresh(BoardData boardData) {
-        System.out.println(boardData);
         //draws the game panel for testing.
         if(!inGame) {
             FXMLLoader gameLoader

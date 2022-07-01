@@ -3,8 +3,6 @@ package it.polimi.ingsw.client.userInterface.gui.graphicObjects;
 import it.polimi.ingsw.communication.modelData.CastleData;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.baseLogic.Team;
-import javafx.event.EventHandler;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -30,7 +28,7 @@ public class GraphicCastle extends BorderPane {
 
         this.setBottom(waitingRoom = new WaitingRoom(castleData.waitingRoom(), disable, is3Game));
         this.setCenter(center);
-        this.setTop(new TowerGarden(castleData.towerColor(), castleData.nTower()));
+        this.setTop(new TowerGarden(castleData.towerColor(), castleData.nTower(), is3Game));
     }
 
     public MultipleToggleGroup getWaitingRoomToggleGroup() {
@@ -92,18 +90,15 @@ class DiningRoom extends Pane {
     }
 
     static class Table extends Pane {
-        private boolean selected;
 
         public Table(StudentColor studentColor, int nStudent) {
             List<GraphicStudent> students = new ArrayList<>();
-            selected = false;
 
             for (int i = 0; i < nStudent; i++) {
                 students.add(new GraphicStudent(studentColor, true));
             }
             setStudentPosition(students);
             this.getChildren().addAll(students);
-            this.setOnMouseClicked(this::onClick);
         }
 
         private void setStudentPosition(List<GraphicStudent> students) {
@@ -112,14 +107,6 @@ class DiningRoom extends Pane {
                 student.setLayoutY(y);
                 y -= 32;
             }
-        }
-
-        private void onClick(MouseEvent mouseEvent){
-            if(getStyleClass().contains("selected"))
-                getStyleClass().remove("selected");
-            else
-                getStyleClass().add("selected");
-            selected = !selected;
         }
     }
 }
@@ -150,24 +137,27 @@ class ProfessorRoom extends Pane {
 }
 
 class TowerGarden extends Pane {
-    public TowerGarden(Team team, int nTower) {
+    public TowerGarden(Team team, int nTower, boolean is3Game) {
         this.setPrefSize(290, 150);
 
         List<GraphicTower> towers = new ArrayList<>();
-        for (int i = 0; i < (8 - nTower); i++) {
+
+        int totTowers = is3Game ? 6 : 8;
+        for (int i = 0; i < (totTowers - nTower); i++) {
             towers.add(new GraphicTower(team, 50, 50));
         }
-        setTowerPositions(towers);
+        setTowerPositions(towers, is3Game);
         this.getChildren().addAll(towers);
     }
 
-    private void setTowerPositions(List<GraphicTower> towers) {
+    private void setTowerPositions(List<GraphicTower> towers, boolean is3Game) {
         double x = 50;
         double y = 20;
+        double offset = is3Game ? 75 : 50;
         for (int i = 0; i < towers.size(); i++) {
             towers.get(i).setLayoutX(x);
             towers.get(i).setLayoutY(y);
-            x = (i % 2) == 0 ? x : x + 50;
+            x = (i % 2) == 0 ? x : x + offset;
             y = y == 20? 90 : 20;
         }
     }
