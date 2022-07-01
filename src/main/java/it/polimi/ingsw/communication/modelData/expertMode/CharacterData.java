@@ -45,10 +45,6 @@ public class CharacterData {
         return name;
     }
 
-    public int getCost() {
-        return cost;
-    }
-
     public List<StudentColor> getStudents() {
         return Optional.ofNullable(students).orElse(new ArrayList<>());
     }

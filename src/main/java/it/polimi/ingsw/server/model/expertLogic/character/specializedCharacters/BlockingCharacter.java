@@ -29,6 +29,12 @@ public class BlockingCharacter extends StandardCharacter {
         availableBlockTiles--;
         cost = character.getCost() + 1;
     }
+
+    @Override
+    public String getExplanation() {
+        return super.getExplanation() + "\b, number of available tiles: " + availableBlockTiles;
+    }
+
     public void addBlockTile(){
         availableBlockTiles++;
     }

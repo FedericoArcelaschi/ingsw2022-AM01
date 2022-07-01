@@ -153,7 +153,6 @@ public class Board {
                     "Current phase is " + turn.getCurrentPhase().toString().toLowerCase());
         castleMap.get(playerID).removeStudentsFromWaitingRoom(students);
         castleMap.get(playerID).addStudentsInDiningRoom(students);
-        // FIXME
         influence.updateProfessors();
     }
 
@@ -194,8 +193,7 @@ public class Board {
         else
             motherNaturePosition += steps;
         conquerIsland(motherNaturePosition);
-        if(turn.isSkipCloudPhase())
-            possibleMovingSteps.update(turn.getPossibleMovingSteps());
+        possibleMovingSteps.zero();
     }
 
     /**

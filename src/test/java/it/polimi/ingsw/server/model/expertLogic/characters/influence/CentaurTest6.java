@@ -28,7 +28,6 @@ public class CentaurTest6 {
         expertBoard.playPlanningPhaseFirstPlayer1();
         expertBoard.easyMoveStudentsToDiningRoom();
         firstRound();
-
     }
 
     @Test
@@ -38,6 +37,7 @@ public class CentaurTest6 {
         assertEquals(BLACK,
                 expertBoard.getIslandList().get(5).getOwnership());
     }
+
     @Test
     void doNOTplayExpertCardTest() throws PhaseNotRightException {
         expertBoard.moveMotherNature(2);
