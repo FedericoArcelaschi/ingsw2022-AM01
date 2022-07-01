@@ -21,7 +21,7 @@ public class GameManager {
     public void createGame(GameType type, Set<Client> clients) {
         GameInterface gameInterface = new GameInterface(type, clients);
         gameList.add(gameInterface);
-        clients.forEach(client->client.setGameInterface(gameInterface));
+        clients.forEach(client -> client.setGameInterface(gameInterface));
     }
 
     public int countGames(GameType type) {

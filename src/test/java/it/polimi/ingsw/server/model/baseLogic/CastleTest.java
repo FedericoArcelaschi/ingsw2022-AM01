@@ -89,6 +89,15 @@ public class CastleTest {
         assertEquals(testMap.get(StudentColor.BLUE), castle.getDiningRoom().get(StudentColor.BLUE));
         assertEquals(testMap.get(StudentColor.RED), castle.getDiningRoom().get(StudentColor.RED));
         assertEquals(testMap.get(StudentColor.YELLOW), castle.getDiningRoom().get(StudentColor.YELLOW));
+        try {
+            castle.addStudentsInDiningRoom(List.of(StudentColor.BLUE, StudentColor.BLUE,
+                    StudentColor.BLUE, StudentColor.BLUE,
+                    StudentColor.BLUE, StudentColor.BLUE,
+                    StudentColor.BLUE, StudentColor.BLUE,
+                    StudentColor.BLUE, StudentColor.BLUE));
+        } catch (TooManyStudentsException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

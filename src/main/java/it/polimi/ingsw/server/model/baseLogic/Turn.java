@@ -1,30 +1,39 @@
 package it.polimi.ingsw.server.model.baseLogic;
 
+import it.polimi.ingsw.server.model.baseLogic.interfaces.IterableList;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Turn {
+public class Turn implements IterableList {
 
     /**
-     * ordered list of players as they joined the game.
+     * Ordered list of players as they joined the game.
      */
     private final List<String> sittingOrder;
+
     /**
-     * ordered list of players as of the current turn computed priority.
+     * Ordered list of players as of the current turn computed priority.
      */
     private List<String> actionOrder;
+
     private String currentPlayer;
+
     private TurnPhase currentPhase;
+
     /**
      * Current hands played card in planning-phase order.
      */
-    private final Map<String, Card> playedCards;
+    private final Map<String, Card> playedCards = new HashMap<>();;
+
     private final int N_PLAYERS;
+
     private final int FIRST_PLANNING_TURN = 1;
+
     private int planningCounter = FIRST_PLANNING_TURN;
-    private boolean isLastTurn;
+
+    private boolean skipCloudPhase;
 
     /**
      * For the first round the PlanningPhase is the Sitting Order
@@ -33,11 +42,10 @@ public class Turn {
     public Turn(List<String> sittingOrder) {
         this.sittingOrder = new ArrayList<>(sittingOrder);
         this.actionOrder = new ArrayList<>(sittingOrder);
-        this.playedCards = new HashMap<>();
-        this.currentPlayer = sittingOrder.get(0);
         this.currentPhase = TurnPhase.PLANNING;
+        this.currentPlayer = sittingOrder.get(0);
         this.N_PLAYERS = sittingOrder.size();
-        isLastTurn = false;
+        skipCloudPhase = false;
     }
 
     /**
@@ -47,27 +55,29 @@ public class Turn {
         switch (currentPhase) {
             case PLANNING -> {
                 if (planningCounter < N_PLAYERS ) {
-                    nextPlayerPlanning();   //we don't change phase, and we change the player that needs to play the card
+                    currentPlayer = next(sittingOrder, currentPlayer);
                     planningCounter++;
-                } else                                      //If we're done all the way through the planning phase we can switch phase and set the new order
-                    setNewRound(playedCards);               //Method that sets the new order for the turn and switches turn player to the new one
-            }
-            default -> currentPhase = currentPhase.next();  //We can move on to the next phase as normal and the turn player stays the same
-            case MOTHERNATURE -> {
-                currentPhase = currentPhase.next();
-                if(isLastTurn) {
-                    changePhase();
+                } else {
+                    setNewRound();
+                    currentPlayer = actionOrder.get(0);
+                    currentPhase = TurnPhase.STUDENTS;
                 }
+            }
+            default -> {
+                if(skipCloudPhase && currentPhase == TurnPhase.MOTHERNATURE)
+                    nextTurn();
+                else
+                    currentPhase = currentPhase.next();
             }
             case CLOUD -> {
-                if (!isLastActionTurn()) {                                      //If there are other players that need to play
-                    currentPhase = TurnPhase.STUDENTS;                          //and set the phase to students
-                } else {                                                        //If we're done throughout the turn
-                    currentPhase = TurnPhase.PLANNING;                          //and we go back to planning
-                    planningCounter = FIRST_PLANNING_TURN;
+                if (!isLastActionTurn())                                    //If there are other players that need to play
+                    nextTurn();                                             //and set the phase to students
+                else {                                                      //If we're done throughout the turn
+                    currentPhase = TurnPhase.PLANNING;
+                    currentPlayer = actionOrder.get(0);
                     playedCards.clear();
+                    planningCounter = FIRST_PLANNING_TURN;
                 }
-                currentPlayer = next(actionOrder, currentPlayer);
             }
         }
     }
@@ -78,48 +88,18 @@ public class Turn {
 
     /**
      * Sets the new turn order.
-     *
-     * @param playerCardMap to be sorted
      */
-    void setNewRound(Map<String, Card> playerCardMap) {
+    void setNewRound() {
         Map<String, Integer> priorityMap = new HashMap<>();
-        playerCardMap.forEach((key, value) -> priorityMap.put(key, value.priority()));
+        playedCards.forEach((key, value) -> priorityMap.put(key, value.priority()));
         Map<String, Integer> sortedMap =
                 priorityMap.entrySet().stream()
                         .sorted(Map.Entry.comparingByValue())
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-        setActionOrder(new ArrayList<>(sortedMap.keySet()));
-        currentPhase = TurnPhase.STUDENTS;
+        actionOrder = new ArrayList<>(sortedMap.keySet());
     }
 
-    /**
-     * Support method for setNewTurn.
-     */
-    private void setActionOrder(List<String> newerTurns) throws IllegalArgumentException {
-        if(new HashSet<>(newerTurns).containsAll(sittingOrder) && new HashSet<>(sittingOrder).containsAll(newerTurns))
-            this.actionOrder = newerTurns;
-        else
-            throw new IllegalArgumentException("Error in Turn .setActionOrder()");
-        currentPlayer = actionOrder.get(0);
-    }
 
-    /** Sets the current turn to the player besides him. Used in the planning phase of the turn.
-     * @return playerTurn
-     * @requires planningCounter < numberOfPlayers && currentPhase == PLANNING
-     */
-    @Contract(pure = true)
-    private void nextPlayerPlanning() {
-        currentPlayer = next(sittingOrder, currentPlayer);
-    }
-
-    @Contract(pure = true)
-    private String next(List<String> list, String element) {
-        int dim = list.size();
-        int index = list.indexOf(element);
-        if(index == dim - 1)
-            return list.get(0);
-        else return list.get(index + 1);
-    }
 
     @Contract(pure = true)
     public boolean isLastActionTurn() {
@@ -135,15 +115,6 @@ public class Turn {
         return playedCards.get(currentPlayer).distance();
     }
 
-    public int getNextPossibleMovingSteps() {
-        return playedCards.get(next(actionOrder, currentPlayer)).distance();
-    }
-
-    @Contract(pure = true)
-    public List<String> getSittingOrder() {
-        return new ArrayList<>(sittingOrder);
-    }
-
     @Contract(pure = true)
     public String getCurrentPlayer() {
         return currentPlayer;
@@ -155,22 +126,28 @@ public class Turn {
     }
 
     @Contract(pure = true)
-    public List<String> getActionOrder() {
-        return new ArrayList<>(actionOrder);
+    public List<String> getTurnOrder() {
+        List<String> newPlanningOrder;
+        int indexFirstPlayer = sittingOrder.indexOf(currentPlayer);
+        newPlanningOrder = new ArrayList<>(sittingOrder.subList(indexFirstPlayer, sittingOrder.size()));
+        newPlanningOrder.addAll(sittingOrder.subList(0, indexFirstPlayer));
+        return currentPhase == TurnPhase.PLANNING ?
+                new ArrayList<>(newPlanningOrder) :
+                new ArrayList<>(actionOrder);
     }
 
-    public Map<String, Card> getPlayedCards() {
-        return playedCards;
+    public boolean isSkipCloudPhase() {
+        return skipCloudPhase;
     }
 
-    public boolean isLastTurn() {
-        return isLastTurn;
+    public void setSkipCloudPhase(boolean skipCloudPhase) {
+        this.skipCloudPhase = skipCloudPhase;
     }
 
-    public void setLastTurn(boolean lastTurn) {
-        isLastTurn = lastTurn;
+    private void nextTurn() {
+        currentPlayer = next(actionOrder, currentPlayer);
+        currentPhase = TurnPhase.STUDENTS;
     }
-
     @Override
     public String toString() {
         return "Turn{" +

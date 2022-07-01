@@ -38,7 +38,6 @@ public class CommandTest {
         command.setUsername("fede");
         assertEquals(CharacterUtility.MAILMAN, CharacterUtility.getChar(command.getCharId()));
         g.executeCommand(command);
-        //fixme assertEquals(3, g.getBoard().getPossibleMovingSteps());
     }
 
     @Test

@@ -24,21 +24,16 @@ public class Game {
 
     private final static Logger logger = Logger.getLogger(Game.class);
     private final Board board;
-    private final Turn turn;
     private final int MAX_STUDENTS_TO_MOVE;
-    private final boolean isLastTurn = false;
-    //FIXME: implement for Ending position, out of resources..
     private int movedStudents = 0;
 
     public Game(GameType gameType, List<String> usernames) {
         this.board = BoardFactory.getBoard(usernames, gameType.expertMode, RandomGenerator.getDefault().nextLong());
-        this.turn = board.getTurn();
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
 
     public Game(GameType gameType, List<String> usernames, long seed) {
         this.board = BoardFactory.getBoard(usernames, gameType.expertMode, seed);
-        this.turn = board.getTurn();
         MAX_STUDENTS_TO_MOVE = (gameType.nPlayer == 3) ? 4 : 3;
     }
 
@@ -51,8 +46,8 @@ public class Game {
      * @see Turn#getCurrentPlayer()
      */
     public @NotNull Map<String, Message> executeCommand(@NotNull Command command) {
-        if (!command.username().equals(turn.getCurrentPlayer()))
-            return errorMessage(command.username(), new Exception("You can't play! It's " + turn.getCurrentPlayer() + "'s turn"));
+        if(!command.username().equals(board.getCurrentPlayer()))
+            return errorMessage(command.username(), new Exception("You can't play! It's " + board.getCurrentPlayer() + "'s turn"));
         return switch (command.getType()) {
             case PLAY_CARD -> playCardCommand(command);
             case MOVE_STUDENT_TO_CASTLE -> moveStudentToDiningRoomCommand(command);
@@ -70,7 +65,7 @@ public class Game {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
-        turn.changePhase();
+        board.changePhase();
         return updateAll();
     }
 
@@ -91,7 +86,7 @@ public class Game {
         }
         if (movedStudents == MAX_STUDENTS_TO_MOVE) {
             movedStudents = 0;
-            turn.changePhase();
+            board.changePhase();
         }
         return updateAll();
     }
@@ -111,7 +106,7 @@ public class Game {
         }
         if (movedStudents == MAX_STUDENTS_TO_MOVE) {
             movedStudents = 0;
-            turn.changePhase();
+            board.changePhase();
         }
         return updateAll();
     }
@@ -123,8 +118,6 @@ public class Game {
             logger.info(e);
             return errorMessage(command.username(), e);
         }
-        if (turn.isLastTurn())
-            board.endOfRound();
         if (board.isWinningState() || board.isEndGame()) {
             try {
                 return winUpdate(board.getWinner());
@@ -133,7 +126,7 @@ public class Game {
                 return errorMessage(command.username(), e);
             }
         }
-        turn.changePhase();
+        board.changePhase();
         return updateAll();
     }
 
@@ -146,7 +139,7 @@ public class Game {
             return errorMessage(command.username(), e);
         }
         board.endOfRound();
-        turn.changePhase();
+        board.changePhase();
         return updateAll();
     }
 
@@ -165,12 +158,11 @@ public class Game {
         Map<String, Message> usernameMessageMap = new HashMap<>();
         board.getCastleMap()
                 .keySet()
-                .forEach(i ->
-                        usernameMessageMap.put(i, new Update(board.getData(i))));
+                .forEach(i -> usernameMessageMap.put(i, new Update(board.getData(i))));
         return usernameMessageMap;
     }
 
-    private @NotNull Map<String, Message> winUpdate(@Nullable Team winner) {
+    protected @NotNull Map<String, Message> winUpdate(@Nullable Team winner) {
         Map<String, Message> usernameMessageMap = new HashMap<>();
                     board.getCastleMap()
                             .keySet()
@@ -188,9 +180,5 @@ public class Game {
 
     public Board getBoard() {
         return board;
-    }
-
-    public Turn getTurn() {
-        return turn;
     }
 }

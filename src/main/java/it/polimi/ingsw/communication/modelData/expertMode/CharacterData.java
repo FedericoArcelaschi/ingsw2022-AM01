@@ -27,10 +27,10 @@ public class CharacterData {
     public String toString(@Nullable CharacterUtility characterUtility){
         StringBuilder output = new StringBuilder();
         if(Objects.equals(this.characterUtility, characterUtility))
-            output  .append("\u0033[48;2;252;233;79m")
+            output  .append("\u001b[38;5;2;252;233;79m")
                     .append(name.charAt(0))
                     .append(name.substring(1).toLowerCase())
-                    .append("\u0033[0m");
+                    .append("\u001b[0m");
         else
             output  .append(name.charAt(0))
                     .append(name.substring(1).toLowerCase());
@@ -45,12 +45,8 @@ public class CharacterData {
         return name;
     }
 
-    public int getCost() {
-        return cost;
-    }
-
     public List<StudentColor> getStudents() {
-        return students;
+        return Optional.ofNullable(students).orElse(new ArrayList<>());
     }
 
     public String getDescription() {

@@ -3,6 +3,7 @@ package it.polimi.ingsw.communication.command;
 import it.polimi.ingsw.server.model.baseLogic.StudentColor;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterInputs;
 import it.polimi.ingsw.server.model.expertLogic.character.costants.CharacterUtility;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -15,7 +16,7 @@ import static it.polimi.ingsw.communication.command.CommandType.getCommandType;
  */
 public class Command {
     //all numbers should be passed as they are showed on the view
-    private final CommandType type;
+    private final @NotNull CommandType type;
     private String username;
     private final List<StudentColor> students = new ArrayList<>();
     private int motherNaturePositionShift;
@@ -47,7 +48,6 @@ public class Command {
         List<String> commandAttributes = new ArrayList<>(Arrays.stream(command.split("\\s+")).toList());
         type = getCommandType(commandAttributes.remove(0));
         if (commandAttributes.size() < 1)
-
             throw new ParseException("'" + command + "' isn't a valid command. Type 'help' to get more information.", 0);
         parseParameters(commandAttributes);
     }
@@ -61,10 +61,11 @@ public class Command {
                         students.add(StudentColor.parseColor(attribute));
                 }
                 case MOVE_STUDENT_TO_ISLAND -> {
-                    islandId = Integer.parseInt(attributes.get(0));
-                    attributes.remove(0);
                     for (String attribute : attributes)
-                        students.add(StudentColor.parseColor(attribute));
+                        if(isInteger(attribute))
+                            islandId = Integer.parseInt(attribute);
+                        else
+                            students.add(StudentColor.parseColor(attribute));
                 }
                 case MOVE_MOTHER_NATURE -> motherNaturePositionShift = Integer.parseInt(attributes.get(0));
                 case CHOOSE_CLOUD -> cloudId = Integer.parseInt(attributes.get(0));

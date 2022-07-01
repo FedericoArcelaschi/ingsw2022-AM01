@@ -18,7 +18,7 @@ public class Castle implements StudentPlaces {
     protected final Team towerColor;
     protected final int waitingRoomSize;
     //constants
-    private static final int diningRoomSizePerColor = 9;
+    private static final int diningRoomSizePerColor = 10;
     private static final int waitingRoomSize2Players = 7;
     private static final int waitingRoomSize3Players = 9;
     private static final int numberOfCards = 10;
@@ -63,7 +63,7 @@ public class Castle implements StudentPlaces {
      */
     public void addStudentInDiningRoom(StudentColor color) throws TooManyStudentsException {
         if (diningRoom.get(color) == diningRoomSizePerColor) {
-            throw new TooManyStudentsException("There are already " + diningRoomSizePerColor + " " + color + " students  in your diningRoom", color);
+            throw new TooManyStudentsException("There are already " + diningRoomSizePerColor + " " + color + " students in your diningRoom", color);
         }
         diningRoom.put(color, diningRoom.get(color) + 1);
     }
@@ -74,17 +74,14 @@ public class Castle implements StudentPlaces {
      * @param students – The list of students to add to the dining room.
      */
     public void addStudentsInDiningRoom(List<StudentColor> students) throws TooManyStudentsException {
-        Throwable exception = null;
         for (StudentColor c : students) {
             try {
                 addStudentInDiningRoom(c);
             } catch (TooManyStudentsException e) {
-                exception = e;
                 this.addStudentsInWaitingRoom(List.of(e.getColor()));
+                throw e;
             }
         }
-        if(exception != null)
-            throw new TooManyStudentsException(exception.getMessage());
     }
 
     /**

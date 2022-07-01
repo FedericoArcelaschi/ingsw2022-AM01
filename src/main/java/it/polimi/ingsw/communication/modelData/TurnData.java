@@ -6,44 +6,18 @@ import java.util.List;
 import java.util.Objects;
 
 public class TurnData {
-    private final List<String> sittingOrder;
-    private final List<String> actionOrder;
+    private final List<String> playerOrder;
     private final TurnPhase currentPhase;
     private final String currentPlayer;
 
-    public TurnData(List<String> sittingOrder, List<String> actionOrder, TurnPhase currentPhase, String currentPlayer) {
-        this.sittingOrder = sittingOrder;
-        this.actionOrder = actionOrder;
+    public TurnData(List<String> playerOrder, TurnPhase currentPhase, String currentPlayer) {
+        this.playerOrder = playerOrder;
         this.currentPhase = currentPhase;
         this.currentPlayer = currentPlayer;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append("\n\tGame Phase: ").append(currentPhase);
-        if (currentPhase == TurnPhase.PLANNING) {
-            s.append("\n\tTurn Order: ");
-            for (String player : sittingOrder) {
-                s.append(player).append(", ");
-            }
-        } else {
-            s.append("\n\tTurn Order: ");
-            for (String player : actionOrder) {
-                s.append(player).append(", ");
-            }
-        }
-        removesComma(s);
-        s.append("\n\tCurrent Player: ").append(currentPlayer);
-        return s.toString();
-    }
-
-    public List<String> sittingOrder() {
-        return sittingOrder;
-    }
-
     public List<String> actionOrder() {
-        return actionOrder;
+        return playerOrder;
     }
 
     public TurnPhase currentPhase() {
@@ -55,12 +29,24 @@ public class TurnData {
     }
 
     @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append("\n\tGame Phase: ").append(currentPhase);
+        s.append("\n\tTurn Order: ");
+        for (String player : playerOrder) {
+            s.append(player).append(", ");
+        }
+        removesComma(s);
+        s.append("\n\tCurrent Player: ").append(currentPlayer);
+        return s.toString();
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (TurnData) obj;
-        return Objects.equals(this.sittingOrder, that.sittingOrder) &&
-                Objects.equals(this.actionOrder, that.actionOrder) &&
+        return Objects.equals(this.playerOrder, that.playerOrder) &&
                 Objects.equals(this.currentPhase, that.currentPhase) &&
                 Objects.equals(this.currentPlayer, that.currentPlayer);
     }
@@ -68,10 +54,4 @@ public class TurnData {
     private void removesComma(StringBuilder s) {
         s.replace(s.length() - 2, s.length(), "");
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(sittingOrder, actionOrder, currentPhase, currentPlayer);
-    }
-
 }
