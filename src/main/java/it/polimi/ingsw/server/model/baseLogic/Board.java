@@ -28,8 +28,8 @@ public class Board {
     protected Influence influence = new Influence(new Professors(castleMap));
 
     protected final Turn turn;
-    //the idea is to save it or send it to the player at the end of the game
     private final long seed;
+    //the idea is to save it or send it to the player at the end of the game
     protected final PossibleMovingSteps possibleMovingSteps = new PossibleMovingSteps(); //calculated form the card: must be stored in memory til the player action turn
 
     //constants
@@ -193,6 +193,7 @@ public class Board {
         else
             motherNaturePosition += steps;
         conquerIsland(motherNaturePosition);
+        possibleMovingSteps.zero();
     }
 
     /**
@@ -279,9 +280,8 @@ public class Board {
         boolean refillableClouds;
         if(turn.isLastActionTurn()) {
             refillableClouds = cloudRefill();
-            endGame =  refillableClouds || remainingCards() == 0;
+            endGame =  refillableClouds || endedCards();
         }
-        possibleMovingSteps.zero();
     }
 
     /**
@@ -308,10 +308,10 @@ public class Board {
      * @return number of cards left.
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
-    private int remainingCards() {
+    private boolean endedCards() {
         Castle currPlayerCastle = castleMap.get(turn.getCurrentPlayer());
         int cardsLeft = (int) currPlayerCastle.getDeck().stream().filter(Card::isAvailable).count();
-        return cardsLeft;
+        return cardsLeft == 0;
     }
 
     /**
