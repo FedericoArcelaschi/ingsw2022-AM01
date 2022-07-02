@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: it.polimi.ingsw.startUp.Main
-Created-By: AM01 - Giovanni Arriciati, Federico Arcelaschi, Lorenzo Aicardi
-JavaFX-Version: 18.0.1

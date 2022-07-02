@@ -86,7 +86,13 @@ public class BoardStub extends Board implements EndGame {
         Random rand = new Random();
         int chosenCard = rand.nextInt(1, 11);
         if (getCastle(player).isCardAvailable(chosenCard)
-                && !turn.isAlreadyPlayed(chosenCard))
+                && (!turn.isAlreadyPlayed(chosenCard)
+                    || castleMap.get(player)
+                            .getDeck()
+                            .stream()
+                            .filter(Card::isAvailable)
+                            .allMatch(card -> turn.isAlreadyPlayed(card.priority()))
+        ))
             try {
                 playCard(player, chosenCard);
             } catch (PhaseNotRightException e) {
