@@ -15,10 +15,7 @@ public class BoardTest {
     private final String player1 = "a", player2 = "2";
     private final int seed = 1;
 
-    void turnSetUpStudents() throws PhaseNotRightException {
-        List<String> listOfPlayer = Arrays.asList(player1, player2);
-        Turn t = new Turn(listOfPlayer);
-        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
+    void turnSetUpStudents(Board b) throws PhaseNotRightException {
         b.getTurn().addCard(player1, new Card(1));
         b.getTurn().changePhase();
         b.getTurn().addCard(player2, new Card(2));
@@ -30,7 +27,7 @@ public class BoardTest {
         List<String> listOfPlayer = Arrays.asList(player1, player2);
         Turn t = new Turn(listOfPlayer);
         Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
-        turnSetUpStudents();
+        turnSetUpStudents(b);
         //got through planning phase for two players
         b.getTurn().changePhase();
         //here turnphase is MOTHERNATURE
@@ -136,7 +133,7 @@ public class BoardTest {
         List<String> listOfPlayer = Arrays.asList(player1, player2);
         Turn t = new Turn(listOfPlayer);
         Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
-        turnSetUpStudents();
+        turnSetUpStudents(b);
         List<StudentColor> cl = new ArrayList<>();
         //move 4 element to DR to free space for new students coming from cloud
         for (int i = 0; i < 4; i++) {
@@ -166,7 +163,7 @@ public class BoardTest {
         List<String> listOfPlayer = Arrays.asList(player1, player2);
         Turn t = new Turn(listOfPlayer);
         Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
-        turnSetUpStudents();
+        turnSetUpStudents(b);
         List<StudentColor> studentColorList =  new ArrayList<>();
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(1));
@@ -222,9 +219,10 @@ public class BoardTest {
         List<String> listOfPlayer = Arrays.asList(player1, player2);
         Turn t = new Turn(listOfPlayer);
         Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
-        turnSetUpStudents();
-        List<StudentColor> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0), b.getCastleMap().get(player1).getWaitingRoom().get(1));
-        b.moveStudentsToDiningRoom(player1, students);
+        turnSetUpStudents(b);
+        String s = b.getTurn().getCurrentPlayer();
+        List<StudentColor> students = Arrays.asList(b.getCastleMap().get(s).getWaitingRoom().get(0), b.getCastleMap().get(player1).getWaitingRoom().get(1));
+        b.moveStudentsToDiningRoom(s, students);
 
         //test professor get assigned
         Map<StudentColor, Team> pm1 = b.getProfessorsMap();
