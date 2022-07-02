@@ -19,15 +19,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ExpertCastleTest{
     private static final List<String> players = Arrays.asList("pippo","pluto","paperino");
     private static final Turn t = new Turn(players);
-    private static ExpertCastle expertCastle;
 
-    @BeforeEach
-    void setUp() {
-        expertCastle = new ExpertCastle(Team.WHITE, 3, Bag.extractMany(9));
-    }
 
     @Test
     public void testAddStudentDR_testpayCharacter() throws TooManyStudentsException {
+
+        ExpertCastle expertCastle = new ExpertCastle(Team.WHITE, 3, Bag.extractMany(9));
+
         List<StudentColor> yellows_3 = Arrays.asList(StudentColor.YELLOW, StudentColor.YELLOW, StudentColor.YELLOW);
             //one coin --> first payment okay, second payment failed
         assertEquals(1, expertCastle.getCoins(),
@@ -60,6 +58,7 @@ public class ExpertCastleTest{
     @Test
     //test not enough coins
     public void testFalsePayChar() {
+        ExpertCastle expertCastle = new ExpertCastle(Team.WHITE, 3, Bag.extractMany(9));
         assertEquals(1, expertCastle.getCoins());
         assertEquals("You had only 1 coins, while 2 coins were needed.",
                 assertThrowsExactly(CoinException.class,()->expertCastle.payCharacter(2)).getMessage()
@@ -68,6 +67,7 @@ public class ExpertCastleTest{
     @Test
     //test adding coins
     public void testTruePayChar() throws TooManyStudentsException {
+        ExpertCastle expertCastle = new ExpertCastle(Team.WHITE, 3, Bag.extractMany(9));
         for (int i = 0; i < 3; i++) {                          //add 3 students to give pippo a coin
             try {
                 expertCastle.addStudentInDiningRoom(StudentColor.YELLOW);
@@ -84,6 +84,7 @@ public class ExpertCastleTest{
     }
     @Test
     public void testAddStudentInDiningRoom() throws TooManyStudentsException {
+        ExpertCastle expertCastle = new ExpertCastle(Team.WHITE, 3, Bag.extractMany(9));
         for (int i = 0; i < 3; i++) {                          //add 3 students to give pippo a coin
             try {
                 expertCastle.addStudentInDiningRoom(StudentColor.YELLOW);

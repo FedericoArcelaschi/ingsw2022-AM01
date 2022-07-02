@@ -13,18 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class BoardTest {
 
     private final String player1 = "a", player2 = "2";
-    private Board b;
-    private Turn t;
     private final int seed = 1;
 
-    @BeforeEach
-    void setUp() {
-        List<String> listOfPlayer = Arrays.asList(player1, player2);
-        t = new Turn(listOfPlayer);
-        b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
-    }
-
     void turnSetUpStudents() throws PhaseNotRightException {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         b.getTurn().addCard(player1, new Card(1));
         b.getTurn().changePhase();
         b.getTurn().addCard(player2, new Card(2));
@@ -33,6 +27,9 @@ public class BoardTest {
     }
 
     void turnSetUpMN() throws PhaseNotRightException {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         turnSetUpStudents();
         //got through planning phase for two players
         b.getTurn().changePhase();
@@ -40,18 +37,27 @@ public class BoardTest {
     }
 
     void turnSetUpCloud() throws PhaseNotRightException {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         turnSetUpMN();
         b.getTurn().changePhase();
         //now it's chooseclouod
     }
     @Test
     public void testBoardIslandNumber() {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
 
         assertEquals(12, b.getIslandList().size());
     }
 
     @Test
     public void testGetAvailableCard() throws PhaseNotRightException {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         assertEquals(10, b.getCastle(player1).getDeck().stream().filter(card -> card.isAvailable()).count());
         b.playCard(player1, 1);
         b.playCard(player1, 2);
@@ -70,11 +76,17 @@ public class BoardTest {
 
     @Test
     public void testNotYourTurnException() {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         assertDoesNotThrow(() -> b.playCard(player1, 1), "player should be able to move because it's his turn");
     }
 
     @Test
     public void testBoardIslandStartingColor() {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         for (int i = 0; i < 12; i++) {
             int nStudents = b.getIslandList().get(i).getStudents().values().stream().mapToInt(n -> n).sum();
             if (i % 6 == 0) assertEquals(0, nStudents);
@@ -84,6 +96,9 @@ public class BoardTest {
 
     @Test
     public void testBoardCloudNumber() {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         String player3 = "3";
         String player4 = "4";
         Turn t1 = new Turn(Arrays.asList(player1, player2));
@@ -109,11 +124,18 @@ public class BoardTest {
 
     @Test
     public void testResetClouds() {
+
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         b.cloudRefill();
     }
 
     @Test
     public void testChooseCloud() throws NoSuchStudentException, TooManyStudentsException, PhaseNotRightException {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         turnSetUpStudents();
         List<StudentColor> cl = new ArrayList<>();
         //move 4 element to DR to free space for new students coming from cloud
@@ -141,6 +163,9 @@ public class BoardTest {
 
     @Test
     public void testMoveStudentToIsland() throws NoSuchStudentException, PhaseNotRightException {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         turnSetUpStudents();
         List<StudentColor> studentColorList =  new ArrayList<>();
         studentColorList.add(b.getCastleMap().get(player1).getWaitingRoom().get(0));
@@ -171,6 +196,9 @@ public class BoardTest {
 
     @Test
     public void testPlayCard() throws PhaseNotRightException {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         //check if the card is not used at the beginning
         assertTrue(b.getCastleMap().get(player1).getDeck().get(0).isAvailable());
         //check if the card is played correctly
@@ -191,6 +219,9 @@ public class BoardTest {
 
     @Test
     public void testUpdateProfessor() throws NoSuchStudentException, TooManyStudentsException, PhaseNotRightException {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         turnSetUpStudents();
         List<StudentColor> students = Arrays.asList(b.getCastleMap().get(player1).getWaitingRoom().get(0), b.getCastleMap().get(player1).getWaitingRoom().get(1));
         b.moveStudentsToDiningRoom(player1, students);
@@ -208,11 +239,18 @@ public class BoardTest {
 
     @Test
     public void testIsNotWonByResources() {
+
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         assertFalse(b.isEndGame());
     }
 
     @Test
     public void testMoveMotherNature() throws PhaseNotRightException {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         final Turn turn = new Turn(List.of("prova", "qwerty"));
         final Board board = new Board("prova", "qwerty", turn, RandomGenerator.getDefault().nextLong());
         board.playCard("prova", 3);
@@ -233,6 +271,9 @@ public class BoardTest {
      */
     @Test
     public void testJoinIsland() {
+        List<String> listOfPlayer = Arrays.asList(player1, player2);
+        Turn t = new Turn(listOfPlayer);
+        Board b =  BoardFactory.getBoard(listOfPlayer, false, RandomGenerator.getDefault().nextLong());
         List<Island> oldList = new ArrayList<>(b.getIslandList());
         Island islandA = b.getIslandList().get(1);
         Island islandB = b.getIslandList().get(2);
@@ -278,7 +319,7 @@ public class BoardTest {
     @Test
     public void testEndGame2Players() {
         List<String> listOfPlayer = Arrays.asList(player1, player2);
-        t = new Turn(listOfPlayer);
+        Turn t = new Turn(listOfPlayer);
         BoardStub bs = new BoardStub(player1, player2, t, new Random().nextLong());
         bs.getToEndGame();
         Team winner = null;
@@ -292,7 +333,7 @@ public class BoardTest {
     public void testEndGame3Players() {
         String player3 = "gamma";
         List<String> listOfPlayer = Arrays.asList(player1, player2, player3);
-        t = new Turn(listOfPlayer);
+        Turn t = new Turn(listOfPlayer);
         BoardStub bs = new BoardStub(player1, player2, player3, t, new Random().nextLong());
         bs.getToEndGame();
         bs.changePhase();
@@ -306,7 +347,7 @@ public class BoardTest {
     @Test
     public void testEndGame4Players() {
         List<String> listOfPlayer = Arrays.asList(player1, player2, "gamma", "delta");
-        t = new Turn(listOfPlayer);
+        Turn t = new Turn(listOfPlayer);
         BoardStub bs = new BoardStub(player1, player2, "gamma", "delta", t, new Random().nextLong());
         bs.getToEndGame();
         Team winner = null;

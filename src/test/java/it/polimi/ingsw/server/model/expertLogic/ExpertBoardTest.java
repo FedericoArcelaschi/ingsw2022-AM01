@@ -17,16 +17,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ExpertBoardTest{
-
-    private static ExpertBoard expertBoard;
     private final String player1 = "Lorenzo";
     private final String player2 = "Federico";
     private final String player3 = "Giovanni";
 
     @BeforeEach
     public void setUp() {
+
+    }
+
+    @Test
+    public void testSetup4CharacterTesting() {
         Turn t = new Turn(Arrays.asList(player1, player2, player3));
-        expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList(player1, player2, player3), true, RandomGenerator.getDefault().nextLong());
+        ExpertBoard expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList(player1, player2, player3), true, RandomGenerator.getDefault().nextLong());
         try {
             expertBoard.playCard(player1, 5);
             expertBoard.changePhase();
@@ -41,10 +44,6 @@ public class ExpertBoardTest{
         expertBoard.getTurn().addCard(player2, new Card(7));
         expertBoard.getTurn().addCard(player3, new Card(2));
         expertBoard.getTurn().changePhase();
-    }
-
-    @Test
-    public void testSetup4CharacterTesting() {
         if(!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.FARMER)){
             setUp();
             testSetup4CharacterTesting();
@@ -59,6 +58,22 @@ public class ExpertBoardTest{
      */
     @Test
     public void testPlayExpertCard() {
+        Turn t = new Turn(Arrays.asList(player1, player2, player3));
+        ExpertBoard expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList(player1, player2, player3), true, RandomGenerator.getDefault().nextLong());
+        try {
+            expertBoard.playCard(player1, 5);
+            expertBoard.changePhase();
+            expertBoard.playCard(player2, 7);
+            expertBoard.changePhase();
+            expertBoard.playCard(player3, 2);
+        } catch (PhaseNotRightException e) {
+            e.printStackTrace();
+            fail();
+        }
+        expertBoard.getTurn().addCard(player1, new Card(5));
+        expertBoard.getTurn().addCard(player2, new Card(7));
+        expertBoard.getTurn().addCard(player3, new Card(2));
+        expertBoard.getTurn().changePhase();
         if (!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.MAILMAN)) {
             assertThrowsExactly(IllegalArgumentException.class,
                     () -> expertBoard.playExpertCard(4, 0, null),
@@ -79,6 +94,22 @@ public class ExpertBoardTest{
 
     @Test
     void testPlayExpertCardException1() {
+        Turn t = new Turn(Arrays.asList(player1, player2, player3));
+        ExpertBoard expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList(player1, player2, player3), true, RandomGenerator.getDefault().nextLong());
+        try {
+            expertBoard.playCard(player1, 5);
+            expertBoard.changePhase();
+            expertBoard.playCard(player2, 7);
+            expertBoard.changePhase();
+            expertBoard.playCard(player3, 2);
+        } catch (PhaseNotRightException e) {
+            e.printStackTrace();
+            fail();
+        }
+        expertBoard.getTurn().addCard(player1, new Card(5));
+        expertBoard.getTurn().addCard(player2, new Card(7));
+        expertBoard.getTurn().addCard(player3, new Card(2));
+        expertBoard.getTurn().changePhase();
         if (!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.MAILMAN)) {
             setUp();
             testPlayExpertCardException1();
@@ -105,6 +136,22 @@ public class ExpertBoardTest{
     @Test
     @SuppressWarnings("empty")
     void testPlayExpertCardException3() {
+        Turn t = new Turn(Arrays.asList(player1, player2, player3));
+        ExpertBoard expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList(player1, player2, player3), true, RandomGenerator.getDefault().nextLong());
+        try {
+            expertBoard.playCard(player1, 5);
+            expertBoard.changePhase();
+            expertBoard.playCard(player2, 7);
+            expertBoard.changePhase();
+            expertBoard.playCard(player3, 2);
+        } catch (PhaseNotRightException e) {
+            e.printStackTrace();
+            fail();
+        }
+        expertBoard.getTurn().addCard(player1, new Card(5));
+        expertBoard.getTurn().addCard(player2, new Card(7));
+        expertBoard.getTurn().addCard(player3, new Card(2));
+        expertBoard.getTurn().changePhase();
         if (!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.MAILMAN)) {
             setUp();
             testPlayExpertCardException3();
@@ -143,6 +190,22 @@ public class ExpertBoardTest{
 
     @Test
     void testPlayExpertCardException4() {
+        Turn t = new Turn(Arrays.asList(player1, player2, player3));
+        ExpertBoard expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList(player1, player2, player3), true, RandomGenerator.getDefault().nextLong());
+        try {
+            expertBoard.playCard(player1, 5);
+            expertBoard.changePhase();
+            expertBoard.playCard(player2, 7);
+            expertBoard.changePhase();
+            expertBoard.playCard(player3, 2);
+        } catch (PhaseNotRightException e) {
+            e.printStackTrace();
+            fail();
+        }
+        expertBoard.getTurn().addCard(player1, new Card(5));
+        expertBoard.getTurn().addCard(player2, new Card(7));
+        expertBoard.getTurn().addCard(player3, new Card(2));
+        expertBoard.getTurn().changePhase();
         if (!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.MAILMAN)) {
             setUp();
             testPlayExpertCardException4();
@@ -172,6 +235,22 @@ public class ExpertBoardTest{
 
     @Test
     void testPlayExpertCardException5() {
+        Turn t = new Turn(Arrays.asList(player1, player2, player3));
+        ExpertBoard expertBoard = (ExpertBoard) BoardFactory.getBoard(Arrays.asList(player1, player2, player3), true, RandomGenerator.getDefault().nextLong());
+        try {
+            expertBoard.playCard(player1, 5);
+            expertBoard.changePhase();
+            expertBoard.playCard(player2, 7);
+            expertBoard.changePhase();
+            expertBoard.playCard(player3, 2);
+        } catch (PhaseNotRightException e) {
+            e.printStackTrace();
+            fail();
+        }
+        expertBoard.getTurn().addCard(player1, new Card(5));
+        expertBoard.getTurn().addCard(player2, new Card(7));
+        expertBoard.getTurn().addCard(player3, new Card(2));
+        expertBoard.getTurn().changePhase();
         if (!expertBoard.getAvailableCharacters().containsKey(CharacterUtility.GUARD)) {
             setUp();
             testPlayExpertCardException5();

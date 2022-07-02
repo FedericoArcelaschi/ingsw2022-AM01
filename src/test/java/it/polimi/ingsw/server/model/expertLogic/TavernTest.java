@@ -15,19 +15,13 @@ import java.util.random.RandomGenerator;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TavernTest{
-    private static Turn t;
-    private static Board board;
-    private static Tavern tavern;
-
-    @BeforeAll
-    static void beforeAll() {
-        t = new Turn(Arrays.asList("a","b"));
-        board = BoardFactory.getBoard(Arrays.asList("a","b"), true, RandomGenerator.getDefault().nextLong());
-        tavern = new Tavern(new Bag(20, 1));
-    }
 
     @Test
     public void testExtraction() {
+        Turn t = new Turn(Arrays.asList("a","b"));
+        Board board = BoardFactory.getBoard(Arrays.asList("a","b"), true, RandomGenerator.getDefault().nextLong());
+        Tavern tavern = new Tavern(new Bag(20, 1));
+
         List<StandardCharacter> expCards;
         expCards = tavern.extract().values().stream().toList();
         board.getBag().extract();
