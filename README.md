@@ -90,7 +90,7 @@ The game supports two modes:
   - **Taxman**: Steal coins from others
 - Character cards cost coins, drawn from tavern
 
-See full Italian rulebook: `src/main/resources/rulebook_ITA.pdf`
+See full Italian rulebook: [rulebook_ITA.pdf](./src/main/resources/rulebook_ITA.pdf)
 
 ---
 
@@ -115,13 +115,13 @@ Client-server architecture with an MVC-like separation:
 
 ```
 ┌─────────────┐     TCP/JSON     ┌──────────────────┐
-│  CLI / GUI   │ ◄─────────────► │     Server       │
-│  (View)      │    (Gson)       │  ┌────────────┐  │
+│  CLI / GUI  │ ◄─────────────►  │     Server       │
+│  (View)     │     (Gson)       │  ┌────────────┐  │
 └─────────────┘                  │  │ Controller │  │
-                                  │  ├────────────┤  │
-                                  │  │   Model    │  │
-                                  │  └────────────┘  │
-                                  └──────────────────┘
+                                 │  ├────────────┤  │
+                                 │  │   Model    │  │
+                                 │  └────────────┘  │
+                                 └──────────────────┘
 ```
 
 - **Model** — pure game logic (Board, Island, Turn, etc.) in `server.model`.
@@ -288,9 +288,9 @@ ingsw2022-AM01/
 │   ├── main/java/it/polimi/ingsw/
 │   │   ├── startUp/               # Entry point (Main.java)
 │   │   ├── server/
-│   │   │   ├── communication/     # Server networking (TCP, lobby)
-│   │   │   ├── controller/        # Game controller (Game.java)
-│   │   │   └── model/             # Business logic (base + expert)
+│   │   │   ├── communication/     # Server networking: TCP, lobby
+│   │   │   ├── controller/        # Game controller: Game.java & helper classes
+│   │   │   └── model/             # Business logic: base + expert
 │   │   ├── communication/         # Shared protocol: messages, commands, DTOs
 │   │   └── client/
 │   │       ├── communication/     # Client networking
@@ -305,7 +305,7 @@ ingsw2022-AM01/
 
 ## UML Diagrams
 
-Initial and final UML diagrams are located in `Deliveries/Model UML/`:
+Initial and final UML diagrams are located in (Deliveries/Model UML/)[./Deliveries/Model%20UML]:
 
 - **Initial model/** — design-time UML (`class_diagram.mdj`, rendered as `.jpg`).
 - **Final model/** — 7 diagrams auto-generated from the final code, covering:
