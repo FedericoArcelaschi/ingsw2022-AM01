@@ -305,7 +305,7 @@ ingsw2022-AM01/
 
 ## UML Diagrams
 
-Initial and final UML diagrams are located in (Deliveries/Model UML/)[./Deliveries/Model%20UML]:
+Initial and final UML diagrams are located in [Deliveries/Model UML/](./Deliveries/Model%20UML):
 
 - **Initial model/** — design-time UML (`class_diagram.mdj`, rendered as `.jpg`).
 - **Final model/** — 7 diagrams auto-generated from the final code, covering:
