@@ -1,5 +1,10 @@
 # ingsw2022-AM01
 
+![Java](https://img.shields.io/badge/Java-17-blue)
+![Maven](https://img.shields.io/badge/Maven-3.8+-red)
+![Coverage](https://img.shields.io/badge/Coverage-88%25-brightgreen)
+![Build](https://github.com/FedericoArcelaschi-Polimi/ingsw2022-AM01/actions/workflows/report.yml/badge.svg)
+
 **Eriantys** — a digital adaptation of the board game by [Cranio Creations](https://craniocreations.it/en/product/eriantys/).
 
 > Software Engineering project — Politecnico di Milano, A.Y. 2021/2022
@@ -22,14 +27,14 @@ The Italian rulebook is included under `src/main/resources/rulebook_ITA.pdf`.
 
 ## Project specification
 
-The project consists of a Java version of the board game *Eriantys*, made by Cranio Crations.
+The project consists of a Java version of the board game *Eriantys*, made by Cranio Creations.
 
 The final version includes:
 * initial UML diagram;
 * final UML diagram, generated from the code by automated tools;
 * working game implementation, with full Expert rules;
 * source code of the implementation;
-* source code of unity tests.
+* source code of unit tests.
 
 ---
 
@@ -40,20 +45,52 @@ The game supports two modes:
 - **Simplified rules** — the base game without character cards.
 - **Expert rules** — all 12 character cards with unique effects (Monk, Farmer, Guard, Mailman, Witch, Centaur, Jester, Knight, Cook, Storyteller, Queen, Taxman).
 
-| Functionality        | Status |
-|:---------------------|:------:|
-| Simplified rules     | 🟢 |
-| Expert rules         | 🟢 |
-| 12 expert cards      | 🟢 |
-| GUI                  | 🟢 |
-| CLI                  | 🟢 |
-| Multiple games       | 🟢 |
-| 4 Players            | 🟢 |
-| connection resiliency| 🔴 |
-| game persistence     | 🔴 |
+| Functionality         | Status |
+|:----------------------|:------:|
+| Simplified rules      | 🟢     |
+| Expert rules          | 🟢     |
+| 12 expert cards       | 🟢     |
+| GUI                   | 🟢     |
+| CLI                   | 🟢     |
+| Multiple games        | 🟢     |
+| 4 Players             | 🟢     |
+| connection resiliency | 🔴     |
+| game persistence      | 🔴     |
 
 #### Legend
 🔴 Not Implemented &nbsp; 🟢 Implemented
+
+---
+
+## Game Rules Summary
+
+### Simplified Rules (Base Game)
+- 2–4 players, each controls a wizard school
+- **Phases per turn**: Planning → Action → Mother Nature → Cloud
+- Move students from entrance → dining room → islands
+- Summon professors by having most students of a color in dining room
+- Place towers on islands where you have influence
+- Advance Mother Nature to score islands
+- Win by placing all towers or having most when game ends
+
+### Expert Rules (Full Game)
+- All base rules +
+- **12 Character Cards** with unique effects:
+  - **Monk**: Move student from entrance to dining room
+  - **Farmer**: Move student from entrance to island
+  - **Guard**: Block an island
+  - **Mailman**: Swap students between entrance and dining room
+  - **Witch**: Move student from island to entrance
+  - **Centaur**: Move student from dining room to island
+  - **Jester**: Copy another character's effect
+  - **Knight**: Move Mother Nature extra steps
+  - **Cook**: Convert student color in dining room
+  - **Storyteller**: Look at cloud cards
+  - **Queen**: Gain coins
+  - **Taxman**: Steal coins from others
+- Character cards cost coins, drawn from tavern
+
+See full Italian rulebook: `src/main/resources/rulebook_ITA.pdf`
 
 ---
 
@@ -81,10 +118,10 @@ Client-server architecture with an MVC-like separation:
 │  CLI / GUI   │ ◄─────────────► │     Server       │
 │  (View)      │    (Gson)       │  ┌────────────┐  │
 └─────────────┘                  │  │ Controller │  │
-                                 │  ├────────────┤  │
-                                 │  │   Model    │  │
-                                 │  └────────────┘  │
-                                 └──────────────────┘
+                                  │  ├────────────┤  │
+                                  │  │   Model    │  │
+                                  │  └────────────┘  │
+                                  └──────────────────┘
 ```
 
 - **Model** — pure game logic (Board, Island, Turn, etc.) in `server.model`.
@@ -96,6 +133,53 @@ Client-server architecture with an MVC-like separation:
 Key design patterns: **Command**, **Strategy** (influence computation), **Factory** (board creation), **Adapter** (`GameInterface` bridges communication and controller), **DTO** (lightweight data objects for network transfer).
 
 The server manages multiple concurrent games through `GameManager`. Lobbies are handled by `LobbyManager` before a game starts.
+
+### Turn Flow Sequence
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as Server
+    participant LM as LobbyManager
+    participant GM as GameManager
+    participant G as Game
+    participant M as Model (Board)
+
+    C->>S: CONNECT
+    S->>C: LOBBYINFO
+    C->>S: PREFERENCES
+    LM->>GM: createGame() when enough players
+    GM->>G: new Game(type, usernames)
+    G->>M: BoardFactory.getBoard()
+    GM->>All Clients: UPDATE (initial board)
+    
+    loop Each Turn
+        S->>Current Player: Prompt for COMMAND
+        Current Player->>S: COMMAND
+        S->>G: executeCommand(cmd)
+        G->>G: validate turn, phase, rules
+        alt Valid
+            G->>M: mutate state
+            G->>M: changePhase()
+            GM->>All Clients: UPDATE
+        else Invalid
+            G->>Current Player: ERROR
+        end
+    end
+    
+    G->>M: isWinningState() / isEndGame()
+    GM->>All Clients: END (winner)
+```
+
+### Key Components Detail
+
+- **`GameManager`** — Registry of active `GameInterface` instances; supports multiple concurrent games
+- **`LobbyManager`** — Queues clients by `GameType` (2/3/4 players × base/expert); creates games when lobby fills
+- **`GameInterface`** — Adapter bridging network `Client` handlers and controller `Game`; handles per-client messaging
+- **`Game`** — Command validator & executor; enforces turn order, phase transitions, move limits (3 students for 2/4p, 4 for 3p)
+- **`BoardFactory`** — Factory pattern: creates `Board` (base) or `ExpertBoard` based on `GameType.expertMode`
+- **Strategy Pattern** — `InfluenceComputing` / `ProfessorComputing` interfaces allow base vs expert influence algorithms
+- **DTOs** — `BoardData`, `IslandData`, `CastleData`, `CharacterData` etc. for network serialization (Gson)
 
 ---
 
@@ -139,6 +223,31 @@ A pre-built JAR and platform-specific launch scripts are also available under `D
 
 ---
 
+## Development Setup
+
+### IDE Configuration
+- **IntelliJ IDEA**: Open as Maven project, enable JavaFX plugin
+- **Eclipse**: Install m2e + e(fx)clipse
+
+### Running Tests
+```bash
+# All tests
+mvn test
+
+# Single test class
+mvn test -Dtest=BoardTest
+
+# With coverage report
+mvn verify
+# Open target/site/jacoco/index.html
+```
+
+### Code Style
+- Google Java Format / IntelliJ default formatter
+- Run `mvn compile` to verify
+
+---
+
 ## Testing & Coverage
 
 ```bash
@@ -150,6 +259,17 @@ Tests are written with **JUnit 5** (Jupiter). Coverage is measured with **JaCoCo
 All tests in model and controller cover 88% of the model and controller.
 
 Coverage reports are generated at `target/site/jacoco/index.html`.
+
+---
+
+## Project Scope Notes
+
+This project was required to implement **one** of three advanced features:
+- ✅ **4 Players** (implemented — supports 2, 3, and 4 players)
+- ❌ Connection Resiliency (reconnection, state recovery)
+- ❌ Game Persistence (save/load, database)
+
+The two unimplemented features are marked 🔴 in the Features table as they were out of scope for this delivery.
 
 ---
 
@@ -212,4 +332,27 @@ Key characteristics:
 - **Heartbeat**: Ping/Pong every 5–10 seconds for connection monitoring
 - **Message types**: `PREFERENCES`, `PING`, `LOBBYINFO`, `COMMAND`, `UPDATE`, `ERROR`, `END`
 
+### Protocol Quick Reference
 
+#### Message Types
+| Type | Direction | Description |
+|------|-----------|-------------|
+| `PREFERENCES` | C→S | Username, game mode (expert/base), player count |
+| `LOBBYINFO` | S→C | Current lobby states per game type |
+| `COMMAND` | C→S | Player action (see commands below) |
+| `UPDATE` | S→C | Full board state broadcast |
+| `ERROR` | S→C | Invalid command rejection |
+| `PING`/`PONG` | S↔C | Heartbeat (5s interval, 5s timeout) |
+| `END` | S→C | Game over, winner declared |
+
+#### Command Types
+| Command | Phase | Parameters |
+|---------|-------|------------|
+| `PLAY_CARD` | Planning | `cardId` (1-10) |
+| `CHOOSE_CLOUD` | Cloud | `cloudId` (1-n) |
+| `MOVE_STUDENT_TO_CASTLE` | Action | `students[]` (colors) |
+| `MOVE_STUDENT_TO_ISLAND` | Action | `islandId`, `students[]` |
+| `MOVE_MOTHER_NATURE` | Mother Nature | `shift` (1-3) |
+| `PAY_CHARACTER` | Expert | `charId`, `islandId`, `students[]` |
+
+Full spec: `Deliveries/Communication Protocol/communication protocol design.md`
