@@ -1,0 +1,33 @@
+package it.polimi.ingsw.communication.message.subclasses;
+
+import it.polimi.ingsw.communication.AlertType;
+import it.polimi.ingsw.communication.message.Message;
+import it.polimi.ingsw.communication.message.MessageType;
+import it.polimi.ingsw.communication.modelData.BoardData;
+import it.polimi.ingsw.server.model.baseLogic.Team;
+
+public class EndGame extends Message {
+    private final String cause;
+    private final AlertType alertType;
+    private final String endGamePlayer;
+    private final Team winnerTeam;
+    private final BoardData boardData;
+
+    public EndGame(String cause, AlertType alertType, String winner, Team winnerTeam, BoardData bd) {
+        super(MessageType.END);
+        this.cause = cause;
+        this.alertType = alertType;
+        this.endGamePlayer = winner;
+        this.winnerTeam = winnerTeam;
+        this.boardData = bd;
+        //this.cause = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+    }
+
+    public String getCause() {
+        return cause;
+    }
+
+    public BoardData getBoardData() {
+        return boardData;
+    }
+}

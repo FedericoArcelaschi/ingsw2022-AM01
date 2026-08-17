@@ -1,7 +1,7 @@
 # ingsw2022-AM01
 
 ![Java](https://img.shields.io/badge/Java-17-blue)
-![Maven](https://img.shields.io/badge/Maven-3.8+-red)
+![Gradle](https://img.shields.io/badge/Gradle-9-blue)
 ![Coverage](https://img.shields.io/badge/Coverage-88%25-brightgreen)
 ![Build](https://github.com/FedericoArcelaschi-Polimi/ingsw2022-AM01/actions/workflows/report.yml/badge.svg)
 
@@ -21,7 +21,7 @@ Lorenzo Aicardi, 10675881, lorenzo.aicardi@mail.polimi.it
 
 *Eriantys* is a strategy board game for 2–4 players where each player controls a school of wizards and tries to conquer the islands around the board. Players move students, summon professors, place towers, and advance Mother Nature to gain influence over islands.
 
-The Italian rulebook is included under `src/main/resources/rulebook_ITA.pdf`.
+The Italian rulebook is included under `desktop/src/main/resources/rulebook_ITA.pdf`.
 
 ---
 
@@ -90,7 +90,7 @@ The game supports two modes:
   - **Taxman**: Steal coins from others
 - Character cards cost coins, drawn from tavern
 
-See full Italian rulebook: [rulebook_ITA.pdf](./src/main/resources/rulebook_ITA.pdf)
+See full Italian rulebook: [rulebook_ITA.pdf](./desktop/src/main/resources/rulebook_ITA.pdf)
 
 ---
 
@@ -99,7 +99,7 @@ See full Italian rulebook: [rulebook_ITA.pdf](./src/main/resources/rulebook_ITA.
 | Category      | Technology |
 |:--------------|:-----------|
 | Language      | Java 17 |
-| Build System  | Apache Maven |
+| Build System  | Gradle (multi-module: `desktop`) |
 | GUI Framework | JavaFX 18.0.1 (with FXML) |
 | Serialization | Gson 2.9.0 |
 | Logging       | Log4j 2.17.2 |
@@ -188,29 +188,30 @@ sequenceDiagram
 ### Prerequisites
 
 - Java 17 JDK
-- Apache Maven
+
+No local Gradle install is required — use the checked-in wrapper (`./gradlew`).
 
 ### Build
 
 ```bash
-mvn clean package
+./gradlew :desktop:shadowJar
 ```
 
-The build produces a fat JAR (`AM01.jar` with `jar-with-dependencies`) in the `target/` directory, with all dependencies included.
+The build produces a fat JAR (`desktop-3.0-all.jar`, all dependencies included) in `desktop/build/libs/`.
 
 ### Run
 
 ```bash
 # Start the server (port 12345)
-java -jar target/AM01.jar server
+java -jar desktop/build/libs/desktop-3.0-all.jar server
 
 # Graphical client
-java -jar target/AM01.jar g-client
+java -jar desktop/build/libs/desktop-3.0-all.jar g-client
 
 # Textual client (CLI)
-java -jar target/AM01.jar t-client
+java -jar desktop/build/libs/desktop-3.0-all.jar t-client
 # or
-java -jar target/AM01.jar tc
+java -jar desktop/build/libs/desktop-3.0-all.jar tc
 ```
 
 A pre-built JAR and platform-specific launch scripts are also available under `Deliveries/play/`:
@@ -226,39 +227,39 @@ A pre-built JAR and platform-specific launch scripts are also available under `D
 ## Development Setup
 
 ### IDE Configuration
-- **IntelliJ IDEA**: Open as Maven project, enable JavaFX plugin
-- **Eclipse**: Install m2e + e(fx)clipse
+- **IntelliJ IDEA**: Open as Gradle project (root `settings.gradle.kts`)
+- **Eclipse**: Install Buildship (Gradle) + e(fx)clipse
 
 ### Running Tests
 ```bash
 # All tests
-mvn test
+./gradlew :desktop:test
 
 # Single test class
-mvn test -Dtest=BoardTest
+./gradlew :desktop:test --tests "it.polimi.ingsw.server.model.baseLogic.BoardTest"
 
 # With coverage report
-mvn verify
-# Open target/site/jacoco/index.html
+./gradlew :desktop:test :desktop:jacocoTestReport
+# Open desktop/build/reports/jacoco/test/html/index.html
 ```
 
 ### Code Style
 - Google Java Format / IntelliJ default formatter
-- Run `mvn compile` to verify
+- Run `./gradlew :desktop:compileJava` to verify
 
 ---
 
 ## Testing & Coverage
 
 ```bash
-mvn test
+./gradlew :desktop:test
 ```
 
 Tests are written with **JUnit 5** (Jupiter). Coverage is measured with **JaCoCo**.
 
 All tests in model and controller cover 88% of the model and controller.
 
-Coverage reports are generated at `target/site/jacoco/index.html`.
+Coverage reports are generated at `desktop/build/reports/jacoco/test/html/index.html`.
 
 ---
 
@@ -284,22 +285,28 @@ ingsw2022-AM01/
 │   ├── Review del gruppo 31/      # Peer review of another group
 │   └── Review del nostro lavoro/  # Reviews of this project
 │
-├── src/
-│   ├── main/java/it/polimi/ingsw/
-│   │   ├── startUp/               # Entry point (Main.java)
-│   │   ├── server/
-│   │   │   ├── communication/     # Server networking: TCP, lobby
-│   │   │   ├── controller/        # Game controller: Game.java & helper classes
-│   │   │   └── model/             # Business logic: base + expert
-│   │   ├── communication/         # Shared protocol: messages, commands, DTOs
-│   │   └── client/
-│   │       ├── communication/     # Client networking
-│   │       └── userInterface/     # CLI and GUI implementations
-│   ├── main/resources/            # FXML, CSS, images, rulebook
-│   └── test/java/it/polimi/ingsw/ # Unit tests
+├── desktop/                       # JavaFX/CLI client + server (Gradle module)
+│   ├── src/
+│   │   ├── main/java/it/polimi/ingsw/
+│   │   │   ├── startUp/           # Entry point (Main.java)
+│   │   │   ├── server/
+│   │   │   │   ├── communication/ # Server networking: TCP, lobby
+│   │   │   │   ├── controller/    # Game controller: Game.java & helper classes
+│   │   │   │   └── model/         # Business logic: base + expert
+│   │   │   ├── communication/     # Shared protocol: messages, commands, DTOs
+│   │   │   └── client/
+│   │   │       ├── communication/ # Client networking
+│   │   │       └── userInterface/ # CLI and GUI implementations
+│   │   ├── main/resources/        # FXML, CSS, images, rulebook
+│   │   └── test/java/it/polimi/ingsw/ # Unit tests
+│   └── build.gradle.kts
 │
-└── pom.xml                        # Maven build configuration
+├── gradle/libs.versions.toml      # Gradle version catalog
+├── settings.gradle.kts
+└── build.gradle.kts               # Root Gradle build configuration
 ```
+
+> An Android client (Kotlin + Jetpack Compose) sharing the protocol/DTO code with `desktop` is in progress — see `:shared`/`:android` modules once introduced.
 
 ---
 
